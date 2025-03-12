@@ -1,0 +1,107 @@
+[gd_scene load_steps=8 format=3 uid="uid://bhk71lctrycc"]
+
+[ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="1_rwgxs"]
+[ext_resource type="Material" uid="uid://b7drq3m6vvnyc" path="res://materials/wall_material.tres" id="2_4wyf3"]
+[ext_resource type="PackedScene" uid="uid://drs2ohyyh3uit" path="res://scenes/player/player.tscn" id="3_4wyf3"]
+[ext_resource type="Shader" uid="uid://dfbg35n7n8gwe" path="res://shaders/psx.gdshader" id="5_71j4m"]
+[ext_resource type="Shader" uid="uid://bucmt47v21xym" path="res://shaders/crt.gdshader" id="5_qfnet"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qfnet"]
+shader = ExtResource("5_71j4m")
+shader_parameter/enabled = true
+shader_parameter/dithering = true
+shader_parameter/colors = 8
+shader_parameter/dither_size = 3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i7141"]
+shader = ExtResource("5_qfnet")
+shader_parameter/overlay = true
+shader_parameter/scanlines_opacity = 0.011
+shader_parameter/scanlines_width = 0.054
+shader_parameter/grille_opacity = 0.064
+shader_parameter/resolution = Vector2(640, 480)
+shader_parameter/pixelate = true
+shader_parameter/roll = true
+shader_parameter/roll_speed = 1.0
+shader_parameter/roll_size = 15.0
+shader_parameter/roll_variation = 1.8
+shader_parameter/distort_intensity = 0.005
+shader_parameter/noise_opacity = 0.591
+shader_parameter/noise_speed = 5.0
+shader_parameter/static_noise_intensity = 0.06
+shader_parameter/aberration = 0.00900005
+shader_parameter/brightness = 1.4
+shader_parameter/discolor = true
+shader_parameter/warp_amount = 0.888
+shader_parameter/clip_warp = false
+shader_parameter/vignette_intensity = 0.5
+shader_parameter/vignette_opacity = 0.377
+
+[node name="world" type="Node3D"]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+material = SubResource("ShaderMaterial_qfnet")
+offset_right = 1152.0
+offset_bottom = 648.0
+scale = Vector2(4, 4)
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="map" type="Node3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1296, 0.0184145, -0.0769463)
+
+[node name="Piso" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0157991, -0.159011, 0.0428863)
+material_override = ExtResource("1_rwgxs")
+use_collision = true
+size = Vector3(10, 1, 10)
+material = ExtResource("1_rwgxs")
+
+[node name="Parede1" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.45861, 1.84099, 0.0428863)
+material_override = ExtResource("2_4wyf3")
+use_collision = true
+size = Vector3(1, 3, 10)
+
+[node name="Parede2" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.54139, 1.84099, 0.0428863)
+material_override = ExtResource("2_4wyf3")
+use_collision = true
+size = Vector3(1, 3, 10)
+
+[node name="Parede3" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map"]
+transform = Transform3D(-0.00487012, 0.000765077, -0.999988, 0.00052374, 1, 0.000762528, 0.999988, -0.000520009, -0.00487051, -0.0633045, 1.84335, 4.54283)
+material_override = ExtResource("2_4wyf3")
+use_collision = true
+size = Vector3(1, 3, 8)
+
+[node name="Parede4" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map"]
+transform = Transform3D(-0.00487012, 0.000765077, -0.999988, 0.00052374, 1, 0.000762528, 0.999988, -0.000520009, -0.00487051, -0.0194734, 1.83863, -4.45706)
+material_override = ExtResource("2_4wyf3")
+use_collision = true
+size = Vector3(1, 3, 8)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="SubViewportContainer/SubViewport/map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.12756, 0)
+light_color = Color(0.988223, 0.917531, 0.843076, 1)
+light_energy = 1.808
+light_volumetric_fog_energy = 5.635
+omni_range = 8.25571
+
+[node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_4wyf3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1296, 0.466597, -0.0769463)
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport/Player"]
+transform = Transform3D(1, 0, 0, 0, 0.935401, 0.353589, 0, -0.353589, 0.935401, 0, 2.50551, 2.78)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="SubViewportContainer/SubViewport"]
+
+[node name="ColorRect" type="ColorRect" parent="SubViewportContainer/SubViewport/CanvasLayer"]
+material = SubResource("ShaderMaterial_i7141")
+offset_left = -29.0
+offset_top = -9.0
+offset_right = 1167.0
+offset_bottom = 670.0
