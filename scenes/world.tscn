@@ -110,20 +110,23 @@ omni_range = 8.25571
 [node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_4wyf3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1296, 0.466597, -0.0769463)
 
-[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport/Player"]
-transform = Transform3D(1, 0, 0, 0, 0.935401, 0.353589, 0, -0.353589, 0.935401, 0, 2.50551, 2.78)
+[node name="ThirdPersonCamera" type="Camera3D" parent="SubViewportContainer/SubViewport/Player"]
+transform = Transform3D(1, 0, 0, 0, 0.884043, 0.467405, 0, -0.467405, 0.884043, 0, 2.29753, 1.49414)
 visible = false
 
-[node name="PixelVigneteShader" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Player/Camera3D"]
+[node name="PixelVigneteShader" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Player/ThirdPersonCamera"]
 transform = Transform3D(1, 0, 0, 0, 0.935401, -0.353589, 0, 0.353589, 0.935401, -0.1296, 0.122702, -0.850524)
 visible = false
 mesh = SubResource("QuadMesh_qfnet")
 skeleton = NodePath("../../../../..")
 
-[node name="CrossHatchingShader" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Player/Camera3D"]
+[node name="CrossHatchingShader" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Player/ThirdPersonCamera"]
 transform = Transform3D(1, 0, 0, 0, 0.935401, -0.353589, 0, 0.353589, 0.935401, -0.1296, -1.82434, -3.57934)
 mesh = SubResource("QuadMesh_4mrxx")
 skeleton = NodePath("../../../../..")
+
+[node name="FirstPersonCamera" type="Camera3D" parent="SubViewportContainer/SubViewport/Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.018385, 1.64292, -0.132919)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="SubViewportContainer/SubViewport"]
 
