@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dh8b54lwa3uwc"]
+
+[ext_resource type="Shader" uid="uid://uf8mi8jex5a8" path="res://shaders/pixelVignete.gdshader" id="1_jdmtt"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_jdmtt")
+shader_parameter/luminance = Color(0.3086, 0.6094, 0.082, 1)
+shader_parameter/brightness = 0.26
+shader_parameter/contrast = 3.0
+shader_parameter/scale = 1.0
+shader_parameter/rotation = 0.08
+shader_parameter/resolution_downsampling = 4.0

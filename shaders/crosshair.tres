@@ -1,0 +1,18 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cuc76brdhoebn"]
+
+[ext_resource type="Shader" uid="uid://csfhm60ek7l0i" path="res://shaders/crosshair.gdshader" id="1_828ok"]
+
+[resource]
+shader = ExtResource("1_828ok")
+shader_parameter/is_symmetric = true
+shader_parameter/center_offset = Vector2(0, 0)
+shader_parameter/line_color = Color(1, 1, 1, 1)
+shader_parameter/line_outline_color = Color(0, 0, 0, 1)
+shader_parameter/line_length = Vector2(20, 20)
+shader_parameter/line_thickness = Vector2(1, 1)
+shader_parameter/line_offset = Vector2(10, 10)
+shader_parameter/line_outline_thickness = Vector2(1, 1)
+shader_parameter/dot_color = Color(1, 1, 1, 1)
+shader_parameter/dot_outline_color = Color(0, 0, 0, 1)
+shader_parameter/dot_size = 2.0
+shader_parameter/dot_outline_thickness = 1.0
