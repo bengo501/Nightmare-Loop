@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bhk71lctrycc"]
+[gd_scene load_steps=15 format=3 uid="uid://bhk71lctrycc"]
 
 [ext_resource type="Material" uid="uid://dh8b54lwa3uwc" path="res://shaders/pixelVignete.tres" id="1_71j4m"]
 [ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="1_rwgxs"]
@@ -8,6 +8,7 @@
 [ext_resource type="Shader" uid="uid://bucmt47v21xym" path="res://shaders/crt.gdshader" id="5_qfnet"]
 [ext_resource type="Material" uid="uid://co46lab2f3058" path="res://shaders/hatching.tres" id="6_i7141"]
 [ext_resource type="Material" uid="uid://cuc76brdhoebn" path="res://shaders/crosshair.tres" id="8_4mrxx"]
+[ext_resource type="PackedScene" uid="uid://8ys0mvh063ck" path="res://scenes/double_bed.tscn" id="9_7r4gi"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qfnet"]
 shader = ExtResource("5_71j4m")
@@ -15,6 +16,9 @@ shader_parameter/enabled = true
 shader_parameter/dithering = true
 shader_parameter/colors = 5
 shader_parameter/dither_size = 4
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4mrxx"]
+size = Vector2(128, 128)
 
 [sub_resource type="QuadMesh" id="QuadMesh_qfnet"]
 material = ExtResource("1_71j4m")
@@ -49,9 +53,6 @@ shader_parameter/warp_amount = 0.888
 shader_parameter/clip_warp = false
 shader_parameter/vignette_intensity = 0.5
 shader_parameter/vignette_opacity = 0.377
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4mrxx"]
-size = Vector2(128, 128)
 
 [node name="world" type="Node3D"]
 
@@ -100,12 +101,24 @@ material_override = ExtResource("2_4wyf3")
 use_collision = true
 size = Vector3(1, 3, 8)
 
+[node name="Crosshair" type="TextureRect" parent="SubViewportContainer/SubViewport/map"]
+material = ExtResource("8_4mrxx")
+offset_left = 985.0
+offset_top = 1108.0
+offset_right = 1185.0
+offset_bottom = 1308.0
+texture = SubResource("PlaceholderTexture2D_4mrxx")
+stretch_mode = 3
+
 [node name="OmniLight3D" type="OmniLight3D" parent="SubViewportContainer/SubViewport/map"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.12756, 0)
 light_color = Color(0.988223, 0.917531, 0.843076, 1)
 light_energy = 1.808
 light_volumetric_fog_energy = 5.635
 omni_range = 8.25571
+
+[node name="DoubleBed" parent="SubViewportContainer/SubViewport/map" instance=ExtResource("9_7r4gi")]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 1.37097, 0.832325, 1.91191)
 
 [node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_4wyf3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1296, 0.466597, -0.0769463)
@@ -136,12 +149,3 @@ offset_left = -29.0
 offset_top = -9.0
 offset_right = 1167.0
 offset_bottom = 670.0
-
-[node name="Crosshair" type="TextureRect" parent="."]
-material = ExtResource("8_4mrxx")
-offset_left = 985.0
-offset_top = 1108.0
-offset_right = 1185.0
-offset_bottom = 1308.0
-texture = SubResource("PlaceholderTexture2D_4mrxx")
-stretch_mode = 3
