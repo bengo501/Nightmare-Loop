@@ -1,21 +1,40 @@
-[gd_scene load_steps=15 format=3 uid="uid://bhk71lctrycc"]
+[gd_scene load_steps=29 format=4 uid="uid://bhk71lctrycc"]
 
 [ext_resource type="Material" uid="uid://dh8b54lwa3uwc" path="res://shaders/pixelVignete.tres" id="1_71j4m"]
 [ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="1_rwgxs"]
-[ext_resource type="Material" uid="uid://b7drq3m6vvnyc" path="res://materials/wall_material.tres" id="2_4wyf3"]
+[ext_resource type="Texture2D" uid="uid://ca44uy3jlfa6w" path="res://assets/textures/Floor/Horror_Floor_05-128x128.png" id="2_w7kh3"]
 [ext_resource type="PackedScene" uid="uid://drs2ohyyh3uit" path="res://scenes/player/player.tscn" id="3_4wyf3"]
+[ext_resource type="Texture2D" uid="uid://cmd33s4pp6r0d" path="res://assets/textures/Wall/Horror_Wall_07-128x128.png" id="4_e3hyu"]
 [ext_resource type="Shader" uid="uid://dfbg35n7n8gwe" path="res://shaders/psx.gdshader" id="5_71j4m"]
 [ext_resource type="Shader" uid="uid://bucmt47v21xym" path="res://shaders/crt.gdshader" id="5_qfnet"]
 [ext_resource type="Material" uid="uid://co46lab2f3058" path="res://shaders/hatching.tres" id="6_i7141"]
+[ext_resource type="PackedScene" uid="uid://ytaetvi5ig5r" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Couch/Couch.fbx_Scene.fbm/Couch.fbx.fbx" id="7_q5onr"]
 [ext_resource type="Material" uid="uid://cuc76brdhoebn" path="res://shaders/crosshair.tres" id="8_4mrxx"]
+[ext_resource type="PackedScene" uid="uid://cj47gniftse4d" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Dresser/Dresser.fbx_Scene/Dresser.fbx_Scene.fbx" id="8_jhx03"]
 [ext_resource type="PackedScene" uid="uid://8ys0mvh063ck" path="res://scenes/double_bed.tscn" id="9_7r4gi"]
+[ext_resource type="Texture2D" uid="uid://cdlnmluiwvtvs" path="res://assets/models/weapons/albedo(1).png" id="12_jhx03"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qfnet"]
 shader = ExtResource("5_71j4m")
 shader_parameter/enabled = true
 shader_parameter/dithering = true
-shader_parameter/colors = 5
+shader_parameter/colors = 6
 shader_parameter/dither_size = 4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w7kh3"]
+albedo_texture = ExtResource("2_w7kh3")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jhx03"]
+albedo_texture = ExtResource("4_e3hyu")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o8fc1"]
+albedo_texture = ExtResource("4_e3hyu")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xo05s"]
+albedo_texture = ExtResource("4_e3hyu")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dss4m"]
+albedo_texture = ExtResource("4_e3hyu")
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4mrxx"]
 size = Vector2(128, 128)
@@ -29,6 +48,78 @@ size = Vector2(4, 4)
 material = ExtResource("6_i7141")
 flip_faces = true
 size = Vector2(4, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_53dg2"]
+resource_name = "Flashlight"
+vertex_color_use_as_albedo = true
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_88mkn"]
+resource_name = "Lightbulb"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.906332, 0.906332, 0.906332, 1)
+emission_enabled = true
+emission = Color(1, 0.898268, 0.732893, 1)
+emission_energy_multiplier = 10.0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_8oyfy"]
+_surfaces = [{
+"aabb": AABB(-0.00125759, -0.000277522, -0.000240341, 0.00253335, 0.000555044, 0.000480682),
+"format": 34359742465,
+"index_count": 210,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAABAAAABAADAAEAAgADAAUABgADAAQABwADAAYABQADAAcABgAEAAgAAAAIAAQABwAGAAkACAAJAAYABQAHAAoACQAKAAcACwAJAAgACgAJAAsADAAIAAAACAAMAAsAAgANAAAADQACAAUACgAOAAUABQAOAA0ADwANAA4AAAANAA8AEAAOAAoADgAQAA8ACgARABAACwARAAoAEgAPABAADwATAAAAAAATAAwAFAATAA8ADwASABQAFQAMABMAEwAUABUAFgALAAwADAAVABYAFwARAAsACwAWABcAGAAQABEAEQAXABgAEAAYABIAFQAUABkAGQAUABIAFgAVABoAGQAaABUAGwAXABYAGAAXABsAGgAcABYAFgAcABsAHAAaAB0AHQAaABkAHQAeABwAGwAcAB4AGQAfAB0AHgAdAB8AHgAgABsAIAAeAB8AGwAhABgAEgAYACEAGwAgACIAIgAgAB8AIgAhABsAIwAfABkAIgAfACMAEgAkABkAIQAkABIAGQAkACMAJAAhACIAIgAjACQA"),
+"name": "Flashlight",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 37,
+"vertex_data": PackedByteArray("qIUHunZ3xTjaAiu5ijenOnZ3xTjaAiu5ijenOnZ3RTkw0BCtijenOilcD7Aw0BCtijenOnZ3xbjaAiu5ijenOnZ3xTjaAis5ijenOnZ3Rbkw0BCtijenOnZ3xbjaAis5qIUHunZ3xbjaAiu5qIUHunZ3Rbkw0BAtqIUHunZ3xbjaAis5mDhlumCAkbmYaFUtmDhlumCAEbkUBHy5qIUHunZ3RTkw0BAtqIUHunZ3xTjaAis5mDhlumCAkTmYaFUtmDhlumCAETkUBHw5mDhlumCAEbkUBHw5tNWkumCAkTmYaFUtmDhlumCAETkUBHy5tNWkumCAETkUBHy5tNWkumCAEbkUBHy5tNWkumCAkbmYaFUttNWkumCAEbkUBHw5tNWkumCAETkUBHw5tNWkuk2Y4jipPES5tNWkuk6Y4riqPES5tNWkuk2Y4ripPEQ5tNWkuk2YYrlAai8tTCl5umza/reUtVy4TCl5umzafrj2KLEsTCl5umna/jeUtVy4TCl5umza/reXtVw4tNWkuk6Y4jiqPEQ5TCl5umza/jeatVw4TCl5umzafjj2KLEstNWkuk2YYjlAai8t")
+}, {
+"aabb": AABB(-0.00102397, -6.07617e-05, -5.26212e-05, 7.34928e-05, 0.000121523, 0.000105242),
+"format": 34359742465,
+"index_count": 18,
+"index_data": PackedByteArray("AAABAAIAAAADAAEAAAACAAQAAAAFAAMAAAAEAAYAAAAGAAUA"),
+"name": "Lightbulb",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 7,
+"vertex_data": PackedByteArray("qDaGug50WqvotAEtTCl5umzafjj2KLEsTCl5umza/jeatVw4TCl5umna/jeUtVy4TCl5umza/reXtVw4TCl5umza/reUtVy4TCl5umzafrj2KLEs")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_d71wi"]
+resource_name = "Cylinder"
+_surfaces = [{
+"aabb": AABB(-0.00125759, -0.000277522, -0.000240341, 0.00253335, 0.000555044, 0.000480682),
+"attribute_data": PackedByteArray("NpTnPgDfTTw2lOc+djh8P8rBXTx2OHw/wsFdPADfTTw2lOc+djh8P8rBXTx2OHw/wsFdPADfTTw2lOc+AN9NPDSU5z52OHw/gMFdPHY4fD8Awl08AN9NPDeU5z4A3008NJTnPnY4fD+AwV08djh8PwDCXTwA3008N5TnPgDfTTyAYfM+6sstP65zeD/qyy0/gGHzPuT9eT+AYfM+6sstP4Bh8z7k/Xk/gGHzPurLLT+AYfM+5P15P4Bh8z7k/Xk/gGHzPurLLT+AYfM+6sstP4Bh8z7k/Xk/gGHzPurLLT+AYfM+5P15PzaU5z52OHw/ysFdPHY4fD/CwV08AN9NPDaU5z4A3008NpTnPgDfTTw2lOc+djh8P8rBXTx2OHw/wsFdPADfTTzC8vE+ZC6dPsLy8T4AiVo8THhSPwCJWjxMeFI/ZC6dPsLy8T7+byQ/THhSP/5vJD/C8vE+/m8kP8Ly8T5kLp0+THhSP2QunT5MeFI//m8kP8Ly8T4AiVo8THhSPwCJWjzC8vE+ZC6dPsLy8T4AiVo8THhSPwCJWjxMeFI/ZC6dPsLy8T7+byQ/THhSP/5vJD9MeFI/ZC6dPsLy8T5kLp0+wvLxPgCJWjxMeFI/AIlaPMLy8T7+byQ/THhSP/5vJD/C8vE+ZC6dPsLy8T4AiVo8THhSPwCJWjxMeFI/ZC6dPsLy8T7+byQ/THhSP/5vJD/C8vE+ZC6dPsLy8T4AiVo8THhSPwCJWjxMeFI/ZC6dPsLy8T7+byQ/THhSP/5vJD8JnFg/zI3IPgmcWD+ARWU8nhN8P4BFZTyeE3w/zI3IPu4Cej96xCM/2rdaP3rEIz/at1o/wAnZPu4Cej/ACdk+7gJ6P8AJ2T7uAno/esQjP9q3Wj96xCM/2rdaP8AJ2T7uAno/wAnZPu4Cej96xCM/2rdaP3rEIz/at1o/wAnZPu4Cej96xCM/2rdaP3rEIz/at1o/wAnZPu4Cej/ACdk+7gJ6P8AJ2T7uAno/esQjP9q3Wj96xCM/2rdaP8AJ2T7uAno/wAnZPu4Cej96xCM/2rdaP3rEIz/at1o/wAnZPp4TfD/Mjcg+CZxYP8yNyD4JnFg/gEVlPJ4TfD+ARWU8nhN8P8yNyD4JnFg/zI3IPgmcWD+ARWU8nhN8P4BFZTyeE3w/zI3IPgmcWD/Mjcg+CZxYP4BFZTyeE3w/gEVlPJ4TfD/Mjcg+CZxYP8yNyD4JnFg/gEVlPJ4TfD+ARWU8CZxYP8yNyD4JnFg/gEVlPJ4TfD+ARWU8nhN8P8yNyD5t11k/8BYFPl3Nej/wFgU+ZVJqPzgmKz5t11k/QOFjPWVSaj9gSJc8Xc16P2DhYz0="),
+"format": 34359742487,
+"index_count": 210,
+"index_data": PackedByteArray("AAABAAIAAgADAAAABAAFAAYABgAHAAQACAAJAAoACgALAAgADAANAA4ADgAPAAwAEAARABIAEwARABQAFQARABYAFwAYABEAGQARABoAGwARABwAHQAeAB8AHwAgAB0AIQAiACMAIwAkACEAJQAmACcAJwAoACUAKQAlACgAKAAqACkAKwAsAC0ALQAuACsALQAsAC8ALwAwAC0AMQAyADMAMwA0ADEANQAxADQANAA2ADUANwA4ADkAOQA6ADcAOwA4ADcANwA8ADsAPQA+AD8APwBAAD0AQQA9AEAAQABCAEEAQwBEAEUARQBGAEMARwBDAEYARgBIAEcASQBKAEsASwBMAEkATQBOAE8ATwBQAE0AUQBSAFMAUwBUAFEAVQBWAFcAVwBYAFUAWQBaAFsAWwBcAFkAXQBeAF8AXwBgAF0AYQBiAGMAYwBkAGEAZQBmAGcAZwBoAGUAaQBqAGsAawBsAGkAbQBuAG8AbwBwAG0AcQByAHMAcwB0AHEAdQB2AHcAdwB4AHUAeQB6AHsAeQB8AHoAfAB9AHoAfQB+AHoA"),
+"material": SubResource("StandardMaterial3D_53dg2"),
+"name": "Flashlight",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 127,
+"vertex_data": PackedByteArray("qIUHunZ3xTjaAiu5ijenOnZ3xTjaAiu5ijenOnZ3RTkw0BCtqIUHunZ3RTkw0BAtijenOnZ3xbjaAiu5ijenOnZ3xTjaAiu5qIUHunZ3xTjaAiu5qIUHunZ3xbjaAiu5ijenOnZ3Rbkw0BCtijenOnZ3xbjaAiu5qIUHunZ3xbjaAiu5qIUHunZ3Rbkw0BAtijenOnZ3xbjaAis5ijenOnZ3Rbkw0BCtqIUHunZ3Rbkw0BAtqIUHunZ3xbjaAis5ijenOnZ3xbjaAiu5ijenOilcD7Aw0BCtijenOnZ3xTjaAiu5ijenOnZ3RTkw0BCtijenOnZ3xTjaAis5ijenOnZ3Rbkw0BCtijenOnZ3xbjaAiu5ijenOnZ3RTkw0BCtijenOnZ3xTjaAiu5ijenOnZ3xTjaAis5ijenOnZ3xbjaAis5ijenOnZ3xbjaAis5ijenOnZ3Rbkw0BCtijenOnZ3xTjaAis5ijenOnZ3xbjaAis5qIUHunZ3xbjaAis5qIUHunZ3xTjaAis5qIUHunZ3RTkw0BAtijenOnZ3RTkw0BCtijenOnZ3xTjaAis5qIUHunZ3xTjaAis5mDhlumCAkbmYaFUtqIUHunZ3Rbkw0BAtqIUHunZ3xbjaAiu5mDhlumCAEbkUBHy5tNWkumCAkbmYaFUttNWkumCAEbkUBHy5tNWkumCAETkUBHy5mDhlumCAETkUBHy5mDhlumCAkTmYaFUttNWkumCAkTmYaFUtqIUHunZ3xTjaAiu5qIUHunZ3RTkw0BAtmDhlumCAkTmYaFUtqIUHunZ3RTkw0BAtqIUHunZ3xTjaAis5mDhlumCAETkUBHw5tNWkumCAkTmYaFUttNWkumCAETkUBHw5mDhlumCAkbmYaFUtmDhlumCAEbkUBHw5qIUHunZ3xbjaAis5qIUHunZ3Rbkw0BAttNWkumCAEbkUBHw5tNWkumCAkbmYaFUtmDhlumCAEbkUBHy5qIUHunZ3xbjaAiu5qIUHunZ3xTjaAiu5mDhlumCAETkUBHy5tNWkumCAEbkUBHy5tNWkumCAETkUBHy5mDhlumCAETkUBHw5qIUHunZ3xTjaAis5qIUHunZ3xbjaAis5mDhlumCAEbkUBHw5tNWkumCAETkUBHw5tNWkumCAEbkUBHw5TCl5umza/jeatVw4tNWkuk6Y4jiqPEQ5tNWkuk2Y4ripPEQ5TCl5umza/reXtVw4tNWkumCAkTmYaFUttNWkuk2YYjlAai8ttNWkuk2Y4jipPES5tNWkumCAETkUBHy5tNWkumCAEbkUBHy5tNWkumCAETkUBHy5tNWkuk2Y4jipPES5tNWkuk6Y4riqPES5tNWkumCAkbmYaFUttNWkumCAEbkUBHy5tNWkuk6Y4riqPES5tNWkuk2YYrlAai8ttNWkumCAkbmYaFUttNWkuk2YYrlAai8ttNWkuk2Y4ripPEQ5tNWkumCAEbkUBHw5tNWkumCAETkUBHw5tNWkumCAEbkUBHw5tNWkuk2Y4ripPEQ5tNWkuk6Y4jiqPEQ5tNWkumCAkTmYaFUttNWkumCAETkUBHw5tNWkuk6Y4jiqPEQ5tNWkuk2YYjlAai8tTCl5umza/reUtVy4TCl5umzafrj2KLEstNWkuk2YYrlAai8ttNWkuk6Y4riqPES5TCl5umzafjj2KLEsTCl5umna/jeUtVy4tNWkuk2Y4jipPES5tNWkuk2YYjlAai8tTCl5umza/jeatVw4TCl5umzafjj2KLEstNWkuk2YYjlAai8ttNWkuk6Y4jiqPEQ5TCl5umzafrj2KLEsTCl5umza/reXtVw4tNWkuk2Y4ripPEQ5tNWkuk2YYrlAai8tTCl5umza/reUtVy4tNWkuk6Y4riqPES5tNWkuk2Y4jipPES5TCl5umna/jeUtVy4TCl5umza/jeatVw4TCl5umna/jeUtVy4TCl5umzafjj2KLEsTCl5umza/reXtVw4TCl5umzafrj2KLEsTCl5umza/reUtVy4JdH//9muAIAl0f//2a4AgP9//////////3////////8l0QAA/39slyXR///ZrgCAJdH//9muAIAl0QAA/39sl/9/AAD/f/+/JdEAAP9/bJcl0QAA/39sl/9/AAD/f/+//38lUf9/kuj/fwAA/3//v/9/AAD/f/+//38lUf9/kuj///9//39s1////3//fwCA////f/9/bNf///9//38AgP///3//fwCA////f/9///////9//3///////3//f5Ko////f/9/kqj///9/JdEAgP///38l0QCA////fyXR//////9/JdH///9/2a7Zrv///38lUf9/kuj/fyVR/3+S6P9/2a7Zrv///3//////////f/////////9/2a7Zrv///3/Zrtmu//+LjYsNC//8+4+ZkBlK/JL4YdjFE8hHQ/rh1DQK0Uz+/P9/AAD//wCAJdEAANmu//8l0f///3+S6OHUyvUAhmjmi41z8vp3eMD/f/7//3//v2HYOex3i+Pjj5lu5idx2cGLjXPyBIiFv4+ZbubXjiW+xZOcp4d0G5w0ihyr/nmWmf9//v//f/+//3/Zrv9/bJeLjYsN8wAChDSK4lQtswCDxZNiWDa4u4WPmZAZtANrh/9/JVHZrgCA/38AAP7/AIDh1DQKJrL7/GHYxRMctCr6Ydg57Fd08OXh1Mr193nr5iXRAADZrv//JdH///9/kug0ihyrB4YSmcWTnKeniw2axZNiWOJL04U0iuJU2E0Dg/9/2a7/f2yX/38lUdmuAIAwIpYiIZPymTAiliIhk/KZMCJo3RpMkIkwImjdGkyQiQAA/3/qlP//AAD/f/9///8AAP9/9Mr//wAA/38l0f//AAD/f0nfAIAAAP9/JdH//wAA/3+m1///AAD/fyXRAIAAAP9/6pQAgAAA/38l0QCAAAD/f/TKAIAAAP9//38AgAAA/3//f3WKAAD/f/9/AIAAAP9//396pQAA/3//f5KoAAD/f/9/WtAAAP9//3+SqAAA/3//f9KrAAD/f/9/bNcAAP9//3+J9QAA/3//f2zXAAD/f/9/hNoAAP9//3///2ldMKLwPu72AFUA1dj0+fQAVQDV2PT59GldMKLwPu72AFX+KvRpksVpXc5dIJJ332ldzl0gknffAFX+KvRpksUwIpYi3m2GoABV/ioKlmy6AFX+KgqWbLowIpYi3m2GoABVANUmCwWLMCJo3Q7BEIkwImjdDsEQiQBVANUmCwWLaV0wouSzbfZpXTCi5LNt9mldzl3dbAzmaV3OXd1sDOYAAP9///8AgAAA/3/+/wCAAAD/f///AIAAAP9//v8AgAAA/3/+/wCAAAD/f/////8=")
+}, {
+"aabb": AABB(-0.00102397, -6.07617e-05, -5.26212e-05, 7.34928e-05, 0.000121523, 0.000105242),
+"attribute_data": PackedByteArray("CcZJP5igdD8riHQ/vu1WPy0kdD8pMXU/K4h0P77tVj8tJHQ/KTF1PyuIdD++7VY/LSR0PykxdT8riHQ/vu1WPy0kdD8pMXU/K4h0P77tVj8tJHQ/KTF1PyuIdD++7VY/LSR0PykxdT8="),
+"format": 34359742487,
+"index_count": 18,
+"index_data": PackedByteArray("AAABAAIAAAADAAQAAAAFAAYAAAAHAAgAAAAJAAoAAAALAAwA"),
+"material": SubResource("StandardMaterial3D_88mkn"),
+"name": "Lightbulb",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 13,
+"vertex_data": PackedByteArray("qDaGug50WqvotAEtTCl5umzafjj2KLEsTCl5umza/jeatVw4TCl5umna/jeUtVy4TCl5umzafjj2KLEsTCl5umzafrj2KLEsTCl5umza/reUtVy4TCl5umza/jeatVw4TCl5umza/reXtVw4TCl5umza/reUtVy4TCl5umna/jeUtVy4TCl5umza/reXtVw4TCl5umzafrj2KLEsAAD/fw2C/v8RRhDGVK+Q07xPL534u73MLx28z7bC4eURRhDGfMY33RFG7jnc2KqXLx1CMILm+528Ty+dLLMht7xPz2I/vOSzLx1CMEPuaOYvHbzPyuff4bxPz2I6tFuhEUbuOY7FPqM=")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_8oyfy")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7t5mc"]
+albedo_texture = ExtResource("12_jhx03")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i7141"]
 shader = ExtResource("5_qfnet")
@@ -72,32 +163,32 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1296, 0.0184145, -0.0769463
 
 [node name="Piso" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0157991, -0.159011, 0.0428863)
-material_override = ExtResource("1_rwgxs")
+material_override = SubResource("StandardMaterial3D_w7kh3")
 use_collision = true
 size = Vector3(10, 1, 10)
 material = ExtResource("1_rwgxs")
 
 [node name="Parede1" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.45861, 1.84099, 0.0428863)
-material_override = ExtResource("2_4wyf3")
+material_override = SubResource("StandardMaterial3D_jhx03")
 use_collision = true
 size = Vector3(1, 3, 10)
 
 [node name="Parede2" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.54139, 1.84099, 0.0428863)
-material_override = ExtResource("2_4wyf3")
+material_override = SubResource("StandardMaterial3D_o8fc1")
 use_collision = true
 size = Vector3(1, 3, 10)
 
 [node name="Parede3" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map"]
 transform = Transform3D(-0.00487012, 0.000765077, -0.999988, 0.00052374, 1, 0.000762528, 0.999988, -0.000520009, -0.00487051, -0.0633045, 1.84335, 4.54283)
-material_override = ExtResource("2_4wyf3")
+material_override = SubResource("StandardMaterial3D_xo05s")
 use_collision = true
 size = Vector3(1, 3, 8)
 
 [node name="Parede4" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map"]
 transform = Transform3D(-0.00487012, 0.000765077, -0.999988, 0.00052374, 1, 0.000762528, 0.999988, -0.000520009, -0.00487051, -0.0194734, 1.83863, -4.45706)
-material_override = ExtResource("2_4wyf3")
+material_override = SubResource("StandardMaterial3D_dss4m")
 use_collision = true
 size = Vector3(1, 3, 8)
 
@@ -120,6 +211,12 @@ omni_range = 8.25571
 [node name="DoubleBed" parent="SubViewportContainer/SubViewport/map" instance=ExtResource("9_7r4gi")]
 transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 1.37097, 0.832325, 1.91191)
 
+[node name="Couch_fbx" parent="SubViewportContainer/SubViewport/map" instance=ExtResource("7_q5onr")]
+transform = Transform3D(-1.99986, 0, 0.0179592, 0, 1, 0, -0.0239455, 0, -1.49989, 3.43594, 0.731322, -0.959917)
+
+[node name="Dresser_fbx_Scene" parent="SubViewportContainer/SubViewport/map" instance=ExtResource("8_jhx03")]
+transform = Transform3D(-1.49891, 0, -0.057294, 0, 1.2, 0, 0.057294, 0, -1.49891, -1.65783, 0.419282, 3.03416)
+
 [node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_4wyf3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1296, 0.466597, -0.0769463)
 
@@ -140,6 +237,15 @@ skeleton = NodePath("../../../../..")
 
 [node name="FirstPersonCamera" type="Camera3D" parent="SubViewportContainer/SubViewport/Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.018385, 1.64292, -0.132919)
+
+[node name="flashlight(1)" type="Node3D" parent="SubViewportContainer/SubViewport/Player/FirstPersonCamera"]
+transform = Transform3D(0.411195, 0, -1.26093, 0, 1.3, 0, 1.63921, 0, 0.316303, 0.190422, -0.133661, -0.150727)
+
+[node name="flashlight" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Player/FirstPersonCamera/flashlight(1)"]
+transform = Transform3D(100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, 0, 0, 0)
+mesh = SubResource("ArrayMesh_d71wi")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_7t5mc")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="SubViewportContainer/SubViewport"]
 
