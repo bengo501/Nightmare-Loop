@@ -36,9 +36,6 @@ albedo_texture = ExtResource("4_e3hyu")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dss4m"]
 albedo_texture = ExtResource("4_e3hyu")
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4mrxx"]
-size = Vector2(128, 128)
-
 [sub_resource type="QuadMesh" id="QuadMesh_qfnet"]
 material = ExtResource("1_71j4m")
 flip_faces = true
@@ -125,9 +122,9 @@ albedo_texture = ExtResource("12_jhx03")
 shader = ExtResource("5_qfnet")
 shader_parameter/overlay = true
 shader_parameter/scanlines_opacity = 0.011
-shader_parameter/scanlines_width = 0.054
+shader_parameter/scanlines_width = 0.05
 shader_parameter/grille_opacity = 0.064
-shader_parameter/resolution = Vector2(640, 480)
+shader_parameter/resolution = Vector2(1980, 1080)
 shader_parameter/pixelate = true
 shader_parameter/roll = true
 shader_parameter/roll_speed = 1.0
@@ -144,6 +141,9 @@ shader_parameter/warp_amount = 0.888
 shader_parameter/clip_warp = false
 shader_parameter/vignette_intensity = 0.5
 shader_parameter/vignette_opacity = 0.377
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4mrxx"]
+size = Vector2(500, 500)
 
 [node name="world" type="Node3D"]
 
@@ -191,15 +191,6 @@ transform = Transform3D(-0.00487012, 0.000765077, -0.999988, 0.00052374, 1, 0.00
 material_override = SubResource("StandardMaterial3D_dss4m")
 use_collision = true
 size = Vector3(1, 3, 8)
-
-[node name="Crosshair" type="TextureRect" parent="SubViewportContainer/SubViewport/map"]
-material = ExtResource("8_4mrxx")
-offset_left = 985.0
-offset_top = 1108.0
-offset_right = 1185.0
-offset_bottom = 1308.0
-texture = SubResource("PlaceholderTexture2D_4mrxx")
-stretch_mode = 3
 
 [node name="OmniLight3D" type="OmniLight3D" parent="SubViewportContainer/SubViewport/map"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.12756, 0)
@@ -255,3 +246,23 @@ offset_left = -29.0
 offset_top = -9.0
 offset_right = 1167.0
 offset_bottom = 670.0
+
+[node name="Crosshair" type="TextureRect" parent="SubViewportContainer/SubViewport"]
+material = ExtResource("8_4mrxx")
+offset_left = 489.5
+offset_top = 113.5
+offset_right = 989.5
+offset_bottom = 613.5
+pivot_offset = Vector2(-824, -730.5)
+texture = SubResource("PlaceholderTexture2D_4mrxx")
+stretch_mode = 3
+
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/SubViewport"]
+visible = false
+material = ExtResource("8_4mrxx")
+offset_left = 169.75
+offset_top = 107.25
+offset_right = 209.75
+offset_bottom = 147.25
+pivot_offset = Vector2(488.25, 300.25)
+stretch_mode = 3
