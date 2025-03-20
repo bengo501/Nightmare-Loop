@@ -1,9 +1,9 @@
 extends CharacterBody3D
 
 const SPEED = 3.0
-const ROTATION_SPEED = 2.0  # Velocidade de rotação do personagem no modo tanque
+const ROTATION_SPEED = 2.0  # Velocidade de rotação no modo tanque
 const JUMP_VELOCITY = 4.5
-const MOUSE_SENSITIVITY = 0.003  # Sensibilidade do mouse para girar a câmera em primeira pessoa
+const MOUSE_SENSITIVITY = 0.003  # Sensibilidade do mouse no modo primeira pessoa
 
 @onready var third_person_camera = $ThirdPersonCamera
 @onready var first_person_camera = $FirstPersonCamera
@@ -18,8 +18,15 @@ func _ready():
 	# Iniciar no modo de terceira pessoa
 	activate_third_person()
 	
-	animation_player.set_blend_time("idle","walk_front",0.2)
-	animation_player.set_blend_time("walk_front","idle",0.2)
+	# Define os tempos de transição entre animações para suavidade
+	animation_player.set_blend_time("idle", "walk_front", 0.3)
+	animation_player.set_blend_time("idle", "walk_back", 0.3)
+	animation_player.set_blend_time("idle", "walk_left", 0.3)
+	animation_player.set_blend_time("idle", "walk_right", 0.3)
+	animation_player.set_blend_time("walk_front", "idle", 0.3)
+	animation_player.set_blend_time("walk_back", "idle", 0.3)
+	animation_player.set_blend_time("walk_left", "idle", 0.3)
+	animation_player.set_blend_time("walk_right", "idle", 0.3)
 
 func _physics_process(delta: float) -> void:
 	# Adiciona gravidade
@@ -39,7 +46,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func move_first_person(delta: float):
-	""" Movimentação no modo primeira pessoa (livre, controlada pelo mouse) """
+	""" Movimentação no modo primeira pessoa (controlada pelo mouse) """
 	var input_dir = Vector3.ZERO
 	
 	# Movimentação com W, A, S, D
@@ -62,7 +69,7 @@ func move_first_person(delta: float):
 func move_third_person(delta: float):
 	""" Movimentação estilo tanque no modo terceira pessoa """
 	var rotate_direction = 0
-	var move_direction = 0
+	var move_direction = Vector3.ZERO
 
 	# Rotação esquerda/direita
 	if Input.is_action_pressed("left"):
@@ -70,29 +77,44 @@ func move_third_person(delta: float):
 	if Input.is_action_pressed("right"):
 		rotate_direction -= 1
 
-	# Movimento para frente/trás
+	# Movimento para frente/trás/direita/esquerda
+	var moving = false
+	
 	if Input.is_action_pressed("foward"):
-		move_direction += 1
+		move_direction -= transform.basis.z
+		play_animation("walk_front")
+		moving = true
 	if Input.is_action_pressed("backward"):
-		move_direction -= 1
+		move_direction += transform.basis.z
+		play_animation("walk_back")
+		moving = true
+	if Input.is_action_pressed("left"):
+		move_direction -= transform.basis.x
+		play_animation("walk_left")
+		moving = true
+	if Input.is_action_pressed("right"):
+		move_direction += transform.basis.x
+		play_animation("walk_right")
+		moving = true
+
+	# Se nenhuma tecla foi pressionada, define a animação como "idle"
+	if not moving:
+		play_animation("idle")
+
+	# Normaliza a direção
+	move_direction = move_direction.normalized()
 
 	# Aplica a rotação do personagem
 	rotation.y += rotate_direction * ROTATION_SPEED * delta
 
-	# Movimenta na direção que está virado
-	var direction = -transform.basis.z * move_direction
-	velocity.x = direction.x * SPEED
-	velocity.z = direction.z * SPEED
+	# Movimenta na direção correta
+	velocity.x = move_direction.x * SPEED
+	velocity.z = move_direction.z * SPEED
 
-	# Controle de animação
-	if move_direction != 0:
-		if not walking:
-			walking = true
-			animation_player.play("walk_front")
-	else:
-		if walking:
-			walking = false
-			animation_player.play("idle")
+func play_animation(anim_name: String):
+	""" Controla a troca de animação garantindo suavidade """
+	if animation_player.current_animation != anim_name:
+		animation_player.play(anim_name)
 
 func _input(event):
 	# Alternar entre primeira e terceira pessoa com o botão direito do mouse

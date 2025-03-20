@@ -221,7 +221,7 @@ transform = Transform3D(-1.49891, 0, -0.057294, 0, 1.2, 0, 0.057294, 0, -1.49891
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1296, 0.466597, -0.0769463)
 
 [node name="ThirdPersonCamera" type="Camera3D" parent="SubViewportContainer/SubViewport/Player"]
-transform = Transform3D(1, 0, 0, 0, 0.884043, 0.467405, 0, -0.467405, 0.884043, 0, 2.29753, 1.49414)
+transform = Transform3D(1, 0, 0, 0, 0.884043, 0.467405, 0, -0.467405, 0.884043, 0.215925, 2.43374, 1.75697)
 
 [node name="PixelVigneteShader" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Player/ThirdPersonCamera"]
 transform = Transform3D(1, 0, 0, 0, 0.935401, -0.353589, 0, 0.353589, 0.935401, -0.1296, 0.122702, -0.850524)
