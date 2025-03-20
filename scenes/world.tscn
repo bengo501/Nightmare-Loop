@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=4 uid="uid://bhk71lctrycc"]
+[gd_scene load_steps=32 format=4 uid="uid://bhk71lctrycc"]
 
 [ext_resource type="Material" uid="uid://dh8b54lwa3uwc" path="res://shaders/pixelVignete.tres" id="1_71j4m"]
 [ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="1_rwgxs"]
@@ -145,6 +145,8 @@ shader_parameter/vignette_opacity = 0.377
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_o8fc1"]
 
+[sub_resource type="CanvasTexture" id="CanvasTexture_xo05s"]
+
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4mrxx"]
 size = Vector2(500, 500)
 
@@ -268,6 +270,14 @@ offset_left = 55.75
 offset_top = 482.0
 offset_right = 95.75
 offset_bottom = 522.0
+
+[node name="TextureRect2" type="TextureRect" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+modulate = Color(0.989622, 0, 0.227846, 0.482353)
+offset_left = 99.25
+offset_top = 462.5
+offset_right = 291.25
+offset_bottom = 508.5
+texture = SubResource("CanvasTexture_xo05s")
 
 [node name="Crosshair" type="TextureRect" parent="SubViewportContainer/SubViewport"]
 material = ExtResource("8_4mrxx")
