@@ -7,7 +7,7 @@ const MOUSE_SENSITIVITY = 0.003  # Sensibilidade do mouse para girar a câmera e
 
 @onready var third_person_camera = $ThirdPersonCamera
 @onready var first_person_camera = $FirstPersonCamera
-@onready var animation_player = $visuals/player/AnimationPlayer
+@onready var animation_player = $visuals/GamePucrsMC/AnimationPlayer
 @onready var visuals = $visuals
 
 var walking = false
@@ -17,6 +17,9 @@ var mouse_input_enabled = false  # Controle para capturar o mouse
 func _ready():
 	# Iniciar no modo de terceira pessoa
 	activate_third_person()
+	
+	animation_player.set_blend_time("idle","walk_front",0.2)
+	animation_player.set_blend_time("walk_front","idle",0.2)
 
 func _physics_process(delta: float) -> void:
 	# Adiciona gravidade
@@ -85,7 +88,7 @@ func move_third_person(delta: float):
 	if move_direction != 0:
 		if not walking:
 			walking = true
-			animation_player.play("walk")
+			animation_player.play("walk_front")
 	else:
 		if walking:
 			walking = false
