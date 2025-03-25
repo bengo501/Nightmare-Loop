@@ -14,6 +14,9 @@ const MOUSE_SENSITIVITY = 0.003  # Sensibilidade do mouse no modo primeira pesso
 @onready var shoot_ray = $FirstPersonCamera/ShootRay
 @onready var laser_line = $FirstPersonCamera/LaserLine
 
+@onready var hud = $"../CanvasLayer/CanvasLayer2"
+@onready var player = $"."
+@onready var crosshair = $"../Crosshair"
 
 var walking = false
 var first_person_mode = false  # Indica se o jogador está em primeira pessoa
@@ -149,6 +152,9 @@ func rotate_camera(mouse_motion: Vector2):
 
 func activate_first_person():
 	""" Ativa a câmera de primeira pessoa e captura o cursor """
+	crosshair.visible = true
+	player.visible = true
+	hud.visible = true
 	first_person_mode = true
 	first_person_camera.current = true
 	third_person_camera.current = false
@@ -156,6 +162,9 @@ func activate_first_person():
 	weapon.visible = true
 
 func activate_third_person():
+	crosshair.visible = true
+	player.visible = true
+	hud.visible = true
 	""" Ativa a câmera de terceira pessoa e libera o cursor """
 	first_person_mode = false
 	third_person_camera.current = true
