@@ -364,7 +364,7 @@ position = Vector2(453.25, 399)
 texture = ExtResource("20_oo54l")
 
 [node name="cores" type="TextureRect" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
-modulate = Color(1, 0.27451, 1, 1)
+modulate = Color(0.348121, 0.586163, 0.97735, 1)
 offset_left = 196.25
 offset_top = 547.75
 offset_right = 236.25
