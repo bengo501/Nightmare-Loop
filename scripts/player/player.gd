@@ -10,6 +10,11 @@ const MOUSE_SENSITIVITY = 0.003  # Sensibilidade do mouse no modo primeira pesso
 @onready var animation_player = $visuals/GamePucrsMC/AnimationPlayer
 @onready var visuals = $visuals
 
+@onready var weapon = $FirstPersonCamera/weapon
+@onready var shoot_ray = $FirstPersonCamera/ShootRay
+@onready var laser_line = $FirstPersonCamera/LaserLine
+
+
 var walking = false
 var first_person_mode = false  # Indica se o jogador está em primeira pessoa
 var mouse_input_enabled = false  # Controle para capturar o mouse
@@ -127,6 +132,10 @@ func _input(event):
 	# Rotação da câmera no modo primeira pessoa
 	if first_person_mode and event is InputEventMouseMotion:
 		rotate_camera(event.relative)
+		
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		fire_laser()
+
 
 func rotate_camera(mouse_motion: Vector2):
 	""" Faz a câmera girar com o movimento do mouse no modo primeira pessoa """
@@ -142,6 +151,7 @@ func activate_first_person():
 	first_person_camera.current = true
 	third_person_camera.current = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)  # Captura o mouse para rotação livre
+	weapon.visible = true
 
 func activate_third_person():
 	""" Ativa a câmera de terceira pessoa e libera o cursor """
@@ -149,3 +159,40 @@ func activate_third_person():
 	third_person_camera.current = true
 	first_person_camera.current = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)  # Libera o cursor
+	weapon.visible = false
+	
+func change_laser_color(color: Color):
+	if laser_line.material == null:
+		var mat = StandardMaterial3D.new()
+		mat.albedo_color = color
+		laser_line.material = mat
+	else:
+		if laser_line.material is StandardMaterial3D:
+			laser_line.material.albedo_color = color
+
+func fire_laser():
+	if not first_person_mode:
+		return  # Só dispara em primeira pessoa
+
+	shoot_ray.force_raycast_update()
+
+	var from_pos = shoot_ray.global_transform.origin
+	var hit_position = shoot_ray.get_collision_point()
+	var to_pos = hit_position if shoot_ray.is_colliding() else from_pos + shoot_ray.global_transform.basis.z * shoot_ray.target_position.length()
+
+	var direction = to_pos - from_pos
+	var length = direction.length()
+	var mid_point = from_pos + direction / 2.0
+
+	# Atualiza posição e orientação do laser
+	laser_line.global_transform.origin = mid_point
+	laser_line.look_at(to_pos, Vector3.UP)
+	laser_line.scale.y = length / 2.0  # Ajusta o comprimento do cilindro
+
+	# Define a cor do laser (ex: vermelho)
+	change_laser_color(Color(1, 0, 0))
+
+	# Mostra o laser e esconde após um tempo
+	laser_line.visible = true
+	await get_tree().create_timer(0.1).timeout
+	laser_line.visible = false

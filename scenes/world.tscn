@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=4 uid="uid://bhk71lctrycc"]
+[gd_scene load_steps=44 format=4 uid="uid://bhk71lctrycc"]
 
 [ext_resource type="Material" uid="uid://dh8b54lwa3uwc" path="res://shaders/pixelVignete.tres" id="1_71j4m"]
 [ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="1_rwgxs"]
@@ -12,8 +12,16 @@
 [ext_resource type="Material" uid="uid://cuc76brdhoebn" path="res://shaders/crosshair.tres" id="8_4mrxx"]
 [ext_resource type="PackedScene" uid="uid://cj47gniftse4d" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Dresser/Dresser.fbx_Scene/Dresser.fbx_Scene.fbx" id="8_jhx03"]
 [ext_resource type="PackedScene" uid="uid://8ys0mvh063ck" path="res://scenes/double_bed.tscn" id="9_7r4gi"]
+[ext_resource type="Texture2D" uid="uid://bcqhlm6vjmnhx" path="res://assets/textures/D4BC5953-C99A-43F1-A561-23D964912C34-removebg-preview.png" id="11_pm21f"]
 [ext_resource type="Texture2D" uid="uid://cdlnmluiwvtvs" path="res://assets/models/weapons/albedo(1).png" id="12_jhx03"]
+[ext_resource type="Texture2D" uid="uid://crir3d3ao6rw5" path="res://assets/textures/pngimg.com_-_fallout_PNG49.png" id="13_dss4m"]
+[ext_resource type="Texture2D" uid="uid://cwfunle18xgoi" path="res://assets/textures/pngwing.com.png" id="14_7t5mc"]
+[ext_resource type="Texture2D" uid="uid://dtcm260hhtsna" path="res://assets/textures/portrait-removebg-preview.png" id="14_lakw3"]
 [ext_resource type="Script" uid="uid://3tj4u1uyqroy" path="res://scripts/crosshair.gd" id="14_o8fc1"]
+[ext_resource type="Texture2D" uid="uid://c5ksa63ybjr87" path="res://assets/textures/mapinha.png" id="16_lakw3"]
+[ext_resource type="Texture2D" uid="uid://c8eiuqetyehqi" path="res://assets/textures/healthsteam.png" id="18_2lf6f"]
+[ext_resource type="Texture2D" uid="uid://b5cykxieqbnuf" path="res://assets/textures/compass.png" id="19_7iits"]
+[ext_resource type="Texture2D" uid="uid://douqs785t2pf8" path="res://assets/textures/xpcontainer-removebg-preview.png" id="20_oo54l"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qfnet"]
 shader = ExtResource("5_71j4m")
@@ -46,6 +54,10 @@ size = Vector2(4, 4)
 material = ExtResource("6_i7141")
 flip_faces = true
 size = Vector2(4, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oo54l"]
+vertex_color_is_srgb = true
+emission_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_53dg2"]
 resource_name = "Flashlight"
@@ -151,6 +163,8 @@ shader_parameter/vignette_opacity = 0.377
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_7t5mc"]
 
+[sub_resource type="CanvasTexture" id="CanvasTexture_oo54l"]
+
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4mrxx"]
 size = Vector2(500, 500)
 
@@ -236,7 +250,24 @@ mesh = SubResource("QuadMesh_4mrxx")
 skeleton = NodePath("../../../../..")
 
 [node name="FirstPersonCamera" type="Camera3D" parent="SubViewportContainer/SubViewport/Player"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.018385, 1.64292, -0.132919)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.018385, 1.64292, -0.116178)
+
+[node name="weapon" type="TextureRect" parent="SubViewportContainer/SubViewport/Player/FirstPersonCamera"]
+offset_left = -48.25
+offset_top = -6.0
+offset_right = 666.75
+offset_bottom = 343.0
+scale = Vector2(2, 2)
+texture = ExtResource("11_pm21f")
+
+[node name="ShootRay" type="RayCast3D" parent="SubViewportContainer/SubViewport/Player/FirstPersonCamera"]
+
+[node name="LaseLine" type="CSGCylinder3D" parent="SubViewportContainer/SubViewport/Player/FirstPersonCamera"]
+transform = Transform3D(0.984808, -0.173644, -0.00121229, 6.10322e-10, -0.00698127, 0.999976, -0.173648, -0.984784, -0.00687521, 0.0411531, -0.0862329, -0.601917)
+radius = 0.00927734
+height = 0.751831
+cone = true
+material = SubResource("StandardMaterial3D_oo54l")
 
 [node name="flashlight(1)" type="Node3D" parent="SubViewportContainer/SubViewport/Player/FirstPersonCamera"]
 transform = Transform3D(0.411195, 0, -1.26093, 0, 1.3, 0, 1.63921, 0, 0.316303, 0.190422, -0.133661, -0.150727)
@@ -269,35 +300,119 @@ offset_right = 61.972
 offset_bottom = 536.368
 texture = SubResource("CanvasTexture_o8fc1")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
-offset_left = 55.75
-offset_top = 482.0
-offset_right = 95.75
-offset_bottom = 522.0
-
 [node name="TextureRect2" type="TextureRect" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
 modulate = Color(0.989622, 0, 0.227846, 0.482353)
-offset_left = 15.5
-offset_top = 472.75
-offset_right = 207.5
-offset_bottom = 518.75
+offset_left = 4.5
+offset_top = 444.75
+offset_right = 249.5
+offset_bottom = 519.75
 texture = SubResource("CanvasTexture_xo05s")
 
 [node name="TextureRect3" type="TextureRect" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
 modulate = Color(1, 0.482353, 0.0470588, 0.647059)
-offset_left = 3.0
-offset_top = 20.75
-offset_right = 219.0
-offset_bottom = 202.75
+offset_left = 38.5
+offset_top = 46.25
+offset_right = 208.5
+offset_bottom = 228.25
 texture = SubResource("CanvasTexture_dss4m")
 
 [node name="TextureRect4" type="TextureRect" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+visible = false
 modulate = Color(0.964706, 0.360784, 0.341176, 0.564706)
 offset_left = 918.25
 offset_top = 21.5
 offset_right = 1122.25
 offset_bottom = 173.5
 texture = SubResource("CanvasTexture_7t5mc")
+
+[node name="Pngimg_com-FalloutPng49" type="Sprite2D" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+position = Vector2(138, 480.25)
+scale = Vector2(0.08, 0.08)
+texture = ExtResource("13_dss4m")
+
+[node name="Portrait-removebg-preview" type="Sprite2D" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+position = Vector2(131.75, 130.75)
+scale = Vector2(0.76, 0.76)
+texture = ExtResource("14_lakw3")
+
+[node name="Pngwing_com" type="Sprite2D" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+position = Vector2(131.5, 133.25)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("14_7t5mc")
+
+[node name="Mapinha" type="Sprite2D" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+position = Vector2(1024, 100)
+scale = Vector2(0.2, 0.4)
+texture = ExtResource("16_lakw3")
+
+[node name="Healthsteam" type="Sprite2D" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+position = Vector2(595, 105)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("18_2lf6f")
+
+[node name="Compass" type="Sprite2D" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+position = Vector2(1024.75, 91.5)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("19_7iits")
+
+[node name="Xpcontainer-removebg-preview" type="Sprite2D" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+position = Vector2(301, 130)
+texture = ExtResource("20_oo54l")
+
+[node name="Xpcontainer-removebg-preview2" type="Sprite2D" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+position = Vector2(453.25, 399)
+texture = ExtResource("20_oo54l")
+
+[node name="cores" type="TextureRect" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+modulate = Color(1, 0.27451, 1, 1)
+offset_left = 196.25
+offset_top = 547.75
+offset_right = 236.25
+offset_bottom = 587.75
+texture = SubResource("CanvasTexture_oo54l")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+offset_left = 43.0
+offset_top = 275.25
+offset_right = 83.0
+offset_bottom = 315.25
+scale = Vector2(2, 2)
+text = "12"
+tab_size = 7
+custom_effects = [null]
+meta_underlined = false
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+offset_left = 24.25
+offset_top = 526.0
+offset_right = 130.25
+offset_bottom = 576.0
+scale = Vector2(1.3, 1.3)
+text = "Ghost Buster"
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+offset_left = 37.0
+offset_top = 549.75
+offset_right = 77.0
+offset_bottom = 589.75
+scale = Vector2(2, 2)
+text = "120"
+
+[node name="RichTextLabel4" type="RichTextLabel" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+offset_left = 98.25
+offset_top = 563.5
+offset_right = 138.25
+offset_bottom = 603.5
+scale = Vector2(1.3, 1.3)
+text = "/ 120"
+
+[node name="RichTextLabel5" type="RichTextLabel" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+offset_left = 971.25
+offset_top = 180.25
+offset_right = 1058.25
+offset_bottom = 220.25
+scale = Vector2(1.4, 1.4)
+text = "Bedroom"
 
 [node name="Crosshair" type="TextureRect" parent="SubViewportContainer/SubViewport"]
 material = ExtResource("8_4mrxx")
