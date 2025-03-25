@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://dmf4ff5if6si"
-path="res://.godot/imported/Music_Keyboard.fbx-ce3f2b270d4910c6b9e07c7ab26bca22.scn"
+path="res://.godot/imported/Music_Keyboard.fbx-d0f011feea9c0c21eb220eea4e4675bc.scn"
 
 [deps]
 
-source_file="res://assets/models/props/PSX_Furniture, Appliances, And Others/Music Keyboard/Music_Keyboard.fbx"
-dest_files=["res://.godot/imported/Music_Keyboard.fbx-ce3f2b270d4910c6b9e07c7ab26bca22.scn"]
+source_file="res://assets/models/props/PSX_Furniture, Appliances, And Others/Music Keyboard/Music_Keyboard/Music_Keyboard.fbx"
+dest_files=["res://.godot/imported/Music_Keyboard.fbx-d0f011feea9c0c21eb220eea4e4675bc.scn"]
 
 [params]
 

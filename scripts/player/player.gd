@@ -82,39 +82,41 @@ func move_third_person(delta: float):
 	if Input.is_action_pressed("right"):
 		rotate_direction -= 1
 
-	# Movimento para frente/trás/direita/esquerda
+	# Leitura de teclas
+	var moving_forward = Input.is_action_pressed("foward")
+	var moving_backward = Input.is_action_pressed("backward")
+	var moving_left = Input.is_action_pressed("left")
+	var moving_right = Input.is_action_pressed("right")
 	var moving = false
-	
-	if Input.is_action_pressed("foward"):
+
+	# MOVIMENTO PRIORITÁRIO PARA FRENTE E TRÁS
+	if moving_forward:
 		move_direction -= transform.basis.z
 		play_animation("walk_front")
 		moving = true
-	if Input.is_action_pressed("backward"):
+	elif moving_backward:
 		move_direction += transform.basis.z
 		play_animation("walk_back")
 		moving = true
-	if Input.is_action_pressed("left"):
+	elif moving_left:
 		move_direction -= transform.basis.x
 		play_animation("walk_left")
 		moving = true
-	if Input.is_action_pressed("right"):
+	elif moving_right:
 		move_direction += transform.basis.x
 		play_animation("walk_right")
 		moving = true
 
-	# Se nenhuma tecla foi pressionada, define a animação como "idle"
+	# Se nenhuma tecla foi pressionada, define como idle
 	if not moving:
 		play_animation("idle")
 
-	# Normaliza a direção
+	# Normaliza a direção e aplica movimento
 	move_direction = move_direction.normalized()
-
-	# Aplica a rotação do personagem
 	rotation.y += rotate_direction * ROTATION_SPEED * delta
-
-	# Movimenta na direção correta
 	velocity.x = move_direction.x * SPEED
 	velocity.z = move_direction.z * SPEED
+
 
 func play_animation(anim_name: String):
 	""" Controla a troca de animação garantindo suavidade """
