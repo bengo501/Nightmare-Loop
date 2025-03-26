@@ -6,7 +6,7 @@ uniform float wave_amplitude = 0.03;
 uniform float glow_intensity = 2.0;
 uniform float alpha_strength = 0.8;
 
-uniform vec4 core_color = vec4(0.3, 0.8, 1.0, 1.0); // Azul claro energético
+uniform vec4 core_color : source_color = vec4(0.3, 0.8, 1.0, 1.0);
 uniform float distortion_strength = 1.0;
 
 float random(vec2 pos) {
