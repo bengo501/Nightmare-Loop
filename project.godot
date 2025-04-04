@@ -15,9 +15,15 @@ run/main_scene="uid://bhk71lctrycc"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
+<<<<<<< Updated upstream
 [display]
 
 mouse_cursor/custom_image="uid://d02xvpntngw1w"
+=======
+[filesystem]
+
+import/blender/enabled=false
+>>>>>>> Stashed changes
 
 [input]
 
