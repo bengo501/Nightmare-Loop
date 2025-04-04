@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://bd1iioahw58ht"]
+
+[ext_resource type="Shader" uid="uid://dpxf1ywmm4un0" path="res://shaders/ghost.gdshader" id="1_qvop4"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_0mtau"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_qvop4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mala1"]
+render_priority = 0
+shader = ExtResource("1_qvop4")
+shader_parameter/fuwafuwa_speed = 4.0
+shader_parameter/fuwafuwa_size = 0.05
+shader_parameter/ghost_color = Vector4(2, 3, 0.85, 0.5)
+shader_parameter/outline_ratio = 3.0
+shader_parameter/noise_speed = 2.0
+shader_parameter/noise_scale = 2.0
+
+[node name="Ghost1" type="Node3D"]
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.242367, 0)
+shape = SubResource("CylinderShape3D_0mtau")
+debug_fill = false
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.19714, 0)
+shape = SubResource("CylinderShape3D_qvop4")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.202897, 0)
+material = SubResource("ShaderMaterial_mala1")

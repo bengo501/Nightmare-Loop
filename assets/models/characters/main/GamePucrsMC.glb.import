@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://fw1ig6175lqf"
-path="res://.godot/imported/DarleneModelFinished.fbx-e0d482e355e2e6d0b352896790e4f6f4.scn"
+uid="uid://mddtw43ycr3a"
+path="res://.godot/imported/GamePucrsMC.glb-c5eb182302b6d4fc585225d364bc3059.scn"
 
 [deps]
 
-source_file="res://assets/models/characters/DarleneModelFinished.fbx"
-dest_files=["res://.godot/imported/DarleneModelFinished.fbx-e0d482e355e2e6d0b352896790e4f6f4.scn"]
+source_file="res://assets/models/characters/main/GamePucrsMC.glb"
+dest_files=["res://.godot/imported/GamePucrsMC.glb-c5eb182302b6d4fc585225d364bc3059.scn"]
 
 [params]
 
@@ -28,11 +28,10 @@ meshes/force_disable_compression=false
 skins/use_named_skins=true
 animation/import=true
 animation/fps=30
-animation/trimming=true
+animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
 _subresources={}
-fbx/importer=0
-fbx/allow_geometry_helper_nodes=false
-fbx/embedded_image_handling=1
+gltf/naming_version=1
+gltf/embedded_image_handling=1

@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://sv02x6ok5npi"
-path.s3tc="res://.godot/imported/DarleneTexture256Fin.png-aac227667322db3de7626c80a82db286.s3tc.ctex"
+path.s3tc="res://.godot/imported/DarleneTexture256Fin.png-28b53adee34e8abc25d18edb0ef1441c.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/models/characters/DarleneTexture256Fin.png"
-dest_files=["res://.godot/imported/DarleneTexture256Fin.png-aac227667322db3de7626c80a82db286.s3tc.ctex"]
+source_file="res://assets/models/characters/misc/DarleneTexture256Fin.png"
+dest_files=["res://.godot/imported/DarleneTexture256Fin.png-28b53adee34e8abc25d18edb0ef1441c.s3tc.ctex"]
 
 [params]
 

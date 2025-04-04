@@ -1,30 +1,29 @@
 shader_type canvas_item;
 
 uniform bool is_symmetric = true;
-uniform vec2 center_offset;
-uniform vec2 aim_offset; // Controle da movimentação
-uniform float rotation_speed = 1.0; // Velocidade de rotação da mira
+uniform vec2 mouse_pos; // Recebe a posição do mouse do GDScript
+uniform vec2 aim_offset;
+uniform float rotation_speed = 1.0;
 uniform vec4 line_color : source_color = vec4(1.0);
 uniform vec4 line_outline_color : source_color = vec4(vec3(0.0), 1);
-uniform float square_size_1 = 15.0; // Tamanho do primeiro quadrado (interno)
-uniform float square_size_2 = 25.0; // Tamanho do segundo quadrado (médio)
-uniform float square_outline_thickness = 2.0; // Espessura da borda das linhas do quadrado
-
+uniform float square_size_1 = 15.0;
+uniform float square_size_2 = 25.0;
+uniform float square_outline_thickness = 2.0;
 uniform vec4 dot_color : source_color = vec4(1.0);
 uniform vec4 dot_outline_color : source_color = vec4(vec3(0.0), 1.0);
 uniform float dot_size = 2.0;
 uniform float dot_outline_thickness = 1.0;
 
 // Função para desenhar um quadrado sólido
-float center_square(float size, float outline, vec2 pixel, vec2 uv){
+float center_square(float size, float outline, vec2 pixel, vec2 uv) {
     size = round(size);
     outline = round(outline);
-
-    if (is_symmetric){
+    
+    if (is_symmetric) {
         size = size * 2.0 - 1.0;
         outline = outline * 2.0;
     }
-
+    
     float square = step(abs(uv.x - 0.5), (size + outline) * pixel.x);
     square *= step(abs(uv.y - 0.5), (size + outline) * pixel.y);
     return square;
@@ -46,7 +45,7 @@ vec4 blend_layers(vec4 bottom, vec4 top) {
 }
 
 void fragment() {
-    float angle = TIME * rotation_speed; // Rotação dinâmica ao longo do tempo
+    float angle = TIME * rotation_speed;
     
     // Criar a matriz de rotação
     mat2 rotation_matrix = mat2(
@@ -54,9 +53,12 @@ void fragment() {
         vec2(sin(angle), cos(angle))
     );
 
+    // Usa a posição do mouse passada pelo GDScript
+    vec2 center_offset = mouse_pos + aim_offset;
+
     // Aplica transformação na UV para girar a mira no próprio centro
-    vec2 uv = (FRAGCOORD.xy * SCREEN_PIXEL_SIZE + center_offset + aim_offset) - vec2(0.5);
-    uv = rotation_matrix * uv + vec2(0.5); // Aplica rotação ao redor do centro
+    vec2 uv = (FRAGCOORD.xy * SCREEN_PIXEL_SIZE + center_offset) - vec2(0.5);
+    uv = rotation_matrix * uv + vec2(0.5);
     vec2 pixel = SCREEN_PIXEL_SIZE / 2.0;
 
     // Criar os dois quadrados apenas com linhas em volta do ponto central (dot)
@@ -75,6 +77,6 @@ void fragment() {
     // Combinar todas as camadas
     vec4 blended_result = blend_layers(square_layer_2, square_layer_1);
     blended_result = blend_layers(blended_result, center_dot_layer);
-    
+
     COLOR = blended_result;
 }

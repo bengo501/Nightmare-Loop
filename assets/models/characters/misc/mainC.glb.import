@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dmf4ff5if6si"
-path="res://.godot/imported/Music_Keyboard.fbx-ce3f2b270d4910c6b9e07c7ab26bca22.scn"
+uid="uid://dg0ireefsv7c1"
+path="res://.godot/imported/mainC.glb-4b80a328ecf07cb93a1ce3737e80f222.scn"
 
 [deps]
 
-source_file="res://assets/models/props/PSX_Furniture, Appliances, And Others/Music Keyboard/Music_Keyboard.fbx"
-dest_files=["res://.godot/imported/Music_Keyboard.fbx-ce3f2b270d4910c6b9e07c7ab26bca22.scn"]
+source_file="res://assets/models/characters/misc/mainC.glb"
+dest_files=["res://.godot/imported/mainC.glb-4b80a328ecf07cb93a1ce3737e80f222.scn"]
 
 [params]
 
@@ -28,11 +28,10 @@ meshes/force_disable_compression=false
 skins/use_named_skins=true
 animation/import=true
 animation/fps=30
-animation/trimming=true
+animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
 _subresources={}
-fbx/importer=0
-fbx/allow_geometry_helper_nodes=false
-fbx/embedded_image_handling=1
+gltf/naming_version=1
+gltf/embedded_image_handling=1
