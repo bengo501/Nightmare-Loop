@@ -1425,6 +1425,9 @@ shape = SubResource("BoxShape3D_e75v4")
 [node name="Boombox_fbx_Scene" parent="SubViewportContainer/SubViewport/map" instance=ExtResource("17_1dgkn")]
 transform = Transform3D(-0.33629, 0, 0.941759, 0, 1, 0, -0.941759, 0, -0.33629, -3.45807, 1.14868, -0.229952)
 
+[node name="Ghost1" parent="SubViewportContainer/SubViewport" instance=ExtResource("4_e68xj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.539327, 0.359403, -1.57956)
+
 [node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_4wyf3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1296, 0.466597, -0.0769463)
 
@@ -1466,9 +1469,13 @@ skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_7t5mc")
 
 [node name="ShootRay" type="RayCast3D" parent="SubViewportContainer/SubViewport/Player/FirstPersonCamera"]
+transform = Transform3D(-0.989972, -0.322947, -0.00819693, 0.00719103, -0.0273806, -1.5094, 0.14108, -2.26476, 0.0194171, -0.144589, 0.01353, -1.11565)
+collision_mask = 2
+debug_shape_custom_color = Color(0, 0.933333, 0, 1)
 
 [node name="LaseLine" type="CSGCylinder3D" parent="SubViewportContainer/SubViewport/Player/FirstPersonCamera"]
 transform = Transform3D(0.984808, -0.173644, -0.00121229, 6.10322e-10, -0.00698127, 0.999976, -0.173648, -0.984784, -0.00687521, 0.0411531, -0.0862329, -0.601917)
+layers = 2
 radius = 0.00927734
 height = 0.751831
 cone = true
