@@ -1,4 +1,4 @@
-[gd_scene load_steps=148 format=4 uid="uid://bhk71lctrycc"]
+[gd_scene load_steps=158 format=4 uid="uid://bhk71lctrycc"]
 
 [ext_resource type="Material" uid="uid://dh8b54lwa3uwc" path="res://shaders/pixelVignete.tres" id="1_71j4m"]
 [ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="1_rwgxs"]
@@ -22,6 +22,7 @@
 [ext_resource type="Material" uid="uid://cuc76brdhoebn" path="res://shaders/crosshair.tres" id="8_4mrxx"]
 [ext_resource type="Texture2D" uid="uid://c6gcyplhmr3tc" path="res://assets/textures/Wall/Horror_Wall_01-128x128.png" id="8_eo1xk"]
 [ext_resource type="PackedScene" uid="uid://cj47gniftse4d" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Dresser/Dresser.fbx_Scene/Dresser.fbx_Scene.fbx" id="8_jhx03"]
+[ext_resource type="Shader" uid="uid://buleteu1jwi75" path="res://shaders/ditherTransparency.gdshader" id="11_h3odw"]
 [ext_resource type="Texture2D" uid="uid://bcqhlm6vjmnhx" path="res://assets/textures/D4BC5953-C99A-43F1-A561-23D964912C34-removebg-preview.png" id="11_pm21f"]
 [ext_resource type="Texture2D" uid="uid://cdlnmluiwvtvs" path="res://assets/models/weapons/albedo(1).png" id="12_jhx03"]
 [ext_resource type="Texture2D" uid="uid://crir3d3ao6rw5" path="res://assets/textures/pngimg.com_-_fallout_PNG49.png" id="13_dss4m"]
@@ -164,8 +165,64 @@ albedo_texture = ExtResource("2_l8ah6")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e68xj"]
 albedo_texture = ExtResource("2_l8ah6")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5hl1e"]
+render_priority = 0
+shader = ExtResource("11_h3odw")
+shader_parameter/texture_albedo = ExtResource("7_hi6a0")
+shader_parameter/color = Color(0.580392, 0.580392, 0.580392, 0.784314)
+shader_parameter/fade_amount = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_66tox"]
+render_priority = 0
+shader = ExtResource("11_h3odw")
+shader_parameter/texture_albedo = ExtResource("7_hi6a0")
+shader_parameter/color = Color(0.580392, 0.580392, 0.580392, 0.784314)
+shader_parameter/fade_amount = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pq8jk"]
+render_priority = 0
+shader = ExtResource("11_h3odw")
+shader_parameter/texture_albedo = ExtResource("7_hi6a0")
+shader_parameter/color = Color(0.580392, 0.580392, 0.580392, 0.784314)
+shader_parameter/fade_amount = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q57r8"]
+render_priority = 0
+shader = ExtResource("11_h3odw")
+shader_parameter/texture_albedo = ExtResource("7_hi6a0")
+shader_parameter/color = Color(0.580392, 0.580392, 0.580392, 0.784314)
+shader_parameter/fade_amount = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h3odw"]
+render_priority = 0
+shader = ExtResource("11_h3odw")
+shader_parameter/texture_albedo = ExtResource("8_eo1xk")
+shader_parameter/color = Color(0.580392, 0.580392, 0.580392, 0.784314)
+shader_parameter/fade_amount = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4kmvx"]
+render_priority = 0
+shader = ExtResource("11_h3odw")
+shader_parameter/texture_albedo = ExtResource("8_eo1xk")
+shader_parameter/color = Color(0.580392, 0.580392, 0.580392, 0.784314)
+shader_parameter/fade_amount = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_40xph"]
+render_priority = 0
+shader = ExtResource("11_h3odw")
+shader_parameter/texture_albedo = ExtResource("7_hi6a0")
+shader_parameter/color = Color(0.580392, 0.580392, 0.580392, 0.784314)
+shader_parameter/fade_amount = 0.0
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_40xph"]
 albedo_texture = ExtResource("7_hi6a0")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8lgfd"]
+render_priority = 0
+shader = ExtResource("11_h3odw")
+shader_parameter/texture_albedo = ExtResource("7_hi6a0")
+shader_parameter/color = Color(0.580392, 0.580392, 0.580392, 0.784314)
+shader_parameter/fade_amount = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8lgfd"]
 albedo_texture = ExtResource("8_eo1xk")
@@ -188,11 +245,19 @@ albedo_texture = ExtResource("7_hi6a0")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qaasp"]
 albedo_texture = ExtResource("8_eo1xk")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1v02h"]
-albedo_texture = ExtResource("8_eo1xk")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_myjip"]
+render_priority = 0
+shader = ExtResource("11_h3odw")
+shader_parameter/texture_albedo = ExtResource("7_hi6a0")
+shader_parameter/color = Color(0.580392, 0.580392, 0.580392, 0.784314)
+shader_parameter/fade_amount = 0.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_shehe"]
-albedo_texture = ExtResource("7_hi6a0")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dyafi"]
+render_priority = 0
+shader = ExtResource("11_h3odw")
+shader_parameter/texture_albedo = ExtResource("7_hi6a0")
+shader_parameter/color = Color(0.580392, 0.580392, 0.580392, 0.784314)
+shader_parameter/fade_amount = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l137e"]
 albedo_texture = ExtResource("7_hi6a0")
@@ -220,6 +285,13 @@ albedo_texture = ExtResource("7_hi6a0")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xgy6y"]
 albedo_texture = ExtResource("8_eo1xk")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5nedk"]
+render_priority = 0
+shader = ExtResource("11_h3odw")
+shader_parameter/texture_albedo = ExtResource("7_hi6a0")
+shader_parameter/color = Color(0.580392, 0.580392, 0.580392, 0.784314)
+shader_parameter/fade_amount = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jhx03"]
 albedo_texture = ExtResource("4_e3hyu")
@@ -930,57 +1002,52 @@ omni_range = 8.0
 
 [node name="Parede1" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
 transform = Transform3D(1.00295, 0, 0, 0, 2.10959, 0, 0, 0, 1.00295, -14.4135, 3.38987, -32.0125)
-material_override = SubResource("StandardMaterial3D_40xph")
 use_collision = true
 size = Vector3(1, 3, 6.47754)
+material = SubResource("ShaderMaterial_5hl1e")
+script = ExtResource("15_e6ckp")
 
 [node name="Parede22" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
 transform = Transform3D(-0.00206553, 0, -1.00295, 0, 2.10959, 0, 1.00295, 0, -0.00206553, -18.1363, 3.38987, -34.7721)
-material_override = SubResource("StandardMaterial3D_40xph")
 use_collision = true
 size = Vector3(1, 3, 6.47754)
+material = SubResource("ShaderMaterial_66tox")
+script = ExtResource("15_e6ckp")
 
 [node name="Parede23" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
 transform = Transform3D(0.882531, 0, -0.476506, 0, 2.10959, 0, 0.476506, 0, 0.882531, -22.3594, 3.38987, -32.2587)
-material_override = SubResource("StandardMaterial3D_40xph")
 use_collision = true
 size = Vector3(1, 3, 5.65115)
+material = SubResource("ShaderMaterial_pq8jk")
+script = ExtResource("15_e6ckp")
 
 [node name="Parede27" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
-transform = Transform3D(0.00336846, 0, 0.999994, 0, 2.10337, 0, -0.999994, 0, 0.00336846, -26.302, 3.38987, -29.9714)
-material_override = SubResource("StandardMaterial3D_40xph")
+transform = Transform3D(0.00336846, 0, 0.999994, 0, 2.10337, 0, -0.999994, 0, 0.00336846, -28.0818, 3.38987, -29.9774)
 use_collision = true
-size = Vector3(1, 3, 5.65115)
-
-[node name="Parede29" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
-transform = Transform3D(0.00336846, 0, 0.999994, 0, 2.10337, 0, -0.999994, 0, 0.00336846, -30.6046, 3.38987, -29.9672)
-material_override = SubResource("StandardMaterial3D_40xph")
-use_collision = true
-size = Vector3(1, 3, 3.20448)
+size = Vector3(1, 3, 9.21083)
+material = SubResource("ShaderMaterial_q57r8")
+script = ExtResource("15_e6ckp")
 
 [node name="Parede30" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
 transform = Transform3D(0.803441, 0, 0.595384, 0, 2.10337, 0, -0.595384, 0, 0.803441, -34.2058, 3.38987, -32.4365)
-material_override = SubResource("StandardMaterial3D_40xph")
 use_collision = true
 size = Vector3(1, 3, 6.58384)
-
-[node name="Parede31" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
-transform = Transform3D(0.803441, 0, 0.595384, 0, 2.10337, 0, -0.595384, 0, 0.803441, -31.5533, 3.38987, -34.9412)
-material_override = SubResource("StandardMaterial3D_40xph")
-use_collision = true
-size = Vector3(1, 3, 2.26679)
+material = SubResource("ShaderMaterial_h3odw")
+script = ExtResource("15_e6ckp")
 
 [node name="Parede28" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
 transform = Transform3D(0.00336846, 0, 0.999994, 0, 2.10337, 0, -0.999994, 0, 0.00336846, -28.4051, 3.38987, -34.2659)
-material_override = SubResource("StandardMaterial3D_40xph")
 use_collision = true
 size = Vector3(1, 3, 5.65115)
+material = SubResource("ShaderMaterial_4kmvx")
+script = ExtResource("15_e6ckp")
 
 [node name="Parede26" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
 transform = Transform3D(0.879931, 0, -0.475102, 0, 2.10337, 0, 0.475102, 0, 0.879931, -24.5076, 3.38987, -36.6554)
-material_override = SubResource("StandardMaterial3D_40xph")
 use_collision = true
 size = Vector3(1, 3, 6.32449)
+material = SubResource("ShaderMaterial_40xph")
+script = ExtResource("15_e6ckp")
 
 [node name="Parede33" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
 transform = Transform3D(0.996612, 0, -0.0822516, 0, 2.10337, 0, 0.0822516, 0, 0.996612, -33.6011, 3.38987, -42.4311)
@@ -1056,15 +1123,16 @@ size = Vector3(1, 3, 6.32449)
 
 [node name="Parede32" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
 transform = Transform3D(0.879931, 0, -0.475102, 0, 2.10337, 0, 0.475102, 0, 0.879931, -35.0999, 3.38987, -37.0306)
-material_override = SubResource("StandardMaterial3D_40xph")
 use_collision = true
 size = Vector3(1, 3, 5.47169)
+material = SubResource("ShaderMaterial_8lgfd")
+script = ExtResource("15_e6ckp")
 
 [node name="Parede2" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
-transform = Transform3D(1, 0, 0, 0, 2.10337, 0, 0, 0, 1, -14.425, 3.38987, -43.748)
+transform = Transform3D(1, 0, 0, 0, 2.10337, 0, 0, 0, 1, -14.425, 3.38987, -44.1727)
 material_override = SubResource("StandardMaterial3D_8lgfd")
 use_collision = true
-size = Vector3(1, 3, 10)
+size = Vector3(1, 3, 9.15051)
 
 [node name="Parede3" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
 transform = Transform3D(1, 0, 0, 0, 2.10337, 0, 0, 0, 1, -14.425, 3.38987, -50.3707)
@@ -1122,27 +1190,17 @@ size = Vector3(1, 3, 4.92627)
 
 [node name="Parede5" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
 transform = Transform3D(1, 0, 0, 0, 2.10337, 0, 0, 0, 1, -9.48975, 3.38987, -33.7767)
-material_override = SubResource("StandardMaterial3D_1v02h")
 use_collision = true
 size = Vector3(1, 3, 10)
+material = SubResource("ShaderMaterial_myjip")
+script = ExtResource("15_e6ckp")
 
 [node name="Parede6" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
-transform = Transform3D(-0.000872638, 0, 1, 0, 2.10337, 0, -1, 0, -0.000872638, -13.9868, 3.38987, -39.2532)
-material_override = SubResource("StandardMaterial3D_shehe")
+transform = Transform3D(-0.000872638, 0, 1, 0, 2.10337, 0, -1, 0, -0.000872638, -16.2864, 3.38987, -39.2512)
 use_collision = true
-size = Vector3(1, 3, 10)
-
-[node name="Parede25" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
-transform = Transform3D(-0.000872638, 0, 1, 0, 2.10337, 0, -1, 0, -0.000872638, -22.3533, 3.38987, -39.2546)
-material_override = SubResource("StandardMaterial3D_shehe")
-use_collision = true
-size = Vector3(1, 3, 6.82642)
-
-[node name="Parede24" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
-transform = Transform3D(-0.000872638, 0, 1, 0, 1, 0, -1, 0, -0.000872638, -13.9868, 1.84099, -39.2532)
-material_override = SubResource("StandardMaterial3D_shehe")
-use_collision = true
-size = Vector3(1, 3, 10)
+size = Vector3(1, 3, 14.5992)
+material = SubResource("ShaderMaterial_dyafi")
+script = ExtResource("15_e6ckp")
 
 [node name="Parede7" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.48975, 1.84099, -53.6053)
@@ -1332,9 +1390,10 @@ size = Vector3(1, 3, 7.99023)
 
 [node name="Parede69" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
 transform = Transform3D(0.0155502, 0, 0.999879, 0, 2.10337, 0, -0.999879, 0, 0.0155502, -7.14019, 3.38989, -29.2601)
-material_override = SubResource("StandardMaterial3D_xgy6y")
 use_collision = true
 size = Vector3(1, 3, 3.8313)
+material = SubResource("ShaderMaterial_5nedk")
+script = ExtResource("15_e6ckp")
 
 [node name="Parede12" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
 transform = Transform3D(-0.0307653, 0, -0.999527, 0, 1, 0, 0.999527, 0, -0.0307653, -4.96961, 1.841, -73.0482)
@@ -1886,7 +1945,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.74743, 0.776425, -3.68692)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.824, 0.776, -3.687)
 
 [node name="TopCupboard_fbx_Scene3" parent="." instance=ExtResource("46_4wdv8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.100623, 0.776425, -3.68692)
+transform = Transform3D(0.999881, 0.0154281, 0, -0.0154281, 0.999881, 0, 0, 0, 1, 0.100623, 0.776425, -3.68692)
 
 [node name="Small_Tablefbx_fbx_Scene" parent="." instance=ExtResource("47_d46x8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.54147, 0.359403, -3.47121)
