@@ -1,12 +1,18 @@
 extends CSGBox3D
 
-@export var fade_duration := 0.2  # Tempo de transição do fade
+@export var fade_duration := 0.4
 
 @onready var player = $"../../Player"
-@onready var camera = $"../../Player/ThirdPersonCamera"
-
+@onready var camera = $"../../ThirdPersonCamera"
 var fade_amount: float = 0.0
 var fade_target: float = 0.0
+
+func _ready():
+	# Torna o material único para cada parede
+	if material and material is ShaderMaterial:
+		material = material.duplicate()
+		print("DEBUG: Material duplicado para esta parede.")
+
 
 func _physics_process(delta):
 	if not player or not camera:

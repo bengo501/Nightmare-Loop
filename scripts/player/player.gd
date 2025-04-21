@@ -12,7 +12,7 @@ const MOUSE_SENSITIVITY = 0.003
 @export var attack_cooldown: float = 0.2
 
 # === NÓS ===
-@onready var third_person_camera = $ThirdPersonCamera
+@onready var third_person_camera = $"../ThirdPersonCamera"
 @onready var first_person_camera = $FirstPersonCamera
 @onready var animation_player = $visuals/GamePucrsMC/AnimationPlayer
 @onready var visuals = $visuals
@@ -161,44 +161,39 @@ func move_first_person(delta: float):
 
 # === MOVIMENTO EM TERCEIRA PESSOA ===
 func move_third_person(delta: float):
-	var rotate_direction = 0
-	var move_direction = Vector3.ZERO
+	var input_vector = Vector3.ZERO
 
+	if Input.is_action_pressed("foward"):
+		input_vector.z -= 1
+	if Input.is_action_pressed("backward"):
+		input_vector.z += 1
 	if Input.is_action_pressed("left"):
-		rotate_direction += 1
+		input_vector.x -= 1
 	if Input.is_action_pressed("right"):
-		rotate_direction -= 1
+		input_vector.x += 1
 
-	var moving_forward = Input.is_action_pressed("foward")
-	var moving_backward = Input.is_action_pressed("backward")
-	var moving_left = Input.is_action_pressed("left")
-	var moving_right = Input.is_action_pressed("right")
-	var moving = false
+	if input_vector != Vector3.ZERO:
+		input_vector = input_vector.normalized()
 
-	if moving_forward:
-		move_direction -= transform.basis.z
+		# Pega a base da câmera (para andar relativo ao ângulo dela)
+		var camera_basis = third_person_camera.global_transform.basis
+		var direction = (camera_basis.x * input_vector.x) + (camera_basis.z * input_vector.z)
+		direction.y = 0
+		direction = direction.normalized()
+
+		velocity.x = direction.x * SPEED
+		velocity.z = direction.z * SPEED
+
+		# Roda o personagem para frente da movimentação
+		look_at(global_position + direction, Vector3.UP)
+
+		# Define a animação com base na direção
 		play_animation("walk_front")
-		moving = true
-	elif moving_backward:
-		move_direction += transform.basis.z
-		play_animation("walk_back")
-		moving = true
-	elif moving_left:
-		move_direction -= transform.basis.x
-		play_animation("walk_left")
-		moving = true
-	elif moving_right:
-		move_direction += transform.basis.x
-		play_animation("walk_right")
-		moving = true
-
-	if not moving:
+	else:
+		velocity.x = lerp(velocity.x, 0.0, 0.2)
+		velocity.z = lerp(velocity.z, 0.0, 0.2)
 		play_animation("idle")
 
-	move_direction = move_direction.normalized()
-	rotation.y += rotate_direction * ROTATION_SPEED * delta
-	velocity.x = move_direction.x * SPEED
-	velocity.z = move_direction.z * SPEED
 
 # === ANIMAÇÃO, CÂMERA E MODO ===
 func play_animation(anim_name: String):

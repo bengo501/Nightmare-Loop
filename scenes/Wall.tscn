@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://btcglxdgl6hmj"]
+
+[ext_resource type="Material" uid="uid://d3j53d06bnt3h" path="res://shaders/ditherTransparency.tres" id="2_gakk0"]
+[ext_resource type="Script" uid="uid://c40fe800olgwg" path="res://scripts/wall.gd" id="3_rri1v"]
+
+[node name="CSGBox3D" type="CSGBox3D"]
+material = ExtResource("2_gakk0")
+script = ExtResource("3_rri1v")

@@ -5,5 +5,5 @@
 [resource]
 render_priority = 0
 shader = ExtResource("1_jucjf")
-shader_parameter/color = Color(1, 1, 1, 0)
+shader_parameter/color = Color(0.58, 0.58, 0.58, 0.784314)
 shader_parameter/fade_amount = 0.0
