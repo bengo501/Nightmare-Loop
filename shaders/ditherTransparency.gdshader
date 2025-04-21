@@ -1,6 +1,6 @@
 shader_type spatial;
 
-render_mode blend_mix, cull_back, unshaded;
+render_mode blend_mix, cull_back;
 
 // Textura principal da parede
 uniform sampler2D texture_albedo;

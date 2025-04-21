@@ -7,5 +7,5 @@
 render_priority = 0
 shader = ExtResource("1_jucjf")
 shader_parameter/texture_albedo = ExtResource("2_bw1w8")
-shader_parameter/color = Color(0.580392, 0.580392, 0.580392, 0.784314)
+shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/fade_amount = 0.0
