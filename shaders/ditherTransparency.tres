@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://d3j53d06bnt3h"]
+
+[ext_resource type="Shader" uid="uid://buleteu1jwi75" path="res://shaders/ditherTransparency.gdshader" id="1_jucjf"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_jucjf")
+shader_parameter/color = Color(1, 1, 1, 0)
+shader_parameter/fade_amount = 0.0
