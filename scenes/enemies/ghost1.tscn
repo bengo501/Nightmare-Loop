@@ -4,7 +4,9 @@
 [ext_resource type="Shader" uid="uid://dpxf1ywmm4un0" path="res://shaders/ghost.gdshader" id="1_qvop4"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_0mtau"]
-radius = 0.7
+margin = 0.1
+height = 2.25549
+radius = 0.980469
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mala1"]
 render_priority = 0
@@ -22,11 +24,13 @@ collision_mask = 3
 script = ExtResource("1_mala1")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." groups=["enemy"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.06734, 0)
 shape = SubResource("CylinderShape3D_0mtau")
+debug_color = Color(0.949585, 0.000840555, 0.965813, 0.42)
 
 [node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42071, 0)
 layers = 2
 radius = 0.7
+height = 2.56152
 material = SubResource("ShaderMaterial_mala1")

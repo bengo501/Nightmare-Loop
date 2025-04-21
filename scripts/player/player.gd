@@ -9,7 +9,7 @@ const MOUSE_SENSITIVITY = 0.003
 # === VARIÁVEIS DE ATAQUE ===
 @export var attack_damage: float = 10.0
 @export var attack_range: float = 10.0
-@export var attack_cooldown: float = 1.0
+@export var attack_cooldown: float = 0.2
 
 # === NÓS ===
 @onready var third_person_camera = $ThirdPersonCamera
