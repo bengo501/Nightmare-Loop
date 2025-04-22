@@ -80,43 +80,31 @@ func _physics_process(delta: float):
 
 	move_and_slide()
 
-
-func get_mouse_ground_position() -> Vector3:
+# === ROTAÇÃO PARA O MOUSE ===
+func rotate_toward_mouse(delta):
 	var mouse_pos = get_viewport().get_mouse_position()
 	var from = third_person_camera.project_ray_origin(mouse_pos)
-	var to = from + third_person_camera.project_ray_normal(mouse_pos) * 1000
+	var to = from + third_person_camera.project_ray_normal(mouse_pos) * 1000.0
 
+	var space_state = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(from, to)
-	query.collision_mask = 1 << 7  # Layer 8
+
+	query.collision_mask = 1 << 7  # Só layer 8
 	query.exclude = [self]
 	query.collide_with_areas = false
 
-	var result = get_world_3d().direct_space_state.intersect_ray(query)
+	var result = space_state.intersect_ray(query)
 
 	if result:
-		return result.position
-	else:
-		return global_transform.origin
-
-
-
-# === ROTAÇÃO PARA O MOUSE ===
-func rotate_toward_mouse(delta):
-	var point = get_mouse_ground_position()
-	var dir = point - global_transform.origin
-	dir.y = 0
-
-	if dir.length_squared() > 0.01:
-		var angle = atan2(dir.x, dir.z)
-		rotation.y = lerp_angle(rotation.y, angle, delta * rotation_speed)
+		var point = result.position
+		var dir = point - global_transform.origin
+		print("✅ Mouse colidiu com chão na posição: ", result.position)
+		dir.y = 0
+		if dir.length_squared() > 0.01:
+			var angle = atan2(dir.x, dir.z)
+			rotation.y = lerp_angle(rotation.y, angle, delta * rotation_speed)
+			
 		
-
-
-
-
-
-
-
 # === MOVIMENTO ISOMÉTRICO ===
 func move_isometric(delta: float):
 	var input_vector = Vector3.ZERO

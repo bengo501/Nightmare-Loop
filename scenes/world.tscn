@@ -1530,6 +1530,13 @@ visible = false
 mesh = SubResource("QuadMesh_4mrxx")
 skeleton = NodePath("../../../..")
 
+[node name="MouseRay" type="RayCast3D" parent="SubViewportContainer/SubViewport/ThirdPersonCamera"]
+transform = Transform3D(-0.124776, -0.0282902, -0.991782, -0.743858, 0.664158, 0.0746389, 0.656588, 0.747059, -0.103915, 0, 0, 0)
+target_position = Vector3(0, -100, 0)
+collision_mask = 128
+debug_shape_custom_color = Color(0, 0, 0.964706, 1)
+debug_shape_thickness = 5
+
 [node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_4wyf3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1296, 0.466597, -0.0769463)
 
