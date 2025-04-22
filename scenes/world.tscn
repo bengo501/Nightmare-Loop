@@ -1417,6 +1417,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1296, 0.0184145, -0.0769463
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0157991, -0.159011, 0.0428863)
 material_override = SubResource("StandardMaterial3D_w7kh3")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("1_rwgxs")
 
@@ -1527,10 +1529,6 @@ transform = Transform3D(1, 0, 0, 0, 0.935401, -0.353589, 0, 0.353589, 0.935401, 
 visible = false
 mesh = SubResource("QuadMesh_4mrxx")
 skeleton = NodePath("../../../..")
-
-[node name="MouseRay" type="RayCast3D" parent="SubViewportContainer/SubViewport/ThirdPersonCamera"]
-transform = Transform3D(-0.124776, -0.0282902, -0.991782, -0.743858, 0.664158, 0.0746389, 0.656588, 0.747059, -0.103915, 0, 0, 0)
-target_position = Vector3(0, -100, 0)
 
 [node name="Player" parent="SubViewportContainer/SubViewport" instance=ExtResource("3_4wyf3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1296, 0.466597, -0.0769463)

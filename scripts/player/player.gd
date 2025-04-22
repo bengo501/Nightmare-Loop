@@ -4,6 +4,7 @@ extends CharacterBody3D
 const SPEED = 3.0
 const JUMP_VELOCITY = 4.5
 const MOUSE_SENSITIVITY = 0.003
+@export var rotation_speed: float = 6.0
 
 # === VARIÁVEIS DE ATAQUE ===
 @export var attack_damage: float = 10.0
@@ -70,7 +71,7 @@ func _physics_process(delta: float):
 
 	if not first_person_mode:
 		move_isometric(delta)
-		rotate_toward_mouse()
+		rotate_toward_mouse(delta)
 	else:
 		move_first_person(delta)
 
@@ -79,20 +80,38 @@ func _physics_process(delta: float):
 
 	move_and_slide()
 
-# === ROTAÇÃO PARA O MOUSE ===
-func rotate_toward_mouse():
+
+func get_mouse_ground_position() -> Vector3:
 	var mouse_pos = get_viewport().get_mouse_position()
 	var from = third_person_camera.project_ray_origin(mouse_pos)
 	var to = from + third_person_camera.project_ray_normal(mouse_pos) * 1000
 
-	var space_state = get_world_3d().direct_space_state
-	var ray_params = PhysicsRayQueryParameters3D.create(from, to)
-	var result = space_state.intersect_ray(ray_params)
+	var query = PhysicsRayQueryParameters3D.create(from, to)
+	query.collision_mask = 1 << 7  # Layer 8
+	query.exclude = [self]
+	query.collide_with_areas = false
+
+	var result = get_world_3d().direct_space_state.intersect_ray(query)
 
 	if result:
-		var point = result.position
-		point.y = global_transform.origin.y  # Mantém no plano horizontal
-		look_at(point, Vector3.UP)
+		return result.position
+	else:
+		return global_transform.origin
+
+
+
+# === ROTAÇÃO PARA O MOUSE ===
+func rotate_toward_mouse(delta):
+	var point = get_mouse_ground_position()
+	var dir = point - global_transform.origin
+	dir.y = 0
+
+	if dir.length_squared() > 0.01:
+		var angle = atan2(dir.x, dir.z)
+		rotation.y = lerp_angle(rotation.y, angle, delta * rotation_speed)
+		
+
+
 
 
 
