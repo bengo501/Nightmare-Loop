@@ -4648,7 +4648,7 @@ shape = SubResource("CylinderShape3D_dovo2")
 [node name="visuals" type="Node3D" parent="."]
 
 [node name="GamePucrsMC" type="Node3D" parent="visuals"]
-transform = Transform3D(0.223539, 0.162954, 0.288923, -0.0758714, 0.364288, -0.146758, -0.322914, 0.0272131, 0.23449, 0.280554, 0, 0.330707)
+transform = Transform3D(0.223539, 0.162954, 0.288923, -0.0758714, 0.364288, -0.146758, -0.322914, 0.0272132, 0.23449, 0.280554, 0, 0.330707)
 
 [node name="metarig_001" type="Node3D" parent="visuals/GamePucrsMC"]
 transform = Transform3D(-1.6268, 0.0556629, 1.73581, 0.282886, 2.35514, 0.189598, -1.71351, 0.335966, -1.61668, -0.170031, -0.181259, -0.243622)

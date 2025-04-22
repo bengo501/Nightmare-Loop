@@ -30,6 +30,8 @@ var can_attack: bool = true
 var attack_timer: Timer
 var current_target = null
 
+
+
 # === INICIALIZAÇÃO ===
 func _ready():
 	activate_third_person()
@@ -79,20 +81,20 @@ func _physics_process(delta: float):
 
 # === ROTAÇÃO PARA O MOUSE ===
 func rotate_toward_mouse():
-	mouse_ray.force_raycast_update()
+	var mouse_pos = get_viewport().get_mouse_position()
+	var from = third_person_camera.project_ray_origin(mouse_pos)
+	var to = from + third_person_camera.project_ray_normal(mouse_pos) * 1000
 
-	if mouse_ray.is_colliding():
-		var target_point = mouse_ray.get_collision_point()
-		print("DEBUG: Mouse colidiu com o chão em ", target_point)
+	var space_state = get_world_3d().direct_space_state
+	var ray_params = PhysicsRayQueryParameters3D.create(from, to)
+	var result = space_state.intersect_ray(ray_params)
 
-		var direction = (target_point - global_transform.origin)
-		direction.y = 0
+	if result:
+		var point = result.position
+		point.y = global_transform.origin.y  # Mantém no plano horizontal
+		look_at(point, Vector3.UP)
 
-		if direction.length() > 0.1:
-			var target_rotation = atan2(direction.x, direction.z)
-			rotation.y = lerp_angle(rotation.y, target_rotation, 0.2)
-	else:
-		print("DEBUG: MouseRay NÃO colidiu!")
+
 
 
 
