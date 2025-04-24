@@ -2,7 +2,7 @@ extends Camera3D
 
 @export var target: Node3D
 @export var offset: Vector3 = Vector3(3, 5, 3)  # 📏 Câmera mais próxima do jogador
-@export var follow_speed: float = 5.0
+@export var follow_speed: float = 4.0
 
 func _process(delta):
 	if not target:
