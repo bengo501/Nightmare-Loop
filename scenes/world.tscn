@@ -1,4 +1,4 @@
-[gd_scene load_steps=245 format=4 uid="uid://bhk71lctrycc"]
+[gd_scene load_steps=246 format=4 uid="uid://bhk71lctrycc"]
 
 [ext_resource type="Material" uid="uid://dh8b54lwa3uwc" path="res://shaders/pixelVignete.tres" id="1_71j4m"]
 [ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="1_rwgxs"]
@@ -589,6 +589,8 @@ shader_parameter/fade_amount = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i00a8"]
 albedo_texture = ExtResource("7_hi6a0")
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_q57r8"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o8fc1"]
 albedo_texture = ExtResource("4_e3hyu")
@@ -2541,6 +2543,9 @@ script = ExtResource("15_e6ckp")
 
 [node name="Ghost1" parent="SubViewportContainer/SubViewport/map2" instance=ExtResource("4_e68xj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.6629, 1.36202, -35.2878)
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="SubViewportContainer/SubViewport/map2"]
+navigation_mesh = SubResource("NavigationMesh_q57r8")
 
 [node name="map" type="Node3D" parent="SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1296, 0.0184145, -0.0769463)

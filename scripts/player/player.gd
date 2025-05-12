@@ -35,6 +35,7 @@ var current_target = null
 
 # === INICIALIZAÇÃO ===
 func _ready():
+	add_to_group("player")
 	activate_third_person()
 	laser_line.visible = false
 	setup_attack_system()
