@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bd1iioahw58ht"]
+[gd_scene load_steps=6 format=3 uid="uid://bd1iioahw58ht"]
 
 [ext_resource type="Script" uid="uid://w2k3xjygr517" path="res://scripts/enemies/ghost.gd" id="1_mala1"]
 [ext_resource type="Shader" uid="uid://dpxf1ywmm4un0" path="res://shaders/ghost.gdshader" id="1_qvop4"]
@@ -18,6 +18,8 @@ shader_parameter/outline_ratio = 3.0
 shader_parameter/noise_speed = 2.0
 shader_parameter/noise_scale = 2.0
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mala1"]
+
 [node name="Ghost1" type="CharacterBody3D" groups=["enemy"]]
 collision_layer = 3
 collision_mask = 3
@@ -34,3 +36,11 @@ layers = 2
 radius = 0.7
 height = 2.56152
 material = SubResource("ShaderMaterial_mala1")
+
+[node name="Agent" type="NavigationAgent3D" parent="."]
+
+[node name="AttackArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AttackArea"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_mala1")
