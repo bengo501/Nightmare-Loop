@@ -984,7 +984,6 @@ material = ExtResource("1_rwgxs")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.6928, 1.15651, 1.97213)
 
 [node name="map2" type="Node3D" parent="SubViewportContainer/SubViewport"]
-script = ExtResource("15_e6ckp")
 
 [node name="Piso" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4912, -0.159011, -33.7358)
