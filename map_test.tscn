@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://b7gfka0hbt4hd"]
+
+[ext_resource type="Texture2D" uid="uid://ca44uy3jlfa6w" path="res://assets/textures/Floor/Horror_Floor_05-128x128.png" id="1_c7aqf"]
+[ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="2_eab4r"]
+[ext_resource type="PackedScene" uid="uid://bd1iioahw58ht" path="res://scenes/enemies/ghost1.tscn" id="3_a2k0k"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w7kh3"]
+albedo_texture = ExtResource("1_c7aqf")
+
+[node name="mapTest" type="Node3D"]
+
+[node name="Piso2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.2151, -0.140597, -0.03406)
+material_override = SubResource("StandardMaterial3D_w7kh3")
+use_collision = true
+size = Vector3(10, 1, 10)
+material = ExtResource("2_eab4r")
+
+[node name="Ghost1" parent="." instance=ExtResource("3_a2k0k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.6928, 1.15651, 1.97213)

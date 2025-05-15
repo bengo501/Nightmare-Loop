@@ -5,7 +5,7 @@ const position_scale = 0.6
 const lerp_speed = 15.0
 
 var shader_target_pos = Vector2.ZERO
-@onready var cores = $"../CanvasLayer/CanvasLayer2/cores"  # Nó visual que também mudará de cor
+@onready var cores = get_node_or_null("../cores") # Atualizado para buscar corretamente em CanvasLayer2
 
 # Cores associadas às teclas
 const COLOR_KEYS = {
@@ -21,11 +21,10 @@ func _process(delta):
 		var mouse_pos = get_viewport().get_mouse_position()
 		var screen_size = get_viewport_rect().size
 
-		var new_shader_pos = ((mouse_pos - (screen_size / 2)) / screen_size) * mouse_sensitivity * -1.0
-		new_shader_pos *= position_scale
-		shader_target_pos = lerp(shader_target_pos, new_shader_pos, delta * lerp_speed)
+		# Sincroniza a posição da crosshair com o mouse
+		self.position = mouse_pos - self.size / 2
 
-		material.set("shader_parameter/mouse_pos", shader_target_pos)
+		# O shader já está centralizado, não precisa de offset do mouse
 
 func _input(event):
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -37,7 +36,7 @@ func _input(event):
 			material.set("shader_parameter/line_color", color)
 
 			# Atualiza a cor do nó visual "cores"
-			if cores.has_method("set_modulate"):
+			if cores and cores.has_method("set_modulate"):
 				cores.set_modulate(color)  # Para Sprite2D, TextureRect, etc.
-			elif cores.has_method("set_color"):
+			elif cores and cores.has_method("set_color"):
 				cores.set_color(color)     # Para ColorRect

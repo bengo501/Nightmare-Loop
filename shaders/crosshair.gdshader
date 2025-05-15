@@ -1,8 +1,6 @@
 shader_type canvas_item;
 
 uniform bool is_symmetric = true;
-uniform vec2 mouse_pos; // Recebe a posição do mouse do GDScript
-uniform vec2 aim_offset;
 uniform float rotation_speed = 1.0;
 uniform vec4 line_color : source_color = vec4(1.0);
 uniform vec4 line_outline_color : source_color = vec4(vec3(0.0), 1);
@@ -53,11 +51,8 @@ void fragment() {
         vec2(sin(angle), cos(angle))
     );
 
-    // Usa a posição do mouse passada pelo GDScript
-    vec2 center_offset = mouse_pos + aim_offset;
-
-    // Aplica transformação na UV para girar a mira no próprio centro
-    vec2 uv = (FRAGCOORD.xy * SCREEN_PIXEL_SIZE + center_offset) - vec2(0.5);
+    // Centraliza a mira no centro do TextureRect
+    vec2 uv = (FRAGCOORD.xy * SCREEN_PIXEL_SIZE) - vec2(0.5);
     uv = rotation_matrix * uv + vec2(0.5);
     vec2 pixel = SCREEN_PIXEL_SIZE / 2.0;
 

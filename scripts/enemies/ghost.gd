@@ -9,6 +9,7 @@ extends CharacterBody3D
 var current_health: float
 var can_attack: bool = true
 var player_ref: Node3D
+var battle_manager: Node
 
 @onready var agent = $Agent
 @onready var attack_area = $AttackArea
@@ -23,6 +24,11 @@ func _ready():
 		player_ref = players[0]
 	else:
 		print("⚠️ Jogador não encontrado.")
+		
+	# Busca o gerenciador de batalha
+	battle_manager = get_node("/root/BattleSceneManager")
+	if not battle_manager:
+		print("⚠️ BattleSceneManager não encontrado.")
 
 func _physics_process(delta):
 	if not player_ref:
@@ -73,4 +79,11 @@ func take_damage(damage: float) -> void:
 
 func die() -> void:
 	print("DEBUG: Ghost morreu!")
+	
+	# Inicia a cena de batalha antes de remover o fantasma
+	if battle_manager:
+		battle_manager.start_battle()
+	
+	# Aguarda um pequeno delay antes de remover o fantasma
+	await get_tree().create_timer(0.5).timeout
 	queue_free()

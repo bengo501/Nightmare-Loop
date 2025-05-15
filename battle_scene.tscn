@@ -1,0 +1,197 @@
+[gd_scene load_steps=10 format=3 uid="uid://qt54qf4vukaf"]
+
+[ext_resource type="Texture2D" uid="uid://gq5cb3qsjni1" path="res://assets/textures/Brick/Horror_Brick_06-128x128.png" id="1_5joda"]
+[ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="2_gf131"]
+[ext_resource type="Texture2D" uid="uid://cg1g4s4m4txir" path="res://assets/textures/Brick/Horror_Brick_03-128x128.png" id="3_sl17i"]
+[ext_resource type="PackedScene" uid="uid://bd1iioahw58ht" path="res://scenes/enemies/ghost1.tscn" id="4_x5h4l"]
+[ext_resource type="Script" uid="uid://b7qtyelyqjpcs" path="res://scripts/BattleSceneManager.gd" id="5_script"]
+[ext_resource type="Script" uid="uid://br6ak60dueag0" path="res://scripts/BattleCamera.gd" id="6_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
+bg_color = Color(0.2, 0.2, 0.2, 0.8)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5p8eo"]
+albedo_texture = ExtResource("1_5joda")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gny1c"]
+albedo_texture = ExtResource("3_sl17i")
+
+[node name="battleScene" type="Node3D"]
+
+[node name="BattleSceneManager" type="Node" parent="."]
+script = ExtResource("5_script")
+
+[node name="BattleCamera" type="Camera3D" parent="."]
+transform = Transform3D(0.0497737, 0, 0.998761, 0, 1, 0, -0.998761, 0, 0.0497737, 0.901611, 1.82071, 2.88134)
+script = ExtResource("6_script")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="BattleUI" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TurnIndicator" type="Label" parent="UI/BattleUI"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 20.0
+offset_right = 100.0
+offset_bottom = 46.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 24
+text = "Turno do Jogador"
+horizontal_alignment = 1
+
+[node name="StatusPanel" type="Panel" parent="UI/BattleUI"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -300.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 120.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
+
+[node name="PlayerStatus" type="VBoxContainer" parent="UI/BattleUI/StatusPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlayerName" type="Label" parent="UI/BattleUI/StatusPanel/PlayerStatus"]
+layout_mode = 2
+text = "Jogador"
+horizontal_alignment = 1
+
+[node name="PlayerHP" type="Label" parent="UI/BattleUI/StatusPanel/PlayerStatus"]
+layout_mode = 2
+text = "HP: 100/100"
+horizontal_alignment = 1
+
+[node name="EnemyStatus" type="VBoxContainer" parent="UI/BattleUI/StatusPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="EnemyName" type="Label" parent="UI/BattleUI/StatusPanel/EnemyStatus"]
+layout_mode = 2
+text = "Fantasma"
+horizontal_alignment = 1
+
+[node name="EnemyHP" type="Label" parent="UI/BattleUI/StatusPanel/EnemyStatus"]
+layout_mode = 2
+text = "HP: 100/100"
+horizontal_alignment = 1
+
+[node name="ActionButtons" type="VBoxContainer" parent="UI/BattleUI"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -200.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="AttackButton" type="Button" parent="UI/BattleUI/ActionButtons"]
+custom_minimum_size = Vector2(180, 50)
+layout_mode = 2
+text = "Atacar"
+
+[node name="DefendButton" type="Button" parent="UI/BattleUI/ActionButtons"]
+custom_minimum_size = Vector2(180, 50)
+layout_mode = 2
+text = "Defender"
+
+[node name="SpecialButton" type="Button" parent="UI/BattleUI/ActionButtons"]
+custom_minimum_size = Vector2(180, 50)
+layout_mode = 2
+text = "Especial"
+
+[node name="Piso3" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.33652, -0.140597, 3.34938)
+material_override = SubResource("StandardMaterial3D_5p8eo")
+use_collision = true
+size = Vector3(10, 1, 10)
+material = ExtResource("2_gf131")
+
+[node name="Piso7" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.33652, -0.140597, 13.3763)
+material_override = SubResource("StandardMaterial3D_5p8eo")
+use_collision = true
+size = Vector3(10, 1, 10)
+material = ExtResource("2_gf131")
+
+[node name="Piso8" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.33652, -0.140597, -6.50483)
+material_override = SubResource("StandardMaterial3D_5p8eo")
+use_collision = true
+size = Vector3(10, 1, 10)
+material = ExtResource("2_gf131")
+
+[node name="Piso4" type="CSGBox3D" parent="."]
+transform = Transform3D(0.0134212, -0.99991, 0, 0.99991, 0.0134212, 0, 0, 0, 1, -5.82179, -0.140597, 3.34938)
+material_override = SubResource("StandardMaterial3D_gny1c")
+use_collision = true
+size = Vector3(10, 1, 10)
+material = ExtResource("2_gf131")
+
+[node name="Piso6" type="CSGBox3D" parent="."]
+transform = Transform3D(0.0134212, -0.99991, 0, 0.99991, 0.0134212, 0, 0, 0, 1, -5.82179, -0.140597, 13.347)
+material_override = SubResource("StandardMaterial3D_gny1c")
+use_collision = true
+size = Vector3(10, 1, 10)
+material = ExtResource("2_gf131")
+
+[node name="Piso9" type="CSGBox3D" parent="."]
+transform = Transform3D(0.0134212, -0.99991, 0, 0.99991, 0.0134212, 0, 0, 0, 1, -5.82179, 9.48743, 13.347)
+material_override = SubResource("StandardMaterial3D_gny1c")
+use_collision = true
+size = Vector3(10, 1, 10)
+material = ExtResource("2_gf131")
+
+[node name="Piso10" type="CSGBox3D" parent="."]
+transform = Transform3D(0.0134212, -0.99991, 0, 0.99991, 0.0134212, 0, 0, 0, 1, -5.82179, 9.48743, 3.29491)
+material_override = SubResource("StandardMaterial3D_gny1c")
+use_collision = true
+size = Vector3(10, 1, 10)
+material = ExtResource("2_gf131")
+
+[node name="Piso11" type="CSGBox3D" parent="."]
+transform = Transform3D(0.0134212, -0.99991, 0, 0.99991, 0.0134212, 0, 0, 0, 1, -5.82179, 9.48743, -6.57173)
+material_override = SubResource("StandardMaterial3D_gny1c")
+use_collision = true
+size = Vector3(10, 1, 10)
+material = ExtResource("2_gf131")
+
+[node name="Piso5" type="CSGBox3D" parent="."]
+transform = Transform3D(0.0134212, -0.99991, 0, 0.99991, 0.0134212, 0, 0, 0, 1, -5.82179, -0.140597, -6.48642)
+material_override = SubResource("StandardMaterial3D_gny1c")
+use_collision = true
+size = Vector3(10, 1, 10)
+material = ExtResource("2_gf131")
+
+[node name="Ghost1" parent="." instance=ExtResource("4_x5h4l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.91863, 1.17886, 2.8286)

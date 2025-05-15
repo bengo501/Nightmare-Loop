@@ -1,13 +1,12 @@
-[gd_scene load_steps=246 format=4 uid="uid://bhk71lctrycc"]
+[gd_scene load_steps=243 format=4 uid="uid://bhk71lctrycc"]
 
 [ext_resource type="Material" uid="uid://dh8b54lwa3uwc" path="res://shaders/pixelVignete.tres" id="1_71j4m"]
 [ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="1_rwgxs"]
-[ext_resource type="Texture2D" uid="uid://gq5cb3qsjni1" path="res://assets/textures/Brick/Horror_Brick_06-128x128.png" id="2_iexy4"]
+[ext_resource type="PackedScene" uid="uid://qt54qf4vukaf" path="res://battle_scene.tscn" id="2_pq8jk"]
 [ext_resource type="Texture2D" uid="uid://ca44uy3jlfa6w" path="res://assets/textures/Floor/Horror_Floor_05-128x128.png" id="2_w7kh3"]
 [ext_resource type="PackedScene" uid="uid://drs2ohyyh3uit" path="res://scenes/player/player.tscn" id="3_4wyf3"]
 [ext_resource type="Texture2D" uid="uid://cmd33s4pp6r0d" path="res://assets/textures/Wall/Horror_Wall_07-128x128.png" id="4_e3hyu"]
 [ext_resource type="PackedScene" uid="uid://bd1iioahw58ht" path="res://scenes/enemies/ghost1.tscn" id="4_e68xj"]
-[ext_resource type="Texture2D" uid="uid://cg1g4s4m4txir" path="res://assets/textures/Brick/Horror_Brick_03-128x128.png" id="4_npbic"]
 [ext_resource type="Shader" uid="uid://dfbg35n7n8gwe" path="res://shaders/psx.gdshader" id="5_71j4m"]
 [ext_resource type="Shader" uid="uid://bucmt47v21xym" path="res://shaders/crt.gdshader" id="5_qfnet"]
 [ext_resource type="Script" uid="uid://b2enjaut01mch" path="res://scripts/double_bed.gd" id="6_817gm"]
@@ -72,12 +71,6 @@ shader_parameter/enabled = true
 shader_parameter/dithering = true
 shader_parameter/colors = 12
 shader_parameter/dither_size = 2
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5p8eo"]
-albedo_texture = ExtResource("2_iexy4")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gny1c"]
-albedo_texture = ExtResource("4_npbic")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w7kh3"]
 albedo_texture = ExtResource("2_w7kh3")
@@ -874,7 +867,7 @@ font_color = Color(0, 0, 0, 1)
 outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4mrxx"]
-size = Vector2(500, 500)
+size = Vector2(96, 96)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e75v4"]
 shader = ExtResource("18_l8ah6")
@@ -900,77 +893,8 @@ handle_input_locally = false
 size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
-[node name="battleScene" type="Node3D" parent="SubViewportContainer/SubViewport"]
+[node name="battleScene" parent="SubViewportContainer/SubViewport" instance=ExtResource("2_pq8jk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.8195, 0, 24.8731)
-
-[node name="Piso3" type="CSGBox3D" parent="SubViewportContainer/SubViewport/battleScene"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.33652, -0.140597, 3.34938)
-material_override = SubResource("StandardMaterial3D_5p8eo")
-use_collision = true
-size = Vector3(10, 1, 10)
-material = ExtResource("1_rwgxs")
-
-[node name="Piso7" type="CSGBox3D" parent="SubViewportContainer/SubViewport/battleScene"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.33652, -0.140597, 13.3763)
-material_override = SubResource("StandardMaterial3D_5p8eo")
-use_collision = true
-size = Vector3(10, 1, 10)
-material = ExtResource("1_rwgxs")
-
-[node name="Piso8" type="CSGBox3D" parent="SubViewportContainer/SubViewport/battleScene"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.33652, -0.140597, -6.50483)
-material_override = SubResource("StandardMaterial3D_5p8eo")
-use_collision = true
-size = Vector3(10, 1, 10)
-material = ExtResource("1_rwgxs")
-
-[node name="Piso4" type="CSGBox3D" parent="SubViewportContainer/SubViewport/battleScene"]
-transform = Transform3D(0.0134212, -0.99991, 0, 0.99991, 0.0134212, 0, 0, 0, 1, -5.82179, -0.140597, 3.34938)
-material_override = SubResource("StandardMaterial3D_gny1c")
-use_collision = true
-size = Vector3(10, 1, 10)
-material = ExtResource("1_rwgxs")
-
-[node name="Piso6" type="CSGBox3D" parent="SubViewportContainer/SubViewport/battleScene"]
-transform = Transform3D(0.0134212, -0.99991, 0, 0.99991, 0.0134212, 0, 0, 0, 1, -5.82179, -0.140597, 13.347)
-material_override = SubResource("StandardMaterial3D_gny1c")
-use_collision = true
-size = Vector3(10, 1, 10)
-material = ExtResource("1_rwgxs")
-
-[node name="Piso9" type="CSGBox3D" parent="SubViewportContainer/SubViewport/battleScene"]
-transform = Transform3D(0.0134212, -0.99991, 0, 0.99991, 0.0134212, 0, 0, 0, 1, -5.82179, 9.48743, 13.347)
-material_override = SubResource("StandardMaterial3D_gny1c")
-use_collision = true
-size = Vector3(10, 1, 10)
-material = ExtResource("1_rwgxs")
-
-[node name="Piso10" type="CSGBox3D" parent="SubViewportContainer/SubViewport/battleScene"]
-transform = Transform3D(0.0134212, -0.99991, 0, 0.99991, 0.0134212, 0, 0, 0, 1, -5.82179, 9.48743, 3.29491)
-material_override = SubResource("StandardMaterial3D_gny1c")
-use_collision = true
-size = Vector3(10, 1, 10)
-material = ExtResource("1_rwgxs")
-
-[node name="Piso11" type="CSGBox3D" parent="SubViewportContainer/SubViewport/battleScene"]
-transform = Transform3D(0.0134212, -0.99991, 0, 0.99991, 0.0134212, 0, 0, 0, 1, -5.82179, 9.48743, -6.57173)
-material_override = SubResource("StandardMaterial3D_gny1c")
-use_collision = true
-size = Vector3(10, 1, 10)
-material = ExtResource("1_rwgxs")
-
-[node name="Piso5" type="CSGBox3D" parent="SubViewportContainer/SubViewport/battleScene"]
-transform = Transform3D(0.0134212, -0.99991, 0, 0.99991, 0.0134212, 0, 0, 0, 1, -5.82179, -0.140597, -6.48642)
-material_override = SubResource("StandardMaterial3D_gny1c")
-use_collision = true
-size = Vector3(10, 1, 10)
-material = ExtResource("1_rwgxs")
-
-[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport/battleScene"]
-transform = Transform3D(0.0497737, 0, 0.998761, 0, 1, 0, -0.998761, 0, 0.0497737, 0.901611, 1.82071, 2.88134)
-
-[node name="Ghost1" parent="SubViewportContainer/SubViewport/battleScene" instance=ExtResource("4_e68xj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.91863, 1.17886, 2.8286)
 
 [node name="mapTest" type="Node3D" parent="SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.3505, 0, 0)
@@ -998,6 +922,8 @@ material = ExtResource("1_rwgxs")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.0822, -0.159011, -33.7358)
 material_override = SubResource("StandardMaterial3D_pq8jk")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(5.80887, 1, 10)
 material = ExtResource("1_rwgxs")
 
@@ -1005,6 +931,8 @@ material = ExtResource("1_rwgxs")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.98666, -0.159011, -23.7369)
 material_override = SubResource("StandardMaterial3D_4kmvx")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("1_rwgxs")
 
@@ -1012,6 +940,8 @@ material = ExtResource("1_rwgxs")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.9728, -0.159011, -23.7369)
 material_override = SubResource("StandardMaterial3D_40xph")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 
 [node name="Piso44" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
@@ -1031,6 +961,8 @@ size = Vector3(10, 1, 10)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.847, -0.159011, -23.7369)
 material_override = SubResource("StandardMaterial3D_4kmvx")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("1_rwgxs")
 
@@ -1044,12 +976,16 @@ size = Vector3(10, 1, 10)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.9806, -0.159011, -33.7358)
 material_override = SubResource("StandardMaterial3D_dyafi")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 
 [node name="Piso36" type="CSGBox3D" parent="SubViewportContainer/SubViewport/map2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.8646, -0.159011, -33.7358)
 material_override = SubResource("StandardMaterial3D_8lgfd")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("1_rwgxs")
 
@@ -2598,7 +2534,7 @@ script = ExtResource("6_817gm")
 teleport_position = NodePath("TeleportPoint")
 
 [node name="DoubleBed" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/map/DoubleBed"]
-transform = Transform3D(6.15098, 0, 0, 0, -6.00779e-06, 48.9504, 0, -50.397, -5.83534e-06, 2.25349, -0.495792, 2.07501)
+transform = Transform3D(6.76803, 0, 0, 0, -2.33344e-06, 41.7603, 0, -53.3829, -1.8254e-06, 1.07844, -1.04495, 1.91371)
 material_override = SubResource("StandardMaterial3D_12tdh")
 mesh = SubResource("ArrayMesh_6jccp")
 skeleton = NodePath("")
@@ -2722,6 +2658,55 @@ offset_right = 1167.0
 offset_bottom = 670.0
 
 [node name="CanvasLayer2" type="CanvasLayer" parent="SubViewportContainer/SubViewport/CanvasLayer"]
+
+[node name="HealthLabel" type="Label" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 24.0
+offset_bottom = 24.0
+text = "Vida: 100/100"
+
+[node name="AmmoLabel" type="Label" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+offset_left = 24.0
+offset_top = 64.0
+offset_right = 24.0
+offset_bottom = 64.0
+text = "Munição: 30/30"
+
+[node name="PlayerNameLabel" type="Label" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+offset_left = 24.0
+offset_top = 104.0
+offset_right = 24.0
+offset_bottom = 104.0
+text = "Player"
+
+[node name="WeaponLabel" type="Label" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+offset_left = 24.0
+offset_top = 144.0
+offset_right = 24.0
+offset_bottom = 144.0
+text = "Arma: Pistola"
+
+[node name="WeaponIcon" type="TextureRect" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+offset_left = 180.0
+offset_top = 144.0
+offset_right = 228.0
+offset_bottom = 192.0
+
+[node name="EnergyBar" type="TextureProgressBar" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+offset_left = 24.0
+offset_top = 200.0
+offset_right = 224.0
+offset_bottom = 224.0
+value = 100.0
+
+[node name="MessageLabel" type="Label" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
+visible = false
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 240.0
+offset_bottom = 240.0
+horizontal_alignment = 1
 
 [node name="TextureRect" type="TextureRect" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
 modulate = Color(1, 0.27451, 0.227451, 0.666667)
@@ -2901,7 +2886,7 @@ offset_bottom = 36.0
 text = "PRESS E"
 label_settings = SubResource("LabelSettings_ggc52")
 
-[node name="Crosshair" type="TextureRect" parent="SubViewportContainer/SubViewport"]
+[node name="Crosshair" type="TextureRect" parent="SubViewportContainer/SubViewport/CanvasLayer/CanvasLayer2"]
 material = ExtResource("8_4mrxx")
 offset_left = 84.4999
 offset_top = 47.5

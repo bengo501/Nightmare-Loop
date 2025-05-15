@@ -5,6 +5,17 @@ extends Camera3D
 @export var follow_speed: float = 5.0
 @export var mouse_influence: float = 1.5
 
+@onready var mouse_ray = $MouseRay
+
+func _ready():
+	if mouse_ray:
+		# Configuração mais precisa do raycast
+		mouse_ray.enabled = true
+		mouse_ray.collision_mask = 1 << 7  # Layer 8 (chão)
+		mouse_ray.target_position = Vector3(0, -100, 0)  # Raycast apontando para baixo
+		mouse_ray.collide_with_areas = false  # Ignora áreas
+		mouse_ray.collide_with_bodies = true  # Colide apenas com corpos físicos
+
 func _process(delta):
 	if not target:
 		return
@@ -26,3 +37,11 @@ func _process(delta):
 	var desired_position = target_position + offset + lateral_offset
 
 	global_transform.origin = global_transform.origin.lerp(desired_position, delta * follow_speed)
+	
+	# Atualiza o raycast do mouse
+	if mouse_ray:
+		mouse_ray.force_raycast_update()
+		if mouse_ray.is_colliding():
+			var collision_point = mouse_ray.get_collision_point()
+			# Debug
+			print("Camera Raycast hit point: ", collision_point)

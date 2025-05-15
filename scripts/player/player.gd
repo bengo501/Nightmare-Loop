@@ -4,12 +4,15 @@ extends CharacterBody3D
 const SPEED = 3.0
 const JUMP_VELOCITY = 4.5
 const MOUSE_SENSITIVITY = 0.003
-@export var rotation_speed: float = 6.0
+@export var rotation_speed: float = 35.0
 
 # === VARIÁVEIS DE ATAQUE ===
 @export var attack_damage: float = 10.0
 @export var attack_range: float = 10.0
 @export var attack_cooldown: float = 0.2
+@export var max_health: float = 100.0
+var current_health: float
+var defense_bonus: float = 1.0
 
 # === NÓS ===
 @onready var third_person_camera = $"../ThirdPersonCamera"
@@ -21,8 +24,9 @@ const MOUSE_SENSITIVITY = 0.003
 @onready var laser_line = $FirstPersonCamera/LaseLine
 @onready var hud = $"../CanvasLayer/CanvasLayer2"
 @onready var player = $"."
-@onready var crosshair = $"../Crosshair"
+@onready var crosshair = $"../CanvasLayer/CanvasLayer2/Crosshair"
 @onready var mouse_ray = $"../ThirdPersonCamera/MouseRay"
+@onready var battle_manager = get_node("/root/BattleSceneManager")
 
 # === ESTADOS ===
 var first_person_mode = false
@@ -30,6 +34,7 @@ var laser_active = false
 var can_attack: bool = true
 var attack_timer: Timer
 var current_target = null
+var can_move = true
 
 
 
@@ -40,6 +45,12 @@ func _ready():
 	laser_line.visible = false
 	setup_attack_system()
 	setup_animations()
+	current_health = max_health
+	
+	# Conecta os sinais do battle manager
+	if battle_manager:
+		battle_manager.connect("battle_started", _on_battle_started)
+		battle_manager.connect("battle_ended", _on_battle_ended)
 
 func setup_attack_system():
 	attack_timer = Timer.new()
@@ -64,6 +75,9 @@ func setup_animations():
 
 # === FÍSICA ===
 func _physics_process(delta: float):
+	if not can_move:
+		return
+		
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
@@ -83,29 +97,23 @@ func _physics_process(delta: float):
 
 # === ROTAÇÃO PARA O MOUSE ===
 func rotate_toward_mouse(delta):
-	var mouse_pos = get_viewport().get_mouse_position()
-	var from = third_person_camera.project_ray_origin(mouse_pos)
-	var to = from + third_person_camera.project_ray_normal(mouse_pos) * 1000.0
+	if not third_person_camera or not third_person_camera.mouse_ray:
+		return
 
-	var space_state = get_world_3d().direct_space_state
-	var query = PhysicsRayQueryParameters3D.create(from, to)
+	third_person_camera.mouse_ray.force_raycast_update()
 
-	query.collision_mask = 1 << 7  # Só layer 8
-	query.exclude = [self]
-	query.collide_with_areas = false
-
-	var result = space_state.intersect_ray(query)
-
-	if result:
-		var point = result.position
-		var dir = point - global_transform.origin
-		print("✅ Mouse colidiu com chão na posição: ", result.position)
+	if third_person_camera.mouse_ray.is_colliding():
+		var hit_point = third_person_camera.mouse_ray.get_collision_point()
+		var player_pos = global_transform.origin
+		var dir = hit_point - player_pos
 		dir.y = 0
+
 		if dir.length_squared() > 0.01:
-			var angle = atan2(dir.x, dir.z)
-			rotation.y = lerp_angle(rotation.y, angle, delta * rotation_speed)
-			
-		
+			var target_angle = atan2(dir.x, dir.z)
+			# Suaviza a rotação usando lerp_angle
+			rotation.y = lerp_angle(rotation.y, target_angle, delta * rotation_speed)
+			visuals.rotation.y = rotation.y
+
 # === MOVIMENTO ISOMÉTRICO ===
 func move_isometric(delta: float):
 	var input_vector = Vector3.ZERO
@@ -209,6 +217,19 @@ func _input(event):
 	if first_person_mode and event is InputEventMouseMotion:
 		rotate_camera(event.relative)
 
+	# Novo: atirar com a tecla F
+	if first_person_mode and event is InputEventKey and event.pressed:
+		if event.keycode == KEY_F:
+			laser_active = true
+			laser_line.visible = true
+			print("DEBUG: Laser ativado (tecla F)")
+	if first_person_mode and event is InputEventKey and not event.pressed:
+		if event.keycode == KEY_F:
+			laser_active = false
+			laser_line.visible = false
+			current_target = null
+			print("DEBUG: Laser desativado (tecla F)")
+
 func rotate_camera(mouse_motion: Vector2):
 	rotation.y -= mouse_motion.x * MOUSE_SENSITIVITY
 	first_person_camera.rotation.x -= mouse_motion.y * MOUSE_SENSITIVITY
@@ -245,3 +266,29 @@ func update_laser_color():
 			laser_line.material_override = shader_material
 		if laser_line.material_override is ShaderMaterial:
 			laser_line.material_override.set_shader_parameter("core_color", cross_color)
+
+func _on_battle_started():
+	can_move = false
+	velocity = Vector3.ZERO
+	laser_active = false
+	laser_line.visible = false
+	weapon.visible = false
+	crosshair.visible = false
+
+func _on_battle_ended():
+	can_move = true
+	weapon.visible = true
+	crosshair.visible = true
+
+func take_damage(damage: float) -> void:
+	var final_damage = damage / defense_bonus
+	current_health -= final_damage
+	print("DEBUG: Jogador tomou ", final_damage, " de dano! Vida restante: ", current_health)
+	
+	if current_health <= 0:
+		die()
+
+func die() -> void:
+	print("DEBUG: Jogador morreu!")
+	# Implementar lógica de game over
+	queue_free()
