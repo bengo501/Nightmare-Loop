@@ -10,14 +10,27 @@ config_version=5
 
 [application]
 
-config/name="Nightmare: Loop"
-run/main_scene="uid://bhk71lctrycc"
-config/features=PackedStringArray("4.4", "Forward Plus")
+config/name="Nightmare Loop"
+run/main_scene="res://scenes/world.tscn"
+config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+GameManager="*res://scripts/game_manager.gd"
+GameStateManager="*res://scripts/game_state_manager.gd"
+UIManager="*res://scripts/ui_manager.gd"
+SceneManager="*res://scripts/scene_manager.gd"
 
 [display]
 
-mouse_cursor/custom_image="uid://d02xvpntngw1w"
+window/size/viewport_width=1024
+window/size/viewport_height=600
+window/stretch/mode="canvas_items"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
 
 [input]
 
