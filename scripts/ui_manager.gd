@@ -7,7 +7,8 @@ var ui_scenes = {
 	"options_menu": "res://scenes/ui/options_menu.tscn",
 	"hud": "res://scenes/ui/hud.tscn",
 	"game_over": "res://scenes/ui/game_over.tscn",
-	"inventory": "res://scenes/ui/inventory.tscn"
+	"inventory": "res://scenes/ui/inventory.tscn",
+	"credits": "res://scenes/ui/credits.tscn"
 }
 
 # Current UI elements

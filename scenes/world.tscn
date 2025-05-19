@@ -1,67 +1,17 @@
-[gd_scene load_steps=81 format=4 uid="uid://bhk71lctrycc"]
+[gd_scene load_steps=10 format=3 uid="uid://bhk71lctrycc"]
 
-[ext_resource type="Material" uid="uid://dh8b54lwa3uwc" path="res://shaders/pixelVignete.tres" id="1_71j4m"]
 [ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="1_rwgxs"]
-[ext_resource type="Texture2D" uid="uid://ca44uy3jlfa6w" path="res://assets/textures/Floor/Horror_Floor_05-128x128.png" id="2_w7kh3"]
+[ext_resource type="Script" uid="uid://bwhtkocfb8obw" path="res://scripts/world.gd" id="1_xxxxx"]
 [ext_resource type="PackedScene" uid="uid://drs2ohyyh3uit" path="res://scenes/player/player.tscn" id="3_4wyf3"]
-[ext_resource type="Texture2D" uid="uid://cmd33s4pp6r0d" path="res://assets/textures/Wall/Horror_Wall_07-128x128.png" id="4_e3hyu"]
 [ext_resource type="PackedScene" uid="uid://bd1iioahw58ht" path="res://scenes/enemies/ghost1.tscn" id="4_e68xj"]
-[ext_resource type="Shader" uid="uid://dfbg35n7n8gwe" path="res://shaders/psx.gdshader" id="5_71j4m"]
-[ext_resource type="Shader" uid="uid://bucmt47v21xym" path="res://shaders/crt.gdshader" id="5_qfnet"]
-[ext_resource type="Script" uid="uid://b2enjaut01mch" path="res://scripts/double_bed.gd" id="6_817gm"]
-[ext_resource type="Material" uid="uid://co46lab2f3058" path="res://shaders/hatching.tres" id="6_i7141"]
-[ext_resource type="Texture2D" uid="uid://b575lhpgb4bje" path="res://assets/models/props/D_DoubleBed.png" id="7_ggc52"]
 [ext_resource type="PackedScene" uid="uid://ytaetvi5ig5r" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Couch/Couch.fbx_Scene.fbm/Couch.fbx.fbx" id="7_q5onr"]
-[ext_resource type="Material" uid="uid://cuc76brdhoebn" path="res://shaders/crosshair.tres" id="8_4mrxx"]
 [ext_resource type="PackedScene" uid="uid://cj47gniftse4d" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Dresser/Dresser.fbx_Scene/Dresser.fbx_Scene.fbx" id="8_jhx03"]
 [ext_resource type="Texture2D" uid="uid://bcqhlm6vjmnhx" path="res://assets/textures/D4BC5953-C99A-43F1-A561-23D964912C34-removebg-preview.png" id="11_pm21f"]
-[ext_resource type="Texture2D" uid="uid://cdlnmluiwvtvs" path="res://assets/models/weapons/albedo(1).png" id="12_jhx03"]
-[ext_resource type="Texture2D" uid="uid://crir3d3ao6rw5" path="res://assets/textures/pngimg.com_-_fallout_PNG49.png" id="13_dss4m"]
-[ext_resource type="Texture2D" uid="uid://cwfunle18xgoi" path="res://assets/textures/pngwing.com.png" id="14_7t5mc"]
-[ext_resource type="Texture2D" uid="uid://dtcm260hhtsna" path="res://assets/textures/portrait-removebg-preview.png" id="14_lakw3"]
-[ext_resource type="Material" uid="uid://d3j53d06bnt3h" path="res://shaders/ditherTransparency.tres" id="14_npbic"]
-[ext_resource type="Script" uid="uid://3tj4u1uyqroy" path="res://scripts/crosshair.gd" id="14_o8fc1"]
-[ext_resource type="Script" uid="uid://c40fe800olgwg" path="res://scripts/wall.gd" id="15_e6ckp"]
-[ext_resource type="Texture2D" uid="uid://c5ksa63ybjr87" path="res://assets/textures/mapinha.png" id="16_lakw3"]
 [ext_resource type="PackedScene" uid="uid://4u41su83a4ma" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Boombox_/Boombox.fbx_Scene/Boombox.fbx_Scene.fbx" id="17_1dgkn"]
-[ext_resource type="Texture2D" uid="uid://c8eiuqetyehqi" path="res://assets/textures/healthsteam.png" id="18_2lf6f"]
-[ext_resource type="Shader" uid="uid://b7040o7kveccd" path="res://shaders/wave.gdshader" id="18_l8ah6"]
-[ext_resource type="Texture2D" uid="uid://b5cykxieqbnuf" path="res://assets/textures/compass.png" id="19_7iits"]
-[ext_resource type="Texture2D" uid="uid://douqs785t2pf8" path="res://assets/textures/xpcontainer-removebg-preview.png" id="20_oo54l"]
-[ext_resource type="Texture2D" uid="uid://bfgja3vtm5igk" path="res://assets/textures/yellow.png" id="21_0nbtd"]
-[ext_resource type="Texture2D" uid="uid://i4bmd8s3pmus" path="res://assets/textures/purple.png" id="22_37qwj"]
-[ext_resource type="Shader" uid="uid://d324kawi15ywl" path="res://shaders/laserRay.gdshader" id="23_5hglh"]
-[ext_resource type="Texture2D" uid="uid://rb8lo3ebpve5" path="res://assets/textures/green.png" id="23_navra"]
-[ext_resource type="Script" uid="uid://bl2opnjmqhur2" path="res://scripts/weapon.gd" id="23_qg546"]
-[ext_resource type="Texture2D" uid="uid://bnvka361m47nr" path="res://assets/textures/gray.png" id="24_luhhm"]
-[ext_resource type="Script" uid="uid://c03xjf26j01ix" path="res://scripts/ThirdPersonCamera.gd" id="24_mvg0v"]
-[ext_resource type="Texture2D" uid="uid://cgdyvcavp0um7" path="res://assets/textures/concience.png" id="25_fh13f"]
-[ext_resource type="Texture2D" uid="uid://f6ljqq20g04q" path="res://assets/textures/bliue.png" id="26_rup4s"]
 [ext_resource type="PackedScene" uid="uid://blm23tt5thlmu" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Bathroom Sink/BathroomSink.fbx_Scene/BathroomSink.fbx_Scene.fbx" id="27_rup4s"]
-[ext_resource type="Script" uid="uid://b01w3nsee7y30" path="res://scripts/tv.gd" id="35_ggc52"]
-[ext_resource type="Texture2D" uid="uid://d2uatmqbw2yp6" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/TV_1/Tv.jpg" id="36_l8ah6"]
-[ext_resource type="Script" uid="uid://c8q4y6n8j0m1x" path="res://scripts/world.gd" id="1_xxxxx"]
-[ext_resource type="Script" uid="uid://c40fe800olgwg" path="res://scripts/game_manager.gd" id="2_xxxxx"]
-[ext_resource type="Script" uid="uid://c40fe800olgwg" path="res://scripts/game_state_manager.gd" id="3_xxxxx"]
-[ext_resource type="Script" uid="uid://c40fe800olgwg" path="res://scripts/ui_manager.gd" id="4_xxxxx"]
-[ext_resource type="Script" uid="uid://c40fe800olgwg" path="res://scripts/scene_manager.gd" id="5_xxxxx"]
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_xxxxx")
-
-[node name="Managers" type="Node3D" parent="."]
-
-[node name="GameManager" type="Node" parent="Managers"]
-script = ExtResource("2_xxxxx")
-
-[node name="GameStateManager" type="Node" parent="Managers"]
-script = ExtResource("3_xxxxx")
-
-[node name="UIManager" type="Node" parent="Managers"]
-script = ExtResource("4_xxxxx")
-
-[node name="SceneManager" type="Node" parent="Managers"]
-script = ExtResource("5_xxxxx")
 
 [node name="Player" parent="." instance=ExtResource("3_4wyf3")]
 
@@ -104,9 +54,6 @@ material = ExtResource("1_rwgxs")
 
 [node name="Furniture" type="Node3D" parent="Environment"]
 
-[node name="DoubleBed" parent="Environment/Furniture" instance=ExtResource("6_817gm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -5)
-
 [node name="Couch" parent="Environment/Furniture" instance=ExtResource("7_q5onr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -5)
 
@@ -117,7 +64,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 5)
 
 [node name="BathroomSink" parent="Environment/Furniture" instance=ExtResource("27_rup4s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Enemies" type="Node3D" parent="."]
 
@@ -140,7 +86,6 @@ offset_left = 20.0
 offset_top = 20.0
 offset_right = 220.0
 offset_bottom = 40.0
-max_value = 100.0
 value = 100.0
 show_percentage = false
 
