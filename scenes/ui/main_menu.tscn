@@ -1,16 +1,27 @@
-[gd_scene load_steps=63 format=3 uid="uid://ddmh4ucs5i5hm"]
+[gd_scene load_steps=75 format=3 uid="uid://ddmh4ucs5i5hm"]
 
 [ext_resource type="Script" uid="uid://dnu14bhp0ix7r" path="res://scripts/ui/main_menu.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://cqvbaj2ycbhhk" path="res://assets/textures/ezgif-split/frame_00_delay-0.02s.png" id="2_7cu7f"]
+[ext_resource type="Texture2D" uid="uid://wt57ti6wd3pk" path="res://assets/textures/ezgif-split(2)/frame_00_delay-0.06s.png" id="2_jg1pe"]
 [ext_resource type="Texture2D" uid="uid://cjxhy6nf53bev" path="res://assets/textures/ezgif-split/frame_01_delay-0.02s.png" id="3_h8y44"]
+[ext_resource type="Texture2D" uid="uid://cndb16o7yxb56" path="res://assets/textures/ezgif-split(2)/frame_01_delay-0.06s.png" id="3_uibjs"]
+[ext_resource type="Texture2D" uid="uid://cxscdje4duayc" path="res://assets/textures/ezgif-split(2)/frame_02_delay-0.06s.png" id="4_jsak6"]
 [ext_resource type="Texture2D" uid="uid://cjgrgg6ahn1p2" path="res://assets/textures/ezgif-split/frame_02_delay-0.02s.png" id="4_ks8yd"]
+[ext_resource type="Texture2D" uid="uid://h5ys1hx0xhjo" path="res://assets/textures/ezgif-split(2)/frame_03_delay-0.06s.png" id="5_1xwyt"]
 [ext_resource type="Texture2D" uid="uid://db3ujddprubd7" path="res://assets/textures/ezgif-split/frame_03_delay-0.02s.png" id="5_62iit"]
+[ext_resource type="Texture2D" uid="uid://bfemugfsnkx44" path="res://assets/textures/ezgif-split(2)/frame_04_delay-0.06s.png" id="6_sqcof"]
 [ext_resource type="Texture2D" uid="uid://bew1qv1mj2wxc" path="res://assets/textures/ezgif-split/frame_04_delay-0.02s.png" id="6_yr3dv"]
 [ext_resource type="Texture2D" uid="uid://cmakethj7xfxb" path="res://assets/textures/ezgif-split/frame_05_delay-0.02s.png" id="7_s2x4s"]
+[ext_resource type="Texture2D" uid="uid://cx1q683jp46d2" path="res://assets/textures/ezgif-split(2)/frame_05_delay-0.06s.png" id="7_wqict"]
 [ext_resource type="Texture2D" uid="uid://lh40088jyh2f" path="res://assets/textures/ezgif-split/frame_06_delay-0.02s.png" id="8_15m4v"]
+[ext_resource type="Texture2D" uid="uid://d2ds36p7eextp" path="res://assets/textures/ezgif-split(2)/frame_06_delay-0.06s.png" id="8_fv10w"]
+[ext_resource type="Texture2D" uid="uid://cf8ps8gtyw2uj" path="res://assets/textures/ezgif-split(2)/frame_07_delay-0.06s.png" id="9_0be2p"]
 [ext_resource type="Texture2D" uid="uid://cndxfniquhsi2" path="res://assets/textures/ezgif-split/frame_07_delay-0.02s.png" id="9_f0cbm"]
+[ext_resource type="Texture2D" uid="uid://dyhvjb5bu7v7y" path="res://assets/textures/ezgif-split(2)/frame_08_delay-0.06s.png" id="10_2gcuk"]
 [ext_resource type="Texture2D" uid="uid://k1xfwlvf6jad" path="res://assets/textures/ezgif-split/frame_08_delay-0.02s.png" id="10_jpjrt"]
 [ext_resource type="Texture2D" uid="uid://cm3wbb650lpor" path="res://assets/textures/ezgif-split/frame_09_delay-0.02s.png" id="11_0td5x"]
+[ext_resource type="Texture2D" uid="uid://ccl4eco2uut2x" path="res://assets/textures/ezgif-split(2)/frame_09_delay-0.06s.png" id="11_ajim5"]
+[ext_resource type="Texture2D" uid="uid://ckgaiseuuift5" path="res://assets/textures/ezgif-split(2)/frame_10_delay-0.06s.png" id="12_0e3hr"]
 [ext_resource type="Texture2D" uid="uid://bey6wvf4nac8j" path="res://assets/textures/ezgif-split/frame_10_delay-0.02s.png" id="12_rx285"]
 [ext_resource type="Texture2D" uid="uid://cce0ibxk2gyir" path="res://assets/textures/ezgif-split/frame_11_delay-0.02s.png" id="13_jg1pe"]
 [ext_resource type="Texture2D" uid="uid://c6601ibqdwf63" path="res://assets/textures/ezgif-split/frame_12_delay-0.02s.png" id="14_uibjs"]
@@ -61,6 +72,47 @@
 [ext_resource type="Texture2D" uid="uid://b1p1o4ihflwng" path="res://assets/textures/ezgif-split/frame_57_delay-0.02s.png" id="59_u1mtm"]
 [ext_resource type="Texture2D" uid="uid://m74sggveaqed" path="res://assets/textures/ezgif-split/frame_58_delay-0.02s.png" id="60_6pijh"]
 [ext_resource type="Texture2D" uid="uid://dgic2l073qx6q" path="res://assets/textures/ezgif-split/frame_59_delay-0.02s.png" id="61_cub41"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_d24t5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_jg1pe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_uibjs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_jsak6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_1xwyt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_sqcof")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_wqict")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_fv10w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_0be2p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_2gcuk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_ajim5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_0e3hr")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_68i3f"]
 animations = [{
@@ -268,6 +320,20 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.5)
 
+[node name="BackgroundAnimGif" type="AnimatedSprite2D" parent="Background"]
+position = Vector2(523, 280)
+scale = Vector2(2.14, 1.7)
+sprite_frames = SubResource("SpriteFrames_d24t5")
+autoplay = "default"
+frame_progress = 0.234301
+
+[node name="TitleAnimGif" type="AnimatedSprite2D" parent="Background"]
+position = Vector2(719, 258)
+scale = Vector2(1.2, 1.039)
+sprite_frames = SubResource("SpriteFrames_68i3f")
+autoplay = "default"
+frame_progress = 0.115851
+
 [node name="MenuContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -275,20 +341,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -150.0
-offset_right = 200.0
-offset_bottom = 150.0
+offset_left = -457.0
+offset_top = -179.0
+offset_right = -57.0
+offset_bottom = 121.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MenuContainer"]
-position = Vector2(200, -66)
-scale = Vector2(0.836634, 0.724599)
-sprite_frames = SubResource("SpriteFrames_68i3f")
-autoplay = "default"
-frame_progress = 0.115851
 
 [node name="NewGameButton" type="Button" parent="MenuContainer"]
 layout_mode = 2
