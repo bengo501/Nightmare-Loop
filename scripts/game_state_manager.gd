@@ -44,29 +44,29 @@ func change_state(new_state: GameState) -> void:
 
 # State handlers
 func handle_main_menu() -> void:
-	# Implement main menu logic
-	pass
+	# Pausa o jogo quando no menu principal
+	get_tree().paused = true
 
 func handle_playing() -> void:
-	# Implement playing state logic
-	pass
+	# Despausa o jogo quando jogando
+	get_tree().paused = false
 
 func handle_paused() -> void:
-	# Implement pause state logic
-	pass
+	# Pausa o jogo
+	get_tree().paused = true
 
 func handle_game_over() -> void:
-	# Implement game over logic
-	pass
+	# Pausa o jogo quando game over
+	get_tree().paused = true
 
 func handle_battle() -> void:
-	# Implement battle state logic
-	pass
+	# Pausa o jogo durante batalha
+	get_tree().paused = true
 
 func handle_dialogue() -> void:
-	# Implement dialogue state logic
-	pass
+	# Pausa o jogo durante diálogo
+	get_tree().paused = true
 
 func handle_inventory() -> void:
-	# Implement inventory state logic
-	pass 
+	# Pausa o jogo durante inventário
+	get_tree().paused = true 

@@ -248,13 +248,13 @@ func activate_first_person():
 
 func activate_third_person():
 	first_person_mode = false
-	crosshair.visible = true
+	#crosshair.visible = true
 	player.visible = true
-	hud.visible = true
-	third_person_camera.current = true
-	first_person_camera.current = false
+	#hud.visible = true
+	#third_person_camera.current = true
+	#first_person_camera.current = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	weapon.visible = false
+	#weapon.visible = false
 
 # === LASER ===
 func update_laser_color():

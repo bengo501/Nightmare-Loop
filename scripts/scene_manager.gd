@@ -4,10 +4,12 @@ signal map_changed(map_path: String)
 
 # Dictionary to store scene paths
 var scenes = {
-	"main_menu": "res://scenes/main_menu.tscn",
+	"main_menu": "res://scenes/ui/main_menu.tscn",
 	"world": "res://scenes/world.tscn",
 	"battle": "res://battle_scene.tscn",
-	"options": "res://scenes/options_menu.tscn"
+	"options": "res://scenes/ui/options_menu.tscn",
+	"pause_menu": "res://scenes/ui/pause_menu.tscn",
+	"hud": "res://scenes/ui/hud.tscn"
 }
 
 # Current scene reference
@@ -17,7 +19,7 @@ var current_scene = null
 var maps = {
 	"main": "res://scenes/maps/main_map.tscn",
 	"dungeon": "res://scenes/maps/dungeon_map.tscn",
-	"boss": "res://scenes/maps/boss_map.tscn"
+	"lobby": "res://scenes/maps/lobby.tscn"
 }
 
 # Mapa atual
@@ -51,6 +53,10 @@ func change_scene(scene_name: String, transition_type: String = "fade") -> void:
 		current_scene.queue_free()
 	
 	current_scene = new_scene
+	
+	# Se for a cena do mundo, carrega o mapa inicial
+	if scene_name == "world":
+		change_map("main")
 
 # Transition effects
 func fade_transition() -> void:

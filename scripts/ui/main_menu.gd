@@ -19,8 +19,18 @@ func _ready():
 
 func _on_new_game_pressed():
 	# Inicia um novo jogo
-	get_node("/root/GameManager").reset_game()
-	get_node("/root/SceneManager").change_scene("world")
+	var game_manager = get_node("/root/GameManager")
+	var state_manager = get_node("/root/GameStateManager")
+	var scene_manager = get_node("/root/SceneManager")
+	
+	# Reseta o jogo
+	game_manager.reset_game()
+	
+	# Muda o estado para PLAYING
+	state_manager.change_state(state_manager.GameState.PLAYING)
+	
+	# Carrega a cena do mundo
+	scene_manager.change_scene("world")
 
 func _on_load_game_pressed():
 	# Carrega o jogo salvo
