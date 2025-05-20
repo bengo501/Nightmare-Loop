@@ -273,6 +273,8 @@ func activate_first_person():
 		crosshair.visible = true
 	if hud:
 		hud.visible = true
+		# Alterna crosshair para modo centralizado
+		hud.set_crosshair_mode(true)
 	if first_person_camera:
 		first_person_camera.current = true
 	if third_person_camera:
@@ -288,6 +290,8 @@ func activate_third_person():
 		crosshair.visible = false
 	if hud:
 		hud.visible = true
+		# Alterna crosshair para seguir o mouse
+		hud.set_crosshair_mode(false)
 	if third_person_camera:
 		third_person_camera.current = true
 	if first_person_camera:
