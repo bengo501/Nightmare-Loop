@@ -4964,3 +4964,18 @@ skin = SubResource("Skin_cgowi")
 libraries = {
 &"": SubResource("AnimationLibrary_1rfb4")
 }
+
+[node name="ThirdPersonCamera" type="Camera3D" parent="."]
+
+[node name="MouseRay" type="RayCast3D" parent="ThirdPersonCamera"]
+
+[node name="FirstPersonCamera" type="Camera3D" parent="."]
+
+[node name="weapon" type="TextureRect" parent="FirstPersonCamera"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ShootRay" type="RayCast3D" parent="FirstPersonCamera"]
+
+[node name="LaseLine" type="CSGCylinder3D" parent="FirstPersonCamera"]
+visible = false

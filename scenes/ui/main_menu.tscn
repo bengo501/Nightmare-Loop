@@ -325,7 +325,7 @@ position = Vector2(523, 280)
 scale = Vector2(2.14, 1.7)
 sprite_frames = SubResource("SpriteFrames_d24t5")
 autoplay = "default"
-frame_progress = 0.234301
+frame_progress = 0.335598
 
 [node name="TitleAnimGif" type="AnimatedSprite2D" parent="Background"]
 position = Vector2(719, 258)

@@ -14,19 +14,20 @@ const MOUSE_SENSITIVITY = 0.003
 var current_health: float
 var defense_bonus: float = 1.0
 
-# === NÓS ===
-@onready var third_person_camera = $"../ThirdPersonCamera"
+# === NÓS (referências adaptadas) ===
+@onready var third_person_camera = $ThirdPersonCamera
 @onready var first_person_camera = $FirstPersonCamera
 @onready var animation_player = $visuals/GamePucrsMC/AnimationPlayer
 @onready var visuals = $visuals
 @onready var weapon = $FirstPersonCamera/weapon
 @onready var shoot_ray = $FirstPersonCamera/ShootRay
 @onready var laser_line = $FirstPersonCamera/LaseLine
-@onready var hud = $"../CanvasLayer/CanvasLayer2"
-@onready var player = $"."
-@onready var crosshair = $"../CanvasLayer/CanvasLayer2/Crosshair"
-@onready var mouse_ray = $"../ThirdPersonCamera/MouseRay"
-@onready var battle_manager = get_node("/root/BattleSceneManager")
+@onready var crosshair = $Crosshair
+@onready var mouse_ray = $ThirdPersonCamera/MouseRay
+# Ajuste o caminho do HUD conforme sua cena:
+@onready var hud = get_node_or_null("/root/World/UI/HUD")
+# Se BattleManager for autoload:
+@onready var battle_manager = get_node_or_null("/root/BattleSceneManager")
 
 # === ESTADOS ===
 var first_person_mode = false
@@ -36,21 +37,52 @@ var attack_timer: Timer
 var current_target = null
 var can_move = true
 
-
-
-# === INICIALIZAÇÃO ===
 func _ready():
 	add_to_group("player")
-	activate_third_person()
-	laser_line.visible = false
+	current_health = max_health
+
+	# Tenta encontrar os nós, se existirem
+	if has_node("../ThirdPersonCamera"):
+		third_person_camera = get_node("../ThirdPersonCamera")
+	if has_node("FirstPersonCamera"):
+		first_person_camera = get_node("FirstPersonCamera")
+		# Arma 2D como TextureRect dentro da câmera de primeira pessoa
+		if first_person_camera.has_node("weapon"):
+			weapon = first_person_camera.get_node("weapon")
+		if first_person_camera.has_node("ShootRay"):
+			shoot_ray = first_person_camera.get_node("ShootRay")
+		if first_person_camera.has_node("LaseLine"):
+			laser_line = first_person_camera.get_node("LaseLine")
+	if has_node("visuals"):
+		visuals = get_node("visuals")
+		if visuals.has_node("GamePucrsMC/AnimationPlayer"):
+			animation_player = visuals.get_node("GamePucrsMC/AnimationPlayer")
+	# HUD e crosshair podem estar em outro CanvasLayer, ajuste o caminho conforme sua cena
+	if has_node("../CanvasLayer/HUD"):
+		hud = get_node("../CanvasLayer/HUD")
+		if hud.has_node("Crosshair"):
+			crosshair = hud.get_node("Crosshair")
+	# MouseRay pode estar na câmera de terceira pessoa
+	if third_person_camera and third_person_camera.has_node("MouseRay"):
+		mouse_ray = third_person_camera.get_node("MouseRay")
+	# BattleManager pode ser autoload ou estar em outro lugar
+	if has_node("/root/BattleSceneManager"):
+		battle_manager = get_node("/root/BattleSceneManager")
+
+	# Inicialização de sistemas
+	if third_person_camera:
+		activate_third_person()
+	if laser_line:
+		laser_line.visible = false
 	setup_attack_system()
 	setup_animations()
-	current_health = max_health
-	
-	# Conecta os sinais do battle manager
+
+	# Conecta sinais do battle manager se existir
 	if battle_manager:
-		battle_manager.connect("battle_started", _on_battle_started)
-		battle_manager.connect("battle_ended", _on_battle_ended)
+		if battle_manager.has_signal("battle_started"):
+			battle_manager.connect("battle_started", _on_battle_started)
+		if battle_manager.has_signal("battle_ended"):
+			battle_manager.connect("battle_ended", _on_battle_ended)
 
 func setup_attack_system():
 	attack_timer = Timer.new()
@@ -59,11 +91,14 @@ func setup_attack_system():
 	attack_timer.connect("timeout", _on_attack_timer_timeout)
 	add_child(attack_timer)
 
-	shoot_ray.target_position = Vector3(0, 0, -attack_range)
-	shoot_ray.collision_mask = 2
-	shoot_ray.enabled = true
+	if shoot_ray:
+		shoot_ray.target_position = Vector3(0, 0, -attack_range)
+		shoot_ray.collision_mask = 2
+		shoot_ray.enabled = true
 
 func setup_animations():
+	if animation_player == null:
+		return
 	var transitions = [
 		["idle", "walk_front"], ["idle", "walk_back"],
 		["idle", "walk_left"], ["idle", "walk_right"],
@@ -77,47 +112,38 @@ func setup_animations():
 func _physics_process(delta: float):
 	if not can_move:
 		return
-		
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
-
 	if not first_person_mode:
 		move_isometric(delta)
 		rotate_toward_mouse(delta)
 	else:
 		move_first_person(delta)
-
 	if laser_active and first_person_mode:
 		check_ray_collision()
-
 	move_and_slide()
 
 # === ROTAÇÃO PARA O MOUSE ===
 func rotate_toward_mouse(delta):
-	if not third_person_camera or not third_person_camera.mouse_ray:
+	if not third_person_camera or not mouse_ray:
 		return
-
-	third_person_camera.mouse_ray.force_raycast_update()
-
-	if third_person_camera.mouse_ray.is_colliding():
-		var hit_point = third_person_camera.mouse_ray.get_collision_point()
+	mouse_ray.force_raycast_update()
+	if mouse_ray.is_colliding():
+		var hit_point = mouse_ray.get_collision_point()
 		var player_pos = global_transform.origin
 		var dir = hit_point - player_pos
 		dir.y = 0
-
 		if dir.length_squared() > 0.01:
 			var target_angle = atan2(dir.x, dir.z)
-			# Suaviza a rotação usando lerp_angle
 			rotation.y = lerp_angle(rotation.y, target_angle, delta * rotation_speed)
-			visuals.rotation.y = rotation.y
+			if visuals:
+				visuals.rotation.y = rotation.y
 
 # === MOVIMENTO ISOMÉTRICO ===
 func move_isometric(delta: float):
 	var input_vector = Vector3.ZERO
-
 	if Input.is_action_pressed("foward"):
 		input_vector.z -= 1
 	if Input.is_action_pressed("backward"):
@@ -126,23 +152,19 @@ func move_isometric(delta: float):
 		input_vector.x -= 1
 	if Input.is_action_pressed("right"):
 		input_vector.x += 1
-
 	if input_vector != Vector3.ZERO:
 		input_vector = input_vector.normalized()
 		var camera_basis = third_person_camera.global_transform.basis
 		var direction = (camera_basis.x * input_vector.x) + (camera_basis.z * input_vector.z)
 		direction.y = 0
 		direction = direction.normalized()
-
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
-
 		play_animation("walk_front")
 	else:
 		velocity.x = lerp(velocity.x, 0.0, 0.2)
 		velocity.z = lerp(velocity.z, 0.0, 0.2)
 		play_animation("idle")
-
 
 # === MOVIMENTO EM PRIMEIRA PESSOA ===
 func move_first_person(delta: float):
@@ -155,7 +177,6 @@ func move_first_person(delta: float):
 		input_dir -= first_person_camera.global_transform.basis.x
 	if Input.is_action_pressed("right"):
 		input_dir += first_person_camera.global_transform.basis.x
-
 	input_dir.y = 0
 	input_dir = input_dir.normalized()
 	velocity.x = input_dir.x * SPEED
@@ -163,11 +184,13 @@ func move_first_person(delta: float):
 
 # === ANIMAÇÕES ===
 func play_animation(anim_name: String):
-	if animation_player.current_animation != anim_name:
+	if animation_player and animation_player.current_animation != anim_name:
 		animation_player.play(anim_name)
 
 # === LASER E ATAQUE ===
 func check_ray_collision():
+	if not shoot_ray:
+		return
 	shoot_ray.force_raycast_update()
 	if shoot_ray.is_colliding():
 		var collider = shoot_ray.get_collider()
@@ -194,7 +217,7 @@ func _on_attack_timer_timeout():
 	if current_target and is_instance_valid(current_target):
 		perform_attack(current_target)
 
-# === ENTRADAS ===
+# === ENTRADAS E TIRO EM PRIMEIRA PESSOA ===
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
@@ -202,89 +225,100 @@ func _input(event):
 				activate_first_person()
 			else:
 				activate_third_person()
-
-		if event.button_index == MOUSE_BUTTON_LEFT:
+		if event.button_index == MOUSE_BUTTON_LEFT and first_person_mode:
 			if event.pressed:
 				laser_active = true
-				laser_line.visible = true
-				print("DEBUG: Laser ativado")
+				if laser_line:
+					laser_line.visible = true
+				shoot_first_person()
 			else:
 				laser_active = false
-				laser_line.visible = false
+				if laser_line:
+					laser_line.visible = false
 				current_target = null
-				print("DEBUG: Laser desativado")
-
 	if first_person_mode and event is InputEventMouseMotion:
 		rotate_camera(event.relative)
 
-	# Novo: atirar com a tecla F
-	if first_person_mode and event is InputEventKey and event.pressed:
-		if event.keycode == KEY_F:
-			laser_active = true
-			laser_line.visible = true
-			print("DEBUG: Laser ativado (tecla F)")
-	if first_person_mode and event is InputEventKey and not event.pressed:
-		if event.keycode == KEY_F:
-			laser_active = false
-			laser_line.visible = false
-			current_target = null
-			print("DEBUG: Laser desativado (tecla F)")
+func shoot_first_person():
+	if not shoot_ray:
+		return
+	shoot_ray.force_raycast_update()
+	if shoot_ray.is_colliding():
+		var collider = shoot_ray.get_collider()
+		if collider and collider.is_in_group("enemy"):
+			if collider.has_method("take_damage"):
+				collider.take_damage(attack_damage)
+				print("DEBUG: Acertou inimigo em primeira pessoa!")
 
 func rotate_camera(mouse_motion: Vector2):
+	if not first_person_camera:
+		return
 	rotation.y -= mouse_motion.x * MOUSE_SENSITIVITY
 	first_person_camera.rotation.x -= mouse_motion.y * MOUSE_SENSITIVITY
 	first_person_camera.rotation.x = clamp(first_person_camera.rotation.x, deg_to_rad(-89), deg_to_rad(89))
 
 # === MODOS ===
 func activate_first_person():
-	crosshair.visible = true
-	player.visible = true
-	hud.visible = true
 	first_person_mode = true
-	first_person_camera.current = true
-	third_person_camera.current = false
+	if crosshair:
+		crosshair.visible = true
+	if hud:
+		hud.visible = true
+	if first_person_camera:
+		first_person_camera.current = true
+	if third_person_camera:
+		third_person_camera.current = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	weapon.visible = true
+	if weapon:
+		weapon.visible = true
 
 func activate_third_person():
 	first_person_mode = false
-	#crosshair.visible = true
-	player.visible = true
-	#hud.visible = true
-	#third_person_camera.current = true
-	#first_person_camera.current = false
+	if crosshair:
+		crosshair.visible = false
+	if hud:
+		hud.visible = true
+	if third_person_camera:
+		third_person_camera.current = true
+	if first_person_camera:
+		first_person_camera.current = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	#weapon.visible = false
+	if weapon:
+		weapon.visible = false
 
 # === LASER ===
 func update_laser_color():
-	if crosshair.material is ShaderMaterial:
+	if crosshair and crosshair.material is ShaderMaterial:
 		var cross_color = crosshair.material.get_shader_parameter("dot_color")
-		if laser_line.material_override == null:
+		if laser_line and laser_line.material_override == null:
 			var shader_material = ShaderMaterial.new()
 			shader_material.shader = preload("res://shaders/laserRay.gdshader")
 			laser_line.material_override = shader_material
-		if laser_line.material_override is ShaderMaterial:
+		if laser_line and laser_line.material_override is ShaderMaterial:
 			laser_line.material_override.set_shader_parameter("core_color", cross_color)
 
 func _on_battle_started():
 	can_move = false
 	velocity = Vector3.ZERO
 	laser_active = false
-	laser_line.visible = false
-	weapon.visible = false
-	crosshair.visible = false
+	if laser_line:
+		laser_line.visible = false
+	if weapon:
+		weapon.visible = false
+	if crosshair:
+		crosshair.visible = false
 
 func _on_battle_ended():
 	can_move = true
-	weapon.visible = true
-	crosshair.visible = true
+	if weapon:
+		weapon.visible = true
+	if crosshair:
+		crosshair.visible = true
 
 func take_damage(damage: float) -> void:
 	var final_damage = damage / defense_bonus
 	current_health -= final_damage
 	print("DEBUG: Jogador tomou ", final_damage, " de dano! Vida restante: ", current_health)
-	
 	if current_health <= 0:
 		die()
 
