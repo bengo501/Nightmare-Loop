@@ -37,6 +37,14 @@ var attack_timer: Timer
 var current_target = null
 var can_move = true
 
+@export var camera_distance: float = -12.0
+@export var camera_height: float = 18.0
+@export var camera_angle_deg: float = 45.0
+@export var camera_smooth: float = 8.0
+@export var sway_max_offset: float = 1.5
+@export var sway_speed: float = 5.0
+var sway_offset: Vector3 = Vector3.ZERO
+
 func _ready():
 	add_to_group("player")
 	current_health = max_health
@@ -328,3 +336,44 @@ func die() -> void:
 	print("DEBUG: Jogador morreu!")
 	# Implementar lógica de game over
 	queue_free()
+
+func _process(delta):
+	if not first_person_mode and third_person_camera:
+		update_camera_sway(delta)
+		update_third_person_look()
+
+func update_camera_sway(delta):
+	var viewport = get_viewport()
+	var mouse_pos = viewport.get_mouse_position()
+	var size = viewport.get_visible_rect().size
+
+	var norm_x = ((mouse_pos.x / size.x) - 0.5) * 2.0
+	var norm_y = ((mouse_pos.y / size.y) - 0.5) * 2.0
+
+	var target_offset = Vector3(norm_x * sway_max_offset, 0, norm_y * sway_max_offset)
+	sway_offset = sway_offset.lerp(target_offset, sway_speed * delta)
+
+	# Posição base da câmera: bem acima e atrás do jogador
+	var base_pos = global_transform.origin
+	base_pos.x += sway_offset.x
+	base_pos.z += sway_offset.z
+	base_pos.y += camera_height
+
+	# Aplica o deslocamento para trás (ângulo isométrico)
+	var angle_rad = deg_to_rad(camera_angle_deg)
+	base_pos.x += camera_distance * sin(angle_rad)
+	base_pos.z += camera_distance * cos(angle_rad)
+
+	third_person_camera.global_transform.origin = base_pos
+	third_person_camera.look_at(global_transform.origin, Vector3.UP)
+
+func update_third_person_look():
+	if mouse_ray:
+		mouse_ray.force_raycast_update()
+		if mouse_ray.is_colliding():
+			var hit_point = mouse_ray.get_collision_point()
+			var player_pos = global_transform.origin
+			var look_dir = hit_point - player_pos
+			look_dir.y = 0
+			if look_dir.length() > 0.1 and visuals:
+				visuals.look_at(Vector3(hit_point.x, visuals.global_transform.origin.y, hit_point.z), Vector3.UP)

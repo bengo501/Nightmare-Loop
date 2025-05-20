@@ -4968,7 +4968,7 @@ libraries = {
 }
 
 [node name="ThirdPersonCamera" type="Camera3D" parent="."]
-transform = Transform3D(0.581016, -0.300155, 0.756524, 0, 0.929513, 0.36879, -0.813893, -0.214273, 0.540061, 2.22554, 2.63549, 2.35367)
+transform = Transform3D(0.543339, -0.300155, 0.784022, -0.0180282, 0.929513, 0.368349, -0.83932, -0.214273, 0.499629, 3.70097, 3.44226, 2.62828)
 script = ExtResource("3_gmlin")
 
 [node name="MouseRay" type="RayCast3D" parent="ThirdPersonCamera"]
