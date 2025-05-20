@@ -1,7 +1,9 @@
-[gd_scene load_steps=31 format=4 uid="uid://drs2ohyyh3uit"]
+[gd_scene load_steps=33 format=4 uid="uid://drs2ohyyh3uit"]
 
 [ext_resource type="Script" uid="uid://bs72uun8hw128" path="res://scripts/player/player.gd" id="1_8afob"]
 [ext_resource type="Texture2D" uid="uid://sv02x6ok5npi" path="res://assets/models/characters/misc/DarleneTexture256Fin.png" id="2_dovo2"]
+[ext_resource type="Script" uid="uid://c03xjf26j01ix" path="res://scripts/ThirdPersonCamera.gd" id="3_gmlin"]
+[ext_resource type="Texture2D" uid="uid://bcqhlm6vjmnhx" path="res://assets/textures/D4BC5953-C99A-43F1-A561-23D964912C34-removebg-preview.png" id="4_lvxji"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_dovo2"]
 
@@ -4966,14 +4968,18 @@ libraries = {
 }
 
 [node name="ThirdPersonCamera" type="Camera3D" parent="."]
+transform = Transform3D(0.581016, -0.300155, 0.756524, 0, 0.929513, 0.36879, -0.813893, -0.214273, 0.540061, 2.22554, 2.63549, 2.35367)
+script = ExtResource("3_gmlin")
 
 [node name="MouseRay" type="RayCast3D" parent="ThirdPersonCamera"]
 
 [node name="FirstPersonCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312904, 1.81408, 0.46997)
 
 [node name="weapon" type="TextureRect" parent="FirstPersonCamera"]
 offset_right = 40.0
 offset_bottom = 40.0
+texture = ExtResource("4_lvxji")
 
 [node name="ShootRay" type="RayCast3D" parent="FirstPersonCamera"]
 

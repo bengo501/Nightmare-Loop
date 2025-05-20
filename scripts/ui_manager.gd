@@ -14,6 +14,7 @@ var ui_scenes = {
 # Current UI elements
 var current_ui = null
 var active_menus = []
+var hud_instance = null
 
 # References to other managers
 @onready var game_manager = get_node("/root/GameManager")
@@ -39,12 +40,20 @@ func show_ui(ui_name: String) -> void:
 	add_child(ui_scene)
 	active_menus.append(ui_scene)
 	current_ui = ui_scene
+	
+	# Se for o menu de pause, esconde a HUD
+	if ui_name == "pause_menu" and hud_instance:
+		hud_instance.visible = false
 
 func hide_ui(ui_name: String) -> void:
 	for menu in active_menus:
 		if menu.name == ui_name:
 			menu.queue_free()
 			active_menus.erase(menu)
+			
+			# Se for o menu de pause, mostra a HUD novamente
+			if ui_name == "pause_menu" and hud_instance:
+				hud_instance.visible = true
 			break
 
 func hide_all_ui() -> void:
@@ -77,6 +86,7 @@ func _on_game_state_changed(new_state: int) -> void:
 		state_manager.GameState.PLAYING:
 			hide_all_ui()
 			show_ui("hud")
+			hud_instance = current_ui  # Guarda referência da HUD
 		state_manager.GameState.PAUSED:
 			show_ui("pause_menu")
 		state_manager.GameState.GAME_OVER:
