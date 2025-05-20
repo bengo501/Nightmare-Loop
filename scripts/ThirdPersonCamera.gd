@@ -6,6 +6,7 @@ extends Camera3D
 @export var mouse_influence: float = 1.5
 
 @onready var mouse_ray = $MouseRay
+var debug_marker: MeshInstance3D = null
 
 func _ready():
 	if mouse_ray:
@@ -15,6 +16,13 @@ func _ready():
 		mouse_ray.target_position = Vector3(0, -100, 0)  # Raycast apontando para baixo
 		mouse_ray.collide_with_areas = false  # Ignora áreas
 		mouse_ray.collide_with_bodies = true  # Colide apenas com corpos físicos
+
+	# Cria o marcador de debug
+	debug_marker = MeshInstance3D.new()
+	debug_marker.mesh = SphereMesh.new()
+	debug_marker.mesh.radius = 0.15
+	debug_marker.visible = false
+	add_child(debug_marker)
 
 func _process(delta):
 	if not target:
@@ -38,10 +46,17 @@ func _process(delta):
 
 	global_transform.origin = global_transform.origin.lerp(desired_position, delta * follow_speed)
 	
-	# Atualiza o raycast do mouse
+	# MouseRay deve partir da posição da câmera para onde o mouse está na tela (sem sway)
 	if mouse_ray:
+		var from = project_ray_origin(mouse_pos)
+		var to = from + project_ray_normal(mouse_pos) * 1000.0
+		mouse_ray.global_transform.origin = from
+		mouse_ray.target_position = to - from
 		mouse_ray.force_raycast_update()
+
+		# Debug visual: mostra uma esfera no ponto de colisão
 		if mouse_ray.is_colliding():
-			var collision_point = mouse_ray.get_collision_point()
-			# Debug
-			print("Camera Raycast hit point: ", collision_point)
+			debug_marker.global_transform.origin = mouse_ray.get_collision_point()
+			debug_marker.visible = true
+		else:
+			debug_marker.visible = false

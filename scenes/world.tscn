@@ -23,6 +23,8 @@ shadow_enabled = true
 [node name="Floor" type="CSGBox3D" parent="Environment"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(40, 0.2, 40)
 material = ExtResource("1_rwgxs")
 

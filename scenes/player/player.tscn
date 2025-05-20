@@ -4972,6 +4972,8 @@ transform = Transform3D(0.543339, -0.300155, 0.784022, -0.0180282, 0.929513, 0.3
 script = ExtResource("3_gmlin")
 
 [node name="MouseRay" type="RayCast3D" parent="ThirdPersonCamera"]
+transform = Transform3D(0.93473, 0.90577, -0.0658068, -0.0280639, 0.101928, -2.41783, -0.132233, 6.38107, 0.0479627, 0, 0, 0)
+collision_mask = 129
 
 [node name="FirstPersonCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312904, 1.59825, 0.36499)

@@ -37,8 +37,8 @@ var attack_timer: Timer
 var current_target = null
 var can_move = true
 
-@export var camera_distance: float = -12.0
-@export var camera_height: float = 18.0
+@export var camera_distance: float = -4.0
+@export var camera_height: float = 7.0
 @export var camera_angle_deg: float = 45.0
 @export var camera_smooth: float = 8.0
 @export var sway_max_offset: float = 1.5
@@ -368,12 +368,20 @@ func update_camera_sway(delta):
 	third_person_camera.look_at(global_transform.origin, Vector3.UP)
 
 func update_third_person_look():
-	if mouse_ray:
-		mouse_ray.force_raycast_update()
-		if mouse_ray.is_colliding():
-			var hit_point = mouse_ray.get_collision_point()
-			var player_pos = global_transform.origin
-			var look_dir = hit_point - player_pos
-			look_dir.y = 0
-			if look_dir.length() > 0.1 and visuals:
-				visuals.look_at(Vector3(hit_point.x, visuals.global_transform.origin.y, hit_point.z), Vector3.UP)
+	# Usa o mouse_ray da câmera para determinar o ponto de olhar
+	if third_person_camera and third_person_camera.has_node("MouseRay"):
+		var cam_mouse_ray = third_person_camera.get_node("MouseRay")
+		cam_mouse_ray.force_raycast_update()
+		if cam_mouse_ray.is_colliding():
+			var collider = cam_mouse_ray.get_collider()
+			# Só rotaciona se colidir com a máscara 8 (piso)
+			if collider and collider.collision_layer & (1 << 7):
+				var hit_point = cam_mouse_ray.get_collision_point()
+				var player_pos = global_transform.origin
+				var look_dir = hit_point - player_pos
+				look_dir.y = 0
+				if look_dir.length() > 0.1 and visuals:
+					var look_at_pos = Vector3(hit_point.x, visuals.global_transform.origin.y, hit_point.z)
+					visuals.look_at(look_at_pos, Vector3.UP)
+					visuals.rotation.x = 0
+					visuals.rotation.z = 0
