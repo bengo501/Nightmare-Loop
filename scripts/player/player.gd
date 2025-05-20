@@ -260,6 +260,7 @@ func rotate_camera(mouse_motion: Vector2):
 # === MODOS ===
 func activate_first_person():
 	first_person_mode = true
+	$visuals.visible = false
 	if crosshair:
 		crosshair.visible = true
 	if hud:
@@ -274,6 +275,7 @@ func activate_first_person():
 
 func activate_third_person():
 	first_person_mode = false
+	$visuals.visible = true
 	if crosshair:
 		crosshair.visible = false
 	if hud:

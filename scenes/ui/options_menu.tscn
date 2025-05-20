@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://dlb1wwp225fmv"]
+[gd_scene load_steps=2 format=3 uid="uid://dlb1wwp225fmv"]
+
+[ext_resource type="Script" uid="uid://ckpg87r0cvd7a" path="res://scripts/ui/options_menu.gd" id="1_script"]
 
 [node name="OptionsMenu" type="Control"]
 layout_mode = 3
@@ -7,3 +9,162 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7)
+
+[node name="MenuContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -300.0
+offset_right = 250.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 30
+
+[node name="Title" type="Label" parent="MenuContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 40
+text = "Opções"
+horizontal_alignment = 1
+
+[node name="VolumeSection" type="VBoxContainer" parent="MenuContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="VolumeLabel" type="Label" parent="MenuContainer/VolumeSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 28
+text = "Volume"
+
+[node name="MasterVolume" type="HBoxContainer" parent="MenuContainer/VolumeSection"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="MenuContainer/VolumeSection/MasterVolume"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Mestre"
+
+[node name="MasterSlider" type="HSlider" parent="MenuContainer/VolumeSection/MasterVolume"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.1
+value = 1.0
+
+[node name="MusicVolume" type="HBoxContainer" parent="MenuContainer/VolumeSection"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="MenuContainer/VolumeSection/MusicVolume"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Música"
+
+[node name="MusicSlider" type="HSlider" parent="MenuContainer/VolumeSection/MusicVolume"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.1
+value = 1.0
+
+[node name="SFXVolume" type="HBoxContainer" parent="MenuContainer/VolumeSection"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="MenuContainer/VolumeSection/SFXVolume"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Efeitos"
+
+[node name="SFXSlider" type="HSlider" parent="MenuContainer/VolumeSection/SFXVolume"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.1
+value = 1.0
+
+[node name="GraphicsSection" type="VBoxContainer" parent="MenuContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="GraphicsLabel" type="Label" parent="MenuContainer/GraphicsSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 28
+text = "Gráficos"
+
+[node name="FullscreenToggle" type="CheckButton" parent="MenuContainer/GraphicsSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Tela Cheia"
+
+[node name="GameplaySection" type="VBoxContainer" parent="MenuContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="GameplayLabel" type="Label" parent="MenuContainer/GameplaySection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 28
+text = "Jogabilidade"
+
+[node name="InvertYToggle" type="CheckButton" parent="MenuContainer/GameplaySection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Inverter Eixo Y"
+
+[node name="MouseSensitivity" type="HBoxContainer" parent="MenuContainer/GameplaySection"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="MenuContainer/GameplaySection/MouseSensitivity"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Sensibilidade do Mouse"
+
+[node name="SensitivitySlider" type="HSlider" parent="MenuContainer/GameplaySection/MouseSensitivity"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.1
+max_value = 2.0
+step = 0.1
+value = 1.0
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="MenuContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="ApplyButton" type="Button" parent="MenuContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "Aplicar"
+
+[node name="BackButton" type="Button" parent="MenuContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "Voltar"

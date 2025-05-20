@@ -4974,11 +4974,11 @@ script = ExtResource("3_gmlin")
 [node name="MouseRay" type="RayCast3D" parent="ThirdPersonCamera"]
 
 [node name="FirstPersonCamera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312904, 1.81408, 0.46997)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312904, 1.59825, 0.36499)
 
 [node name="weapon" type="TextureRect" parent="FirstPersonCamera"]
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 1032.0
+offset_bottom = 600.0
 texture = ExtResource("4_lvxji")
 
 [node name="ShootRay" type="RayCast3D" parent="FirstPersonCamera"]

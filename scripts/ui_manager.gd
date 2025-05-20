@@ -15,6 +15,7 @@ var ui_scenes = {
 var current_ui = null
 var active_menus = []
 var hud_instance = null
+var options_menu_instance = null
 
 # References to other managers
 @onready var game_manager = get_node("/root/GameManager")
@@ -35,17 +36,31 @@ func show_ui(ui_name: String) -> void:
 	if not ui_scenes.has(ui_name):
 		push_error("UI scene not found: " + ui_name)
 		return
+	
+	# Se já existe uma instância do menu de opções, apenas torna visível
+	if ui_name == "options_menu" and options_menu_instance:
+		options_menu_instance.show()
+		return
 		
 	var ui_scene = load(ui_scenes[ui_name]).instantiate()
 	add_child(ui_scene)
 	active_menus.append(ui_scene)
 	current_ui = ui_scene
 	
+	# Guarda referência do menu de opções
+	if ui_name == "options_menu":
+		options_menu_instance = ui_scene
+	
 	# Se for o menu de pause, esconde a HUD
 	if ui_name == "pause_menu" and hud_instance:
 		hud_instance.visible = false
 
 func hide_ui(ui_name: String) -> void:
+	# Se for o menu de opções e ele existe, apenas esconde
+	if ui_name == "options_menu" and options_menu_instance:
+		options_menu_instance.hide()
+		return
+	
 	for menu in active_menus:
 		if menu.name == ui_name:
 			menu.queue_free()
@@ -61,6 +76,7 @@ func hide_all_ui() -> void:
 		menu.queue_free()
 	active_menus.clear()
 	current_ui = null
+	options_menu_instance = null
 
 # Signal handlers
 func _on_health_changed(new_health: int) -> void:
