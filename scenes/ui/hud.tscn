@@ -2,32 +2,149 @@
 
 [node name="UI" type="CanvasLayer"]
 
-[node name="Crosshair" type="TextureRect" parent="."]
-offset_left = 512.0
-offset_top = 300.0
-offset_right = 528.0
-offset_bottom = 316.0
+[node name="WeaponPanel#WeaponInfo" type="HBoxContainer" parent="."]
+offset_left = -5.0
+offset_top = 262.0
+offset_right = 163.0
+offset_bottom = 842.0
+
+[node name="WeaponInfo#WeaponIcon" type="TextureRect" parent="WeaponPanel#WeaponInfo"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="HealthBar" type="ProgressBar" parent="."]
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 220.0
-offset_bottom = 40.0
+[node name="WeaponInfo#AmmoLabel" type="Label" parent="WeaponPanel#WeaponInfo"]
+layout_mode = 2
+text = "Munição: 0/0"
+
+[node name="TopBar#PlayerIcon" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(64, 64)
+offset_left = 25.0
+offset_top = 11.0
+offset_right = 89.0
+offset_bottom = 75.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TopBar#PlayerInfoVBox" type="VBoxContainer" parent="."]
+offset_left = 118.0
+offset_top = 7.0
+offset_right = 318.0
+offset_bottom = 78.0
+
+[node name="TopBar_PlayerInfoVBox#PlayerNameLabel" type="Label" parent="TopBar#PlayerInfoVBox"]
+layout_mode = 2
+text = "PlayerName"
+
+[node name="TopBar_PlayerInfoVBox#HealthBar" type="ProgressBar" parent="TopBar#PlayerInfoVBox"]
+custom_minimum_size = Vector2(200, 24)
+layout_mode = 2
 value = 100.0
 show_percentage = false
 
-[node name="ScoreLabel" type="Label" parent="."]
-offset_left = 20.0
-offset_top = 50.0
-offset_right = 220.0
-offset_bottom = 70.0
+[node name="TopBar_PlayerInfoVBox#XPBar" type="ProgressBar" parent="TopBar#PlayerInfoVBox"]
+custom_minimum_size = Vector2(200, 16)
+layout_mode = 2
+show_percentage = false
+
+[node name="TopBar#ScoreLevelVBox" type="VBoxContainer" parent="."]
+offset_left = 846.0
+offset_top = 6.0
+offset_right = 1026.0
+offset_bottom = 267.0
+
+[node name="TopBar_ScoreLevelVBox#ScoreLabel" type="Label" parent="TopBar#ScoreLevelVBox"]
+layout_mode = 2
 text = "Score: 0"
 
-[node name="LevelLabel" type="Label" parent="."]
-offset_left = 20.0
-offset_top = 80.0
-offset_right = 220.0
-offset_bottom = 100.0
+[node name="TopBar_ScoreLevelVBox#LevelLabel" type="Label" parent="TopBar#ScoreLevelVBox"]
+layout_mode = 2
 text = "Level: 1"
+
+[node name="StageNameLabel" type="Label" parent="TopBar#ScoreLevelVBox"]
+layout_mode = 2
+text = "Fase: Nome da Fase"
+horizontal_alignment = 1
+
+[node name="MinimapPanel#Minimap" type="TextureRect" parent="TopBar#ScoreLevelVBox"]
+custom_minimum_size = Vector2(180, 180)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ItemsPanel#ItemsContainer" type="HBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 13.0
+offset_top = 28.0
+offset_right = -7.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ItemsContainer#ItemSlot1" type="VBoxContainer" parent="ItemsPanel#ItemsContainer"]
+layout_mode = 2
+
+[node name="ItemsContainer_ItemSlot1#ItemIcon1" type="TextureRect" parent="ItemsPanel#ItemsContainer/ItemsContainer#ItemSlot1"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ItemsContainer_ItemSlot1#ItemCount1" type="Label" parent="ItemsPanel#ItemsContainer/ItemsContainer#ItemSlot1"]
+layout_mode = 2
+text = "x0"
+
+[node name="ItemsContainer#ItemSlot2" type="VBoxContainer" parent="ItemsPanel#ItemsContainer"]
+layout_mode = 2
+
+[node name="ItemsContainer_ItemSlot2#ItemIcon2" type="TextureRect" parent="ItemsPanel#ItemsContainer/ItemsContainer#ItemSlot2"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ItemsContainer_ItemSlot2#ItemCount2" type="Label" parent="ItemsPanel#ItemsContainer/ItemsContainer#ItemSlot2"]
+layout_mode = 2
+text = "x0"
+
+[node name="ItemsContainer#ItemSlot3" type="VBoxContainer" parent="ItemsPanel#ItemsContainer"]
+layout_mode = 2
+
+[node name="ItemsContainer_ItemSlot3#ItemIcon3" type="TextureRect" parent="ItemsPanel#ItemsContainer/ItemsContainer#ItemSlot3"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ItemsContainer_ItemSlot3#ItemCount3" type="Label" parent="ItemsPanel#ItemsContainer/ItemsContainer#ItemSlot3"]
+layout_mode = 2
+text = "x0"
+
+[node name="ItemsContainer#ItemSlot4" type="VBoxContainer" parent="ItemsPanel#ItemsContainer"]
+layout_mode = 2
+
+[node name="ItemsContainer_ItemSlot4#ItemIcon4" type="TextureRect" parent="ItemsPanel#ItemsContainer/ItemsContainer#ItemSlot4"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ItemsContainer_ItemSlot4#ItemCount4" type="Label" parent="ItemsPanel#ItemsContainer/ItemsContainer#ItemSlot4"]
+layout_mode = 2
+text = "x0"
+
+[node name="ItemsContainer#ItemSlot5" type="VBoxContainer" parent="ItemsPanel#ItemsContainer"]
+layout_mode = 2
+
+[node name="ItemsContainer_ItemSlot5#ItemIcon5" type="TextureRect" parent="ItemsPanel#ItemsContainer/ItemsContainer#ItemSlot5"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ItemsContainer_ItemSlot5#ItemCount5" type="Label" parent="ItemsPanel#ItemsContainer/ItemsContainer#ItemSlot5"]
+layout_mode = 2
+text = "x0"
