@@ -54,18 +54,27 @@ func show_ui(ui_name: String) -> void:
 	# Se for o menu de pause, esconde a HUD
 	if ui_name == "pause_menu" and hud_instance:
 		hud_instance.visible = false
+	
+	# Se for a tela de game over, esconde a HUD e conecta os botões
+	if ui_name == "game_over":
+		if hud_instance:
+			hud_instance.visible = false
+		if ui_scene.has_node("MenuContainer/RestartButton"):
+			ui_scene.get_node("MenuContainer/RestartButton").pressed.connect(_on_game_over_restart)
+		if ui_scene.has_node("MenuContainer/MainMenuButton"):
+			ui_scene.get_node("MenuContainer/MainMenuButton").pressed.connect(_on_game_over_main_menu)
+		if ui_scene.has_node("MenuContainer/QuitButton"):
+			ui_scene.get_node("MenuContainer/QuitButton").pressed.connect(_on_game_over_quit)
 
 func hide_ui(ui_name: String) -> void:
 	# Se for o menu de opções e ele existe, apenas esconde
 	if ui_name == "options_menu" and options_menu_instance:
 		options_menu_instance.hide()
 		return
-	
 	for menu in active_menus:
-		if menu.name == ui_name:
+		if menu.name.to_lower() == ui_name.to_lower():
 			menu.queue_free()
 			active_menus.erase(menu)
-			
 			# Se for o menu de pause, mostra a HUD novamente
 			if ui_name == "pause_menu" and hud_instance:
 				hud_instance.visible = true
@@ -109,3 +118,17 @@ func _on_game_state_changed(new_state: int) -> void:
 			show_ui("game_over")
 		state_manager.GameState.INVENTORY:
 			show_ui("inventory") 
+
+# Funções dos botões da tela de game over
+func _on_game_over_restart():
+	get_node("/root/SceneManager").change_scene("world")
+	get_node("/root/GameStateManager").change_state(get_node("/root/GameStateManager").GameState.PLAYING)
+	hide_ui("game_over")
+
+func _on_game_over_main_menu():
+	get_node("/root/SceneManager").change_scene("main_menu")
+	get_node("/root/GameStateManager").change_state(get_node("/root/GameStateManager").GameState.MAIN_MENU)
+	hide_ui("game_over")
+
+func _on_game_over_quit():
+	get_tree().quit() 

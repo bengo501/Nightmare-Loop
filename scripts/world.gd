@@ -16,11 +16,13 @@ var current_map: Node = null
 func _ready():
 	# Inicializa o estado do jogo como PLAYING
 	state_manager.change_state(state_manager.GameState.PLAYING)
+	# Mouse sempre visível
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	
 	# Conecta sinais do jogador
 	if player:
 		player.connect("health_changed", _on_player_health_changed)
-		player.connect("died", _on_player_died)
+		player.connect("game_over", _on_player_game_over)
 	
 	# Conecta sinais do SceneManager
 	scene_manager.connect("map_changed", _on_map_changed)
@@ -57,7 +59,7 @@ func _on_player_health_changed(new_health: int):
 	game_manager.player_health = new_health
 	game_manager.health_changed.emit(new_health)
 
-func _on_player_died():
+func _on_player_game_over():
 	# Quando o jogador morre
 	game_manager.game_over.emit()
 	state_manager.change_state(state_manager.GameState.GAME_OVER)

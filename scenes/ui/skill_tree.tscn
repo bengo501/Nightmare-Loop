@@ -1,0 +1,248 @@
+[gd_scene load_steps=19 format=3 uid="uid://c8qvnx4y5g6m2"]
+
+[ext_resource type="Script" uid="uid://ck4pyesth0h2n" path="res://scripts/ui/skill_tree.gd" id="1_xxxxx"]
+
+[sub_resource type="Resource" id="Resource_eiof6"]
+metadata/__load_path__ = "res://themes/main_theme.tres"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xxxxx"]
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 0.901961)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.392157, 0.392157, 0.392157, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Resource" id="Resource_lvhuv"]
+metadata/__load_path__ = "res://themes/main_theme.tres"
+
+[sub_resource type="Resource" id="Resource_6rj6t"]
+metadata/__load_path__ = "res://themes/main_theme.tres"
+
+[sub_resource type="Resource" id="Resource_nsdrr"]
+metadata/__load_path__ = "res://themes/main_theme.tres"
+
+[sub_resource type="Resource" id="Resource_7j510"]
+metadata/__load_path__ = "res://themes/main_theme.tres"
+
+[sub_resource type="Resource" id="Resource_7lr3a"]
+metadata/__load_path__ = "res://themes/main_theme.tres"
+
+[sub_resource type="Resource" id="Resource_k3ia8"]
+metadata/__load_path__ = "res://themes/main_theme.tres"
+
+[sub_resource type="Resource" id="Resource_2ki4s"]
+metadata/__load_path__ = "res://themes/main_theme.tres"
+
+[sub_resource type="Resource" id="Resource_karle"]
+metadata/__load_path__ = "res://themes/main_theme.tres"
+
+[sub_resource type="Resource" id="Resource_bmt6l"]
+metadata/__load_path__ = "res://themes/main_theme.tres"
+
+[sub_resource type="Resource" id="Resource_byjj7"]
+metadata/__load_path__ = "res://themes/main_theme.tres"
+
+[sub_resource type="Resource" id="Resource_6ilqw"]
+metadata/__load_path__ = "res://themes/main_theme.tres"
+
+[sub_resource type="Resource" id="Resource_woo0h"]
+metadata/__load_path__ = "res://themes/main_theme.tres"
+
+[sub_resource type="Resource" id="Resource_87c80"]
+metadata/__load_path__ = "res://themes/main_theme.tres"
+
+[sub_resource type="Resource" id="Resource_qabtx"]
+metadata/__load_path__ = "res://themes/main_theme.tres"
+
+[sub_resource type="Resource" id="Resource_xv45t"]
+metadata/__load_path__ = "res://themes/main_theme.tres"
+
+[node name="SkillTree" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xxxxx")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.501961)
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -300.0
+offset_right = 400.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Resource_eiof6")
+theme_override_styles/panel = SubResource("StyleBoxFlat_xxxxx")
+
+[node name="Title" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 20.0
+offset_right = 100.0
+offset_bottom = 46.0
+grow_horizontal = 2
+theme = SubResource("Resource_lvhuv")
+text = "Árvore de Habilidades"
+horizontal_alignment = 1
+
+[node name="SkillPoints" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -200.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 46.0
+grow_horizontal = 0
+theme = SubResource("Resource_6rj6t")
+text = "Pontos de Habilidade: 0"
+horizontal_alignment = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 60.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SkillTreeContainer" type="Control" parent="Panel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SpeedBranch" type="VBoxContainer" parent="Panel/ScrollContainer/SkillTreeContainer"]
+layout_mode = 2
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 250.0
+offset_bottom = 350.0
+
+[node name="SpeedTitle" type="Label" parent="Panel/ScrollContainer/SkillTreeContainer/SpeedBranch"]
+layout_mode = 2
+theme = SubResource("Resource_nsdrr")
+text = "Velocidade"
+horizontal_alignment = 1
+
+[node name="Speed1" type="Button" parent="Panel/ScrollContainer/SkillTreeContainer/SpeedBranch"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme = SubResource("Resource_7j510")
+text = "Velocidade I (+10%)"
+
+[node name="Speed2" type="Button" parent="Panel/ScrollContainer/SkillTreeContainer/SpeedBranch"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme = SubResource("Resource_7lr3a")
+text = "Velocidade II (+20%)"
+
+[node name="Speed3" type="Button" parent="Panel/ScrollContainer/SkillTreeContainer/SpeedBranch"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme = SubResource("Resource_k3ia8")
+text = "Velocidade III (+30%)"
+
+[node name="DamageBranch" type="VBoxContainer" parent="Panel/ScrollContainer/SkillTreeContainer"]
+layout_mode = 2
+offset_left = 300.0
+offset_top = 50.0
+offset_right = 500.0
+offset_bottom = 350.0
+
+[node name="DamageTitle" type="Label" parent="Panel/ScrollContainer/SkillTreeContainer/DamageBranch"]
+layout_mode = 2
+theme = SubResource("Resource_2ki4s")
+text = "Dano"
+horizontal_alignment = 1
+
+[node name="Damage1" type="Button" parent="Panel/ScrollContainer/SkillTreeContainer/DamageBranch"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme = SubResource("Resource_karle")
+text = "Dano I (+15%)"
+
+[node name="Damage2" type="Button" parent="Panel/ScrollContainer/SkillTreeContainer/DamageBranch"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme = SubResource("Resource_bmt6l")
+text = "Dano II (+25%)"
+
+[node name="Damage3" type="Button" parent="Panel/ScrollContainer/SkillTreeContainer/DamageBranch"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme = SubResource("Resource_byjj7")
+text = "Dano III (+35%)"
+
+[node name="HealthBranch" type="VBoxContainer" parent="Panel/ScrollContainer/SkillTreeContainer"]
+layout_mode = 2
+offset_left = 550.0
+offset_top = 50.0
+offset_right = 750.0
+offset_bottom = 350.0
+
+[node name="HealthTitle" type="Label" parent="Panel/ScrollContainer/SkillTreeContainer/HealthBranch"]
+layout_mode = 2
+theme = SubResource("Resource_6ilqw")
+text = "Vida"
+horizontal_alignment = 1
+
+[node name="Health1" type="Button" parent="Panel/ScrollContainer/SkillTreeContainer/HealthBranch"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme = SubResource("Resource_woo0h")
+text = "Vida I (+20%)"
+
+[node name="Health2" type="Button" parent="Panel/ScrollContainer/SkillTreeContainer/HealthBranch"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme = SubResource("Resource_87c80")
+text = "Vida II (+30%)"
+
+[node name="Health3" type="Button" parent="Panel/ScrollContainer/SkillTreeContainer/HealthBranch"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme = SubResource("Resource_qabtx")
+text = "Vida III (+40%)"
+
+[node name="CloseButton" type="Button" parent="Panel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -60.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 46.0
+grow_horizontal = 0
+theme = SubResource("Resource_xv45t")
+text = "X"

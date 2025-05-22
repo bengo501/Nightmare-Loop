@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bhk71lctrycc"]
+[gd_scene load_steps=11 format=3 uid="uid://bhk71lctrycc"]
 
 [ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="1_rwgxs"]
 [ext_resource type="Script" uid="uid://bwhtkocfb8obw" path="res://scripts/world.gd" id="1_xxxxx"]
@@ -8,6 +8,17 @@
 [ext_resource type="PackedScene" uid="uid://cj47gniftse4d" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Dresser/Dresser.fbx_Scene/Dresser.fbx_Scene.fbx" id="8_jhx03"]
 [ext_resource type="PackedScene" uid="uid://4u41su83a4ma" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Boombox_/Boombox.fbx_Scene/Boombox.fbx_Scene.fbx" id="17_1dgkn"]
 [ext_resource type="PackedScene" uid="uid://blm23tt5thlmu" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Bathroom Sink/BathroomSink.fbx_Scene/BathroomSink.fbx_Scene.fbx" id="27_rup4s"]
+[ext_resource type="PackedScene" uid="uid://c8qvnx4y5g6m2" path="res://scenes/ui/skill_tree.tscn" id="28_xxxxx"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_xxxxx"]
+vertices = PackedVector3Array(20, 0, 20, -20, 0, 20, -20, 0, -20, 20, 0, -20)
+polygons = [PackedInt32Array(0, 1, 2, 3)]
+agent_height = 2.0
+agent_max_climb = 0.5
+region_min_size = 0.5
+edge_max_length = 12.0
+edge_max_error = 1.0
+vertices_per_polygon = 4.0
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_xxxxx")
@@ -63,7 +74,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 5)
 
 [node name="BathroomSink" parent="Environment/Furniture" instance=ExtResource("27_rup4s")]
 
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="Environment"]
+navigation_mesh = SubResource("NavigationMesh_xxxxx")
+
 [node name="Enemies" type="Node3D" parent="."]
 
 [node name="Ghost1" parent="Enemies" instance=ExtResource("4_e68xj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 10)
+ghost_type = null
+max_health = null
+speed = null
+attack_range = null
+attack_damage = null
+attack_cooldown = null
+ghost_color = null
+ghost_scale = null
+path_update_interval = null
+rotation_speed = null
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="SkillTree" parent="UI" instance=ExtResource("28_xxxxx")]

@@ -45,9 +45,32 @@ var can_move = true
 @export var sway_speed: float = 5.0
 var sway_offset: Vector3 = Vector3.ZERO
 
+# Variáveis de movimento
+@export var speed: float = 5.0
+@export var jump_velocity: float = 4.5
+@export var gravity: float = 9.8
+
+# Multiplicadores de status
+var speed_multiplier: float = 1.0
+var damage_multiplier: float = 1.0
+var health_multiplier: float = 1.0
+
+# Referências
+@onready var camera_mount = $CameraMount
+@onready var camera = $CameraMount/Camera3D
+@onready var ray_cast = $CameraMount/RayCast3D
+
+# Flag para modo batalha em turno
+var is_battle_mode: bool = false
+
+signal game_over
+
 func _ready():
 	add_to_group("player")
 	current_health = max_health
+
+	if is_battle_mode:
+		return # Não buscar por nós específicos de gameplay normal
 
 	# Tenta encontrar os nós, se existirem
 	if has_node("../ThirdPersonCamera"):
@@ -91,6 +114,9 @@ func _ready():
 			battle_manager.connect("battle_started", _on_battle_started)
 		if battle_manager.has_signal("battle_ended"):
 			battle_manager.connect("battle_ended", _on_battle_ended)
+
+	# Configurações iniciais
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func setup_attack_system():
 	attack_timer = Timer.new()
@@ -246,6 +272,19 @@ func _input(event):
 				current_target = null
 	if first_person_mode and event is InputEventMouseMotion:
 		rotate_camera(event.relative)
+	# Ativação do laser/ataque com a tecla F
+	if first_person_mode and event is InputEventKey:
+		if event.keycode == KEY_F:
+			if event.pressed and not event.echo:
+				laser_active = true
+				if laser_line:
+					laser_line.visible = true
+				shoot_first_person()
+			elif not event.pressed:
+				laser_active = false
+				if laser_line:
+					laser_line.visible = false
+				current_target = null
 
 func shoot_first_person():
 	if not shoot_ray:
@@ -279,7 +318,7 @@ func activate_first_person():
 		first_person_camera.current = true
 	if third_person_camera:
 		third_person_camera.current = false
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	if weapon:
 		weapon.visible = true
 
@@ -296,7 +335,7 @@ func activate_third_person():
 		third_person_camera.current = true
 	if first_person_camera:
 		first_person_camera.current = false
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	if weapon:
 		weapon.visible = false
 
@@ -338,7 +377,7 @@ func take_damage(damage: float) -> void:
 
 func die() -> void:
 	print("DEBUG: Jogador morreu!")
-	# Implementar lógica de game over
+	emit_signal("game_over")
 	queue_free()
 
 func _process(delta):
@@ -389,3 +428,13 @@ func update_third_person_look():
 					visuals.look_at(look_at_pos, Vector3.UP)
 					visuals.rotation.x = 0
 					visuals.rotation.z = 0
+
+# Métodos para as habilidades
+func set_speed_multiplier(value: float):
+	speed_multiplier = value
+
+func set_damage_multiplier(value: float):
+	damage_multiplier = value
+
+func set_health_multiplier(value: float):
+	health_multiplier = value

@@ -13,25 +13,29 @@ var player_camera: Camera3D
 var third_person_camera: Camera3D
 var player_ref: Node3D
 var enemy_ref: Node3D
+var pending_enemy_data = null
 
-# Referências da UI
-@onready var turn_indicator = $UI/BattleUI/TurnIndicator
-@onready var action_buttons = $UI/BattleUI/ActionButtons
-@onready var player_hp_label = $UI/BattleUI/StatusPanel/PlayerStatus/PlayerHP
-@onready var enemy_hp_label = $UI/BattleUI/StatusPanel/EnemyStatus/EnemyHP
-@onready var attack_button = $UI/BattleUI/ActionButtons/AttackButton
-@onready var defend_button = $UI/BattleUI/ActionButtons/DefendButton
-@onready var special_button = $UI/BattleUI/ActionButtons/SpecialButton
-@onready var UI = $"../UI"
+# Referências corretas conforme a hierarquia
+var attack_button: Button = null
+var defend_button: Button = null
+var special_button: Button = null
+var battle_ui: Control = null
+var turn_indicator: Label = null
+var player_hp_label: Label = null
+var enemy_hp_label: Label = null
+
 func _ready():
-	# Encontra as câmeras necessárias
-	battle_camera = get_node("BattleCamera")
-	player_camera = null
-	third_person_camera = null
-	if has_node("/root/Main/FirstPersonCamera"):
-		player_camera = get_node("/root/Main/FirstPersonCamera")
-	if has_node("/root/Main/ThirdPersonCamera"):
-		third_person_camera = get_node("/root/Main/ThirdPersonCamera")
+	# Câmera
+	battle_camera = get_node_or_null("BattleCamera")
+	# UI principal
+	battle_ui = get_node_or_null("UI/BattleUI")
+	# Botões de ação
+	attack_button = get_node_or_null("UI/BattleUI/ActionButtons/AttackButton")
+	defend_button = get_node_or_null("UI/BattleUI/ActionButtons/DefendButton")
+	special_button = get_node_or_null("UI/BattleUI/ActionButtons/SpecialButton")
+	turn_indicator = get_node_or_null("UI/BattleUI/TurnIndicator")
+	player_hp_label = get_node_or_null("UI/BattleUI/StatusPanel/PlayerStatus/PlayerHP")
+	enemy_hp_label = get_node_or_null("UI/BattleUI/StatusPanel/EnemyStatus/EnemyHP")
 	
 	# Conecta os sinais dos botões de forma segura
 	if attack_button:
@@ -41,37 +45,67 @@ func _ready():
 	if special_button:
 		special_button.pressed.connect(_on_special_pressed)
 	
-	# Inicialmente esconde a UI
-	$"../UI".visible = false
+	# Instancia o ghost salvo em BattleData, se existir
+	var enemy_data = BattleData.enemy_data
+	if enemy_data:
+		var ghost_scene = preload("res://scenes/enemies/ghost1.tscn")
+		enemy_ref = ghost_scene.instantiate()
+		enemy_ref.ghost_type = enemy_data.ghost_type
+		enemy_ref.max_health = enemy_data.max_health
+		enemy_ref.current_health = enemy_data.current_health
+		enemy_ref.speed = enemy_data.speed
+		enemy_ref.attack_range = enemy_data.attack_range
+		enemy_ref.attack_damage = enemy_data.attack_damage
+		enemy_ref.attack_cooldown = enemy_data.attack_cooldown
+		enemy_ref.ghost_color = enemy_data.ghost_color
+		enemy_ref.ghost_scale = enemy_data.ghost_scale
+		add_child(enemy_ref)
+		enemy_ref.global_position = Vector3(0, 0, 0)
+		BattleData.enemy_data = null
+	else:
+		enemy_ref = get_node_or_null("Ghost1")
 
-func start_battle():
+	# Referenciar ou instanciar o player
+	player_ref = get_node_or_null("Player")
+	if not player_ref:
+		var player_scene = preload("res://scenes/player/player.tscn")
+		player_ref = player_scene.instantiate()
+		player_ref.is_battle_mode = true
+		add_child(player_ref)
+		player_ref.global_position = Vector3(0, 0, -2) # Posição inicial do player
+
+	# Debug: Verificar player_ref e enemy_ref
+	if not player_ref:
+		push_error("[BattleSceneManager] player_ref é null! Não foi possível instanciar ou encontrar o player.")
+		return
+	if not enemy_ref:
+		push_error("[BattleSceneManager] enemy_ref é null! Não foi possível instanciar ou encontrar o inimigo.")
+		return
+	# Verificar métodos essenciais
+	var player_ok = player_ref.has_method("take_damage") and player_ref.has_method("die") and player_ref.has_method("set_health_multiplier")
+	var enemy_ok = enemy_ref.has_method("take_damage")
+	if not player_ok:
+		push_error("[BattleSceneManager] player_ref não possui todos os métodos/atributos necessários para a batalha!")
+		return
+	if not enemy_ok:
+		push_error("[BattleSceneManager] enemy_ref não possui todos os métodos/atributos necessários para a batalha!")
+		return
+
+	# Ativa a UI e inicializa a batalha
+	if battle_ui:
+		battle_ui.visible = true
+
+	is_in_battle = true
+	current_turn = TurnType.PLAYER
+	update_hp_display()
+	update_turn_indicator()
+
+func start_battle(enemy_instance = null):
 	if is_in_battle:
 		return
-		
-	is_in_battle = true
-	
-	# Encontra referências do jogador e inimigo
-	player_ref = get_node("/root/Main/Player")
-	enemy_ref = get_node("Ghost1")
-	
-	# Desativa as câmeras normais
-	player_camera.current = false
-	third_person_camera.current = false
-	
-	# Ativa a câmera de batalha
-	battle_camera.current = true
-	
-	# Mostra a UI
-	UI.visible = true
-	
-	# Inicia com o turno do jogador
-	current_turn = TurnType.PLAYER
-	update_turn_indicator()
-	
-	# Emite sinal de início de batalha
-	emit_signal("battle_started")
-	
-	print("Battle Scene iniciada!")
+	pending_enemy_data = enemy_instance
+	# Troca para a cena de batalha
+	get_node("/root/SceneManager").change_scene("battle")
 
 func end_battle():
 	if not is_in_battle:
@@ -86,7 +120,8 @@ func end_battle():
 	third_person_camera.current = true
 	
 	# Esconde a UI
-	$UI.visible = false
+	if battle_ui:
+		battle_ui.visible = false
 	
 	# Emite sinal de fim de batalha
 	emit_signal("battle_ended")
@@ -94,20 +129,34 @@ func end_battle():
 	print("Battle Scene finalizada!")
 
 func update_turn_indicator():
+	if not turn_indicator:
+		print("[BattleSceneManager] turn_indicator não encontrado!")
+		return
 	if current_turn == TurnType.PLAYER:
 		turn_indicator.text = "Turno do Jogador"
-		action_buttons.visible = true
-	else:
+		if attack_button:
+			attack_button.disabled = false
+			defend_button.disabled = false
+			special_button.disabled = false
+	elif current_turn == TurnType.ENEMY:
 		turn_indicator.text = "Turno do Inimigo"
-		action_buttons.visible = false
-		# Inicia o turno do inimigo após um pequeno delay
+		if attack_button:
+			attack_button.disabled = true
+			defend_button.disabled = true
+			special_button.disabled = true
 		await get_tree().create_timer(1.0).timeout
 		enemy_turn()
 
 func update_hp_display():
 	if player_ref and enemy_ref:
-		player_hp_label.text = "HP: %d/%d" % [player_ref.current_health, player_ref.max_health]
-		enemy_hp_label.text = "HP: %d/%d" % [enemy_ref.current_health, enemy_ref.max_health]
+		if player_hp_label:
+			player_hp_label.text = "HP: %d/%d" % [player_ref.current_health, player_ref.max_health]
+		else:
+			print("[BattleSceneManager] player_hp_label não encontrado!")
+		if enemy_hp_label:
+			enemy_hp_label.text = "HP: %d/%d" % [enemy_ref.current_health, enemy_ref.max_health]
+		else:
+			print("[BattleSceneManager] enemy_hp_label não encontrado!")
 
 func _on_attack_pressed():
 	if current_turn != TurnType.PLAYER:
