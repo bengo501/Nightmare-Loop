@@ -96,9 +96,6 @@ func _ready():
 	# MouseRay pode estar na câmera de terceira pessoa
 	if third_person_camera and third_person_camera.has_node("MouseRay"):
 		mouse_ray = third_person_camera.get_node("MouseRay")
-	# BattleManager pode ser autoload ou estar em outro lugar
-	if has_node("/root/BattleSceneManager"):
-		battle_manager = get_node("/root/BattleSceneManager")
 
 	# Inicialização de sistemas
 	if third_person_camera:
@@ -107,13 +104,6 @@ func _ready():
 		laser_line.visible = false
 	setup_attack_system()
 	setup_animations()
-
-	# Conecta sinais do battle manager se existir
-	if battle_manager:
-		if battle_manager.has_signal("battle_started"):
-			battle_manager.connect("battle_started", _on_battle_started)
-		if battle_manager.has_signal("battle_ended"):
-			battle_manager.connect("battle_ended", _on_battle_ended)
 
 	# Configurações iniciais
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -360,13 +350,53 @@ func _on_battle_started():
 		weapon.visible = false
 	if crosshair:
 		crosshair.visible = false
+	
+	# Esconde o modelo do player
+	if visuals:
+		visuals.visible = false
+	
+	# Esconde a HUD normal
+	if hud:
+		hud.visible = false
+	
+	# Desativa as câmeras do player
+	if first_person_camera:
+		first_person_camera.current = false
+	if third_person_camera:
+		third_person_camera.current = false
+	
+	# Ativa a câmera de batalha
+	var battle_camera = get_node_or_null("/root/battleScene/BattleCamera")
+	if battle_camera:
+		battle_camera.current = true
 
 func _on_battle_ended():
 	can_move = true
-	if weapon:
-		weapon.visible = true
-	if crosshair:
-		crosshair.visible = true
+	
+	# Mostra o modelo do player novamente
+	if visuals:
+		visuals.visible = true
+	
+	# Mostra a HUD normal
+	if hud:
+		hud.visible = true
+	
+	# Desativa a câmera de batalha
+	var battle_camera = get_node_or_null("/root/battleScene/BattleCamera")
+	if battle_camera:
+		battle_camera.current = false
+	
+	# Reativa a câmera apropriada baseada no modo atual
+	if first_person_mode:
+		if first_person_camera:
+			first_person_camera.current = true
+		if weapon:
+			weapon.visible = true
+		if crosshair:
+			crosshair.visible = true
+	else:
+		if third_person_camera:
+			third_person_camera.current = true
 
 func take_damage(damage: float) -> void:
 	var final_damage = damage / defense_bonus

@@ -2097,16 +2097,6 @@ script = ExtResource("4_dbeie")
 
 [node name="Ghost1" parent="." instance=ExtResource("16_b20xn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.6629, 1.36202, -35.2878)
-ghost_type = null
-max_health = null
-speed = null
-attack_range = null
-attack_damage = null
-attack_cooldown = null
-ghost_color = null
-ghost_scale = null
-path_update_interval = null
-rotation_speed = null
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_q57r8")

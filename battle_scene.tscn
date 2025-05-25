@@ -1,9 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://qt54qf4vukaf"]
+[gd_scene load_steps=9 format=3 uid="uid://qt54qf4vukaf"]
 
 [ext_resource type="Texture2D" uid="uid://gq5cb3qsjni1" path="res://assets/textures/Brick/Horror_Brick_06-128x128.png" id="1_5joda"]
 [ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="2_gf131"]
 [ext_resource type="Texture2D" uid="uid://cg1g4s4m4txir" path="res://assets/textures/Brick/Horror_Brick_03-128x128.png" id="3_sl17i"]
-[ext_resource type="PackedScene" uid="uid://bd1iioahw58ht" path="res://scenes/enemies/ghost1.tscn" id="4_x5h4l"]
 [ext_resource type="Script" uid="uid://b7qtyelyqjpcs" path="res://scripts/BattleSceneManager.gd" id="5_script"]
 [ext_resource type="Script" uid="uid://br6ak60dueag0" path="res://scripts/BattleCamera.gd" id="6_script"]
 
@@ -193,5 +192,47 @@ use_collision = true
 size = Vector3(10, 1, 10)
 material = ExtResource("2_gf131")
 
-[node name="Ghost1" parent="." instance=ExtResource("4_x5h4l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.91863, 1.17886, 2.8286)
+[node name="Lights" type="Node3D" parent="."]
+
+[node name="MainLight" type="DirectionalLight3D" parent="Lights"]
+transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 0, 10, 0)
+light_energy = 0.8
+shadow_enabled = true
+
+[node name="AmbientLight" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+light_energy = 0.3
+omni_range = 20.0
+omni_attenuation = 2.0
+
+[node name="SpotLight1" type="SpotLight3D" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, -0.707107, 0.707107, 0, -0.707107, -0.707107, -5, 8, 0)
+light_energy = 0.5
+shadow_enabled = true
+spot_range = 10.0
+
+[node name="SpotLight2" type="SpotLight3D" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, -0.707107, 0.707107, 0, -0.707107, -0.707107, 5, 8, 0)
+light_energy = 0.5
+shadow_enabled = true
+spot_range = 10.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+
+[node name="Environment" type="Environment" parent="WorldEnvironment"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+background_mode = 1
+background_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.2, 0.2, 0.2, 1)
+tonemap_mode = 2
+glow_enabled = true
+script = null

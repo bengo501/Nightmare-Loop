@@ -81,16 +81,6 @@ navigation_mesh = SubResource("NavigationMesh_xxxxx")
 
 [node name="Ghost1" parent="Enemies" instance=ExtResource("4_e68xj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 10)
-ghost_type = null
-max_health = null
-speed = null
-attack_range = null
-attack_damage = null
-attack_cooldown = null
-ghost_color = null
-ghost_scale = null
-path_update_interval = null
-rotation_speed = null
 
 [node name="UI" type="CanvasLayer" parent="."]
 

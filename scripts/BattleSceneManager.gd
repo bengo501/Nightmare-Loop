@@ -27,6 +27,13 @@ var enemy_hp_label: Label = null
 func _ready():
 	# Câmera
 	battle_camera = get_node_or_null("BattleCamera")
+	if battle_camera:
+		battle_camera.current = true  # Ativa a câmera de batalha imediatamente
+		# Desativa o processamento de input da câmera do player
+		if player_ref and player_ref.has_node("ThirdPersonCamera"):
+			player_ref.get_node("ThirdPersonCamera").current = false
+		if player_ref and player_ref.has_node("FirstPersonCamera"):
+			player_ref.get_node("FirstPersonCamera").current = false
 	# UI principal
 	battle_ui = get_node_or_null("UI/BattleUI")
 	# Botões de ação
@@ -99,6 +106,19 @@ func _ready():
 	current_turn = TurnType.PLAYER
 	update_hp_display()
 	update_turn_indicator()
+	
+	# Desativa os controles do player
+	if player_ref:
+		player_ref.can_move = false
+		player_ref.set_process_input(false)
+		player_ref.set_physics_process(false)
+	
+	# Emite o sinal de início de batalha
+	emit_signal("battle_started")
+	
+	# Força a atualização da interface do jogador
+	if player_ref.has_method("_on_battle_started"):
+		player_ref._on_battle_started()
 
 func start_battle(enemy_instance = null):
 	if is_in_battle:
@@ -114,14 +134,22 @@ func end_battle():
 	is_in_battle = false
 	
 	# Desativa a câmera de batalha
-	battle_camera.current = false
+	if battle_camera:
+		battle_camera.current = false
 	
 	# Restaura a câmera anterior
-	third_person_camera.current = true
+	if third_person_camera:
+		third_person_camera.current = true
 	
 	# Esconde a UI
 	if battle_ui:
 		battle_ui.visible = false
+	
+	# Reativa os controles do player
+	if player_ref:
+		player_ref.can_move = true
+		player_ref.set_process_input(true)
+		player_ref.set_physics_process(true)
 	
 	# Emite sinal de fim de batalha
 	emit_signal("battle_ended")
