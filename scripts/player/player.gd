@@ -411,23 +411,41 @@ func update_camera_sway(delta):
 	third_person_camera.look_at(global_transform.origin, Vector3.UP)
 
 func update_third_person_look():
-	# Usa o mouse_ray da câmera para determinar o ponto de olhar
 	if third_person_camera and third_person_camera.has_node("MouseRay"):
 		var cam_mouse_ray = third_person_camera.get_node("MouseRay")
+		var viewport = get_viewport()
+		var mouse_pos = viewport.get_mouse_position()
+		
+		# Converte a posição do mouse para coordenadas do viewport normalizadas (-1 a 1)
+		var viewport_size = viewport.get_visible_rect().size
+		var normalized_pos = Vector2(
+			(mouse_pos.x / viewport_size.x) * 2.0 - 1.0,
+			(mouse_pos.y / viewport_size.y) * 2.0 - 1.0
+		)
+		
+		# Cria um raio a partir da câmera
+		var camera = third_person_camera
+		var from = camera.project_ray_origin(mouse_pos)
+		var to = from + camera.project_ray_normal(mouse_pos) * 1000.0
+		
+		# Atualiza a posição e direção do mouseRay
+		cam_mouse_ray.global_position = from
+		cam_mouse_ray.target_position = to - from
 		cam_mouse_ray.force_raycast_update()
+		
+		# Atualiza a rotação do personagem se houver colisão
 		if cam_mouse_ray.is_colliding():
-			var collider = cam_mouse_ray.get_collider()
-			# Só rotaciona se colidir com a máscara 8 (piso)
-			if collider and collider.collision_layer & (1 << 7):
-				var hit_point = cam_mouse_ray.get_collision_point()
-				var player_pos = global_transform.origin
-				var look_dir = hit_point - player_pos
-				look_dir.y = 0
-				if look_dir.length() > 0.1 and visuals:
-					var look_at_pos = Vector3(hit_point.x, visuals.global_transform.origin.y, hit_point.z)
-					visuals.look_at(look_at_pos, Vector3.UP)
-					visuals.rotation.x = 0
-					visuals.rotation.z = 0
+			var hit_point = cam_mouse_ray.get_collision_point()
+			var player_pos = global_transform.origin
+			var look_dir = hit_point - player_pos
+			look_dir.y = 0
+			if look_dir.length() > 0.1 and visuals:
+				var look_at_pos = Vector3(hit_point.x, visuals.global_transform.origin.y, hit_point.z)
+				# Inverte a direção do look_at adicionando 180 graus à rotação
+				visuals.look_at(look_at_pos, Vector3.UP)
+				visuals.rotation.y += PI  # Adiciona 180 graus (PI radianos)
+				visuals.rotation.x = 0
+				visuals.rotation.z = 0
 
 # Métodos para as habilidades
 func set_speed_multiplier(value: float):
