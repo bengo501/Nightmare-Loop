@@ -148,23 +148,28 @@ func set_crosshair_mode(first_person: bool):
 		crosshair.anchor_top = 0.5
 		crosshair.anchor_right = 0.5
 		crosshair.anchor_bottom = 0.5
-		crosshair.offset_left = -16
-		crosshair.offset_top = -16
-		crosshair.offset_right = 16
-		crosshair.offset_bottom = 16
+		crosshair.offset_left = -crosshair.rect_size.x / 2
+		crosshair.offset_top = -crosshair.rect_size.y / 2
+		crosshair.offset_right = crosshair.rect_size.x / 2
+		crosshair.offset_bottom = crosshair.rect_size.y / 2
 	else:
 		# Faz a crosshair seguir o mouse
 		crosshair.anchor_left = 0
 		crosshair.anchor_top = 0
 		crosshair.anchor_right = 0
 		crosshair.anchor_bottom = 0
+		crosshair.offset_left = 0
+		crosshair.offset_top = 0
+		crosshair.offset_right = 0
+		crosshair.offset_bottom = 0
 		update_crosshair_position()
 
 # Atualiza a posição da crosshair para seguir o mouse (modo terceira pessoa)
 func update_crosshair_position():
-	if not is_first_person_mode:
+	if crosshair:
 		var mouse_pos = get_viewport().get_mouse_position()
-		crosshair.position = mouse_pos - crosshair.size / 2
+		print("Mouse pos:", mouse_pos)
+		crosshair.rect_position = mouse_pos - crosshair.rect_size / 2
 
 # Atualiza a crosshair em tempo real no _process
 func _process(delta):

@@ -289,8 +289,12 @@ func rotate_camera(mouse_motion: Vector2):
 	if not first_person_camera:
 		return
 	rotation.y -= mouse_motion.x * MOUSE_SENSITIVITY
-	first_person_camera.rotation.x -= mouse_motion.y * MOUSE_SENSITIVITY
-	first_person_camera.rotation.x = clamp(first_person_camera.rotation.x, deg_to_rad(-89), deg_to_rad(89))
+	# Bloqueia rotação vertical no modo primeira pessoa
+	if first_person_mode:
+		first_person_camera.rotation.x = 0
+	else:
+		first_person_camera.rotation.x -= mouse_motion.y * MOUSE_SENSITIVITY
+		first_person_camera.rotation.x = clamp(first_person_camera.rotation.x, deg_to_rad(-89), deg_to_rad(89))
 
 # === MODOS ===
 func activate_first_person():
@@ -412,6 +416,8 @@ func _process(delta):
 	if not first_person_mode and third_person_camera:
 		update_camera_sway(delta)
 		update_third_person_look()
+		if hud and hud.has_method("update_crosshair_position"):
+			hud.update_crosshair_position()
 
 func update_camera_sway(delta):
 	var viewport = get_viewport()

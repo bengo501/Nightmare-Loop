@@ -113,5 +113,3 @@ spot_range = 10.0
 [node name="Node" type="Node" parent="."]
 
 [node name="BattleUI" parent="Node" instance=ExtResource("6_sl17i")]
-layout_mode = 3
-anchors_preset = 15

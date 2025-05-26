@@ -340,12 +340,18 @@ func enemy_turn():
 	update_turn_indicator() 
 
 func _on_flee_pressed():
-	# Volta para o mundo ao fugir da batalha
+	# Esconde a UI de batalha
+	if battle_ui_instance:
+		battle_ui_instance.visible = false
 	if UIManager.has_method("hide_ui"):
 		UIManager.hide_ui("battle_ui")
 	if UIManager.hud_instance:
 		UIManager.hud_instance.visible = true
+	# Troca para a cena do mundo
 	SceneManager.change_scene("world")
+	# Troca o estado do jogo para normal (PLAYING)
+	if GameStateManager.has_method("change_state"):
+		GameStateManager.change_state(GameStateManager.GameState.PLAYING)
 
 func _on_skill_pressed():
 	# Skill popup já aparece pela UI, mas aqui tratamos a escolha
