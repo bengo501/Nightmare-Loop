@@ -14,7 +14,6 @@ extends CharacterBody3D
 var current_health: float
 var can_attack: bool = true
 var player_ref: Node3D
-var battle_manager: Node
 var path_update_timer: float = 0.0
 
 @onready var navigation_agent = $NavigationAgent3D
@@ -48,11 +47,6 @@ func _ready():
 		_update_navigation_target()
 	else:
 		print("⚠️ Jogador não encontrado.")
-	
-	# Busca o gerenciador de batalha
-	battle_manager = get_node_or_null("/root/BattleSceneManager")
-	if not battle_manager:
-		print("⚠️ BattleSceneManager não encontrado.")
 
 func _physics_process(delta):
 	if not player_ref:
@@ -113,6 +107,7 @@ func die() -> void:
 	_on_special_death()
 	# Salva dados do ghost e troca para a cena de batalha
 	BattleData.enemy_data = {
+		"scene_path": "res://scenes/enemies/ghost1.tscn", # Caminho da cena do ghost
 		"ghost_type": ghost_type,
 		"max_health": max_health,
 		"current_health": current_health,

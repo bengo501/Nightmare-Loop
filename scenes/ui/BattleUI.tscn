@@ -1,0 +1,126 @@
+[gd_scene format=3 uid="uid://dxex0ddte0835"]
+
+[node name="BattleUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="StatusPanel" type="HBoxContainer" parent="."]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 0.15
+size_flags_horizontal = 3
+
+[node name="PlayerStatus1" type="VBoxContainer" parent="StatusPanel"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="StatusPanel/PlayerStatus1"]
+layout_mode = 2
+text = "Morel"
+
+[node name="HPBar" type="ProgressBar" parent="StatusPanel/PlayerStatus1"]
+layout_mode = 2
+max_value = 273.0
+value = 273.0
+
+[node name="MPBar" type="ProgressBar" parent="StatusPanel/PlayerStatus1"]
+layout_mode = 2
+max_value = 221.0
+value = 221.0
+
+[node name="PlayerStatus2" type="VBoxContainer" parent="StatusPanel"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="StatusPanel/PlayerStatus2"]
+layout_mode = 2
+text = "Rangda"
+
+[node name="HPBar" type="ProgressBar" parent="StatusPanel/PlayerStatus2"]
+layout_mode = 2
+max_value = 562.0
+value = 562.0
+
+[node name="MPBar" type="ProgressBar" parent="StatusPanel/PlayerStatus2"]
+layout_mode = 2
+max_value = 356.0
+value = 356.0
+
+[node name="PlayerStatus3" type="VBoxContainer" parent="StatusPanel"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="StatusPanel/PlayerStatus3"]
+layout_mode = 2
+text = "Ym"
+
+[node name="HPBar" type="ProgressBar" parent="StatusPanel/PlayerStatus3"]
+layout_mode = 2
+max_value = 211.0
+value = 211.0
+
+[node name="MPBar" type="ProgressBar" parent="StatusPanel/PlayerStatus3"]
+layout_mode = 2
+max_value = 355.0
+value = 355.0
+
+[node name="PlayerStatus4" type="VBoxContainer" parent="StatusPanel"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="StatusPanel/PlayerStatus4"]
+layout_mode = 2
+text = "Ometotl"
+
+[node name="HPBar" type="ProgressBar" parent="StatusPanel/PlayerStatus4"]
+layout_mode = 2
+max_value = 181.0
+value = 181.0
+
+[node name="MPBar" type="ProgressBar" parent="StatusPanel/PlayerStatus4"]
+layout_mode = 2
+max_value = 221.0
+value = 221.0
+
+[node name="CommandBar" type="HBoxContainer" parent="."]
+layout_mode = 0
+anchor_top = 0.85
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+
+[node name="SkillButton" type="Button" parent="CommandBar"]
+layout_mode = 2
+text = "Skill"
+
+[node name="SwapButton" type="Button" parent="CommandBar"]
+layout_mode = 2
+text = "Swap"
+
+[node name="FleeButton" type="Button" parent="CommandBar"]
+layout_mode = 2
+text = "Flee"
+
+[node name="NextButton" type="Button" parent="CommandBar"]
+layout_mode = 2
+text = "Next"
+
+[node name="TurnIndicator" type="VBoxContainer" parent="."]
+layout_mode = 0
+anchor_left = 0.85
+anchor_right = 1.0
+anchor_bottom = 0.2
+
+[node name="TurnIcons" type="HBoxContainer" parent="TurnIndicator"]
+layout_mode = 2
+
+[node name="Icon1" type="TextureRect" parent="TurnIndicator/TurnIcons"]
+layout_mode = 2
+
+[node name="Icon2" type="TextureRect" parent="TurnIndicator/TurnIcons"]
+layout_mode = 2
+
+[node name="Icon3" type="TextureRect" parent="TurnIndicator/TurnIcons"]
+layout_mode = 2
+
+[node name="TurnLabel" type="Label" parent="TurnIndicator"]
+layout_mode = 2
+text = "PLAYER"

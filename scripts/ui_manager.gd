@@ -8,7 +8,8 @@ var ui_scenes = {
 	"hud": "res://scenes/ui/hud.tscn",
 	"game_over": "res://scenes/ui/game_over.tscn",
 	"inventory": "res://scenes/ui/inventory.tscn",
-	"credits": "res://scenes/ui/credits.tscn"
+	"credits": "res://scenes/ui/credits.tscn",
+	"battle_ui": "res://scenes/ui/BattleUI.tscn"
 }
 
 # Current UI elements

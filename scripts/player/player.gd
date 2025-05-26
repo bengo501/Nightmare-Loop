@@ -26,8 +26,6 @@ var defense_bonus: float = 1.0
 @onready var mouse_ray = $ThirdPersonCamera/MouseRay
 # Ajuste o caminho do HUD conforme sua cena:
 @onready var hud = get_node_or_null("/root/World/UI/HUD")
-# Se BattleManager for autoload:
-@onready var battle_manager = get_node_or_null("/root/BattleSceneManager")
 
 # === ESTADOS ===
 var first_person_mode = false
