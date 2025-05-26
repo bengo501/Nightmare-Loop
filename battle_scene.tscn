@@ -1,11 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://qt54qf4vukaf"]
+[gd_scene load_steps=8 format=3 uid="uid://qt54qf4vukaf"]
 
 [ext_resource type="Texture2D" uid="uid://gq5cb3qsjni1" path="res://assets/textures/Brick/Horror_Brick_06-128x128.png" id="1_5joda"]
 [ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="2_gf131"]
 [ext_resource type="Texture2D" uid="uid://cg1g4s4m4txir" path="res://assets/textures/Brick/Horror_Brick_03-128x128.png" id="3_sl17i"]
 [ext_resource type="Script" uid="uid://b7qtyelyqjpcs" path="res://scripts/BattleSceneManager.gd" id="5_script"]
 [ext_resource type="Script" uid="uid://br6ak60dueag0" path="res://scripts/BattleCamera.gd" id="6_script"]
-[ext_resource type="PackedScene" uid="uid://dxex0ddte0835" path="res://scenes/ui/BattleUI.tscn" id="6_sl17i"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5p8eo"]
 albedo_texture = ExtResource("1_5joda")
@@ -109,7 +108,3 @@ transform = Transform3D(1, 0, 0, 0, -0.707107, 0.707107, 0, -0.707107, -0.707107
 light_energy = 0.5
 shadow_enabled = true
 spot_range = 10.0
-
-[node name="Node" type="Node" parent="."]
-
-[node name="BattleUI" parent="Node" instance=ExtResource("6_sl17i")]

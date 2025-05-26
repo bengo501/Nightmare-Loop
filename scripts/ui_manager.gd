@@ -9,7 +9,12 @@ var ui_scenes = {
 	"game_over": "res://scenes/ui/game_over.tscn",
 	"inventory": "res://scenes/ui/inventory.tscn",
 	"credits": "res://scenes/ui/credits.tscn",
-	"battle_ui": "res://scenes/ui/BattleUI.tscn"
+	"battle_ui": "res://scenes/ui/BattleUI.tscn",
+	"skill_menu": "res://scenes/ui/SkillMenu.tscn",
+	"item_menu": "res://scenes/ui/ItemMenu.tscn",
+	"talk_menu": "res://scenes/ui/TalkMenu.tscn",
+	"gifts_menu": "res://scenes/ui/GiftsMenu.tscn",
+	"skill_tree": "res://scenes/ui/skill_tree.tscn"
 }
 
 # Current UI elements
@@ -17,6 +22,9 @@ var current_ui = null
 var active_menus = []
 var hud_instance = null
 var options_menu_instance = null
+var battle_ui_instance = null
+var active_battle_menu = null  # Menu ativo durante a batalha (skill, item, talk)
+var skill_tree_instance = null  # Instância da árvore de habilidades
 
 # References to other managers
 @onready var game_manager = get_node("/root/GameManager")
@@ -31,6 +39,9 @@ func _ready():
 	
 	# Connect to state manager signals
 	state_manager.state_changed.connect(_on_game_state_changed)
+	
+	# Cria a SkillTree no início
+	_create_skill_tree()
 
 # UI control functions
 func show_ui(ui_name: String) -> void:
@@ -133,3 +144,127 @@ func _on_game_over_main_menu():
 
 func _on_game_over_quit():
 	get_tree().quit() 
+
+# Funções específicas para menus de batalha
+func show_battle_menu(menu_name: String) -> void:
+	if not ui_scenes.has(menu_name):
+		push_error("Menu de batalha não encontrado: " + menu_name)
+		return
+	
+	# Fecha o menu ativo se existir
+	if active_battle_menu:
+		active_battle_menu.queue_free()
+	
+	# Instancia o novo menu
+	var menu_scene = load(ui_scenes[menu_name]).instantiate()
+	battle_ui_instance.add_child(menu_scene)
+	active_battle_menu = menu_scene
+	
+	# Conecta os sinais específicos do menu
+	match menu_name:
+		"skill_menu":
+			if menu_scene.has_signal("skill_selected"):
+				menu_scene.skill_selected.connect(_on_skill_selected)
+		"item_menu":
+			if menu_scene.has_signal("item_selected"):
+				menu_scene.item_selected.connect(_on_item_selected)
+		"talk_menu":
+			if menu_scene.has_signal("talk_option_selected"):
+				menu_scene.talk_option_selected.connect(_on_talk_option_selected)
+		"gifts_menu":
+			if menu_scene.has_signal("gift_selected"):
+				menu_scene.gift_selected.connect(_on_gift_selected)
+	
+	# Mostra o menu
+	menu_scene.show_menu()
+
+func hide_battle_menu() -> void:
+	if active_battle_menu:
+		active_battle_menu.queue_free()
+		active_battle_menu = null
+
+# Handlers para os sinais dos menus de batalha
+func _on_skill_selected(skill_data):
+	if battle_ui_instance and battle_ui_instance.has_signal("skill_selected"):
+		battle_ui_instance.emit_signal("skill_selected", skill_data)
+	hide_battle_menu()
+
+func _on_item_selected(item_data):
+	if battle_ui_instance and battle_ui_instance.has_signal("item_selected"):
+		battle_ui_instance.emit_signal("item_selected", item_data)
+	hide_battle_menu()
+
+func _on_talk_option_selected(option_data):
+	if battle_ui_instance and battle_ui_instance.has_signal("talk_option_selected"):
+		battle_ui_instance.emit_signal("talk_option_selected", option_data)
+	hide_battle_menu()
+
+# Handler para o sinal do GiftsMenu
+func _on_gift_selected(gift_id):
+	if battle_ui_instance and battle_ui_instance.has_signal("gift_selected"):
+		battle_ui_instance.emit_signal("gift_selected", gift_id)
+	hide_battle_menu()
+
+# Função para criar a SkillTree
+func _create_skill_tree():
+	if not skill_tree_instance:
+		var skill_tree_resource = load(ui_scenes["skill_tree"])
+		if not skill_tree_resource:
+			push_error("SkillTree scene not found or failed to load: " + str(ui_scenes["skill_tree"]))
+			return
+		var skill_tree_scene = skill_tree_resource.instantiate()
+		if not skill_tree_scene:
+			push_error("Failed to instantiate SkillTree scene.")
+			return
+		add_child(skill_tree_scene)
+		skill_tree_instance = skill_tree_scene
+		
+		# Conecta o sinal de upgrade
+		if skill_tree_instance.has_signal("skill_upgraded"):
+			skill_tree_instance.skill_upgraded.connect(_on_skill_upgraded)
+		
+		# Carrega o progresso salvo
+		load_skill_progress()
+
+# Função para mostrar a árvore de habilidades
+func show_skill_tree():
+	if not skill_tree_instance:
+		_create_skill_tree()
+	if skill_tree_instance:
+		skill_tree_instance.show()
+		skill_tree_instance.raise()
+		skill_tree_instance.set_process_input(true)
+		skill_tree_instance.set_process(true)
+		skill_tree_instance.set_process_unhandled_input(true)
+		skill_tree_instance.set_process_unhandled_key_input(true)
+
+# Handler para o sinal de upgrade de habilidade
+func _on_skill_upgraded(skill_data):
+	# Aqui você pode implementar a lógica para aplicar o upgrade da habilidade
+	# Por exemplo, atualizar os dados do jogador ou salvar o progresso
+	print("Habilidade atualizada: ", skill_data.name, " para nível ", skill_data.level)
+	
+	# Se houver um jogador ativo, atualiza suas habilidades
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.has_method("update_skill"):
+		player.update_skill(skill_data)
+	
+	# Salva o progresso das habilidades
+	save_skill_progress()
+
+# Função para salvar o progresso das habilidades
+func save_skill_progress():
+	if skill_tree_instance:
+		var save_data = {
+			"skills": skill_tree_instance.available_skills
+		}
+		# Aqui você pode implementar a lógica para salvar os dados
+		# Por exemplo, usando o sistema de save do jogo
+		print("Progresso das habilidades salvo")
+
+# Função para carregar o progresso das habilidades
+func load_skill_progress():
+	if skill_tree_instance:
+		# Aqui você pode implementar a lógica para carregar os dados
+		# Por exemplo, usando o sistema de save do jogo
+		print("Progresso das habilidades carregado") 

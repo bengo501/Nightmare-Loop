@@ -23,6 +23,10 @@ var turn_indicator: Label = null
 var player_hp_label: Label = null
 var enemy_hp_label: Label = null
 
+# Referência à UI
+@onready var battle_ui = $BattleUI
+@onready var player_status = $BattleUI/StatusPanel/PlayerStatus
+
 @onready var battle_ui_instance = get_node_or_null("BattleUI")
 
 func _ready():
@@ -78,9 +82,12 @@ func _ready():
 		add_child(player_ref)
 		player_ref.global_position = Vector3(0, 0, -2)
 
-	# Conectar sinais da UI
+	# Mostra a UI de batalha
+	get_node("/root/UIManager").show_ui("battle_ui")
+	battle_ui_instance = get_node("/root/UIManager").battle_ui_instance
+	
+	# Conecta os sinais da UI
 	if battle_ui_instance:
-		battle_ui_instance.visible = true
 		if battle_ui_instance.has_signal("flee_pressed"):
 			battle_ui_instance.flee_pressed.connect(_on_flee_pressed)
 		if battle_ui_instance.has_signal("skill_pressed"):
@@ -146,21 +153,16 @@ func end_battle():
 	if third_person_camera:
 		third_person_camera.current = true
 	
-	# Esconde a UI
-	if battle_ui_instance:
-		battle_ui_instance.visible = false
+	# Esconde a UI de batalha e mostra a HUD normal
+	get_node("/root/UIManager").hide_ui("battle_ui")
+	if UIManager.hud_instance:
+		UIManager.hud_instance.visible = true
 	
 	# Reativa os controles do player
 	if player_ref:
 		player_ref.can_move = true
 		player_ref.set_process_input(true)
 		player_ref.set_physics_process(true)
-	
-	# Esconde a UI de batalha e mostra a HUD normal
-	if UIManager.has_method("hide_ui"):
-		UIManager.hide_ui("battle_ui")
-	if UIManager.hud_instance:
-		UIManager.hud_instance.visible = true
 	
 	# Emite sinal de fim de batalha
 	emit_signal("battle_ended")
@@ -314,35 +316,101 @@ func _on_next_pressed():
 		update_turn_indicator()
 
 # Skill popup handler
-func _on_skill_selected(id):
+func _on_skill_selected(skill_data):
 	if current_turn != TurnType.PLAYER:
 		return
 		
-	match id:
-		0: # Ataque Normal
-			var damage = player_ref.attack_damage
-			enemy_ref.take_damage(damage)
-		1: # Ataque Especial
-			var damage = player_ref.attack_damage * 1.5
-			enemy_ref.take_damage(damage)
-		2: # Magia de Fogo
-			var damage = player_ref.attack_damage * 2.0
-			enemy_ref.take_damage(damage)
-		3: # Magia de Gelo
-			var damage = player_ref.attack_damage * 1.8
-			enemy_ref.take_damage(damage)
-		4: # Magia de Raio
-			var damage = player_ref.attack_damage * 2.2
-			enemy_ref.take_damage(damage)
+	# Verifica se o jogador tem MP suficiente
+	if player_ref.current_mp < skill_data.mp_cost:
+		print("MP insuficiente para usar a habilidade: ", skill_data.name)
+		return
+		
+	# Consome o MP
+	player_ref.current_mp -= skill_data.mp_cost
+	update_mp_display()
 	
+	match skill_data.type:
+		"wind", "fire", "ice":  # Habilidades elementais
+			var damage = player_ref.attack_damage * (skill_data.power / 100.0)
+			enemy_ref.take_damage(damage)
+			print("Usando habilidade elemental: ", skill_data.name)
+			
+			# Efeitos específicos por elemento
+			match skill_data.type:
+				"wind":
+					enemy_ref.apply_status_effect("speed_down", 2)  # Reduz velocidade por 2 turnos
+				"fire":
+					enemy_ref.apply_status_effect("burn", 3)  # Queima por 3 turnos
+				"ice":
+					enemy_ref.apply_status_effect("frozen", 1)  # Congela por 1 turno
+			
+			# Se o inimigo morrer por dano de habilidade, aumenta o poder dos outros fantasmas
+			if enemy_ref.current_health <= 0:
+				_increase_remaining_ghosts_power()
+		
+		"gift":  # Habilidades de presente
+			print("Usando presente: ", skill_data.name)
+			# Aplica efeito baseado no estágio do luto
+			match skill_data.name:
+				"Presente da Negação":
+					enemy_ref.apply_status_effect("denial", 2)
+				"Presente da Raiva":
+					enemy_ref.apply_status_effect("anger", 2)
+				"Presente da Barganha":
+					enemy_ref.apply_status_effect("bargaining", 2)
+				"Presente da Depressão":
+					enemy_ref.apply_status_effect("depression", 2)
+				"Presente da Aceitação":
+					enemy_ref.apply_status_effect("acceptance", 2)
+		
+		"support":  # Habilidades de suporte
+			print("Usando habilidade de suporte: ", skill_data.name)
+			match skill_data.name:
+				"Barreira Espiritual":
+					player_ref.apply_status_effect("defense_up", 3)  # Aumenta defesa por 3 turnos
+				"Purificação":
+					player_ref.remove_all_status_effects()  # Remove todos os efeitos negativos
+					player_ref.current_health = min(player_ref.current_health + 30, player_ref.max_health)  # Cura 30 HP
+				"Visão Espiritual":
+					# Revela o estágio atual do luto do fantasma
+					var ghost_stage = enemy_ref.current_grief_stage
+					print("Estágio atual do fantasma: ", ghost_stage)
+		
+		"curse":  # Habilidades de maldição
+			print("Usando maldição: ", skill_data.name)
+			match skill_data.name:
+				"Maldição do Silêncio":
+					enemy_ref.apply_status_effect("silenced", 2)  # Impede uso de habilidades por 2 turnos
+				"Pesadelo Eterno":
+					var damage = player_ref.attack_damage * (skill_data.power / 100.0)
+					enemy_ref.take_damage(damage)
+					enemy_ref.apply_status_effect("nightmare", 3)  # Causa dano mental por 3 turnos
+				"Correntes do Abismo":
+					enemy_ref.apply_status_effect("chained", 2)  # Reduz velocidade por 2 turnos
+	
+	# Atualiza o display de HP
 	update_hp_display()
 	
+	# Verifica se o inimigo morreu
 	if enemy_ref.current_health <= 0:
 		end_battle()
 		return
 	
+	# Muda para o turno do inimigo
 	current_turn = TurnType.ENEMY
 	update_turn_indicator()
+
+# Função para aumentar o poder dos fantasmas restantes
+func _increase_remaining_ghosts_power():
+	var remaining_ghosts = get_tree().get_nodes_in_group("ghosts")
+	for ghost in remaining_ghosts:
+		if ghost != enemy_ref and ghost.current_health > 0:
+			# Aumenta atributos do fantasma
+			ghost.max_health *= 1.2 # +20% de vida
+			ghost.current_health = ghost.max_health
+			ghost.attack_damage *= 1.15 # +15% de dano
+			ghost.speed *= 1.1 # +10% de velocidade
+			print("Fantasma restante fortalecido: ", ghost.name)
 
 func _on_talk_option_selected(id):
 	if current_turn != TurnType.PLAYER:
@@ -408,5 +476,9 @@ func _on_item_selected(id):
 	# Após usar o item, passa para o turno do inimigo
 	current_turn = TurnType.ENEMY
 	update_turn_indicator()
+
+func update_mp_display():
+	if player_status:
+		player_status.update_mp(player_ref.current_mp, player_ref.max_mp)
 
 # ... resto do código existente ...

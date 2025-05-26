@@ -95,9 +95,23 @@ func _ready():
 	_update_command_highlight()
 	_update_grief_stages_display()
 	print("BattleUI: Inicialização concluída")
+	
+	set_process_input(true)
 
 func _input(event):
-	if event is InputEventKey and event.pressed:
+	if event.is_action_pressed("battle_skill_menu"):
+		get_node("/root/UIManager").show_battle_menu("skill_menu")
+	elif event.is_action_pressed("battle_item_menu"):
+		get_node("/root/UIManager").show_battle_menu("item_menu")
+	elif event.is_action_pressed("battle_talk_menu"):
+		get_node("/root/UIManager").show_battle_menu("talk_menu")
+	elif event.is_action_pressed("battle_gift_menu"):
+		get_node("/root/UIManager").show_battle_menu("gifts_menu") # Certifique-se que existe esse menu
+	elif event.is_action_pressed("battle_flee"):
+		emit_signal("flee_pressed")
+	elif event.is_action_pressed("battle_pass_turn"):
+		emit_signal("pass_turn_pressed")
+	elif event is InputEventKey and event.pressed:
 		if event.keycode == KEY_RIGHT:
 			selected_command = (selected_command + 1) % command_buttons.size()
 			_update_command_highlight()
@@ -158,11 +172,7 @@ func _on_flee_pressed():
 func _on_skill_pressed():
 	print("BattleUI: Botão Skill pressionado")
 	_close_active_menu()
-	var skill_menu = skill_menu_scene.instantiate()
-	add_child(skill_menu)
-	skill_menu.skill_selected.connect(_on_skill_selected)
-	skill_menu.show_menu()
-	active_menu = skill_menu
+	get_node("/root/UIManager").show_battle_menu("skill_menu")
 	print("BattleUI: Menu de habilidades aberto")
 	emit_signal("skill_pressed")
 
@@ -174,11 +184,7 @@ func _on_skill_selected(skill_data):
 func _on_item_pressed():
 	print("BattleUI: Botão Item pressionado")
 	_close_active_menu()
-	var item_menu = item_menu_scene.instantiate()
-	add_child(item_menu)
-	item_menu.item_selected.connect(_on_item_selected)
-	item_menu.show_menu()
-	active_menu = item_menu
+	get_node("/root/UIManager").show_battle_menu("item_menu")
 	print("BattleUI: Menu de itens aberto")
 	emit_signal("item_pressed")
 
@@ -190,11 +196,7 @@ func _on_item_selected(item_data):
 func _on_talk_pressed():
 	print("BattleUI: Botão Talk pressionado")
 	_close_active_menu()
-	var talk_menu = talk_menu_scene.instantiate()
-	add_child(talk_menu)
-	talk_menu.talk_option_selected.connect(_on_talk_option_selected)
-	talk_menu.show_menu()
-	active_menu = talk_menu
+	get_node("/root/UIManager").show_battle_menu("talk_menu")
 	print("BattleUI: Menu de conversa aberto")
 	emit_signal("talk_pressed")
 

@@ -1,156 +1,109 @@
 extends Control
 
-# Referências aos botões
-@onready var speed_buttons = [
-	$Panel/ScrollContainer/SkillTreeContainer/SpeedBranch/Speed1,
-	$Panel/ScrollContainer/SkillTreeContainer/SpeedBranch/Speed2,
-	$Panel/ScrollContainer/SkillTreeContainer/SpeedBranch/Speed3
-]
+# Sinal para quando uma habilidade for melhorada
+signal skill_upgraded(branch, level)
 
-@onready var damage_buttons = [
-	$Panel/ScrollContainer/SkillTreeContainer/DamageBranch/Damage1,
-	$Panel/ScrollContainer/SkillTreeContainer/DamageBranch/Damage2,
-	$Panel/ScrollContainer/SkillTreeContainer/DamageBranch/Damage3
-]
-
-@onready var health_buttons = [
-	$Panel/ScrollContainer/SkillTreeContainer/HealthBranch/Health1,
-	$Panel/ScrollContainer/SkillTreeContainer/HealthBranch/Health2,
-	$Panel/ScrollContainer/SkillTreeContainer/HealthBranch/Health3
-]
-
-# Variáveis de estado
-var skill_points: int = 0
-var unlocked_skills = {
-	"speed": 0,
-	"damage": 0,
-	"health": 0
-}
-
-# Referência ao jogador
-var player: Node
+# Pontos de habilidade do jogador
+var skill_points := 3
+var is_visible := false
 
 func _ready():
-	# Conecta os sinais dos botões
-	for button in speed_buttons:
-		button.pressed.connect(_on_speed_button_pressed.bind(button))
-	
-	for button in damage_buttons:
-		button.pressed.connect(_on_damage_button_pressed.bind(button))
-	
-	for button in health_buttons:
-		button.pressed.connect(_on_health_button_pressed.bind(button))
-	
-	$Panel/CloseButton.pressed.connect(_on_close_button_pressed)
-	
-	# Busca o jogador
-	var players = get_tree().get_nodes_in_group("player")
-	if players.size() > 0:
-		player = players[0]
-	
-	# Inicialmente esconde a UI
+	# Atualiza o texto dos pontos de habilidade
+	$Panel/SkillPoints.text = "Pontos de Habilidade: %d" % skill_points
+
+	# Conecta o botão de fechar
+	$Panel/CloseButton.pressed.connect(_on_close_pressed)
+
+	# Conecta os botões de cada ramo
+	$Panel/ScrollContainer/SkillTreeContainer/SpeedBranch/Speed1.pressed.connect(_on_speed1_pressed)
+	$Panel/ScrollContainer/SkillTreeContainer/SpeedBranch/Speed2.pressed.connect(_on_speed2_pressed)
+	$Panel/ScrollContainer/SkillTreeContainer/SpeedBranch/Speed3.pressed.connect(_on_speed3_pressed)
+
+	$Panel/ScrollContainer/SkillTreeContainer/DamageBranch/Damage1.pressed.connect(_on_damage1_pressed)
+	$Panel/ScrollContainer/SkillTreeContainer/DamageBranch/Damage2.pressed.connect(_on_damage2_pressed)
+	$Panel/ScrollContainer/SkillTreeContainer/DamageBranch/Damage3.pressed.connect(_on_damage3_pressed)
+
+	$Panel/ScrollContainer/SkillTreeContainer/HealthBranch/Health1.pressed.connect(_on_health1_pressed)
+	$Panel/ScrollContainer/SkillTreeContainer/HealthBranch/Health2.pressed.connect(_on_health2_pressed)
+	$Panel/ScrollContainer/SkillTreeContainer/HealthBranch/Health3.pressed.connect(_on_health3_pressed)
+
 	hide()
-	
-	# Atualiza o estado dos botões
-	_update_button_states()
+	set_process_input(true)
 
 func _input(event):
-	if event.is_action_pressed("skill_tree"): # Tecla H
-		if visible:
-			hide()
-			get_tree().paused = false
-		else:
-			show()
-			_update_button_states()
-			get_tree().paused = true
+	if event.is_action_pressed("skill_tree"):
+		toggle_skill_tree()
 
-func _update_button_states():
-	# Atualiza os botões de velocidade
-	for i in range(speed_buttons.size()):
-		var button = speed_buttons[i]
-		button.disabled = i > unlocked_skills.speed or skill_points < 1
-	
-	# Atualiza os botões de dano
-	for i in range(damage_buttons.size()):
-		var button = damage_buttons[i]
-		button.disabled = i > unlocked_skills.damage or skill_points < 1
-	
-	# Atualiza os botões de vida
-	for i in range(health_buttons.size()):
-		var button = health_buttons[i]
-		button.disabled = i > unlocked_skills.health or skill_points < 1
-	
-	# Atualiza o texto dos pontos
-	$Panel/SkillPoints.text = "Pontos de Habilidade: " + str(skill_points)
+func toggle_skill_tree():
+	if is_visible:
+		hide()
+		get_tree().paused = false
+		is_visible = false
+		# Mostra a HUD do player se existir
+		var hud = get_node_or_null("/root/UIManager/hud_instance")
+		if hud:
+			hud.visible = true
+	else:
+		show()
+		move_to_front()
+		get_tree().paused = true
+		is_visible = true
+		# Esconde a HUD do player se existir
+		var hud = get_node_or_null("/root/UIManager/hud_instance")
+		if hud:
+			hud.visible = false
 
-func _on_speed_button_pressed(button: Button):
-	var index = speed_buttons.find(button)
-	if index > unlocked_skills.speed and skill_points >= 1:
-		unlocked_skills.speed = index
-		skill_points -= 1
-		_apply_speed_upgrade()
-		_update_button_states()
-
-func _on_damage_button_pressed(button: Button):
-	var index = damage_buttons.find(button)
-	if index > unlocked_skills.damage and skill_points >= 1:
-		unlocked_skills.damage = index
-		skill_points -= 1
-		_apply_damage_upgrade()
-		_update_button_states()
-
-func _on_health_button_pressed(button: Button):
-	var index = health_buttons.find(button)
-	if index > unlocked_skills.health and skill_points >= 1:
-		unlocked_skills.health = index
-		skill_points -= 1
-		_apply_health_upgrade()
-		_update_button_states()
-
-func _on_close_button_pressed():
+func _on_close_pressed():
 	hide()
 	get_tree().paused = false
+	is_visible = false
 
-# Funções de aplicação das habilidades
-func _apply_speed_upgrade():
-	if player:
-		var speed_multiplier = 1.0 + (unlocked_skills.speed * 0.1) # +10% por nível
-		player.set_speed_multiplier(speed_multiplier)
+# Exemplo de handlers para cada botão de skill
+func _on_speed1_pressed():
+	_upgrade_skill("speed", 1)
 
-func _apply_damage_upgrade():
-	if player:
-		var damage_multiplier = 1.0 + (unlocked_skills.damage * 0.15) # +15% por nível
-		player.set_damage_multiplier(damage_multiplier)
+func _on_speed2_pressed():
+	_upgrade_skill("speed", 2)
 
-func _apply_health_upgrade():
-	if player:
-		var health_multiplier = 1.0 + (unlocked_skills.health * 0.2) # +20% por nível
-		player.set_health_multiplier(health_multiplier)
+func _on_speed3_pressed():
+	_upgrade_skill("speed", 3)
 
-# Função para adicionar pontos de habilidade
-func add_skill_points(amount: int):
-	skill_points += amount
-	_update_button_states()
+func _on_damage1_pressed():
+	_upgrade_skill("damage", 1)
 
-# Função para salvar o progresso
-func save_progress():
-	var save_data = {
-		"skill_points": skill_points,
-		"unlocked_skills": unlocked_skills
-	}
-	return save_data
+func _on_damage2_pressed():
+	_upgrade_skill("damage", 2)
 
-# Função para carregar o progresso
-func load_progress(data: Dictionary):
-	skill_points = data.get("skill_points", 0)
-	unlocked_skills = data.get("unlocked_skills", {
-		"speed": 0,
-		"damage": 0,
-		"health": 0
-	})
-	
-	# Aplica todas as habilidades desbloqueadas
-	_apply_speed_upgrade()
-	_apply_damage_upgrade()
-	_apply_health_upgrade()
-	_update_button_states() 
+func _on_damage3_pressed():
+	_upgrade_skill("damage", 3)
+
+func _on_health1_pressed():
+	_upgrade_skill("health", 1)
+
+func _on_health2_pressed():
+	_upgrade_skill("health", 2)
+
+func _on_health3_pressed():
+	_upgrade_skill("health", 3)
+
+# Função para melhorar uma habilidade
+func _upgrade_skill(branch: String, level: int):
+	if skill_points > 0:
+		skill_points -= 1
+		$Panel/SkillPoints.text = "Pontos de Habilidade: %d" % skill_points
+		emit_signal("skill_upgraded", branch, level)
+		# Aqui você pode adicionar lógica para desabilitar o botão, aplicar efeito, etc.
+	else:
+		# Sem pontos suficientes
+		print("Sem pontos de habilidade!")
+
+# Função para mostrar o menu (pode ser chamada pelo UIManager)
+func show_menu():
+	show()
+	move_to_front()
+	get_tree().paused = true
+	$Panel/SkillPoints.text = "Pontos de Habilidade: %d" % skill_points
+	# Esconde a HUD do player se existir
+	var hud = get_node_or_null("/root/UIManager/hud_instance")
+	if hud:
+		hud.visible = false

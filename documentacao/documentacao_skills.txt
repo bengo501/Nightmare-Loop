@@ -1,0 +1,154 @@
+SISTEMA DE HABILIDADES
+=====================
+
+1. VISÃO GERAL
+-------------
+O sistema de habilidades é uma parte fundamental do combate, oferecendo diferentes estratégias para o jogador. As habilidades podem ser usadas tanto para combate direto quanto para facilitar o uso dos gifts, que são a forma preferencial de resolver os conflitos.
+
+2. CATEGORIAS DE HABILIDADES
+---------------------------
+2.1 ATAQUES
+-----------
+Habilidades focadas em causar dano direto ao inimigo.
+- Golpe Espiritual (5 MP)
+  * Dano moderado (20% do ataque base)
+  * Útil para combate direto
+  * Custo baixo de MP
+
+- Explosão Espiritual (15 MP)
+  * Dano alto (40% do ataque base)
+  * Melhor custo-benefício para dano
+  * Custo médio de MP
+
+- Lançamento Espiritual (10 MP)
+  * Dano considerável (30% do ataque base)
+  * Bom para manter distância
+  * Custo médio de MP
+
+2.2 ATORDOAMENTO
+---------------
+Habilidades que causam dano e atordoam o inimigo por 1 turno.
+- Golpe Atordoante (8 MP)
+  * Dano baixo (15% do ataque base)
+  * Atordoa por 1 turno
+  * Útil para ganhar tempo
+
+- Onda de Choque (12 MP)
+  * Dano muito baixo (10% do ataque base)
+  * Atordoa por 1 turno
+  * Maior alcance que o Golpe Atordoante
+
+2.3 SUPORTE
+----------
+Habilidades que auxiliam no uso dos gifts e na sobrevivência.
+- Amplificador Espiritual (10 MP)
+  * Aumenta a eficácia dos gifts em 50%
+  * Dura 3 turnos
+  * Essencial para resolução pacífica
+
+- Barreira Protetora (8 MP)
+  * Reduz dano recebido em 30%
+  * Dura 3 turnos
+  * Bom para sobrevivência
+
+- Visão Espiritual (5 MP)
+  * Revela o estágio atual do luto do fantasma
+  * Sem duração
+  * Crucial para escolher o gift correto
+
+2.4 DEBUFFS
+----------
+Habilidades que enfraquecem o inimigo.
+- Fraqueza Espiritual (12 MP)
+  * Reduz defesa do inimigo em 25%
+  * Dura 3 turnos
+  * Bom para aumentar dano dos gifts
+
+- Correntes Espirituais (15 MP)
+  * Reduz velocidade do inimigo em 30%
+  * Dura 3 turnos
+  * Útil para controle de combate
+
+- Confusão Espiritual (10 MP)
+  * Reduz ataque do inimigo em 20%
+  * Dura 3 turnos
+  * Bom para sobrevivência
+
+3. MECÂNICAS IMPORTANTES
+-----------------------
+3.1 Consequências do Combate Violento
+-----------------------------------
+- Ao matar um fantasma usando habilidades:
+  * Outros fantasmas ganham +20% de vida máxima
+  * Outros fantasmas ganham +15% de dano
+  * Outros fantasmas ganham +10% de velocidade
+
+3.2 Estratégias Recomendadas
+--------------------------
+1. Priorizar o uso de gifts:
+   - Usar Visão Espiritual para identificar o estágio
+   - Aplicar debuffs para facilitar o uso dos gifts
+   - Usar Amplificador Espiritual para aumentar eficácia
+
+2. Usar habilidades de forma estratégica:
+   - Atordoamento para ganhar tempo
+   - Debuffs para enfraquecer o inimigo
+   - Ataques apenas quando necessário
+
+3. Gerenciamento de MP:
+   - Manter MP suficiente para gifts
+   - Usar habilidades de baixo custo primeiro
+   - Priorizar habilidades de suporte
+
+4. INTEGRAÇÃO COM OUTROS SISTEMAS
+-------------------------------
+4.1 Sistema de Gifts
+------------------
+- Habilidades de suporte aumentam eficácia dos gifts
+- Debuffs facilitam o uso dos gifts
+- Atordoamento dá tempo para preparar gifts
+
+4.2 Sistema de Status
+-------------------
+- Efeitos de status duram 3 turnos
+- Podem ser combinados com gifts
+- Ajudam no controle do combate
+
+4.3 Sistema de Turnos
+-------------------
+- Atordoamento afeta o sistema de turnos
+- Debuffs afetam ações do inimigo
+- Suporte pode ser usado em qualquer turno
+
+5. DICAS DE USO
+-------------
+1. Combate Pacífico:
+   - Use Visão Espiritual primeiro
+   - Aplique debuffs apropriados
+   - Use Amplificador Espiritual
+   - Ofereça o gift correto
+
+2. Combate Violento (não recomendado):
+   - Use atordoamento para controlar
+   - Aplique debuffs para reduzir perigo
+   - Use ataques poderosos
+   - Esteja preparado para fantasmas mais fortes
+
+3. Combate Híbrido:
+   - Use habilidades para facilitar gifts
+   - Mantenha ataques como último recurso
+   - Priorize sobrevivência
+
+6. CONSIDERAÇÕES TÉCNICAS
+------------------------
+- Todas as habilidades têm cooldown de 1 turno
+- Efeitos de status não se acumulam
+- MP é restaurado parcialmente a cada turno
+- Algumas habilidades podem ser bloqueadas por status
+
+7. BALANCEAMENTO
+--------------
+- Custo de MP balanceado com efeito
+- Duração dos efeitos limitada a 3 turnos
+- Dano das habilidades proporcional ao custo
+- Debuffs têm efeitos moderados para manter desafio 

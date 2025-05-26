@@ -9,12 +9,12 @@ signal ghost_scare(scare_data)
 var ghost_attacks = {
 	"golpe_espiritual": {
 		"name": "Golpe Espiritual",
-		"damage": 15,
+		"damage": 20,
 		"description": "Um golpe direto com energia espiritual."
 	},
 	"explosao_ectoplasmica": {
 		"name": "Explosão Ectoplásmica",
-		"damage": 25,
+		"damage": 20,
 		"description": "Uma explosão de energia ectoplásmica."
 	},
 	"lancamento_espiritual": {
@@ -24,12 +24,12 @@ var ghost_attacks = {
 	},
 	"onda_do_abismo": {
 		"name": "Onda do Abismo",
-		"damage": 30,
+		"damage": 20,
 		"description": "Uma onda de energia negativa do abismo."
 	},
 	"garras_espirituais": {
 		"name": "Garras Espirituais",
-		"damage": 18,
+		"damage": 20,
 		"description": "Ataque com garras feitas de energia espiritual."
 	}
 }

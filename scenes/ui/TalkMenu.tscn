@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://d5ce2tt3x3bu"]
 
-[ext_resource type="Script" path="res://scripts/ui/talk_menu.gd" id="1_4k4m3"]
+[ext_resource type="Script" uid="uid://b27dmyjjatvif" path="res://scripts/ui/talk_menu.gd" id="1_4k4m3"]
 
 [node name="TalkMenu" type="Control"]
 layout_mode = 3
@@ -99,4 +99,4 @@ horizontal_alignment = 1
 
 [node name="CloseButton" type="Button" parent="MenuContainer"]
 layout_mode = 2
-text = "Fechar" 
+text = "Fechar"
