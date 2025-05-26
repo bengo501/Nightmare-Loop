@@ -1,0 +1,102 @@
+[gd_scene load_steps=2 format=3 uid="uid://d5ce2tt3x3bu"]
+
+[ext_resource type="Script" path="res://scripts/ui/talk_menu.gd" id="1_4k4m3"]
+
+[node name="TalkMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4k4m3")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.8)
+
+[node name="MenuContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 200.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="MenuContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Conversar"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MenuContainer"]
+layout_mode = 2
+
+[node name="Categories" type="HBoxContainer" parent="MenuContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Questions" type="VBoxContainer" parent="MenuContainer/Categories"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CategoryTitle" type="Label" parent="MenuContainer/Categories/Questions"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.8, 1, 1)
+text = "Perguntas"
+horizontal_alignment = 1
+
+[node name="OptionList" type="VBoxContainer" parent="MenuContainer/Categories/Questions"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Conversations" type="VBoxContainer" parent="MenuContainer/Categories"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CategoryTitle" type="Label" parent="MenuContainer/Categories/Conversations"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+text = "Conversas"
+horizontal_alignment = 1
+
+[node name="OptionList" type="VBoxContainer" parent="MenuContainer/Categories/Conversations"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Negotiations" type="VBoxContainer" parent="MenuContainer/Categories"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CategoryTitle" type="Label" parent="MenuContainer/Categories/Negotiations"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.2, 0.8, 1)
+text = "Negociações"
+horizontal_alignment = 1
+
+[node name="OptionList" type="VBoxContainer" parent="MenuContainer/Categories/Negotiations"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HSeparator2" type="HSeparator" parent="MenuContainer"]
+layout_mode = 2
+
+[node name="Response" type="Label" parent="MenuContainer"]
+layout_mode = 2
+text = "Selecione uma opção para conversar"
+horizontal_alignment = 1
+
+[node name="CloseButton" type="Button" parent="MenuContainer"]
+layout_mode = 2
+text = "Fechar" 

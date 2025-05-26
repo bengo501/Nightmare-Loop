@@ -1,0 +1,96 @@
+STATUS DE IMPLEMENTAÇÃO
+======================
+
+1. SISTEMA DO JOGADOR
+---------------------
+✅ IMPLEMENTADO:
+- Sistema de movimento (primeira e terceira pessoa)
+- Sistema de câmera
+- Estatísticas base
+- Sistema de dano e cura
+- Efeitos de status
+- Sistema de animações
+- Sistema de debug
+- Sistema de save/load
+
+🔄 EM DESENVOLVIMENTO:
+- Sistema de habilidades
+- Sistema de inventário
+- Sistema de diálogo
+
+❌ NÃO IMPLEMENTADO:
+- Sistema de missões
+- Sistema de progressão
+- Sistema de crafting
+- Sistema de equipamentos
+
+2. SISTEMA DE COMBATE
+--------------------
+✅ IMPLEMENTADO:
+- Estrutura básica de turnos
+- Ações do fantasma
+- Sistema de gifts
+- Sistema de status
+- Interface básica
+
+🔄 EM DESENVOLVIMENTO:
+- Sistema de diálogo em combate
+- Sistema de negociação
+- Efeitos visuais
+
+❌ NÃO IMPLEMENTADO:
+- Sistema de recompensas
+- Sistema de balanceamento dinâmico
+- Sistema de combos
+- Sistema de críticos
+
+3. PRÓXIMOS PASSOS
+-----------------
+1. Implementar sistema de habilidades:
+   - Criar sistema de cooldown
+   - Implementar efeitos visuais
+   - Balancear custos de MP
+
+2. Implementar sistema de inventário:
+   - Criar interface de inventário
+   - Implementar sistema de itens
+   - Adicionar sistema de equipamentos
+
+3. Implementar sistema de diálogo:
+   - Criar sistema de diálogo em combate
+   - Implementar sistema de negociação
+   - Adicionar respostas dos fantasmas
+
+4. Melhorar sistema de combate:
+   - Implementar sistema de recompensas
+   - Adicionar sistema de balanceamento
+   - Melhorar feedback visual
+
+5. Implementar sistema de missões:
+   - Criar sistema de progressão
+   - Adicionar objetivos
+   - Implementar recompensas
+
+4. PRIORIDADES
+-------------
+1. Sistema de habilidades (Alta)
+2. Sistema de diálogo em combate (Alta)
+3. Sistema de inventário (Média)
+4. Sistema de recompensas (Média)
+5. Sistema de missões (Baixa)
+
+5. NOTAS TÉCNICAS
+----------------
+- Manter consistência com o sistema de turnos
+- Garantir feedback visual para todas as ações
+- Implementar sistema de debug para testes
+- Documentar todas as novas implementações
+- Manter balanceamento do jogo
+
+6. CONSIDERAÇÕES DE DESIGN
+-------------------------
+- Manter a temática de horror
+- Garantir que o sistema de gifts seja intuitivo
+- Manter o sistema de diálogo relevante
+- Balancear dificuldade do combate
+- Manter a progressão interessante 

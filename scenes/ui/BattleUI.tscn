@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://dxex0ddte0835"]
+[gd_scene load_steps=2 format=3 uid="uid://dxex0ddte0835"]
+
+[ext_resource type="Script" uid="uid://bdeqk61pqujt" path="res://scripts/ui/battle_ui.gd" id="1_2k4m3"]
 
 [node name="BattleUI" type="Control"]
 layout_mode = 3
@@ -7,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_2k4m3")
 
 [node name="StatusPanel" type="HBoxContainer" parent="."]
 layout_mode = 0
@@ -14,73 +17,107 @@ anchor_right = 1.0
 anchor_bottom = 0.15
 size_flags_horizontal = 3
 
-[node name="PlayerStatus1" type="VBoxContainer" parent="StatusPanel"]
+[node name="PlayerStatus" type="VBoxContainer" parent="StatusPanel"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="StatusPanel/PlayerStatus1"]
+[node name="Name" type="Label" parent="StatusPanel/PlayerStatus"]
 layout_mode = 2
-text = "Morel"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Player"
 
-[node name="HPBar" type="ProgressBar" parent="StatusPanel/PlayerStatus1"]
+[node name="HPBar" type="ProgressBar" parent="StatusPanel/PlayerStatus"]
 layout_mode = 2
-max_value = 273.0
-value = 273.0
+value = 100.0
 
-[node name="MPBar" type="ProgressBar" parent="StatusPanel/PlayerStatus1"]
+[node name="HPValue" type="Label" parent="StatusPanel/PlayerStatus"]
 layout_mode = 2
-max_value = 221.0
-value = 221.0
+text = "HP: 100/100"
 
-[node name="PlayerStatus2" type="VBoxContainer" parent="StatusPanel"]
+[node name="MPBar" type="ProgressBar" parent="StatusPanel/PlayerStatus"]
 layout_mode = 2
+value = 100.0
 
-[node name="Name" type="Label" parent="StatusPanel/PlayerStatus2"]
+[node name="MPValue" type="Label" parent="StatusPanel/PlayerStatus"]
 layout_mode = 2
-text = "Rangda"
+text = "MP: 100/100"
 
-[node name="HPBar" type="ProgressBar" parent="StatusPanel/PlayerStatus2"]
-layout_mode = 2
-max_value = 562.0
-value = 562.0
+[node name="GriefStages" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.15
+anchor_right = 1.0
+anchor_bottom = 0.25
+offset_left = 43.0
+offset_top = 305.0
+offset_right = 43.0
+offset_bottom = 305.0
+grow_horizontal = 2
+grow_vertical = 0
 
-[node name="MPBar" type="ProgressBar" parent="StatusPanel/PlayerStatus2"]
+[node name="Negacao" type="VBoxContainer" parent="GriefStages"]
 layout_mode = 2
-max_value = 356.0
-value = 356.0
+size_flags_horizontal = 3
 
-[node name="PlayerStatus3" type="VBoxContainer" parent="StatusPanel"]
+[node name="Name" type="Label" parent="GriefStages/Negacao"]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.2, 0.2, 1)
+text = "Negação"
 
-[node name="Name" type="Label" parent="StatusPanel/PlayerStatus3"]
+[node name="Quantity" type="Label" parent="GriefStages/Negacao"]
 layout_mode = 2
-text = "Ym"
+text = "x3"
 
-[node name="HPBar" type="ProgressBar" parent="StatusPanel/PlayerStatus3"]
+[node name="Raiva" type="VBoxContainer" parent="GriefStages"]
 layout_mode = 2
-max_value = 211.0
-value = 211.0
+size_flags_horizontal = 3
 
-[node name="MPBar" type="ProgressBar" parent="StatusPanel/PlayerStatus3"]
+[node name="Name" type="Label" parent="GriefStages/Raiva"]
 layout_mode = 2
-max_value = 355.0
-value = 355.0
+theme_override_colors/font_color = Color(0.8, 0.1, 0.1, 1)
+text = "Raiva"
 
-[node name="PlayerStatus4" type="VBoxContainer" parent="StatusPanel"]
+[node name="Quantity" type="Label" parent="GriefStages/Raiva"]
 layout_mode = 2
+text = "x2"
 
-[node name="Name" type="Label" parent="StatusPanel/PlayerStatus4"]
+[node name="Barganha" type="VBoxContainer" parent="GriefStages"]
 layout_mode = 2
-text = "Ometotl"
+size_flags_horizontal = 3
 
-[node name="HPBar" type="ProgressBar" parent="StatusPanel/PlayerStatus4"]
+[node name="Name" type="Label" parent="GriefStages/Barganha"]
 layout_mode = 2
-max_value = 181.0
-value = 181.0
+theme_override_colors/font_color = Color(0.2, 0.6, 1, 1)
+text = "Barganha"
 
-[node name="MPBar" type="ProgressBar" parent="StatusPanel/PlayerStatus4"]
+[node name="Quantity" type="Label" parent="GriefStages/Barganha"]
 layout_mode = 2
-max_value = 221.0
-value = 221.0
+text = "x4"
+
+[node name="Depressao" type="VBoxContainer" parent="GriefStages"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="GriefStages/Depressao"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.2, 0.8, 1)
+text = "Depressão"
+
+[node name="Quantity" type="Label" parent="GriefStages/Depressao"]
+layout_mode = 2
+text = "x1"
+
+[node name="Aceitacao" type="VBoxContainer" parent="GriefStages"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="GriefStages/Aceitacao"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.8, 0.2, 1)
+text = "Aceitação"
+
+[node name="Quantity" type="Label" parent="GriefStages/Aceitacao"]
+layout_mode = 2
+text = "x5"
 
 [node name="CommandBar" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -97,18 +134,32 @@ size_flags_horizontal = 3
 
 [node name="SkillButton" type="Button" parent="CommandBar"]
 layout_mode = 2
+mouse_filter = 2
 text = "Skill"
 
-[node name="SwapButton" type="Button" parent="CommandBar"]
+[node name="ItemButton" type="Button" parent="CommandBar"]
 layout_mode = 2
-text = "Swap"
+mouse_filter = 2
+text = "Item"
+
+[node name="TalkButton" type="Button" parent="CommandBar"]
+layout_mode = 2
+mouse_filter = 2
+text = "Talk"
+
+[node name="GiftButton" type="Button" parent="CommandBar"]
+layout_mode = 2
+mouse_filter = 2
+text = "Gift"
 
 [node name="FleeButton" type="Button" parent="CommandBar"]
 layout_mode = 2
+mouse_filter = 2
 text = "Flee"
 
 [node name="NextButton" type="Button" parent="CommandBar"]
 layout_mode = 2
+mouse_filter = 2
 text = "Next"
 
 [node name="TurnIndicator" type="VBoxContainer" parent="."]

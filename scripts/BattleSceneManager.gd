@@ -29,28 +29,19 @@ func _ready():
 	# Câmera
 	battle_camera = get_node_or_null("BattleCamera")
 	if battle_camera:
-		battle_camera.current = true  # Ativa a câmera de batalha imediatamente
-		# Desativa o processamento de input da câmera do player
+		battle_camera.current = true
 		if player_ref and player_ref.has_node("ThirdPersonCamera"):
 			player_ref.get_node("ThirdPersonCamera").current = false
 		if player_ref and player_ref.has_node("FirstPersonCamera"):
 			player_ref.get_node("FirstPersonCamera").current = false
+	
 	# UI principal
-	# Botões de ação
 	attack_button = get_node_or_null("UI/BattleUI/ActionButtons/AttackButton")
 	defend_button = get_node_or_null("UI/BattleUI/ActionButtons/DefendButton")
 	special_button = get_node_or_null("UI/BattleUI/ActionButtons/SpecialButton")
 	turn_indicator = get_node_or_null("UI/BattleUI/TurnIndicator")
 	player_hp_label = get_node_or_null("UI/BattleUI/StatusPanel/PlayerStatus/PlayerHP")
 	enemy_hp_label = get_node_or_null("UI/BattleUI/StatusPanel/EnemyStatus/EnemyHP")
-	
-	# Conecta os sinais dos botões de forma segura
-	if attack_button:
-		attack_button.pressed.connect(_on_attack_pressed)
-	if defend_button:
-		defend_button.pressed.connect(_on_defend_pressed)
-	if special_button:
-		special_button.pressed.connect(_on_special_pressed)
 	
 	# Instancia o inimigo salvo em BattleData, se existir
 	var enemy_data = BattleData.enemy_data
@@ -67,11 +58,10 @@ func _ready():
 		enemy_ref.ghost_color = enemy_data.ghost_color
 		enemy_ref.ghost_scale = enemy_data.ghost_scale
 		add_child(enemy_ref)
-		# Posiciona o inimigo à frente da câmera de batalha
 		if battle_camera:
 			var cam_transform = battle_camera.global_transform
 			var forward = -cam_transform.basis.z.normalized()
-			var enemy_pos = cam_transform.origin + forward * 5.0 # 5 unidades à frente
+			var enemy_pos = cam_transform.origin + forward * 5.0
 			enemy_ref.global_position = enemy_pos
 		else:
 			enemy_ref.global_position = Vector3(0, 0, 0)
@@ -86,37 +76,29 @@ func _ready():
 		player_ref = player_scene.instantiate()
 		player_ref.is_battle_mode = true
 		add_child(player_ref)
-		player_ref.global_position = Vector3(0, 0, -2) # Posição inicial do player
+		player_ref.global_position = Vector3(0, 0, -2)
 
-	# Debug: Verificar player_ref e enemy_ref
-	if not player_ref:
-		push_error("[BattleSceneManager] player_ref é null! Não foi possível instanciar ou encontrar o player.")
-		return
-	if not enemy_ref:
-		push_error("[BattleSceneManager] enemy_ref é null! Não foi possível instanciar ou encontrar o inimigo.")
-		return
-	# Verificar métodos essenciais
-	var player_ok = player_ref.has_method("take_damage") and player_ref.has_method("die") and player_ref.has_method("set_health_multiplier")
-	var enemy_ok = enemy_ref.has_method("take_damage")
-	if not player_ok:
-		push_error("[BattleSceneManager] player_ref não possui todos os métodos/atributos necessários para a batalha!")
-		return
-	if not enemy_ok:
-		push_error("[BattleSceneManager] enemy_ref não possui todos os métodos/atributos necessários para a batalha!")
-		return
-
-	# Conectar sinais da UI já existente
+	# Conectar sinais da UI
 	if battle_ui_instance:
 		battle_ui_instance.visible = true
-		print("Conectando sinais da BattleUI (fixa)")
 		if battle_ui_instance.has_signal("flee_pressed"):
 			battle_ui_instance.flee_pressed.connect(_on_flee_pressed)
 		if battle_ui_instance.has_signal("skill_pressed"):
 			battle_ui_instance.skill_pressed.connect(_on_skill_pressed)
 		if battle_ui_instance.has_signal("skill_selected"):
 			battle_ui_instance.skill_selected.connect(_on_skill_selected)
-		if battle_ui_instance.has_signal("swap_pressed"):
-			battle_ui_instance.swap_pressed.connect(_on_swap_pressed)
+		if battle_ui_instance.has_signal("item_pressed"):
+			battle_ui_instance.item_pressed.connect(_on_item_pressed)
+		if battle_ui_instance.has_signal("item_selected"):
+			battle_ui_instance.item_selected.connect(_on_item_selected)
+		if battle_ui_instance.has_signal("talk_pressed"):
+			battle_ui_instance.talk_pressed.connect(_on_talk_pressed)
+		if battle_ui_instance.has_signal("talk_option_selected"):
+			battle_ui_instance.talk_option_selected.connect(_on_talk_option_selected)
+		if battle_ui_instance.has_signal("gift_pressed"):
+			battle_ui_instance.gift_pressed.connect(_on_gift_pressed)
+		if battle_ui_instance.has_signal("gift_selected"):
+			battle_ui_instance.gift_selected.connect(_on_gift_selected)
 		if battle_ui_instance.has_signal("next_pressed"):
 			battle_ui_instance.next_pressed.connect(_on_next_pressed)
 
@@ -124,25 +106,8 @@ func _ready():
 	if UIManager.hud_instance:
 		UIManager.hud_instance.visible = false
 
-	# Atualiza a UI de batalha com os dados reais
+	# Atualiza a UI de batalha
 	_update_battle_ui()
-
-	# Ativa a UI e inicializa a batalha
-	if battle_ui_instance and battle_ui_instance is Control:
-		battle_ui_instance.visible = true
-		# Conectar sinais dos botões
-		if battle_ui_instance.has_signal("flee_pressed"):
-			battle_ui_instance.connect("flee_pressed", Callable(self, "_on_flee_pressed"))
-		if battle_ui_instance.has_signal("skill_pressed"):
-			battle_ui_instance.connect("skill_pressed", Callable(self, "_on_skill_pressed"))
-		if battle_ui_instance.has_signal("skill_selected"):
-			battle_ui_instance.connect("skill_selected", Callable(self, "_on_skill_selected"))
-		# Conectar comandos principais
-		if "command_buttons" in battle_ui_instance:
-			battle_ui_instance.command_buttons[0].connect("pressed", Callable(self, "_on_skill_pressed")) # Skill
-			battle_ui_instance.command_buttons[1].connect("pressed", Callable(self, "_on_swap_pressed")) # Swap
-			battle_ui_instance.command_buttons[2].connect("pressed", Callable(self, "_on_flee_pressed")) # Flee
-			battle_ui_instance.command_buttons[3].connect("pressed", Callable(self, "_on_next_pressed")) # Next
 
 	is_in_battle = true
 	current_turn = TurnType.PLAYER
@@ -155,13 +120,8 @@ func _ready():
 		player_ref.set_process_input(false)
 		player_ref.set_physics_process(false)
 	
-	# Exemplo de atualização de status e turnos:
-	# (REMOVIDO - agora só usamos _update_battle_ui())
-
-	# Emite o sinal de início de batalha
 	emit_signal("battle_started")
 	
-	# Força a atualização da interface do jogador
 	if player_ref.has_method("_on_battle_started"):
 		player_ref._on_battle_started()
 
@@ -235,35 +195,29 @@ func _update_battle_ui():
 	# Garante que é a UI correta
 	if not ("update_status" in battle_ui_instance and "update_turn_icons" in battle_ui_instance):
 		return
-	# Player
-	if player_ref:
-		var name = "Player"
-		if "player_name" in player_ref:
-			name = player_ref.player_name
-		var hp = int(player_ref.current_health)
-		var max_hp = int(player_ref.max_health)
-		var mp = 0
-		var max_mp = 0
-		if "current_mp" in player_ref:
-			mp = int(player_ref.current_mp)
-		if "max_mp" in player_ref:
-			max_mp = int(player_ref.max_mp)
-		battle_ui_instance.update_status(0, name, hp, max_hp, mp, max_mp)
-	# Inimigo (exemplo, pode ser expandido para party)
-	if enemy_ref:
-		var name = "Enemy"
-		if "enemy_name" in enemy_ref:
-			name = enemy_ref.enemy_name
-		var hp = int(enemy_ref.current_health)
-		var max_hp = int(enemy_ref.max_health)
-		var mp = 0
-		var max_mp = 0
-		if "current_mp" in enemy_ref:
-			mp = int(enemy_ref.current_mp)
-		if "max_mp" in enemy_ref:
-			max_mp = int(enemy_ref.max_mp)
-		battle_ui_instance.update_status(1, name, hp, max_hp, mp, max_mp)
-	# Atualiza turnos (exemplo: 3 turnos para o player)
+		
+	# Atualiza os status dos estágios do luto
+	var grief_stages = [
+		{"name": "Negação", "quantity": 3, "hp": 100, "max_hp": 100, "mp": 100, "max_mp": 100},
+		{"name": "Raiva", "quantity": 2, "hp": 100, "max_hp": 100, "mp": 100, "max_mp": 100},
+		{"name": "Barganha", "quantity": 4, "hp": 100, "max_hp": 100, "mp": 100, "max_mp": 100},
+		{"name": "Depressão", "quantity": 1, "hp": 100, "max_hp": 100, "mp": 100, "max_mp": 100},
+		{"name": "Aceitação", "quantity": 5, "hp": 100, "max_hp": 100, "mp": 100, "max_mp": 100}
+	]
+	
+	for i in range(grief_stages.size()):
+		var stage = grief_stages[i]
+		battle_ui_instance.update_status(
+			i,
+			stage.name,
+			stage.hp,
+			stage.max_hp,
+			stage.mp,
+			stage.max_mp,
+			stage.quantity
+		)
+	
+	# Atualiza turnos
 	battle_ui_instance.update_turn_icons(3, current_turn == TurnType.PLAYER)
 
 func _on_attack_pressed():
@@ -340,30 +294,21 @@ func enemy_turn():
 	update_turn_indicator() 
 
 func _on_flee_pressed():
-	# Esconde a UI de batalha
-	if battle_ui_instance:
-		battle_ui_instance.visible = false
-	if UIManager.has_method("hide_ui"):
-		UIManager.hide_ui("battle_ui")
-	if UIManager.hud_instance:
-		UIManager.hud_instance.visible = true
-	# Troca para a cena do mundo
-	SceneManager.change_scene("world")
-	# Troca o estado do jogo para normal (PLAYING)
-	if GameStateManager.has_method("change_state"):
-		GameStateManager.change_state(GameStateManager.GameState.PLAYING)
+	end_battle()
 
 func _on_skill_pressed():
-	# Skill popup já aparece pela UI, mas aqui tratamos a escolha
-	# O popup chama _on_skill_selected via signal
-	print("Skill menu aberto!")
+	# O menu de skills já é gerenciado pela UI
+	pass
 
-func _on_swap_pressed():
-	# Placeholder para troca de personagem
-	print("Troca de personagem não implementada.")
+func _on_talk_pressed():
+	# O menu de conversas já é gerenciado pela UI
+	pass
+
+func _on_gift_pressed():
+	# O menu de presentes já é gerenciado pela UI
+	pass
 
 func _on_next_pressed():
-	# Passa o turno para o inimigo
 	if current_turn == TurnType.PLAYER:
 		current_turn = TurnType.ENEMY
 		update_turn_indicator()
@@ -372,20 +317,96 @@ func _on_next_pressed():
 func _on_skill_selected(id):
 	if current_turn != TurnType.PLAYER:
 		return
-	if id == 0:
-		print("Ataque Normal!")
-		_on_attack_pressed()
-	elif id == 1:
-		print("Ataque Especial!")
-		_on_special_pressed()
-	elif id == 2:
-		print("Magia!")
-		# Exemplo: dano mágico
-		var magic_damage = player_ref.attack_damage * 2
-		enemy_ref.take_damage(magic_damage)
-		update_hp_display()
-		if enemy_ref.current_health <= 0:
-			end_battle()
-			return
-		current_turn = TurnType.ENEMY
-		update_turn_indicator() 
+		
+	match id:
+		0: # Ataque Normal
+			var damage = player_ref.attack_damage
+			enemy_ref.take_damage(damage)
+		1: # Ataque Especial
+			var damage = player_ref.attack_damage * 1.5
+			enemy_ref.take_damage(damage)
+		2: # Magia de Fogo
+			var damage = player_ref.attack_damage * 2.0
+			enemy_ref.take_damage(damage)
+		3: # Magia de Gelo
+			var damage = player_ref.attack_damage * 1.8
+			enemy_ref.take_damage(damage)
+		4: # Magia de Raio
+			var damage = player_ref.attack_damage * 2.2
+			enemy_ref.take_damage(damage)
+	
+	update_hp_display()
+	
+	if enemy_ref.current_health <= 0:
+		end_battle()
+		return
+	
+	current_turn = TurnType.ENEMY
+	update_turn_indicator()
+
+func _on_talk_option_selected(id):
+	if current_turn != TurnType.PLAYER:
+		return
+		
+	match id:
+		0: # Perguntar sobre o passado
+			print("O fantasma conta sobre seu passado...")
+		1: # Perguntar sobre o presente
+			print("O fantasma fala sobre sua situação atual...")
+		2: # Perguntar sobre o futuro
+			print("O fantasma faz uma previsão...")
+		3: # Tentar convencer
+			print("Tentando convencer o fantasma...")
+	
+	# Após a conversa, passa para o turno do inimigo
+	current_turn = TurnType.ENEMY
+	update_turn_indicator()
+
+func _on_gift_selected(id):
+	if current_turn != TurnType.PLAYER:
+		return
+		
+	match id:
+		0: # Flor
+			print("Oferecendo uma flor ao fantasma...")
+		1: # Chocolate
+			print("Oferecendo chocolate ao fantasma...")
+		2: # Livro
+			print("Oferecendo um livro ao fantasma...")
+		3: # Jóia
+			print("Oferecendo uma jóia ao fantasma...")
+	
+	# Após dar o presente, passa para o turno do inimigo
+	current_turn = TurnType.ENEMY
+	update_turn_indicator()
+
+func _on_item_pressed():
+	# O menu de itens já é gerenciado pela UI
+	pass
+
+func _on_item_selected(id):
+	if current_turn != TurnType.PLAYER:
+		return
+		
+	match id:
+		0: # Negação
+			print("Usando Negação...")
+			# Implementar efeito do item
+		1: # Raiva
+			print("Usando Raiva...")
+			# Implementar efeito do item
+		2: # Barganha
+			print("Usando Barganha...")
+			# Implementar efeito do item
+		3: # Depressão
+			print("Usando Depressão...")
+			# Implementar efeito do item
+		4: # Aceitação
+			print("Usando Aceitação...")
+			# Implementar efeito do item
+	
+	# Após usar o item, passa para o turno do inimigo
+	current_turn = TurnType.ENEMY
+	update_turn_indicator()
+
+# ... resto do código existente ...

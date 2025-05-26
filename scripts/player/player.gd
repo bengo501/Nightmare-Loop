@@ -63,6 +63,35 @@ var is_battle_mode: bool = false
 
 signal game_over
 
+# Sinais para comunicação com outros sistemas
+signal player_health_changed(new_health, max_health)  # Emitido quando o HP muda
+signal player_mp_changed(new_mp, max_mp)             # Emitido quando o MP muda
+signal player_xp_changed(new_xp)                      # Emitido quando o XP muda
+signal player_consciencia_changed(new_value)          # Emitido quando a consciência muda
+signal player_stats_changed(stats)                    # Emitido quando qualquer estatística muda
+signal player_died                                    # Emitido quando o jogador é derrotado
+
+# Estatísticas base do jogador
+var stats = {
+	"hp": 100,          # Pontos de vida atuais
+	"max_hp": 100,      # Pontos de vida máximos
+	"mp": 50,           # Pontos de magia atuais
+	"max_mp": 50,       # Pontos de magia máximos
+	"xp": 0,            # Pontos de experiência
+	"consciencia": 100, # Nível de consciência (afeta interações com fantasmas)
+	"defesa": 10,       # Reduz o dano recebido
+	"ataque": 15,       # Aumenta o dano causado
+	"velocidade": 10    # Afeta a velocidade de movimento e ordem dos turnos
+}
+
+# Modificadores temporários de status
+var status_effects = {
+	"defesa_reduzida": 0,  # Quantidade de defesa reduzida
+	"ataque_reduzido": 0,  # Quantidade de ataque reduzido
+	"velocidade_reduzida": 0, # Quantidade de velocidade reduzida
+	"gift_boost": 0        # Multiplicador de eficácia dos gifts
+}
+
 func _ready():
 	add_to_group("player")
 	current_health = max_health
@@ -400,17 +429,32 @@ func _on_battle_ended():
 		if third_person_camera:
 			third_person_camera.current = true
 
-func take_damage(damage: float) -> void:
-	var final_damage = damage / defense_bonus
-	current_health -= final_damage
-	print("DEBUG: Jogador tomou ", final_damage, " de dano! Vida restante: ", current_health)
-	if current_health <= 0:
-		die()
-
 func die() -> void:
 	print("DEBUG: Jogador morreu!")
 	emit_signal("game_over")
 	queue_free()
+
+# Função para receber dano
+func take_damage(amount):
+	# Calcula o dano final considerando a defesa e efeitos de status
+	var final_damage = max(1, amount - stats.defesa + status_effects.defesa_reduzida)
+	stats.hp -= final_damage
+	
+	# Garante que o HP não fique negativo
+	stats.hp = max(0, stats.hp)
+	
+	# Emite o sinal de mudança de HP
+	emit_signal("player_health_changed", stats.hp, stats.max_hp)
+	
+	# Toca a animação de dano
+	if animation_player:
+		animation_player.play("hurt")
+	
+	# Verifica se o jogador foi derrotado
+	if stats.hp <= 0:
+		die()
+	
+	print("Jogador recebeu ", final_damage, " de dano. HP restante: ", stats.hp)
 
 func _process(delta):
 	if not first_person_mode and third_person_camera:
@@ -490,3 +534,90 @@ func set_damage_multiplier(value: float):
 
 func set_health_multiplier(value: float):
 	health_multiplier = value
+
+# Função para atualizar a velocidade baseada nas estatísticas
+func update_speed():
+	speed = 200.0 * (1.0 - (status_effects.velocidade_reduzida / 100.0))
+	speed = max(speed, 50.0)  # Velocidade mínima
+
+# Função para curar o jogador
+func heal(amount):
+	stats.hp = min(stats.hp + amount, stats.max_hp)
+	emit_signal("player_health_changed", stats.hp, stats.max_hp)
+	print("Jogador curado em ", amount, " HP. HP atual: ", stats.hp)
+
+# Função para restaurar MP
+func restore_mp(amount):
+	stats.mp = min(stats.mp + amount, stats.max_mp)
+	emit_signal("player_mp_changed", stats.mp, stats.max_mp)
+	print("MP restaurado em ", amount, ". MP atual: ", stats.mp)
+
+# Função para ganhar experiência
+func gain_xp(amount):
+	stats.xp += amount
+	emit_signal("player_xp_changed", stats.xp)
+	print("Ganhou ", amount, " de XP. XP total: ", stats.xp)
+
+# Função para alterar a consciência
+func change_consciencia(amount):
+	stats.consciencia = clamp(stats.consciencia + amount, 0, 100)
+	emit_signal("player_consciencia_changed", stats.consciencia)
+	print("Consciência alterada em ", amount, ". Valor atual: ", stats.consciencia)
+
+# Função para aplicar efeito de status
+func apply_status_effect(effect_type, amount):
+	match effect_type:
+		"defesa_reduzida":
+			status_effects.defesa_reduzida += amount
+		"ataque_reduzido":
+			status_effects.ataque_reduzido += amount
+		"velocidade_reduzida":
+			status_effects.velocidade_reduzida += amount
+			update_speed()
+		"gift_boost":
+			status_effects.gift_boost += amount
+	
+	print("Efeito de status aplicado: ", effect_type, " (", amount, ")")
+
+# Função para remover efeito de status
+func remove_status_effect(effect_type, amount):
+	match effect_type:
+		"defesa_reduzida":
+			status_effects.defesa_reduzida = max(0, status_effects.defesa_reduzida - amount)
+		"ataque_reduzido":
+			status_effects.ataque_reduzido = max(0, status_effects.ataque_reduzido - amount)
+		"velocidade_reduzida":
+			status_effects.velocidade_reduzida = max(0, status_effects.velocidade_reduzida - amount)
+			update_speed()
+		"gift_boost":
+			status_effects.gift_boost = max(0, status_effects.gift_boost - amount)
+	
+	print("Efeito de status removido: ", effect_type, " (", amount, ")")
+
+# Função para salvar o estado do jogador
+func save_state():
+	var save_data = {
+		"stats": stats,
+		"status_effects": status_effects,
+		"position": {
+			"x": position.x,
+			"y": position.y
+		}
+	}
+	return save_data
+
+# Função para carregar o estado do jogador
+func load_state(save_data):
+	stats = save_data.stats
+	status_effects = save_data.status_effects
+	position = Vector3(save_data.position.x, position.y, save_data.position.y)
+	
+	# Atualiza a velocidade baseada nos efeitos de status
+	update_speed()
+	
+	# Emite sinais de atualização
+	emit_signal("player_health_changed", stats.hp, stats.max_hp)
+	emit_signal("player_mp_changed", stats.mp, stats.max_mp)
+	emit_signal("player_xp_changed", stats.xp)
+	emit_signal("player_consciencia_changed", stats.consciencia)
+	emit_signal("player_stats_changed", stats)

@@ -153,7 +153,6 @@ text = "x0"
 
 [node name="Crosshair" type="TextureRect" parent="."]
 z_as_relative = false
-anchors_preset = -1
 offset_left = 221.0
 offset_top = 107.0
 offset_right = 269.0

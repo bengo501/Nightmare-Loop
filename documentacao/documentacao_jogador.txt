@@ -1,0 +1,135 @@
+DOCUMENTAÇÃO DO SISTEMA DO JOGADOR
+=================================
+
+1. VISÃO GERAL
+--------------
+O sistema do jogador é uma classe que herda de CharacterBody3D e implementa todas as funcionalidades
+necessárias para o controle do personagem, incluindo movimento, combate, status e interações.
+
+2. SINAIS (SIGNALS)
+------------------
+- player_health_changed(new_health, max_health): Emitido quando o HP muda
+- player_mp_changed(new_mp, max_mp): Emitido quando o MP muda
+- player_xp_changed(new_xp): Emitido quando o XP muda
+- player_consciencia_changed(new_value): Emitido quando a consciência muda
+- player_stats_changed(stats): Emitido quando qualquer estatística muda
+- player_died: Emitido quando o jogador é derrotado
+- game_over: Emitido quando o jogador morre
+
+3. ESTATÍSTICAS BASE
+-------------------
+O jogador possui as seguintes estatísticas base:
+- hp: Pontos de vida atuais
+- max_hp: Pontos de vida máximos
+- mp: Pontos de magia atuais
+- max_mp: Pontos de magia máximos
+- xp: Pontos de experiência
+- consciencia: Nível de consciência (afeta interações com fantasmas)
+- defesa: Reduz o dano recebido
+- ataque: Aumenta o dano causado
+- velocidade: Afeta a velocidade de movimento e ordem dos turnos
+
+4. EFEITOS DE STATUS
+-------------------
+O jogador pode sofrer os seguintes efeitos de status:
+- defesa_reduzida: Reduz a defesa do jogador
+- ataque_reduzido: Reduz o ataque do jogador
+- velocidade_reduzida: Reduz a velocidade do jogador
+- gift_boost: Aumenta a eficácia dos gifts
+
+5. SISTEMA DE MOVIMENTO
+----------------------
+O jogador possui dois modos de movimento:
+a) Modo Terceira Pessoa (Isométrico):
+   - Movimento baseado em input WASD
+   - Câmera segue o jogador com ângulo isométrico
+   - Rotação do personagem segue o mouse
+   - Sistema de sway na câmera para movimento mais fluido
+
+b) Modo Primeira Pessoa:
+   - Movimento baseado na direção da câmera
+   - Controle de mira com o mouse
+   - Sistema de laser para mira
+   - Arma visível na tela
+
+6. SISTEMA DE COMBATE
+--------------------
+a) Ataques:
+   - Dano base calculado com ataque e multiplicadores
+   - Sistema de cooldown entre ataques
+   - Diferentes tipos de ataques (melee, ranged)
+
+b) Defesa:
+   - Sistema de dano reduzido baseado na defesa
+   - Efeitos de status podem reduzir a defesa
+   - Animações de dano
+
+7. SISTEMA DE HABILIDADES
+------------------------
+- Uso de habilidades consome MP
+- Diferentes tipos de habilidades (ataque, suporte, defesa)
+- Sistema de cooldown por habilidade
+- Efeitos visuais e sonoros
+
+8. SISTEMA DE SALVAMENTO
+-----------------------
+O jogador pode salvar e carregar seu estado, incluindo:
+- Todas as estatísticas
+- Efeitos de status ativos
+- Posição no mundo
+- Progresso e itens
+
+9. ANIMAÇÕES
+-----------
+O jogador possui animações para:
+- Idle (parado)
+- Movimento (frente, trás, esquerda, direita)
+- Ataque
+- Dano
+- Morte
+
+10. INTERAÇÃO COM O MUNDO
+------------------------
+- Sistema de colisão com o ambiente
+- Interação com objetos e NPCs
+- Sistema de diálogo
+- Sistema de inventário
+
+11. DEBUG E LOGGING
+------------------
+O sistema inclui mensagens de debug para:
+- Dano recebido/causado
+- Uso de habilidades
+- Mudanças de status
+- Eventos importantes
+
+12. CONSIDERAÇÕES TÉCNICAS
+-------------------------
+- Uso de sinais para comunicação entre sistemas
+- Sistema de estados para diferentes modos (combate, exploração)
+- Gerenciamento de recursos (HP, MP)
+- Sistema de eventos para interações
+
+13. INTEGRAÇÃO COM OUTROS SISTEMAS
+--------------------------------
+O jogador se integra com:
+- Sistema de combate
+- Sistema de diálogo
+- Sistema de inventário
+- Sistema de missões
+- Sistema de save/load
+
+14. OTIMIZAÇÕES
+--------------
+- Uso de timers para cooldowns
+- Sistema de cache para referências de nós
+- Otimização de cálculos de física
+- Gerenciamento eficiente de memória
+
+15. MANUTENÇÃO E EXPANSÃO
+------------------------
+O código foi estruturado para facilitar:
+- Adição de novas habilidades
+- Modificação de estatísticas
+- Implementação de novos efeitos de status
+- Expansão do sistema de combate 

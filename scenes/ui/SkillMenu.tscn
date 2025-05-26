@@ -1,0 +1,102 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8j6y4q3n5x2m"]
+
+[ext_resource type="Script" path="res://scripts/ui/skill_menu.gd" id="1_2k4m3"]
+
+[node name="SkillMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2k4m3")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.8)
+
+[node name="MenuContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 200.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="MenuContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Habilidades"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MenuContainer"]
+layout_mode = 2
+
+[node name="Categories" type="HBoxContainer" parent="MenuContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PhysicalAttacks" type="VBoxContainer" parent="MenuContainer/Categories"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CategoryTitle" type="Label" parent="MenuContainer/Categories/PhysicalAttacks"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+text = "Ataques Físicos"
+horizontal_alignment = 1
+
+[node name="SkillList" type="VBoxContainer" parent="MenuContainer/Categories/PhysicalAttacks"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MagicAttacks" type="VBoxContainer" parent="MenuContainer/Categories"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CategoryTitle" type="Label" parent="MenuContainer/Categories/MagicAttacks"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.8, 1, 1)
+text = "Ataques Mágicos"
+horizontal_alignment = 1
+
+[node name="SkillList" type="VBoxContainer" parent="MenuContainer/Categories/MagicAttacks"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SpecialSkills" type="VBoxContainer" parent="MenuContainer/Categories"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CategoryTitle" type="Label" parent="MenuContainer/Categories/SpecialSkills"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.2, 0.8, 1)
+text = "Habilidades Especiais"
+horizontal_alignment = 1
+
+[node name="SkillList" type="VBoxContainer" parent="MenuContainer/Categories/SpecialSkills"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HSeparator2" type="HSeparator" parent="MenuContainer"]
+layout_mode = 2
+
+[node name="Description" type="Label" parent="MenuContainer"]
+layout_mode = 2
+text = "Selecione uma habilidade para ver sua descrição"
+horizontal_alignment = 1
+
+[node name="CloseButton" type="Button" parent="MenuContainer"]
+layout_mode = 2
+text = "Fechar" 
