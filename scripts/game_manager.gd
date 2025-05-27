@@ -22,9 +22,21 @@ signal enemy_defeated
 @onready var scene_manager = get_node("/root/SceneManager")
 @onready var state_manager = get_node("/root/GameStateManager")
 
+# Configurações de opções
+var settings = {
+	"master_volume": 1.0,
+	"music_volume": 1.0,
+	"sfx_volume": 1.0,
+	"fullscreen": false,
+	"vsync": true,
+	"invert_y": false,
+	"mouse_sensitivity": 1.0
+}
+
 func _ready():
 	# Initialize game
 	reset_game()
+	load_settings()
 
 func _process(delta):
 	if state_manager.current_state == state_manager.GameState.PLAYING:
@@ -104,4 +116,43 @@ func load_game() -> void:
 	game_time = save_data.game_time
 	
 	health_changed.emit(player_health)
-	score_changed.emit(player_score) 
+	score_changed.emit(player_score)
+
+func get_settings() -> Dictionary:
+	return settings.duplicate()
+
+func set_master_volume(value: float) -> void:
+	settings["master_volume"] = value
+	# Aqui você pode aplicar o volume no AudioServer, se desejar
+
+func set_music_volume(value: float) -> void:
+	settings["music_volume"] = value
+
+func set_sfx_volume(value: float) -> void:
+	settings["sfx_volume"] = value
+
+func set_fullscreen(enabled: bool) -> void:
+	settings["fullscreen"] = enabled
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if enabled else DisplayServer.WINDOW_MODE_WINDOWED)
+
+func set_vsync(enabled: bool) -> void:
+	settings["vsync"] = enabled
+	# Implemente a lógica de VSync se necessário
+
+func set_invert_y(enabled: bool) -> void:
+	settings["invert_y"] = enabled
+
+func set_mouse_sensitivity(value: float) -> void:
+	settings["mouse_sensitivity"] = value
+
+func save_settings() -> void:
+	var config = ConfigFile.new()
+	for key in settings.keys():
+		config.set_value("options", key, settings[key])
+	config.save("user://options.cfg")
+
+func load_settings() -> void:
+	var config = ConfigFile.new()
+	if config.load("user://options.cfg") == OK:
+		for key in settings.keys():
+			settings[key] = config.get_value("options", key, settings[key]) 

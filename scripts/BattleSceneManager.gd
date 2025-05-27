@@ -210,13 +210,10 @@ func _update_battle_ui():
 	for i in range(grief_stages.size()):
 		var stage = grief_stages[i]
 		battle_ui_instance.update_status(
-			i,
-			stage.name,
 			stage.hp,
 			stage.max_hp,
 			stage.mp,
 			stage.max_mp,
-			stage.quantity
 		)
 	
 	# Atualiza turnos

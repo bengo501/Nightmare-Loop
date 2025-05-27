@@ -1,81 +1,52 @@
+# ===============================
+# SceneManager.gd
+# ===============================
 extends Node
 
 signal map_changed(map_path: String)
+signal scene_changed(scene_path: String)
 
-# Dictionary to store scene paths
 var scenes = {
 	"main_menu": "res://scenes/ui/main_menu.tscn",
 	"world": "res://scenes/world.tscn",
 	"battle": "res://battle_scene.tscn",
-	"options": "res://scenes/ui/options_menu.tscn",
+	"options_menu": "res://scenes/ui/options_menu.tscn",
 	"pause_menu": "res://scenes/ui/pause_menu.tscn",
-	"hud": "res://scenes/ui/hud.tscn"
+	"hud": "res://scenes/ui/hud.tscn",
+	"game_over": "res://scenes/ui/game_over.tscn",
+	"credits": "res://scenes/ui/credits.tscn"
 }
 
-# Current scene reference
-var current_scene = null
-
-# Dicionário com os caminhos dos mapas
 var maps = {
 	"main": "res://scenes/maps/main_map.tscn",
 	"dungeon": "res://scenes/maps/dungeon_map.tscn",
 	"lobby": "res://scenes/maps/lobby.tscn"
 }
 
-# Mapa atual
+var current_scene = null
 var current_map_name: String = "main"
 
 func _ready():
-	# Initialize with the current scene
 	current_scene = get_tree().current_scene
 
-# Function to change scenes
-func change_scene(scene_name: String, transition_type: String = "fade") -> void:
-	if not scenes.has(scene_name):
-		push_error("Scene not found: " + scene_name)
-		return
-		
-	# Handle different transition types
-	match transition_type:
-		"fade":
-			await fade_transition()
-		"instant":
-			pass
-		"slide":
-			await slide_transition()
-	
-	# Change the scene
-	var new_scene = load(scenes[scene_name]).instantiate()
-	get_tree().root.add_child(new_scene)
-	get_tree().current_scene = new_scene
-	
-	if current_scene:
-		current_scene.queue_free()
-	
-	current_scene = new_scene
-	
-	# Se for a cena do mundo, carrega o mapa inicial
-	if scene_name == "world":
-		change_map("main")
-
-# Transition effects
-func fade_transition() -> void:
-	# Implement fade transition logic here
-	pass
-
-func slide_transition() -> void:
-	# Implement slide transition logic here
-	pass
+func change_scene(scene_name: String):
+	if scenes.has(scene_name):
+		var path = scenes[scene_name]
+		get_tree().change_scene_to_file(path)
+		emit_signal("scene_changed", path)
+	else:
+		push_error("Cena não encontrada: " + scene_name)
 
 func change_map(map_name: String):
 	if maps.has(map_name):
 		current_map_name = map_name
-		map_changed.emit(maps[map_name])
+		var path = maps[map_name]
+		map_changed.emit(path)
 	else:
 		push_error("Mapa não encontrado: " + map_name)
 
-func get_current_map() -> String:
-	return current_map_name
+func get_current_map_path() -> String:
+	return maps.get(current_map_name, "")
 
-func get_map_path(map_name: String) -> String:
-	return maps.get(map_name, "") 
+func get_current_map_name() -> String:
+	return current_map_name

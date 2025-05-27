@@ -4,7 +4,7 @@ extends CharacterBody3D
 @export var max_health: float = 100.0
 @export var speed: float = 3.0
 @export var attack_range: float = 1.5
-@export var attack_damage: float = 20.0
+@export var attack_damage: float = 20.0  # Dano fixo de 20 na exploração 3D
 @export var attack_cooldown: float = 1.0
 @export var ghost_color: Color = Color(1,1,1,0.5)
 @export var ghost_scale: Vector3 = Vector3(1,1,1)

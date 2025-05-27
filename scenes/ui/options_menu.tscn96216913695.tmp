@@ -15,11 +15,8 @@ color = Color(0, 0, 0, 0.5)
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 309.0
-offset_top = 186.0
-offset_right = 349.0
-offset_bottom = 226.0
-scale = Vector2(0.6, 0.6)
+offset_right = 40.0
+offset_bottom = 40.0
 script = ExtResource("1_script")
 
 [node name="MenuContainer" type="VBoxContainer" parent="Control"]

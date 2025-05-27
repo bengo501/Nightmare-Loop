@@ -1,39 +1,49 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://b21pprh3f73tq"]
 
 [node name="GiftsMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="Panel" type="Panel" parent="."]
+layout_mode = 0
 anchor_left = 0.3
 anchor_top = 0.2
 anchor_right = 0.7
 anchor_bottom = 0.8
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 0
 anchor_left = 0.05
 anchor_top = 0.1
 anchor_right = 0.95
 anchor_bottom = 0.8
 
 [node name="Gift1" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
 text = "Negação"
 
 [node name="Gift2" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
 text = "Raiva"
 
 [node name="Gift3" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
 text = "Barganha"
 
 [node name="Gift4" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
 text = "Depressão"
 
 [node name="Gift5" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
 text = "Aceitação"
 
 [node name="CloseButton" type="Button" parent="Panel"]
+layout_mode = 0
 anchor_left = 0.8
 anchor_top = 0.85
 anchor_right = 0.95
 anchor_bottom = 0.95
-text = "Fechar" 
+text = "Fechar"

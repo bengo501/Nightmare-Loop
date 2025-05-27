@@ -70,6 +70,7 @@ signal player_xp_changed(new_xp)                      # Emitido quando o XP muda
 signal player_consciencia_changed(new_value)          # Emitido quando a consciência muda
 signal player_stats_changed(stats)                    # Emitido quando qualquer estatística muda
 signal player_died                                    # Emitido quando o jogador é derrotado
+signal health_changed(new_health: float)
 
 # Estatísticas base do jogador
 var stats = {
@@ -95,6 +96,7 @@ var status_effects = {
 func _ready():
 	add_to_group("player")
 	current_health = max_health
+	emit_signal("health_changed", current_health)
 
 	if is_battle_mode:
 		return # Não buscar por nós específicos de gameplay normal

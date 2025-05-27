@@ -71,10 +71,12 @@ func restart_game():
 	get_tree().paused = false
 	is_paused = false
 	
-	# Reposiciona o jogador se necessário
+	# Reposiciona o jogador e reseta sua vida
 	if player:
-		player.global_position = Vector3(0, 0, 0)  # Ajuste para a posição inicial desejada
-		player.health = player.max_health
+		# Posição inicial do jogador (ajuste conforme necessário)
+		player.global_position = Vector3(0, 0, 0)
+		player.current_health = player.max_health
+		player.emit_signal("health_changed", player.current_health)
 
 # Função para salvar o estado do jogo
 func save_game_state():

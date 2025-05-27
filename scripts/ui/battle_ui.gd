@@ -58,9 +58,9 @@ var grief_quantities = {
 }
 
 # Cenas dos menus
-var skill_menu_scene = preload("res://scenes/ui/SkillMenu.tscn")
-var item_menu_scene = preload("res://scenes/ui/ItemMenu.tscn")
-var talk_menu_scene = preload("res://scenes/ui/TalkMenu.tscn")
+var SkillMenu = preload("res://scenes/ui/SkillMenu.tscn")
+var ItemMenu = preload("res://scenes/ui/ItemMenu.tscn")
+var TalkMenu = preload("res://scenes/ui/TalkMenu.tscn")
 
 # Variáveis para controlar os menus ativos
 var active_menu = null
@@ -100,7 +100,7 @@ func _ready():
 
 func _input(event):
 	if event.is_action_pressed("battle_skill_menu"):
-		get_node("/root/UIManager").show_battle_menu("skill_menu")
+		get_node("/root/UIManager").show_battle_menu("SkillMenu")
 	elif event.is_action_pressed("battle_item_menu"):
 		get_node("/root/UIManager").show_battle_menu("item_menu")
 	elif event.is_action_pressed("battle_talk_menu"):
@@ -172,7 +172,7 @@ func _on_flee_pressed():
 func _on_skill_pressed():
 	print("BattleUI: Botão Skill pressionado")
 	_close_active_menu()
-	get_node("/root/UIManager").show_battle_menu("skill_menu")
+	get_node("/root/UIManager").show_battle_menu("SkillMenu")
 	print("BattleUI: Menu de habilidades aberto")
 	emit_signal("skill_pressed")
 
