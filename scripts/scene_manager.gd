@@ -30,12 +30,21 @@ func _ready():
 	current_scene = get_tree().current_scene
 
 func change_scene(scene_name: String):
+	print("\n[SceneManager] ====== MUDANDO CENA ======")
+	print("[SceneManager] Cena atual: ", get_tree().current_scene.name if get_tree().current_scene else "Nenhuma")
+	print("[SceneManager] Tentando mudar para cena: ", scene_name)
+	
 	if scenes.has(scene_name):
 		var path = scenes[scene_name]
+		print("[SceneManager] Caminho da cena: ", path)
+		print("[SceneManager] Trocando para a cena: " + scene_name + " (" + path + ")")
 		get_tree().change_scene_to_file(path)
 		emit_signal("scene_changed", path)
+		print("[SceneManager] Cena alterada com sucesso!")
 	else:
-		push_error("Cena não encontrada: " + scene_name)
+		push_error("[SceneManager] Cena não encontrada: " + scene_name)
+	
+	print("[SceneManager] ====== FIM DA MUDANÇA DE CENA ======\n")
 
 func change_map(map_name: String):
 	if maps.has(map_name):

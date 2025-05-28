@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ckpg87r0cvd7a" path="res://scripts/ui/options_menu.gd" id="1_script"]
 
 [node name="OptionsMenu" type="CanvasLayer"]
+layer = 10
 
 [node name="Background" type="ColorRect" parent="."]
 anchors_preset = 15

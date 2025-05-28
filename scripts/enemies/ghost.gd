@@ -15,13 +15,18 @@ var current_health: float
 var can_attack: bool = true
 var player_ref: Node3D
 var path_update_timer: float = 0.0
+var is_dying: bool = false
 
 @onready var navigation_agent = $NavigationAgent3D
 @onready var attack_area = $AttackArea
 @onready var mesh = $CSGCylinder3D
 
+signal ghost_defeated
+
 func _ready():
 	current_health = max_health
+	print("[Ghost] Fantasma inicializado com vida: ", current_health, "/", max_health)
+	add_to_group("ghosts")
 	add_to_group("enemy")
 	self.scale = ghost_scale
 	
@@ -47,6 +52,9 @@ func _ready():
 		_update_navigation_target()
 	else:
 		print("⚠️ Jogador não encontrado.")
+		
+	print("[Ghost] Fantasma adicionado ao grupo 'ghosts' e 'enemy'")
+	
 
 func _physics_process(delta):
 	if not player_ref:
@@ -92,34 +100,31 @@ func perform_attack():
 	can_attack = true
 
 func take_damage(damage: float) -> void:
+	if current_health <= 0 or is_dying:  # Se já estiver morto ou morrendo, não faz nada
+		return
+		
 	current_health -= damage
 	print("DEBUG: Ghost tomou ", damage, " de dano! Vida restante: ", current_health)
+	
 	if mesh and mesh.material is ShaderMaterial:
 		mesh.material.set_shader_parameter("ghost_color", Vector4(2, 0, 0, 0.5))
 		await get_tree().create_timer(0.2).timeout
 		mesh.material.set_shader_parameter("ghost_color", Vector4(ghost_color.r, ghost_color.g, ghost_color.b, ghost_color.a))
+	
 	if current_health <= 0:
+		print("[Ghost] Fantasma morreu! Chamando função die()...")
 		die()
 
 func die() -> void:
-	print("DEBUG: Ghost morreu!")
-	# Atributo especial ao morrer
-	_on_special_death()
-	# Salva dados do ghost e troca para a cena de batalha
-	BattleData.enemy_data = {
-		"scene_path": "res://scenes/enemies/ghost1.tscn", # Caminho da cena do ghost
-		"ghost_type": ghost_type,
-		"max_health": max_health,
-		"current_health": current_health,
-		"speed": speed,
-		"attack_range": attack_range,
-		"attack_damage": attack_damage,
-		"attack_cooldown": attack_cooldown,
-		"ghost_color": ghost_color,
-		"ghost_scale": ghost_scale
-	}
-	get_node("/root/SceneManager").change_scene("battle")
-	await get_tree().create_timer(0.5).timeout
+	if is_dying:
+		return
+		
+	is_dying = true
+	print("[Ghost] Fantasma derrotado! Emitindo sinal ghost_defeated...")
+	print("[Ghost] Nome do fantasma: ", name)
+	print("[Ghost] Grupos do fantasma: ", get_groups())
+	ghost_defeated.emit()
+	print("[Ghost] Sinal ghost_defeated emitido!")
 	queue_free()
 
 # Atributo especial de cada tipo
@@ -150,3 +155,13 @@ func _explode():
 		if body.is_in_group("player"):
 			body.take_damage(attack_damage * 2)
 	area.queue_free()
+
+func _connect_ghost_signal():
+	if has_signal("ghost_defeated") and has_node("/root/GameManager"):
+		var gm = get_node("/root/GameManager")
+		if not is_connected("ghost_defeated", Callable(gm, "_on_ghost_defeated")):
+			var error = connect("ghost_defeated", Callable(gm, "_on_ghost_defeated"))
+			if error == OK:
+				print("[Ghost] Sinal ghost_defeated conectado ao GameManager com sucesso!")
+			else:
+				push_error("[Ghost] Erro ao conectar sinal ghost_defeated ao GameManager: " + str(error))

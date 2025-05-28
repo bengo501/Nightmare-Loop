@@ -34,9 +34,33 @@ var settings = {
 }
 
 func _ready():
+	print("[GameManager] Iniciando GameManager...")
 	# Initialize game
 	reset_game()
 	load_settings()
+	
+	# Conectar ao sinal node_added para detectar novos fantasmas
+	get_tree().node_added.connect(_on_node_added)
+	
+	# Conectar ao sinal ghost_defeated de todos os fantasmas já presentes
+	print("[GameManager] Procurando fantasmas na cena...")
+	var ghosts = get_tree().get_nodes_in_group("ghosts")
+	print("[GameManager] Fantasmas encontrados: ", ghosts.size())
+	
+	for ghost in ghosts:
+		print("[GameManager] Conectando sinal ghost_defeated ao fantasma: " + ghost.name)
+		if ghost.has_signal("ghost_defeated"):
+			if not ghost.is_connected("ghost_defeated", _on_ghost_defeated):
+				var error = ghost.ghost_defeated.connect(_on_ghost_defeated)
+				if error != OK:
+					push_error("[GameManager] Erro ao conectar sinal ghost_defeated: " + str(error))
+				else:
+					print("[GameManager] Sinal ghost_defeated conectado com sucesso ao fantasma: " + ghost.name)
+		else:
+			push_error("[GameManager] Fantasma não tem sinal ghost_defeated: " + ghost.name)
+	
+	print("[GameManager] Referência ao state_manager: ", state_manager)
+	print("[GameManager] Referência ao scene_manager: ", scene_manager)
 
 func _process(delta):
 	if state_manager.current_state == state_manager.GameState.PLAYING:
@@ -156,3 +180,44 @@ func load_settings() -> void:
 	if config.load("user://options.cfg") == OK:
 		for key in settings.keys():
 			settings[key] = config.get_value("options", key, settings[key]) 
+
+func _on_ghost_defeated():
+	print("\n[GameManager] ====== SINAL RECEBIDO ======")
+	print("[GameManager] Função _on_ghost_defeated chamada!")
+	print("[GameManager] Estado atual do jogo: ", state_manager.current_state)
+	
+	if not is_instance_valid(state_manager):
+		push_error("[GameManager] Erro: state_manager não é válido!")
+		return
+		
+	if not is_instance_valid(scene_manager):
+		push_error("[GameManager] Erro: scene_manager não é válido!")
+		return
+	
+	print("[GameManager] Fantasma derrotado! Trocando para estado BATTLE...")
+	state_manager.change_state(state_manager.GameState.BATTLE)
+	print("[GameManager] Estado após mudança: ", state_manager.current_state)
+	
+	print("[GameManager] Mudando para a cena de batalha...")
+	scene_manager.change_scene("battle")
+	print("[GameManager] ====== FIM DO SINAL ======\n") 
+
+func _on_node_added(node: Node) -> void:
+	print("[GameManager] node_added chamado para: ", node.name)
+	if node.is_in_group("ghosts"):
+		print("[GameManager] Novo fantasma detectado: " + node.name)
+		node.call_deferred("_connect_ghost_signal")
+
+#func _on_node_added(node: Node) -> void:
+	print("[GameManager] node_added chamado para: ", node.name)
+	if node.is_in_group("ghosts"):
+		print("[GameManager] Novo fantasma detectado: " + node.name)
+		if node.has_signal("ghost_defeated"):
+			if not node.is_connected("ghost_defeated", _on_ghost_defeated):
+				var error = node.ghost_defeated.connect(_on_ghost_defeated)
+				if error != OK:
+					push_error("[GameManager] Erro ao conectar sinal ghost_defeated ao novo fantasma: " + str(error))
+				else:
+					print("[GameManager] Sinal ghost_defeated conectado com sucesso ao novo fantasma: " + node.name)
+		else:
+			push_error("[GameManager] Novo fantasma não tem sinal ghost_defeated: " + node.name) 
