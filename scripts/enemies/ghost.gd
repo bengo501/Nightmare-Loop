@@ -55,6 +55,8 @@ func _ready():
 		
 	print("[Ghost] Fantasma adicionado ao grupo 'ghosts' e 'enemy'")
 	
+	# Conecta o sinal ghost_defeated
+	_connect_ghost_signal()
 
 func _physics_process(delta):
 	if not player_ref:
@@ -123,6 +125,23 @@ func die() -> void:
 	print("[Ghost] Fantasma derrotado! Emitindo sinal ghost_defeated...")
 	print("[Ghost] Nome do fantasma: ", name)
 	print("[Ghost] Grupos do fantasma: ", get_groups())
+	
+	# Store ghost data in BattleData before being destroyed
+	var battle_data = get_node("/root/BattleData")
+	if battle_data:
+		battle_data.enemy_data = {
+			"scene_path": scene_file_path,
+			"ghost_type": ghost_type,
+			"max_health": max_health,
+			"current_health": current_health,
+			"speed": speed,
+			"attack_range": attack_range,
+			"attack_damage": attack_damage,
+			"attack_cooldown": attack_cooldown,
+			"ghost_color": ghost_color,
+			"ghost_scale": ghost_scale
+		}
+	
 	ghost_defeated.emit()
 	print("[Ghost] Sinal ghost_defeated emitido!")
 	queue_free()

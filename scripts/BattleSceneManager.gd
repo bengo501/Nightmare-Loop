@@ -30,14 +30,15 @@ var enemy_hp_label: Label = null
 @onready var battle_ui_instance = get_node_or_null("BattleUI")
 
 func _ready():
-	# Câmera
+	print("[BattleSceneManager] Iniciando cena de batalha...")
+	
+	# Referenciar a câmera de batalha
 	battle_camera = get_node_or_null("BattleCamera")
 	if battle_camera:
 		battle_camera.current = true
-		if player_ref and player_ref.has_node("ThirdPersonCamera"):
-			player_ref.get_node("ThirdPersonCamera").current = false
-		if player_ref and player_ref.has_node("FirstPersonCamera"):
-			player_ref.get_node("FirstPersonCamera").current = false
+		print("[BattleSceneManager] Câmera de batalha ativada")
+	else:
+		push_error("[BattleSceneManager] Câmera de batalha não encontrada!")
 	
 	# UI principal
 	attack_button = get_node_or_null("UI/BattleUI/ActionButtons/AttackButton")
@@ -50,6 +51,7 @@ func _ready():
 	# Instancia o inimigo salvo em BattleData, se existir
 	var enemy_data = BattleData.enemy_data
 	if enemy_data:
+		print("[BattleSceneManager] Dados do fantasma encontrados, instanciando...")
 		var enemy_scene = load(enemy_data.scene_path)
 		enemy_ref = enemy_scene.instantiate()
 		enemy_ref.ghost_type = enemy_data.ghost_type
@@ -69,25 +71,39 @@ func _ready():
 			enemy_ref.global_position = enemy_pos
 		else:
 			enemy_ref.global_position = Vector3(0, 0, 0)
+		print("[BattleSceneManager] Fantasma instanciado com sucesso!")
 		BattleData.enemy_data = null
 	else:
+		print("[BattleSceneManager] Nenhum dado de fantasma encontrado!")
 		enemy_ref = get_node_or_null("Ghost1")
 
 	# Referenciar ou instanciar o player
 	player_ref = get_node_or_null("Player")
 	if not player_ref:
+		print("[BattleSceneManager] Instanciando novo jogador...")
 		var player_scene = preload("res://scenes/player/player.tscn")
 		player_ref = player_scene.instantiate()
 		player_ref.is_battle_mode = true
 		add_child(player_ref)
 		player_ref.global_position = Vector3(0, 0, -2)
+		print("[BattleSceneManager] Jogador instanciado com sucesso!")
 
 	# Mostra a UI de batalha
-	get_node("/root/UIManager").show_ui("battle_ui")
-	battle_ui_instance = get_node("/root/UIManager").battle_ui_instance
+	print("[BattleSceneManager] Mostrando UI de batalha...")
+	var ui_manager = get_node("/root/UIManager")
+	if ui_manager:
+		ui_manager.show_ui("battle_ui")
+		battle_ui_instance = ui_manager.battle_ui_instance
+		
+		# Esconde a HUD normal se existir
+		if ui_manager.hud_instance:
+			ui_manager.hud_instance.visible = false
+	else:
+		push_error("[BattleSceneManager] UIManager não encontrado!")
 	
 	# Conecta os sinais da UI
 	if battle_ui_instance:
+		print("[BattleSceneManager] Conectando sinais da UI de batalha...")
 		if battle_ui_instance.has_signal("flee_pressed"):
 			battle_ui_instance.flee_pressed.connect(_on_flee_pressed)
 		if battle_ui_instance.has_signal("skill_pressed"):
@@ -108,14 +124,12 @@ func _ready():
 			battle_ui_instance.gift_selected.connect(_on_gift_selected)
 		if battle_ui_instance.has_signal("next_pressed"):
 			battle_ui_instance.next_pressed.connect(_on_next_pressed)
-
-	# Esconde a HUD normal se existir
-	if UIManager.hud_instance:
-		UIManager.hud_instance.visible = false
+		print("[BattleSceneManager] Sinais da UI conectados com sucesso!")
 
 	# Atualiza a UI de batalha
 	_update_battle_ui()
 
+	# Inicializa o sistema de turnos
 	is_in_battle = true
 	current_turn = TurnType.PLAYER
 	update_hp_display()
@@ -131,6 +145,8 @@ func _ready():
 	
 	if player_ref.has_method("_on_battle_started"):
 		player_ref._on_battle_started()
+
+	print("[BattleSceneManager] Cena de batalha inicializada com sucesso!")
 
 func start_battle(enemy_instance = null):
 	if is_in_battle:
@@ -154,9 +170,13 @@ func end_battle():
 		third_person_camera.current = true
 	
 	# Esconde a UI de batalha e mostra a HUD normal
-	get_node("/root/UIManager").hide_ui("battle_ui")
-	if UIManager.hud_instance:
-		UIManager.hud_instance.visible = true
+	var ui_manager = get_node("/root/UIManager")
+	if ui_manager:
+		ui_manager.hide_ui("battle_ui")
+		if ui_manager.hud_instance:
+			ui_manager.hud_instance.visible = true
+	else:
+		push_error("[BattleSceneManager] UIManager não encontrado!")
 	
 	# Reativa os controles do player
 	if player_ref:
@@ -173,18 +193,23 @@ func update_turn_indicator():
 	if not turn_indicator:
 		print("[BattleSceneManager] turn_indicator não encontrado!")
 		return
+		
 	if current_turn == TurnType.PLAYER:
-		turn_indicator.text = "Turno do Jogador"
+		turn_indicator.text = "Seu Turno"
+		turn_indicator.modulate = Color(0, 1, 0)  # Verde para turno do jogador
 		if attack_button:
 			attack_button.disabled = false
 			defend_button.disabled = false
 			special_button.disabled = false
+			print("[BattleSceneManager] Botões de ação habilitados")
 	elif current_turn == TurnType.ENEMY:
-		turn_indicator.text = "Turno do Inimigo"
+		turn_indicator.text = "Turno do Fantasma"
+		turn_indicator.modulate = Color(1, 0, 0)  # Vermelho para turno do inimigo
 		if attack_button:
 			attack_button.disabled = true
 			defend_button.disabled = true
 			special_button.disabled = true
+			print("[BattleSceneManager] Botões de ação desabilitados")
 		await get_tree().create_timer(1.0).timeout
 		enemy_turn()
 
@@ -223,15 +248,18 @@ func _on_attack_pressed():
 	if current_turn != TurnType.PLAYER:
 		return
 		
+	print("[BattleSceneManager] Jogador atacou!")
 	# Realiza o ataque
 	var damage = player_ref.attack_damage
 	enemy_ref.take_damage(damage)
+	print("[BattleSceneManager] Fantasma tomou ", damage, " de dano!")
 	
 	# Atualiza o display de HP
 	update_hp_display()
 	
 	# Verifica se o inimigo morreu
 	if enemy_ref.current_health <= 0:
+		print("[BattleSceneManager] Fantasma derrotado!")
 		end_battle()
 		return
 	
@@ -274,23 +302,25 @@ func enemy_turn():
 	if not is_in_battle or current_turn != TurnType.ENEMY:
 		return
 		
+	print("[BattleSceneManager] Turno do fantasma!")
 	# Lógica simples de ataque do inimigo
 	var damage = enemy_ref.attack_damage
 	player_ref.take_damage(damage)
+	print("[BattleSceneManager] Jogador tomou ", damage, " de dano!")
 	
 	# Atualiza o display de HP
 	update_hp_display()
 	
 	# Verifica se o jogador morreu
 	if player_ref.current_health <= 0:
+		print("[BattleSceneManager] Jogador derrotado!")
 		# Implementar lógica de game over
-		print("Game Over!")
 		end_battle()
 		return
 	
 	# Muda para o turno do jogador
 	current_turn = TurnType.PLAYER
-	update_turn_indicator() 
+	update_turn_indicator()
 
 func _on_flee_pressed():
 	end_battle()

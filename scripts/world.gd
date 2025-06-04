@@ -46,13 +46,24 @@ func _process(_delta):
 		toggle_pause()
 
 func toggle_pause():
-	is_paused = !is_paused
-	if is_paused:
+	print("[World] Alternando estado de pausa...")
+	
+	if state_manager.current_state == state_manager.GameState.PLAYING:
+		# Pausa o jogo
+		print("[World] Pausando o jogo...")
 		state_manager.change_state(state_manager.GameState.PAUSED)
 		get_tree().paused = true
+		is_paused = true
+		# Mostra o menu de pause
+		ui_manager.show_ui("pause_menu")
 	else:
+		# Despausa o jogo
+		print("[World] Despausando o jogo...")
 		state_manager.change_state(state_manager.GameState.PLAYING)
 		get_tree().paused = false
+		is_paused = false
+		# Esconde o menu de pause
+		ui_manager.hide_ui("pause_menu")
 
 func _on_player_health_changed(new_health: int):
 	# Atualiza a vida do jogador no GameManager

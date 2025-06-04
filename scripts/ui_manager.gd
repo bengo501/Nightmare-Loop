@@ -22,6 +22,8 @@ var ui_scenes := {
 
 # Gerenciamento de instâncias
 var active_ui := {}
+var battle_ui_instance = null  # Referência específica para a UI de batalha
+var hud_instance = null       # Referência específica para a HUD
 
 @onready var state_manager = get_node("/root/GameStateManager")
 @onready var scene_manager = get_node("/root/SceneManager")
@@ -68,12 +70,28 @@ func show_ui(ui_name: String, data: Dictionary = {}):
 
 		if instance.has_method("setup"):
 			instance.setup(data)
+			
+		# Special handling for specific UI types
+		match ui_name:
+			"battle_ui":
+				battle_ui_instance = instance
+				print("[UIManager] Battle UI instanciada e referenciada")
+			"hud":
+				hud_instance = instance
+				print("[UIManager] HUD instanciada e referenciada")
 
 func hide_ui(ui_name: String):
 	if active_ui.has(ui_name):
 		active_ui[ui_name].queue_free()
 		emit_signal("ui_closed", ui_name)
 		active_ui.erase(ui_name)
+		
+		# Clear specific references
+		match ui_name:
+			"battle_ui":
+				battle_ui_instance = null
+			"hud":
+				hud_instance = null
 
 func hide_all_ui():
 	for key in active_ui.keys():

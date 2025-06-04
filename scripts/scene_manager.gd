@@ -37,6 +37,16 @@ func change_scene(scene_name: String):
 	if scenes.has(scene_name):
 		var path = scenes[scene_name]
 		print("[SceneManager] Caminho da cena: ", path)
+		
+		# Verifica se o arquivo existe
+		var file = FileAccess.open(path, FileAccess.READ)
+		if file:
+			file.close()
+			print("[SceneManager] Arquivo da cena encontrado!")
+		else:
+			push_error("[SceneManager] Erro: Arquivo da cena não encontrado: " + path)
+			return
+		
 		print("[SceneManager] Trocando para a cena: " + scene_name + " (" + path + ")")
 		get_tree().change_scene_to_file(path)
 		emit_signal("scene_changed", path)
