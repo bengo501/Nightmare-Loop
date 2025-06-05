@@ -323,24 +323,90 @@ func enemy_turn():
 	update_turn_indicator()
 
 func _on_flee_pressed():
-	end_battle()
-
-func _on_skill_pressed():
-	# O menu de skills já é gerenciado pela UI
-	pass
-
-func _on_talk_pressed():
-	# O menu de conversas já é gerenciado pela UI
-	pass
-
-func _on_gift_pressed():
-	# O menu de presentes já é gerenciado pela UI
-	pass
-
-func _on_next_pressed():
-	if current_turn == TurnType.PLAYER:
+	print("[BattleSceneManager] Tentando fugir da batalha...")
+	# 50% de chance de fugir com sucesso
+	if randf() < 0.5:
+		print("[BattleSceneManager] Fuga bem sucedida!")
+		end_battle()
+	else:
+		print("[BattleSceneManager] Fuga falhou!")
+		# Muda para o turno do inimigo como punição
 		current_turn = TurnType.ENEMY
 		update_turn_indicator()
+
+func _on_skill_pressed():
+	if current_turn != TurnType.PLAYER:
+		return
+		
+	print("[BattleSceneManager] Abrindo menu de habilidades...")
+	if battle_ui_instance and battle_ui_instance.has_method("show_skill_menu"):
+		battle_ui_instance.show_skill_menu()
+		# Desabilita os botões principais enquanto o submenu está aberto
+		_set_main_buttons_enabled(false)
+
+func _on_talk_pressed():
+	if current_turn != TurnType.PLAYER:
+		return
+		
+	print("[BattleSceneManager] Abrindo menu de conversas...")
+	if battle_ui_instance and battle_ui_instance.has_method("show_talk_menu"):
+		battle_ui_instance.show_talk_menu()
+		# Desabilita os botões principais enquanto o submenu está aberto
+		_set_main_buttons_enabled(false)
+
+func _on_gift_pressed():
+	if current_turn != TurnType.PLAYER:
+		return
+		
+	print("[BattleSceneManager] Abrindo menu de presentes...")
+	if battle_ui_instance and battle_ui_instance.has_method("show_gift_menu"):
+		battle_ui_instance.show_gift_menu()
+		# Desabilita os botões principais enquanto o submenu está aberto
+		_set_main_buttons_enabled(false)
+
+func _on_item_pressed():
+	if current_turn != TurnType.PLAYER:
+		return
+		
+	print("[BattleSceneManager] Abrindo menu de itens...")
+	if battle_ui_instance and battle_ui_instance.has_method("show_item_menu"):
+		battle_ui_instance.show_item_menu()
+		# Desabilita os botões principais enquanto o submenu está aberto
+		_set_main_buttons_enabled(false)
+
+func _on_next_pressed():
+	if current_turn != TurnType.PLAYER:
+		return
+		
+	print("[BattleSceneManager] Passando para o próximo turno...")
+	current_turn = TurnType.ENEMY
+	update_turn_indicator()
+
+# Função auxiliar para habilitar/desabilitar botões principais
+func _set_main_buttons_enabled(enabled: bool):
+	if attack_button:
+		attack_button.disabled = not enabled
+	if defend_button:
+		defend_button.disabled = not enabled
+	if special_button:
+		special_button.disabled = not enabled
+
+# Handlers para fechamento de submenus
+func _on_skill_menu_closed():
+	print("[BattleSceneManager] Menu de habilidades fechado")
+	_set_main_buttons_enabled(true)
+
+func _on_talk_menu_closed():
+	print("[BattleSceneManager] Menu de conversas fechado")
+	_set_main_buttons_enabled(true)
+
+func _on_gift_menu_closed():
+	print("[BattleSceneManager] Menu de presentes fechado")
+	_set_main_buttons_enabled(true)
+
+func _on_item_menu_closed():
+	print("[BattleSceneManager] Menu de itens fechado")
+	_set_main_buttons_enabled(true)
 
 # Skill popup handler
 func _on_skill_selected(skill_data):
@@ -474,10 +540,6 @@ func _on_gift_selected(id):
 	# Após dar o presente, passa para o turno do inimigo
 	current_turn = TurnType.ENEMY
 	update_turn_indicator()
-
-func _on_item_pressed():
-	# O menu de itens já é gerenciado pela UI
-	pass
 
 func _on_item_selected(id):
 	if current_turn != TurnType.PLAYER:
