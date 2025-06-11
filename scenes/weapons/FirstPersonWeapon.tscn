@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dd8fkot5o0beq"]
+
+[ext_resource type="Texture2D" uid="uid://bcqhlm6vjmnhx" path="res://assets/textures/D4BC5953-C99A-43F1-A561-23D964912C34-removebg-preview.png" id="1_qggpg"]
+
+[node name="Weapon" type="Sprite2D"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_qggpg")

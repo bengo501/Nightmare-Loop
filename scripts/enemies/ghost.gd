@@ -23,6 +23,8 @@ var is_dying: bool = false
 @onready var animation_player = $AnimationPlayer
 @onready var battle_data = get_node("/root/BattleData")
 @onready var camera = get_node("/root/Game/Player/Camera3D")
+@onready var collision_shape = $CollisionShape3D
+@onready var battle_ui = $BattleUI
 
 # Cena da label de dano
 var damage_label_scene = preload("res://scenes/ui/DamageLabel.tscn")
@@ -133,9 +135,11 @@ func take_damage(amount: int):
 		animation_player.play("take_damage")
 	
 	# Aplica shake na câmera
-	var camera = get_viewport().get_camera_3d()
-	if camera and camera.get_script().get_path().ends_with("FirstPersonCamera.gd"):
-		camera.shake()
+	var viewport = get_viewport()
+	if viewport:
+		var camera = viewport.get_camera_3d()
+		if camera and camera.get_script() and camera.get_script().resource_path.ends_with("FirstPersonCamera.gd"):
+			camera.shake()
 	
 	# Verifica se morreu
 	if current_health <= 0:
@@ -150,7 +154,6 @@ func attack_player():
 	battle_data.update_player_health(-damage)
 	
 	# Mostra o dano na UI do jogador
-	var battle_ui = get_node("/root/BattleUI")
 	if battle_ui:
 		battle_ui.show_damage_label(damage, true)
 	
@@ -214,3 +217,67 @@ func _connect_ghost_signal():
 				print("[Ghost] Sinal ghost_defeated conectado ao GameManager com sucesso!")
 			else:
 				push_error("[Ghost] Erro ao conectar sinal ghost_defeated ao GameManager: " + str(error))
+
+func start_battle():
+	if is_dying or is_dying:
+		return
+		
+	is_dying = true
+	print("Starting battle with ghost!")
+	
+	# Mostra a UI de batalha
+	if battle_ui:
+		battle_ui.show()
+		battle_ui.update_enemy_health(current_health)
+	
+	# Inicia o ciclo de ataques
+	start_attack_cycle()
+
+func end_battle():
+	is_dying = false
+	
+	# Esconde a UI de batalha
+	if battle_ui:
+		battle_ui.hide()
+	
+	# Para a animação de ataque
+	if animation_player:
+		animation_player.stop()
+
+func start_attack_cycle():
+	if not is_dying:
+		return
+		
+	# Escolhe um ataque aleatório
+	var attacks = ["attack1", "attack2", "attack3"]
+	var current_attack = attacks[randi() % attacks.size()]
+	
+	# Toca a animação do ataque
+	if animation_player:
+		animation_player.play(current_attack)
+	
+	# Aplica o dano após um pequeno delay
+	await get_tree().create_timer(0.5).timeout
+	if not is_dying:
+		apply_attack_damage()
+	
+	# Aguarda a animação terminar
+	await animation_player.animation_finished
+	
+	# Inicia o próximo ciclo após o cooldown
+	if not is_dying:
+		await get_tree().create_timer(attack_cooldown).timeout
+		start_attack_cycle()
+
+func apply_attack_damage():
+	# Notifica o jogador sobre o dano
+	# Aqui você precisará implementar a lógica para aplicar o dano ao jogador
+	print("Ghost attacks for ", attack_damage, " damage!")
+
+func _on_attack_area_body_entered(body):
+	if body.is_in_group("player") and not is_dying:
+		start_battle()
+
+func _on_attack_area_body_exited(body):
+	if body.is_in_group("player") and is_dying:
+		end_battle()

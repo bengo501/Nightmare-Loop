@@ -23,6 +23,8 @@ UIManager="*res://scripts/ui_manager.gd"
 SceneManager="*res://scripts/scene_manager.gd"
 BattleData="*res://scripts/battle_data.gd"
 DamageCounterManager="*res://scripts/managers/damage_counter_manager.gd"
+LucidityManager="*res://scripts/managers/LucidityManager.gd"
+GiftManager="*res://scripts/managers/GiftManager.gd"
 
 [display]
 

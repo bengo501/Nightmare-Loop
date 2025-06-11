@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/camera/FirstPersonCamera.gd" id="1_xxxxx"]
+[ext_resource type="Texture2D" uid="uid://bcqhlm6vjmnhx" path="res://assets/textures/D4BC5953-C99A-43F1-A561-23D964912C34-removebg-preview.png" id="2_xxxxx"]
+
+[node name="FirstPersonCamera" type="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+script = ExtResource("1_xxxxx")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 1
+
+[node name="weapon" type="Sprite2D" parent="CanvasLayer"]
+position = Vector2(576, 748)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_xxxxx")
+visible = false 

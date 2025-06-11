@@ -5,26 +5,26 @@
 [node name="AdditionalGifts" type="Node3D"]
 
 [node name="Negacao2" parent="." instance=ExtResource("1_2k4m3")]
-position = Vector2(-10, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1, 0)
 grief_stage = "negacao"
 item_description = "Outro presente que representa a negação da perda"
 
 [node name="Raiva2" parent="." instance=ExtResource("1_2k4m3")]
-position = Vector2(-5, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1, 0)
 grief_stage = "raiva"
 item_description = "Outro presente que representa a raiva da perda"
 
 [node name="Barganha2" parent="." instance=ExtResource("1_2k4m3")]
-position = Vector2(0, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 grief_stage = "barganha"
 item_description = "Outro presente que representa a barganha da perda"
 
 [node name="Depressao2" parent="." instance=ExtResource("1_2k4m3")]
-position = Vector2(5, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1, 0)
 grief_stage = "depressao"
 item_description = "Outro presente que representa a depressão da perda"
 
 [node name="Aceitacao2" parent="." instance=ExtResource("1_2k4m3")]
-position = Vector2(10, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1, 0)
 grief_stage = "aceitacao"
 item_description = "Outro presente que representa a aceitação da perda"
