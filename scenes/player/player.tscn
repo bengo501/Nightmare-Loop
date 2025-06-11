@@ -4656,7 +4656,6 @@ transform = Transform3D(0.399999, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 transform = Transform3D(2.37963, 0, 0, 0, 2.37963, 0, 0, 0, 2.37963, 0, 0, 0)
 
 [node name="Skeleton3D" type="Skeleton3D" parent="visuals/GamePucrsMC/metarig_001"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 bones/0/name = "spine"
 bones/0/parent = -1
 bones/0/rest = Transform3D(1, 7.10667e-09, 2.30827e-07, 7.04366e-08, 0.942514, -0.334166, -2.19933e-07, 0.334166, 0.942514, -1.02445e-08, 1.11524, -0.0408557)

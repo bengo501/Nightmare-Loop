@@ -296,6 +296,25 @@ func player_use_gift(gift_type):
 	# Deduz o gift usado
 	grief_quantities[gift_type] -= 1
 	
+	# Implementar lógica de efeito do gift
+	match gift_type:
+		"negacao":
+			ghost_stats.hp -= 10
+		"raiva":
+			ghost_stats.hp -= 15
+		"barganha":
+			ghost_stats.hp -= 20
+		"depressao":
+			ghost_stats.hp -= 25
+		"aceitacao":
+			ghost_stats.hp -= 30
+	
+	if ghost_stats.hp <= 0:
+		ghost_stats.hp = 0
+		print("Fantasma derrotado!")
+		emit_signal("battle_ended", true)
+		return
+	
 	end_player_turn()
 
 # Processa a tentativa de fuga do jogador

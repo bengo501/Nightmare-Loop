@@ -26,6 +26,7 @@ var enemy_hp_label: Label = null
 # Referência à UI
 @onready var battle_ui = $BattleUI
 @onready var player_status = $BattleUI/StatusPanel/PlayerStatus
+@onready var battle_manager = $BattleManager
 
 @onready var battle_ui_instance = get_node_or_null("BattleUI")
 
@@ -571,3 +572,44 @@ func update_mp_display():
 		player_status.update_mp(player_ref.current_mp, player_ref.max_mp)
 
 # ... resto do código existente ...
+
+func update_battle_ui():
+	if battle_ui:
+		battle_ui.update_status(
+			battle_manager.player_stats.hp,
+			battle_manager.player_stats.max_hp,
+			battle_manager.player_stats.mp,
+			battle_manager.player_stats.max_mp,
+			battle_manager.ghost_stats.hp,
+			battle_manager.ghost_stats.max_hp
+		)
+		battle_ui.update_turn_indicator(current_turn == TurnType.PLAYER)
+
+func _on_player_turn_started():
+	current_turn = TurnType.PLAYER
+	update_battle_ui()
+	emit_signal("turn_changed", current_turn)
+
+func _on_ghost_turn_started():
+	current_turn = TurnType.ENEMY
+	update_battle_ui()
+	emit_signal("turn_changed", current_turn)
+
+func _on_battle_ended(victory):
+	is_in_battle = false
+	
+	# Desativa a câmera de batalha
+	if battle_camera:
+		battle_camera.current = false
+	
+	# Restaura a câmera anterior
+	if third_person_camera:
+		third_person_camera.current = true
+	
+	# Reativa os controles do player
+	if player_ref:
+		player_ref.can_move = true
+		player_ref.set_process_input(true)
+		player_ref.set_physics_process(true)
+	
+	emit_signal("battle_ended", victory)
