@@ -12,6 +12,18 @@ var is_collected: bool = false
 var can_interact: bool = false
 var battle_data: Node
 
+# Cores para cada estágio do luto
+var grief_colors = {
+	"negacao": Color(0.8, 0.2, 0.2, 1),  # Vermelho escuro
+	"raiva": Color(0.8, 0.4, 0, 1),      # Laranja
+	"barganha": Color(0.8, 0.8, 0.2, 1), # Amarelo
+	"depressao": Color(0.2, 0.2, 0.8, 1), # Azul
+	"aceitacao": Color(0.2, 0.8, 0.2, 1)  # Verde
+}
+
+# Velocidade de rotação
+var rotation_speed = 2.0
+
 func _ready():
 	# Obtém referência ao BattleData singleton
 	battle_data = get_node("/root/BattleData")
@@ -20,18 +32,24 @@ func _ready():
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	
-	# Inicia a animação de flutuação
-	if animation_player:
-		animation_player.play("float")
+	# Configura a cor do material baseado no estágio do luto
+	if grief_stage in grief_colors:
+		var material = StandardMaterial3D.new()
+		material.albedo_color = grief_colors[grief_stage]
+		mesh_instance.material_override = material
 	
 	# Esconde o prompt inicialmente
 	if interaction_prompt:
 		interaction_prompt.visible = false
 
-func _process(_delta):
+func _process(delta):
 	# Verifica interação com a tecla E
 	if can_interact and Input.is_action_just_pressed("interact") and not is_collected:
 		collect()
+	
+	# Rotação contínua
+	if mesh_instance and not is_collected:
+		mesh_instance.rotate_y(rotation_speed * delta)
 	
 	# Adiciona um efeito de flutuação suave
 	if mesh_instance and not is_collected:
@@ -54,11 +72,6 @@ func collect():
 		return
 		
 	is_collected = true
-	
-	# Toca a animação de coleta
-	if animation_player:
-		animation_player.play("collect")
-		await animation_player.animation_finished
 	
 	# Adiciona o item ao inventário usando o BattleData
 	if battle_data:

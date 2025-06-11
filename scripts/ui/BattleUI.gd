@@ -45,6 +45,12 @@ extends Control
 # Referência ao BattleManager
 var battle_manager = null
 
+# Referência ao BattleData
+@onready var battle_data = get_node("/root/BattleData")
+
+# Cena da label de dano
+var damage_label_scene = preload("res://scenes/ui/DamageLabel.tscn")
+
 func _ready():
 	# Conecta os sinais dos botões principais
 	skill_button.pressed.connect(_on_skill_pressed)
@@ -212,4 +218,11 @@ func _on_aceitacao_pressed():
 	hide_all_interface()
 
 func _on_back_from_gifts_pressed():
-	show_main_commands() 
+	show_main_commands()
+
+func show_damage_label(damage: int, is_damage: bool = true):
+	var label = damage_label_scene.instantiate()
+	add_child(label)
+	label.setup(damage, is_damage)
+	# Posiciona a label na parte superior da UI
+	label.position = Vector3(get_viewport_rect().size.x / 2, 100, 0) 

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/DamageLabel.gd" id="1_xxxxx"]
+
+[node name="DamageLabel" type="Label3D"]
+script = ExtResource("1_xxxxx")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+billboard = 1
+text = "0"
+font_size = 64
+modulate = Color(1, 0, 0, 1)  # Vermelho 

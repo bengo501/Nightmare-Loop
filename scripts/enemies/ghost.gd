@@ -20,6 +20,12 @@ var is_dying: bool = false
 @onready var navigation_agent = $NavigationAgent3D
 @onready var attack_area = $AttackArea
 @onready var mesh = $CSGCylinder3D
+@onready var animation_player = $AnimationPlayer
+@onready var battle_data = get_node("/root/BattleData")
+@onready var camera = get_node("/root/Game/Player/Camera3D")
+
+# Cena da label de dano
+var damage_label_scene = preload("res://scenes/ui/DamageLabel.tscn")
 
 signal ghost_defeated
 
@@ -101,49 +107,73 @@ func perform_attack():
 	await get_tree().create_timer(attack_cooldown).timeout
 	can_attack = true
 
-func take_damage(damage: float) -> void:
+func take_damage(amount: int):
 	if current_health <= 0 or is_dying:  # Se já estiver morto ou morrendo, não faz nada
 		return
 		
-	current_health -= damage
-	print("DEBUG: Ghost tomou ", damage, " de dano! Vida restante: ", current_health)
+	current_health -= amount
+	print("DEBUG: Ghost tomou ", amount, " de dano! Vida restante: ", current_health)
 	
+	# Mostra a label de dano
+	var label = damage_label_scene.instantiate()
+	add_child(label)
+	label.setup(amount, true)
+	
+	# Atualiza a vida no BattleData
+	battle_data.update_enemy_health(-amount)
+	
+	# Efeito visual de dano
 	if mesh and mesh.material is ShaderMaterial:
 		mesh.material.set_shader_parameter("ghost_color", Vector4(2, 0, 0, 0.5))
 		await get_tree().create_timer(0.2).timeout
 		mesh.material.set_shader_parameter("ghost_color", Vector4(ghost_color.r, ghost_color.g, ghost_color.b, ghost_color.a))
 	
+	# Toca animação de dano
+	if animation_player:
+		animation_player.play("take_damage")
+	
+	# Aplica shake na câmera
+	var camera = get_viewport().get_camera_3d()
+	if camera and camera.get_script().get_path().ends_with("FirstPersonCamera.gd"):
+		camera.shake()
+	
+	# Verifica se morreu
 	if current_health <= 0:
 		print("[Ghost] Fantasma morreu! Chamando função die()...")
 		die()
+
+func attack_player():
+	# Lógica de ataque
+	var damage = 10  # Exemplo de dano fixo
+	
+	# Atualiza a vida do jogador no BattleData
+	battle_data.update_player_health(-damage)
+	
+	# Mostra o dano na UI do jogador
+	var battle_ui = get_node("/root/BattleUI")
+	if battle_ui:
+		battle_ui.show_damage_label(damage, true)
+	
+	# Toca animação de ataque
+	if animation_player:
+		animation_player.play("attack")
 
 func die() -> void:
 	if is_dying:
 		return
 		
 	is_dying = true
-	print("[Ghost] Fantasma derrotado! Emitindo sinal ghost_defeated...")
-	print("[Ghost] Nome do fantasma: ", name)
-	print("[Ghost] Grupos do fantasma: ", get_groups())
+	print("[Ghost] Iniciando sequência de morte...")
 	
-	# Store ghost data in BattleData before being destroyed
-	var battle_data = get_node("/root/BattleData")
-	if battle_data:
-		battle_data.enemy_data = {
-			"scene_path": scene_file_path,
-			"ghost_type": ghost_type,
-			"max_health": max_health,
-			"current_health": current_health,
-			"speed": speed,
-			"attack_range": attack_range,
-			"attack_damage": attack_damage,
-			"attack_cooldown": attack_cooldown,
-			"ghost_color": ghost_color,
-			"ghost_scale": ghost_scale
-		}
+	# Toca animação de morte
+	if animation_player:
+		animation_player.play("die")
+		await animation_player.animation_finished
 	
-	ghost_defeated.emit()
-	print("[Ghost] Sinal ghost_defeated emitido!")
+	# Emite sinal de derrota
+	emit_signal("ghost_defeated")
+	
+	# Remove o fantasma da cena
 	queue_free()
 
 # Atributo especial de cada tipo

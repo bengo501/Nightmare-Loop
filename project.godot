@@ -22,6 +22,7 @@ GameStateManager="*res://scripts/game_state_manager.gd"
 UIManager="*res://scripts/ui_manager.gd"
 SceneManager="*res://scripts/scene_manager.gd"
 BattleData="*res://scripts/battle_data.gd"
+DamageCounterManager="*res://scripts/managers/damage_counter_manager.gd"
 
 [display]
 

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://ehkwbtbn76ry"]
+
+[ext_resource type="Script" uid="uid://bns5ou7yiumj1" path="res://scripts/ui/DamageCounter.gd" id="1_2k4m3"]
+
+[node name="DamageCounter" type="Node3D"]
+script = ExtResource("1_2k4m3")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+billboard = 1
+outline_size = 2
