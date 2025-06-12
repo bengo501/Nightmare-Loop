@@ -10,7 +10,7 @@ extends Area3D
 
 var is_collected: bool = false
 var can_interact: bool = false
-var battle_data: Node
+var gift_manager: Node
 
 # Cores para cada estágio do luto
 var grief_colors = {
@@ -25,8 +25,8 @@ var grief_colors = {
 var rotation_speed = 2.0
 
 func _ready():
-	# Obtém referência ao BattleData singleton
-	battle_data = get_node("/root/BattleData")
+	# Obtém referência ao GiftManager singleton
+	gift_manager = get_node("/root/GiftManager")
 	
 	# Conecta os sinais
 	body_entered.connect(_on_body_entered)
@@ -73,17 +73,12 @@ func collect():
 		
 	is_collected = true
 	
-	# Adiciona o item ao inventário usando o BattleData
-	if battle_data:
-		battle_data.add_gift(grief_stage)
+	# Adiciona o item ao inventário usando o GiftManager
+	if gift_manager:
+		gift_manager.add_gift(grief_stage)
 		print("Presente coletado: ", grief_stage)
 	else:
-		print("Erro: BattleData não encontrado!")
-	
-	# Atualiza a UI se necessário
-	var ui_manager = get_node("/root/UiManager")
-	if ui_manager:
-		ui_manager.update_gift_ui()
+		print("Erro: GiftManager não encontrado!")
 	
 	# Remove o item da cena
 	queue_free()

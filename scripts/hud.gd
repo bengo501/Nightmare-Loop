@@ -78,12 +78,14 @@ func _ready():
 	var lucidity_manager = get_node("/root/LucidityManager")
 	if lucidity_manager:
 		lucidity_manager.connect("lucidity_points_changed", _on_lucidity_points_changed)
-		lucidity_manager.connect("gifts_changed", _on_gifts_changed)
 	
 	# Conectar ao GiftManager
 	var gift_manager = get_node("/root/GiftManager")
 	if gift_manager:
-		gift_manager.connect("gift_collected", Callable(self, "_on_gift_collected"))
+		gift_manager.connect("gift_collected", _on_gift_collected)
+		gift_manager.connect("gifts_changed", _on_gifts_changed)
+		# Inicializa os gifts com os valores atuais
+		set_all_gifts(gift_manager.get_all_gifts())
 	
 	update_hud()
 

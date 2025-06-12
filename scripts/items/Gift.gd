@@ -1,7 +1,7 @@
 extends Area3D
 
 @onready var mesh: MeshInstance3D = $MeshInstance3D
-@onready var point_light: PointLight3D = $PointLight3D
+@onready var point_light: OmniLight3D = $OmniLight3D
 @onready var interaction_prompt: Label3D = $InteractionPrompt/Label3D
 
 var can_interact: bool = false
@@ -39,6 +39,9 @@ func _ready():
     # Configurar cor da luz baseada no tipo de gift
     if gift_type in gift_colors:
         point_light.light_color = gift_colors[gift_type]
+        if mesh.material_override:
+            mesh.material_override.albedo_color = gift_colors[gift_type]
+            mesh.material_override.emission = gift_colors[gift_type]
 
 func _process(_delta):
     if can_interact and Input.is_action_just_pressed("interact") and not is_collected:
@@ -56,6 +59,7 @@ func _on_Gift_body_exited(body):
 
 func collect():
     is_collected = true
+    interaction_prompt.visible = false
     
     # Adicionar gift ao GiftManager
     var gift_manager = get_node("/root/GiftManager")

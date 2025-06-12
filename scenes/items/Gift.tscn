@@ -18,7 +18,7 @@ gift_type = "negacao"
 mesh = SubResource("SphereMesh3D_xxxxx")
 surface_material_override/0 = ExtResource("2_xxxxx")
 
-[node name="PointLight3D" type="PointLight3D" parent="."]
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
 light_color = Color(0.8, 0.2, 0.2, 1)
 light_energy = 2.0
 omni_range = 3.0
