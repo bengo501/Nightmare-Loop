@@ -21,7 +21,7 @@ var current_battle_data: Dictionary = {
 	"current_turn": "player"
 }
 
-var enemy_data = null
+var enemy_data = null 
 
 func _ready():
 	print("BattleData singleton initialized")

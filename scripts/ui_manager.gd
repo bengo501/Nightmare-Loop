@@ -40,22 +40,19 @@ func _on_state_changed(new_state):
 			show_ui("main_menu")
 		state_manager.GameState.PLAYING:
 			show_ui("hud")
-		state_manager.GameState.PAUSED:
-			show_ui("pause_menu")
+		#state_manager.GameState.PAUSED:
+			#show_ui("pause_menu")
 		state_manager.GameState.GAME_OVER:
 			show_ui("game_over")
 		state_manager.GameState.BATTLE:
 			show_ui("battle_ui")
-		state_manager.GameState.GIFTS:
-			show_ui("gifts_menu")
+		state_manager.GameState.DIALOGUE:
+			# Mantém a UI atual durante diálogos
+			pass
 		state_manager.GameState.INVENTORY:
 			show_ui("item_menu")
 		state_manager.GameState.SKILL_TREE:
 			show_ui("skill_tree")
-		state_manager.GameState.CREDITS:
-			show_ui("credits")
-		state_manager.GameState.OPTIONS:
-			show_ui("options_menu")
 
 func show_ui(ui_name: String, data: Dictionary = {}):
 	if active_ui.has(ui_name):

@@ -30,6 +30,16 @@ script = ExtResource("1_xxxxx")
 transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 0, 10, 0)
 shadow_enabled = true
 
+[node name="DirectionalLight3D3" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 26.1499, 10, -15.0977)
+light_energy = 0.2
+shadow_enabled = true
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, -18.0102, 10, 10.3982)
+light_energy = 0.2
+shadow_enabled = true
+
 [node name="Environment" type="Node3D" parent="."]
 
 [node name="Floor" type="CSGBox3D" parent="Environment"]
@@ -86,7 +96,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 10)
 [node name="Node" type="Node" parent="."]
 
 [node name="GriefGifts" parent="." instance=ExtResource("9_7r4gi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.12269, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.12269, 0, 13.361)
+
+[node name="GriefGifts3" parent="." instance=ExtResource("9_7r4gi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.12269, 0, 2.25806)
+
+[node name="GriefGifts2" parent="." instance=ExtResource("9_7r4gi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.12269, 0, -8.5535)
 
 [node name="LucidityPoint" parent="." instance=ExtResource("10_w7kh3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5498, 1.40161, 6.46555)
+
+[node name="LucidityPoint2" parent="." instance=ExtResource("10_w7kh3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.5176, 1.40161, -16.0113)
+
+[node name="LucidityPoint3" parent="." instance=ExtResource("10_w7kh3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.8849, 1.40161, 8.98524)
+
+[node name="LucidityPoint4" parent="." instance=ExtResource("10_w7kh3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5498, 1.40161, -13.2402)

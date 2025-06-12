@@ -4,7 +4,7 @@ var shake_amount = 0.0
 var shake_time = 0.0
 
 # Referência para a arma
-@onready var weapon = $weapon
+@onready var weapon = $CanvasLayer/weapon
 
 # Variáveis para a animação da arma
 var weapon_draw_time = 0.0

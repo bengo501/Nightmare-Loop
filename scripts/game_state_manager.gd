@@ -8,7 +8,8 @@ enum GameState {
 	GAME_OVER,
 	BATTLE,
 	DIALOGUE,
-	INVENTORY
+	INVENTORY,
+	SKILL_TREE
 }
 
 # Current game state
@@ -53,6 +54,9 @@ func change_state(new_state: GameState) -> void:
 		GameState.INVENTORY:
 			print("[GameStateManager] Executando lógica do estado INVENTORY")
 			handle_inventory()
+		GameState.SKILL_TREE:
+			print("[GameStateManager] Executando lógica do estado SKILL_TREE")
+			handle_skill_tree()
 	
 	print("[GameStateManager] Estado alterado com sucesso para: ", current_state)
 	print("[GameStateManager] ====== FIM DA MUDANÇA DE ESTADO ======\n")
@@ -84,4 +88,8 @@ func handle_dialogue() -> void:
 
 func handle_inventory() -> void:
 	# Pausa o jogo durante inventário
+	get_tree().paused = true
+
+func handle_skill_tree() -> void:
+	# Pausa o jogo durante a árvore de habilidades
 	get_tree().paused = true 

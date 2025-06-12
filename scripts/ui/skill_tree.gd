@@ -7,6 +7,8 @@ signal skill_upgraded(branch, level)
 var skill_points := 3
 var is_visible := false
 
+@onready var state_manager = get_node("/root/GameStateManager")
+
 func _ready():
 	# Atualiza o texto dos pontos de habilidade
 	$Panel/SkillPoints.text = "Pontos de Habilidade: %d" % skill_points
@@ -39,15 +41,16 @@ func toggle_skill_tree():
 		hide()
 		get_tree().paused = false
 		is_visible = false
+		state_manager.change_state(state_manager.GameState.PLAYING)
 		# Mostra a HUD do player se existir
 		var hud = get_node_or_null("/root/UIManager/hud_instance")
 		if hud:
 			hud.visible = true
 	else:
 		show()
-		move_to_front()
 		get_tree().paused = true
 		is_visible = true
+		state_manager.change_state(state_manager.GameState.SKILL_TREE)
 		# Esconde a HUD do player se existir
 		var hud = get_node_or_null("/root/UIManager/hud_instance")
 		if hud:
@@ -57,6 +60,11 @@ func _on_close_pressed():
 	hide()
 	get_tree().paused = false
 	is_visible = false
+	state_manager.change_state(state_manager.GameState.PLAYING)
+	# Mostra a HUD do player se existir
+	var hud = get_node_or_null("/root/UIManager/hud_instance")
+	if hud:
+		hud.visible = true
 
 # Exemplo de handlers para cada botão de skill
 func _on_speed1_pressed():
@@ -100,8 +108,9 @@ func _upgrade_skill(branch: String, level: int):
 # Função para mostrar o menu (pode ser chamada pelo UIManager)
 func show_menu():
 	show()
-	move_to_front()
 	get_tree().paused = true
+	is_visible = true
+	state_manager.change_state(state_manager.GameState.SKILL_TREE)
 	$Panel/SkillPoints.text = "Pontos de Habilidade: %d" % skill_points
 	# Esconde a HUD do player se existir
 	var hud = get_node_or_null("/root/UIManager/hud_instance")

@@ -26,6 +26,8 @@ var defense_bonus: float = 1.0
 @onready var mouse_ray = $ThirdPersonCamera/MouseRay
 # Ajuste o caminho do HUD conforme sua cena:
 @onready var hud = get_node_or_null("/root/World/UI/HUD")
+@onready var damage_indicator_scene = preload("res://scenes/ui/damage_indicator.tscn")
+@onready var camera_shake_script = preload("res://scripts/camera/camera_shake.gd")
 
 # === ESTADOS ===
 var first_person_mode = false
@@ -104,8 +106,24 @@ func _ready():
 	# Tenta encontrar os nós, se existirem
 	if has_node("../ThirdPersonCamera"):
 		third_person_camera = get_node("../ThirdPersonCamera")
+		# Adiciona o script de shake à câmera de terceira pessoa
+		if not third_person_camera.has_node("CameraShake"):
+			var camera_shake = Node3D.new()
+			camera_shake.set_script(camera_shake_script)
+			camera_shake.name = "CameraShake"
+			third_person_camera.add_child(camera_shake)
+			print("Adicionado CameraShake à câmera de terceira pessoa")
+	
 	if has_node("FirstPersonCamera"):
 		first_person_camera = get_node("FirstPersonCamera")
+		# Adiciona o script de shake à câmera de primeira pessoa
+		if not first_person_camera.has_node("CameraShake"):
+			var camera_shake = Node3D.new()
+			camera_shake.set_script(camera_shake_script)
+			camera_shake.name = "CameraShake"
+			first_person_camera.add_child(camera_shake)
+			print("Adicionado CameraShake à câmera de primeira pessoa")
+		
 		# Arma 2D como TextureRect dentro da câmera de primeira pessoa
 		if first_person_camera.has_node("weapon"):
 			weapon = first_person_camera.get_node("weapon")
@@ -437,26 +455,41 @@ func die() -> void:
 	queue_free()
 
 # Função para receber dano
-func take_damage(amount):
-	# Calcula o dano final considerando a defesa e efeitos de status
-	var final_damage = max(1, amount - stats.defesa + status_effects.defesa_reduzida)
-	stats.hp -= final_damage
-	
-	# Garante que o HP não fique negativo
-	stats.hp = max(0, stats.hp)
-	
-	# Emite o sinal de mudança de HP
+func take_damage(amount: float):
+	var actual_damage = amount * (1.0 - (stats.defesa / 100.0))
+	stats.hp = max(0, stats.hp - actual_damage)
+	emit_signal("health_changed", stats.hp)
 	emit_signal("player_health_changed", stats.hp, stats.max_hp)
 	
-	# Toca a animação de dano
-	if animation_player:
-		animation_player.play("hurt")
+	# Mostra o indicador de dano
+	var damage_indicator = damage_indicator_scene.instantiate()
+	add_child(damage_indicator)
+	damage_indicator.set_damage(int(actual_damage))
 	
-	# Verifica se o jogador foi derrotado
+	# Aplica o efeito de shake nas câmeras
+	print("Tentando aplicar shake nas câmeras...")
+	
+	# Shake na câmera de terceira pessoa
+	if third_person_camera:
+		var third_person_shake = third_person_camera.get_node_or_null("CameraShake")
+		if third_person_shake:
+			print("Aplicando shake na câmera de terceira pessoa")
+			third_person_shake.start_shake()
+		else:
+			print("CameraShake não encontrado na câmera de terceira pessoa")
+	
+	# Shake na câmera de primeira pessoa
+	if first_person_camera:
+		var first_person_shake = first_person_camera.get_node_or_null("CameraShake")
+		if first_person_shake:
+			print("Aplicando shake na câmera de primeira pessoa")
+			first_person_shake.start_shake()
+		else:
+			print("CameraShake não encontrado na câmera de primeira pessoa")
+	
 	if stats.hp <= 0:
-		die()
-	
-	print("Jogador recebeu ", final_damage, " de dano. HP restante: ", stats.hp)
+		emit_signal("player_died")
+		game_over.emit()
 
 func _process(delta):
 	if not first_person_mode and third_person_camera:
