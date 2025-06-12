@@ -8,7 +8,7 @@ extends CanvasLayer
 @onready var player_icon = $TopBar/PlayerIcon
 @onready var weapon_icon = $WeaponPanel/WeaponInfo/WeaponInfo/WeaponIcon
 @onready var stage_name_label = $TopBar/TopBar_ScoreLevelVBox/StageNameLabel
-@onready var minimap = $TopBar/TopBar_ScoreLevelVBox/MinimapPanel/Minimap
+@onready var minimap = $TopBar/TopBar_ScoreLevelVBox/MinimapPanel/Minimap/Minimap
 @onready var score_label = $TopBar/TopBar_ScoreLevelVBox/ScoreLabel
 @onready var level_label = $TopBar/TopBar_ScoreLevelVBox/LevelLabel
 @onready var lucidity_points_label = $TopBar/TopBar_ScoreLevelVBox/LucidityPointsLabel
