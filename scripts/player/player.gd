@@ -24,8 +24,8 @@ var defense_bonus: float = 1.0
 @onready var laser_line = $FirstPersonCamera/LaseLine
 @onready var crosshair = $Crosshair
 @onready var mouse_ray = $ThirdPersonCamera/MouseRay
-# Ajuste o caminho do HUD conforme sua cena:
-@onready var hud = get_node_or_null("/root/World/UI/HUD")
+# Ajuste o caminho do HUD para usar o UIManager:
+@onready var hud = get_node("/root/UIManager").hud_instance
 @onready var damage_indicator_scene = preload("res://scenes/ui/damage_indicator.tscn")
 @onready var camera_shake_script = preload("res://scripts/camera/camera_shake.gd")
 
@@ -135,11 +135,6 @@ func _ready():
 		visuals = get_node("visuals")
 		if visuals.has_node("GamePucrsMC/AnimationPlayer"):
 			animation_player = visuals.get_node("GamePucrsMC/AnimationPlayer")
-	# HUD e crosshair podem estar em outro CanvasLayer, ajuste o caminho conforme sua cena
-	if has_node("../CanvasLayer/HUD"):
-		hud = get_node("../CanvasLayer/HUD")
-		if hud.has_node("Crosshair"):
-			crosshair = hud.get_node("Crosshair")
 	# MouseRay pode estar na câmera de terceira pessoa
 	if third_person_camera and third_person_camera.has_node("MouseRay"):
 		mouse_ray = third_person_camera.get_node("MouseRay")

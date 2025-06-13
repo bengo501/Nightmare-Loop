@@ -48,7 +48,26 @@ func change_scene(scene_name: String):
 			return
 		
 		print("[SceneManager] Trocando para a cena: " + scene_name + " (" + path + ")")
-		get_tree().change_scene_to_file(path)
+		
+		# Carrega a cena
+		var scene_resource = load(path)
+		if scene_resource == null:
+			push_error("[SceneManager] Erro: Não foi possível carregar a cena: " + path)
+			return
+			
+		# Limpa a cena atual
+		if get_tree().current_scene:
+			get_tree().current_scene.queue_free()
+		
+		# Instancia e adiciona a nova cena
+		var new_scene = scene_resource.instantiate()
+		if new_scene == null:
+			push_error("[SceneManager] Erro: Não foi possível instanciar a cena: " + path)
+			return
+			
+		get_tree().root.add_child(new_scene)
+		get_tree().current_scene = new_scene
+		
 		emit_signal("scene_changed", path)
 		print("[SceneManager] Cena alterada com sucesso!")
 	else:

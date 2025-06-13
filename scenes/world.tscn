@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://ytaetvi5ig5r" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Couch/Couch.fbx_Scene.fbm/Couch.fbx.fbx" id="7_q5onr"]
 [ext_resource type="PackedScene" uid="uid://cj47gniftse4d" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Dresser/Dresser.fbx_Scene/Dresser.fbx_Scene.fbx" id="8_jhx03"]
 [ext_resource type="PackedScene" uid="uid://c8q7v4j6y5n3q" path="res://scenes/items/GriefGifts.tscn" id="9_7r4gi"]
-[ext_resource type="PackedScene" uid="uid://c4rvwq52s3ajv" path="res://scenes/ui/hud.tscn" id="10_w7kh3"]
+[ext_resource type="PackedScene" uid="uid://c4rvwq52s3ajv" path="res://scenes/items/LucidityPoint.tscn" id="10_w7kh3"]
 [ext_resource type="PackedScene" uid="uid://4u41su83a4ma" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Boombox_/Boombox.fbx_Scene/Boombox.fbx_Scene.fbx" id="17_1dgkn"]
 [ext_resource type="PackedScene" uid="uid://blm23tt5thlmu" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Bathroom Sink/BathroomSink.fbx_Scene/BathroomSink.fbx_Scene.fbx" id="27_rup4s"]
 
@@ -105,17 +105,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.12269, 0, 2.25806)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.12269, 0, -8.5535)
 
 [node name="LucidityPoint" parent="." instance=ExtResource("10_w7kh3")]
-offset = Vector2(-1.5498, 1.40161)
-transform = Transform2D(1, 0, 0, 1, -1.5498, 1.40161)
-
-[node name="LucidityPoint2" parent="." instance=ExtResource("10_w7kh3")]
-offset = Vector2(15.5176, 1.40161)
-transform = Transform2D(1, 0, 0, 1, 15.5176, 1.40161)
-
-[node name="LucidityPoint3" parent="." instance=ExtResource("10_w7kh3")]
-offset = Vector2(-10.8849, 1.40161)
-transform = Transform2D(1, 0, 0, 1, -10.8849, 1.40161)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8704, 0.693841, 0)
 
 [node name="LucidityPoint4" parent="." instance=ExtResource("10_w7kh3")]
-offset = Vector2(-1.5498, 1.40161)
-transform = Transform2D(1, 0, 0, 1, -1.5498, 1.40161)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8704, 0.693841, -13.8082)
+
+[node name="LucidityPoint2" parent="." instance=ExtResource("10_w7kh3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8704, 0.693841, 13.2942)
+
+[node name="LucidityPoint3" parent="." instance=ExtResource("10_w7kh3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.19697, 0.693841, 13.2942)
+
+[node name="LucidityPoint8" parent="." instance=ExtResource("10_w7kh3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.19697, 0.693841, -16.0637)
+
+[node name="LucidityPoint5" parent="." instance=ExtResource("10_w7kh3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.3391, 0.693841, 13.2942)
+
+[node name="LucidityPoint6" parent="." instance=ExtResource("10_w7kh3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.3391, 0.693841, -1.31485)
+
+[node name="LucidityPoint7" parent="." instance=ExtResource("10_w7kh3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.3391, 0.693841, -12.5766)

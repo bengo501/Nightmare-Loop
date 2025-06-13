@@ -30,6 +30,15 @@ var hud_instance = null       # Referência específica para a HUD
 
 func _ready():
 	state_manager.connect("state_changed", _on_state_changed)
+	scene_manager.connect("scene_changed", _on_scene_changed)
+	if state_manager.current_state == state_manager.GameState.PLAYING:
+		show_ui("hud")
+
+func _on_scene_changed(_scene_path: String):
+	# Limpa todas as UIs ao mudar de cena
+	hide_all_ui()
+	
+	# Se estiver no estado PLAYING, mostra a HUD
 	if state_manager.current_state == state_manager.GameState.PLAYING:
 		show_ui("hud")
 
@@ -40,8 +49,6 @@ func _on_state_changed(new_state):
 			show_ui("main_menu")
 		state_manager.GameState.PLAYING:
 			show_ui("hud")
-		#state_manager.GameState.PAUSED:
-			#show_ui("pause_menu")
 		state_manager.GameState.GAME_OVER:
 			show_ui("game_over")
 		state_manager.GameState.BATTLE:

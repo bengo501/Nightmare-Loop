@@ -6,7 +6,6 @@ extends Control
 @onready var ui_manager = get_node("/root/UIManager")
 @onready var game_manager = get_node("/root/GameManager")
 
-
 func _ready():
 	$NewGameButton.pressed.connect(_on_new_game_pressed)
 	$OptionsButton.pressed.connect(_on_options_pressed)
@@ -14,10 +13,17 @@ func _ready():
 	$QuitButton.pressed.connect(_on_quit_pressed)
 
 func _on_new_game_pressed():
+	# Primeiro reseta o jogo
 	game_manager.reset_game()
-	state_manager.change_state(state_manager.GameState.PLAYING)
+	
+	# Esconde o menu atual
+	queue_free()
+	
+	# Muda a cena
 	scene_manager.change_scene("world")
-	ui_manager.hide_ui("main_menu")
+	
+	# Muda o estado para PLAYING
+	state_manager.change_state(state_manager.GameState.PLAYING)
 
 func _on_options_pressed():
 	ui_manager.hide_ui("main_menu")
