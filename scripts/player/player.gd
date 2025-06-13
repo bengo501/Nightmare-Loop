@@ -155,6 +155,9 @@ func _ready():
 	# Configurações iniciais
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
+	if hud:
+		connect("player_health_changed", Callable(hud, "set_health"))
+
 func setup_attack_system():
 	attack_timer = Timer.new()
 	attack_timer.wait_time = attack_cooldown

@@ -1,7 +1,7 @@
 extends SubViewport
 
 @onready var camera = $MinimapCamera
-@onready var player = get_node("/root/GameManager/Player")
+@onready var player = $World/Player
 
 # Configurações do minimapa
 var camera_height = 15.0  # Reduzido para uma visão mais próxima

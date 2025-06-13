@@ -1,12 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://c4rvwq52s3ajv"]
+[gd_scene load_steps=13 format=3 uid="uid://c4rvwq52s3ajv"]
 
 [ext_resource type="Script" uid="uid://dkqmts8vihtpp" path="res://scripts/hud.gd" id="1_xxxxx"]
 [ext_resource type="Texture2D" uid="uid://dtcm260hhtsna" path="res://assets/textures/portrait-removebg-preview.png" id="2_bo48s"]
-[ext_resource type="PackedScene" path="res://scenes/ui/minimap.tscn" id="2_xxxxx"]
+[ext_resource type="PackedScene" uid="uid://xv4cs6ahki25" path="res://scenes/ui/minimap.tscn" id="2_xxxxx"]
 [ext_resource type="Texture2D" uid="uid://cwfunle18xgoi" path="res://assets/textures/pngwing.com.png" id="4_8qguk"]
 [ext_resource type="Texture2D" uid="uid://crir3d3ao6rw5" path="res://assets/textures/pngimg.com_-_fallout_PNG49.png" id="4_gss2c"]
 [ext_resource type="Texture2D" uid="uid://b5cykxieqbnuf" path="res://assets/textures/compass.png" id="5_136eg"]
 [ext_resource type="Texture2D" uid="uid://d02xvpntngw1w" path="res://assets/textures/crosshair186.png" id="5_h022r"]
+[ext_resource type="Texture2D" uid="uid://f6ljqq20g04q" path="res://assets/textures/bliue.png" id="6_0h1do"]
+[ext_resource type="Texture2D" uid="uid://rb8lo3ebpve5" path="res://assets/textures/green.png" id="7_4d46k"]
+[ext_resource type="Texture2D" uid="uid://bnvka361m47nr" path="res://assets/textures/gray.png" id="8_erw67"]
+[ext_resource type="Texture2D" uid="uid://i4bmd8s3pmus" path="res://assets/textures/purple.png" id="9_gonto"]
+[ext_resource type="Texture2D" uid="uid://bfgja3vtm5igk" path="res://assets/textures/yellow.png" id="10_cwdlq"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_xxxxx")
@@ -267,7 +272,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("5_h022r")
 
-[node name="GiftsPanel" type="Panel" parent="."]
+[node name="GiftsPainel" type="Panel" parent="."]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -280,7 +285,7 @@ offset_bottom = -173.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="GiftsTitle" type="Label" parent="GiftsPanel"]
+[node name="GiftsTitle" type="Label" parent="GiftsPainel"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -293,7 +298,7 @@ grow_horizontal = 2
 text = "Gifts"
 horizontal_alignment = 1
 
-[node name="GiftsList" type="VBoxContainer" parent="GiftsPanel"]
+[node name="GiftsList" type="VBoxContainer" parent="GiftsPainel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -302,30 +307,65 @@ offset_top = 40.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="NegacaoLabel" type="Label" parent="GiftsPanel/GiftsList"]
+[node name="NegacaoHBox" type="HBoxContainer" parent="GiftsPainel/GiftsList"]
+layout_mode = 2
+
+[node name="NegacaoIcon" type="TextureRect" parent="GiftsPainel/GiftsList/NegacaoHBox"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("6_0h1do")
+
+[node name="NegacaoLabel" type="Label" parent="GiftsPainel/GiftsList/NegacaoHBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8, 0.2, 0.2, 1)
-text = "Negação: 0"
 
-[node name="RaivaLabel" type="Label" parent="GiftsPanel/GiftsList"]
+[node name="RaivaHBox" type="HBoxContainer" parent="GiftsPainel/GiftsList"]
+layout_mode = 2
+
+[node name="RaivaIcon" type="TextureRect" parent="GiftsPainel/GiftsList/RaivaHBox"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("7_4d46k")
+
+[node name="RaivaLabel" type="Label" parent="GiftsPainel/GiftsList/RaivaHBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.4, 0, 1)
-text = "Raiva: 0"
 
-[node name="BarganhaLabel" type="Label" parent="GiftsPanel/GiftsList"]
+[node name="BarganhaHBox" type="HBoxContainer" parent="GiftsPainel/GiftsList"]
+layout_mode = 2
+
+[node name="BarganhaIcon" type="TextureRect" parent="GiftsPainel/GiftsList/BarganhaHBox"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("8_erw67")
+
+[node name="BarganhaLabel" type="Label" parent="GiftsPainel/GiftsList/BarganhaHBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8, 0.8, 0.2, 1)
-text = "Barganha: 0"
 
-[node name="DepressaoLabel" type="Label" parent="GiftsPanel/GiftsList"]
+[node name="DepressaoHBox" type="HBoxContainer" parent="GiftsPainel/GiftsList"]
+layout_mode = 2
+
+[node name="DepressaoIcon" type="TextureRect" parent="GiftsPainel/GiftsList/DepressaoHBox"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("9_gonto")
+
+[node name="DepressaoLabel" type="Label" parent="GiftsPainel/GiftsList/DepressaoHBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.4, 0.2, 0.8, 1)
-text = "Depressão: 0"
 
-[node name="AceitacaoLabel" type="Label" parent="GiftsPanel/GiftsList"]
+[node name="AceitacaoHBox" type="HBoxContainer" parent="GiftsPainel/GiftsList"]
+layout_mode = 2
+
+[node name="AceitacaoIcon" type="TextureRect" parent="GiftsPainel/GiftsList/AceitacaoHBox"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("10_cwdlq")
+
+[node name="AceitacaoLabel" type="Label" parent="GiftsPainel/GiftsList/AceitacaoHBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.2, 0.8, 0.2, 1)
-text = "Aceitação: 0"
 
 [node name="PictureFrame" type="TextureRect" parent="."]
 offset_left = -8.0

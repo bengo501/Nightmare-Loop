@@ -30,11 +30,20 @@ extends CanvasLayer
 
 # Referências para os labels de gifts
 @onready var gift_labels = {
-	"negacao": $GiftsPanel/GiftsList/NegacaoLabel,
-	"raiva": $GiftsPanel/GiftsList/RaivaLabel,
-	"barganha": $GiftsPanel/GiftsList/BarganhaLabel,
-	"depressao": $GiftsPanel/GiftsList/DepressaoLabel,
-	"aceitacao": $GiftsPanel/GiftsList/AceitacaoLabel
+	"negacao": $GiftsPainel/GiftsList/NegacaoHBox/NegacaoLabel,
+	"raiva": $GiftsPainel/GiftsList/RaivaHBox/RaivaLabel,
+	"barganha": $GiftsPainel/GiftsList/BarganhaHBox/BarganhaLabel,
+	"depressao": $GiftsPainel/GiftsList/DepressaoHBox/DepressaoLabel,
+	"aceitacao": $GiftsPainel/GiftsList/AceitacaoHBox/AceitacaoLabel
+}
+
+# Referências para os ícones de gifts
+@onready var gift_icons = {
+	"negacao": $GiftsPainel/GiftsList/NegacaoHBox/NegacaoIcon,
+	"raiva": $GiftsPainel/GiftsList/RaivaHBox/RaivaIcon,
+	"barganha": $GiftsPainel/GiftsList/BarganhaHBox/BarganhaIcon,
+	"depressao": $GiftsPainel/GiftsList/DepressaoHBox/DepressaoIcon,
+	"aceitacao": $GiftsPainel/GiftsList/AceitacaoHBox/AceitacaoIcon
 }
 
 # Variáveis de estado da HUD
@@ -91,8 +100,12 @@ func _ready():
 
 # Atualiza a barra de vida
 func set_health(value: float, max_value: float = 100.0):
+	print("[HUD] set_health chamado: ", value, "/", max_value)
 	health = value
 	max_health = max_value
+	if health_bar:
+		health_bar.max_value = max_health
+		health_bar.value = health
 	update_hud()
 
 # Atualiza a barra de XP
@@ -204,7 +217,7 @@ func _aplicar_fontes():
 		score_label.add_theme_font_override("font", font_title)
 		level_label.add_theme_font_override("font", font_title)
 		lucidity_points_label.add_theme_font_override("font", font_title)
-		$GiftsPanel/GiftsTitle.add_theme_font_override("font", font_title)
+		$GiftsPainel/GiftsTitle.add_theme_font_override("font", font_title)
 	if font_label:
 		ammo_label.add_theme_font_override("font", font_label)
 		player_name_label.add_theme_font_override("font", font_label)
@@ -232,3 +245,10 @@ func _on_gift_collected(gift_type: String):
 	if gift_type in gifts:
 		gifts[gift_type] += 1
 		update_hud()
+
+# Função para resetar gifts ao iniciar novo jogo
+func reset_gifts_on_new_game():
+	var gift_manager = get_node("/root/GiftManager")
+	if gift_manager:
+		gift_manager.reset_gifts()
+		set_all_gifts(gift_manager.get_all_gifts())

@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://xv4cs6ahki25"]
 
-[ext_resource type="Script" path="res://scripts/ui/minimap.gd" id="1_xxxxx"]
-[ext_resource type="Environment" path="res://environments/minimap_environment.tres" id="2_xxxxx"]
+[ext_resource type="Script" uid="uid://06huecfxpwc7" path="res://scripts/ui/minimap.gd" id="1_xxxxx"]
+[ext_resource type="Environment" uid="uid://d30is62pmxmy0" path="res://environments/minimap_environment.tres" id="2_xxxxx"]
 
 [node name="Minimap" type="SubViewport"]
 size = Vector2i(256, 256)
@@ -13,4 +13,4 @@ transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 
 fov = 45.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="MinimapCamera"]
-environment = ExtResource("2_xxxxx") 
+environment = ExtResource("2_xxxxx")
