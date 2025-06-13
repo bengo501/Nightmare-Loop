@@ -194,16 +194,16 @@ func _on_ghost_defeated():
 		push_error("[GameManager] Erro: scene_manager não é válido!")
 		return
 	
-	print("[GameManager] Fantasma derrotado! Trocando para estado BATTLE...")
-	state_manager.change_state(state_manager.GameState.BATTLE)
-	print("[GameManager] Estado após mudança: ", state_manager.current_state)
-	
 	print("[GameManager] Mudando para a cena de batalha...")
 	# Garante que a cena de batalha existe antes de tentar mudar
 	var battle_scene = load("res://battle_scene.tscn")
 	if battle_scene:
 		scene_manager.change_scene("battle")
 		print("[GameManager] Cena de batalha carregada com sucesso!")
+		
+		print("[GameManager] Fantasma derrotado! Trocando para estado BATTLE...")
+		state_manager.change_state(state_manager.GameState.BATTLE)
+		print("[GameManager] Estado após mudança: ", state_manager.current_state)
 	else:
 		push_error("[GameManager] Erro: Não foi possível carregar a cena de batalha!")
 	print("[GameManager] ====== FIM DO SINAL ======\n")

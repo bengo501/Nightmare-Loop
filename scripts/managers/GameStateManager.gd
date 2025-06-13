@@ -40,6 +40,6 @@ func change_state(new_state: GameState):
 			GameState.DIALOGUE:
 				get_tree().paused = true
 			GameState.BATTLE:
-				get_tree().paused = true
+				get_tree().paused = false  # Não pausa durante a batalha
 			GameState.SKILL_TREE:
 				get_tree().paused = true 
