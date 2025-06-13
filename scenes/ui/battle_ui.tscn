@@ -11,6 +11,20 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_2u4vx")
 
+[node name="Background" type="TextureRect" parent="."]
+texture = ExtResource("res://assets/textures/mcgame.png")
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+stretch_mode = 2 # STRETCH_SCALE
+z_index = -10
+
+[node name="GhostSprite" type="Sprite2D" parent="."]
+texture = ExtResource("res://assets/textures/D4BC5953-C99A-43F1-A561-23D964912C34-removebg-preview.png")
+position = Vector2(800, 400)
+z_index = 1
+
 [node name="StatusPanel" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 1

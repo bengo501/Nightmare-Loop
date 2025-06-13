@@ -1,5 +1,9 @@
 extends Control
 
+# Referências visuais
+@onready var background = $Background
+@onready var ghost_sprite = $GhostSprite
+
 # Referências aos painéis principais
 @onready var main_commands = $MainCommands
 @onready var skill_commands = $SkillCommands
@@ -45,34 +49,29 @@ extends Control
 # Referência ao BattleManager
 var battle_manager = null
 
-# Referência ao BattleData
-@onready var battle_data = get_node("/root/BattleData")
-
-# Cena da label de dano
-var damage_label_scene = preload("res://scenes/ui/DamageLabel.tscn")
-
 func _ready():
-	print(">>> BattleUI _ready chamado")
-
+	# Busca o BattleManager diretamente na root
+	if get_tree().has_node("/root/BattleManager"):
+		battle_manager = get_node("/root/BattleManager")
+		battle_manager.player_turn_started.connect(_on_player_turn_started)
+		battle_manager.ghost_turn_started.connect(_on_ghost_turn_started)
+		battle_manager.battle_ended.connect(_on_battle_ended)
 	# Conecta os sinais dos botões principais
 	skill_button.pressed.connect(_on_skill_pressed)
 	talk_button.pressed.connect(_on_talk_pressed)
 	gift_button.pressed.connect(_on_gift_pressed)
 	flee_button.pressed.connect(_on_flee_pressed)
 	next_button.pressed.connect(_on_next_pressed)
-	
 	# Conecta os sinais dos botões de skill
 	damage_boost_button.pressed.connect(_on_damage_boost_pressed)
 	heal_button.pressed.connect(_on_heal_pressed)
 	gift_boost_button.pressed.connect(_on_gift_boost_pressed)
 	back_from_skills_button.pressed.connect(_on_back_from_skills_pressed)
-	
 	# Conecta os sinais dos botões de talk
 	talk_option1_button.pressed.connect(_on_talk_option1_pressed)
 	talk_option2_button.pressed.connect(_on_talk_option2_pressed)
 	talk_option3_button.pressed.connect(_on_talk_option3_pressed)
 	back_from_talk_button.pressed.connect(_on_back_from_talk_pressed)
-	
 	# Conecta os sinais dos botões de gift
 	negacao_button.pressed.connect(_on_negacao_pressed)
 	raiva_button.pressed.connect(_on_raiva_pressed)
@@ -81,11 +80,11 @@ func _ready():
 	aceitacao_button.pressed.connect(_on_aceitacao_pressed)
 	back_from_gifts_button.pressed.connect(_on_back_from_gifts_pressed)
 
-	# Começa com o painel principal visível
 	show_main_commands()
+	update_status()
+	update_turn_indicator()
 
 # === VISIBILIDADE DOS PAINÉIS ===
-
 func show_main_commands():
 	main_commands.visible = true
 	skill_commands.visible = false
@@ -121,7 +120,6 @@ func hide_all_interface():
 	turn_indicator.visible = false
 
 # === STATUS ===
-
 func update_status():
 	if not battle_manager:
 		return
@@ -143,19 +141,19 @@ func update_turn_indicator():
 	turn_label.modulate = Color(0, 1, 0) if battle_manager.is_player_turn else Color(1, 0, 0)
 
 # === HANDLERS DOS TURNOS ===
-
 func _on_player_turn_started():
 	update_turn_indicator()
+	update_status()
 	show_main_commands()
 
 func _on_ghost_turn_started():
 	update_turn_indicator()
+	update_status()
 
 func _on_battle_ended(victory):
 	hide_all_interface()
 
 # === BOTÕES PRINCIPAIS ===
-
 func _on_skill_pressed():
 	show_skill_commands()
 
@@ -166,63 +164,78 @@ func _on_gift_pressed():
 	show_gift_commands()
 
 func _on_flee_pressed():
+	if battle_manager:
+		battle_manager.player_flee()
 	hide_all_interface()
 
 func _on_next_pressed():
+	if battle_manager:
+		battle_manager.end_player_turn()
 	hide_all_interface()
 
 # === BOTÕES DE SKILL ===
-
 func _on_damage_boost_pressed():
+	if battle_manager:
+		battle_manager.use_damage_boost()
 	hide_all_interface()
 
 func _on_heal_pressed():
+	if battle_manager:
+		battle_manager.use_heal()
 	hide_all_interface()
 
 func _on_gift_boost_pressed():
+	if battle_manager:
+		battle_manager.use_gift_boost()
 	hide_all_interface()
 
 func _on_back_from_skills_pressed():
 	show_main_commands()
 
 # === BOTÕES DE TALK ===
-
 func _on_talk_option1_pressed():
+	if battle_manager:
+		battle_manager.use_talk_option(1)
 	hide_all_interface()
 
 func _on_talk_option2_pressed():
+	if battle_manager:
+		battle_manager.use_talk_option(2)
 	hide_all_interface()
 
 func _on_talk_option3_pressed():
+	if battle_manager:
+		battle_manager.use_talk_option(3)
 	hide_all_interface()
 
 func _on_back_from_talk_pressed():
 	show_main_commands()
 
 # === BOTÕES DE GIFT ===
-
 func _on_negacao_pressed():
+	if battle_manager:
+		battle_manager.use_gift("negacao")
 	hide_all_interface()
 
 func _on_raiva_pressed():
+	if battle_manager:
+		battle_manager.use_gift("raiva")
 	hide_all_interface()
 
 func _on_barganha_pressed():
+	if battle_manager:
+		battle_manager.use_gift("barganha")
 	hide_all_interface()
 
 func _on_depressao_pressed():
+	if battle_manager:
+		battle_manager.use_gift("depressao")
 	hide_all_interface()
 
 func _on_aceitacao_pressed():
+	if battle_manager:
+		battle_manager.use_gift("aceitacao")
 	hide_all_interface()
 
 func _on_back_from_gifts_pressed():
-	show_main_commands()
-
-# === LABEL DE DANO ===
-
-func show_damage_label(damage: int, is_damage: bool = true):
-	var label = damage_label_scene.instantiate()
-	add_child(label)
-	label.setup(damage, is_damage)
-	label.position = Vector3(get_viewport_rect().size.x / 2, 100, 0)
+	show_main_commands() 
