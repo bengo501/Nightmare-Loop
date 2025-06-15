@@ -1,0 +1,37 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://raqr3bjdu26n"
+path="res://.godot/imported/Pillow.fbx_Scene_0.png-ded497edf562a1b1604d27880ed4dba9.ctex"
+metadata={
+"vram_texture": false
+}
+generator_parameters={
+"md5": "3bde02d7011bae6f99e96cdf983c7ebd"
+}
+
+[deps]
+
+source_file="res://assets/models/props/PSX_Furniture, Appliances, And Others/Pillow/Pillow.fbx_Scene.fbx_Scene/Pillow.fbx_Scene_0.png"
+dest_files=["res://.godot/imported/Pillow.fbx_Scene_0.png-ded497edf562a1b1604d27880ed4dba9.ctex"]
+
+[params]
+
+compress/mode=0
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=1

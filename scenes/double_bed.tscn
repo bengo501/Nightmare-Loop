@@ -1,6 +1,5 @@
-[gd_scene load_steps=6 format=3 uid="uid://8ys0mvh063ck"]
+[gd_scene load_steps=5 format=3 uid="uid://8ys0mvh063ck"]
 
-[ext_resource type="PackedScene" uid="uid://87m6nvqs6nke" path="res://assets/models/props/DoubleBed.fbx" id="1_jsvyx"]
 [ext_resource type="Script" uid="uid://b2enjaut01mch" path="res://scripts/double_bed.gd" id="2_12tdh"]
 [ext_resource type="Texture2D" uid="uid://b575lhpgb4bje" path="res://assets/models/props/D_DoubleBed.png" id="2_u86wf"]
 
@@ -10,7 +9,7 @@ albedo_texture = ExtResource("2_u86wf")
 [sub_resource type="BoxShape3D" id="BoxShape3D_jsvyx"]
 size = Vector3(9.34369, 3.84485, 8.73047)
 
-[node name="DoubleBed" instance=ExtResource("1_jsvyx")]
+[node name="DoubleBed"]
 script = ExtResource("2_12tdh")
 
 [node name="DoubleBed" parent="." index="0"]

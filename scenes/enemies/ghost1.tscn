@@ -42,10 +42,6 @@ path_desired_distance = 0.5
 target_desired_distance = 0.5
 path_max_distance = 10.0
 avoidance_enabled = true
-radius = 0.5
-neighbor_distance = 50.0
-max_neighbors = 10
-time_horizon = 1.0
 max_speed = 3.0
 
 [node name="AttackArea" type="Area3D" parent="."]
