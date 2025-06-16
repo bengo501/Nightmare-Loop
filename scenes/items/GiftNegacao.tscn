@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/items/Gift.gd" id="1"]
+
+[sub_resource type="BoxMesh" id="1_box"]
+size = Vector3(1, 1, 1)
+
+[node name="GiftNegacao" type="Area3D"]
+script = ExtResource("1")
+gift_type = "negacao"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("1_box")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+
+[node name="InteractionPrompt" type="Node3D" parent="."]
+
+[node name="Label3D" type="Label3D" parent="InteractionPrompt"]
+text = "Pressione E para coletar" 

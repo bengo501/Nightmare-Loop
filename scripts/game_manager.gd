@@ -76,6 +76,10 @@ func reset_game() -> void:
 	game_time = 0.0
 	health_changed.emit(player_health)
 	score_changed.emit(player_score)
+	# Resetar gifts ao iniciar novo jogo
+	var gift_manager = get_node_or_null("/root/GiftManager")
+	if gift_manager:
+		gift_manager.reset_gifts()
 
 func take_damage(amount: int) -> void:
 	player_health = max(0, player_health - amount)

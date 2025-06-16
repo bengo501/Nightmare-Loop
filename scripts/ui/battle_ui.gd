@@ -19,6 +19,14 @@ signal flee_pressed
 @onready var item_button = $MainPanel/ActionButtons/ItemButton
 @onready var flee_button = $MainPanel/ActionButtons/FleeButton
 
+# --- Gifts UI ---
+@onready var gifts_panel = $MainPanel/GiftsPanel if has_node("MainPanel/GiftsPanel") else null
+@onready var negacao_label = gifts_panel.get_node("NegacaoLabel") if gifts_panel else null
+@onready var raiva_label = gifts_panel.get_node("RaivaLabel") if gifts_panel else null
+@onready var barganha_label = gifts_panel.get_node("BarganhaLabel") if gifts_panel else null
+@onready var depressao_label = gifts_panel.get_node("DepressaoLabel") if gifts_panel else null
+@onready var aceitacao_label = gifts_panel.get_node("AceitacaoLabel") if gifts_panel else null
+
 var float_time := 0.0
 var enemy_base_y: float = 0.0
 
@@ -77,3 +85,15 @@ func _process(delta):
 	float_time += delta
 	var float_offset = sin(float_time * 2.0) * 10.0
 	enemy_sprite.position.y = enemy_base_y + float_offset
+
+func update_gifts_quantities(gifts: Dictionary):
+	if negacao_label:
+		negacao_label.text = "x%d" % gifts.get("negacao", 0)
+	if raiva_label:
+		raiva_label.text = "x%d" % gifts.get("raiva", 0)
+	if barganha_label:
+		barganha_label.text = "x%d" % gifts.get("barganha", 0)
+	if depressao_label:
+		depressao_label.text = "x%d" % gifts.get("depressao", 0)
+	if aceitacao_label:
+		aceitacao_label.text = "x%d" % gifts.get("aceitacao", 0)

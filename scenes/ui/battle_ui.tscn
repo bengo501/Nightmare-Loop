@@ -27,6 +27,88 @@ offset_bottom = 568.0
 texture = ExtResource("1_uu5og")
 expand_mode = 2
 
+[node name="GiftsPanel" type="Panel" parent="MainPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.75
+anchor_top = 0.05
+anchor_right = 0.98
+anchor_bottom = 0.45
+offset_left = 88.2
+offset_top = 91.0
+offset_right = 88.2
+offset_bottom = 91.0
+
+[node name="GiftsTitle" type="Label" parent="MainPanel/GiftsPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.1
+text = "Gifts"
+horizontal_alignment = 1
+
+[node name="GiftsList" type="VBoxContainer" parent="MainPanel/GiftsPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.1
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="NegacaoHBox" type="HBoxContainer" parent="MainPanel/GiftsPanel/GiftsList"]
+layout_mode = 2
+
+[node name="NegacaoIcon" type="TextureRect" parent="MainPanel/GiftsPanel/GiftsList/NegacaoHBox"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+
+[node name="NegacaoLabel" type="Label" parent="MainPanel/GiftsPanel/GiftsList/NegacaoHBox"]
+layout_mode = 2
+text = "x0"
+
+[node name="RaivaHBox" type="HBoxContainer" parent="MainPanel/GiftsPanel/GiftsList"]
+layout_mode = 2
+
+[node name="RaivaIcon" type="TextureRect" parent="MainPanel/GiftsPanel/GiftsList/RaivaHBox"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+
+[node name="RaivaLabel" type="Label" parent="MainPanel/GiftsPanel/GiftsList/RaivaHBox"]
+layout_mode = 2
+text = "x0"
+
+[node name="BarganhaHBox" type="HBoxContainer" parent="MainPanel/GiftsPanel/GiftsList"]
+layout_mode = 2
+
+[node name="BarganhaIcon" type="TextureRect" parent="MainPanel/GiftsPanel/GiftsList/BarganhaHBox"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+
+[node name="BarganhaLabel" type="Label" parent="MainPanel/GiftsPanel/GiftsList/BarganhaHBox"]
+layout_mode = 2
+text = "x0"
+
+[node name="DepressaoHBox" type="HBoxContainer" parent="MainPanel/GiftsPanel/GiftsList"]
+layout_mode = 2
+
+[node name="DepressaoIcon" type="TextureRect" parent="MainPanel/GiftsPanel/GiftsList/DepressaoHBox"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+
+[node name="DepressaoLabel" type="Label" parent="MainPanel/GiftsPanel/GiftsList/DepressaoHBox"]
+layout_mode = 2
+text = "x0"
+
+[node name="AceitacaoHBox" type="HBoxContainer" parent="MainPanel/GiftsPanel/GiftsList"]
+layout_mode = 2
+
+[node name="AceitacaoIcon" type="TextureRect" parent="MainPanel/GiftsPanel/GiftsList/AceitacaoHBox"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+
+[node name="AceitacaoLabel" type="Label" parent="MainPanel/GiftsPanel/GiftsList/AceitacaoHBox"]
+layout_mode = 2
+text = "x0"
+
 [node name="EnemeySprite" type="TextureRect" parent="MainPanel"]
 visible = false
 layout_mode = 0
