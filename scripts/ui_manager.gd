@@ -52,6 +52,16 @@ func _on_state_changed(new_state):
 				active_ui[key].visible = false
 			else:
 				active_ui[key].visible = true
+		# Esconde a arma do player (FirstPersonCamera)
+		var players = get_tree().get_nodes_in_group("player")
+		for player in players:
+			if player.has_node("FirstPersonCamera"):
+				var fpcam = player.get_node("FirstPersonCamera")
+				if fpcam.has_method("hide_weapon"):
+					fpcam.hide_weapon()
+			# Garante que o player entra no modo batalha
+			if player.has_method("_on_battle_started"):
+				player._on_battle_started()
 		return
 	match new_state:
 		state_manager.GameState.MAIN_MENU:
@@ -92,6 +102,9 @@ func show_ui(ui_name: String, data: Dictionary = {}):
 			"hud":
 				hud_instance = instance
 				print("[UIManager] HUD instanciada e referenciada")
+		# Garante que a battle_ui está sempre no topo
+		if ui_name == "battle_ui":
+			move_child(instance, get_child_count() - 1)
 
 func hide_ui(ui_name: String):
 	if active_ui.has(ui_name):
