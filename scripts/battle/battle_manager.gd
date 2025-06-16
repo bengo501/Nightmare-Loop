@@ -7,7 +7,9 @@ signal battle_ended(victory) # Emitido quando a batalha termina (true = vitória
 signal ghost_sequence_updated(sequence) # Emitido quando a sequência de cores do fantasma é atualizada
 signal ghost_stunned(turns) # Emitido quando o fantasma é atordoado
 
-@onready var ghost_actions = $GhostActions
+@onready var ghost_actions = null
+@onready var ui_manager = get_node("/root/UIManager")
+var battle_ui = null
 
 # Variável que controla de quem é o turno atual
 var is_player_turn = true
@@ -59,6 +61,14 @@ var grief_quantities = {
 }
 
 func _ready():
+	# Garante que ghost_actions existe
+	if has_node("GhostActions"):
+		ghost_actions = $GhostActions
+	else:
+		ghost_actions = Node.new()
+		ghost_actions.name = "GhostActions"
+		ghost_actions.set_script(load("res://scripts/battle/ghost_actions.gd"))
+		add_child(ghost_actions)
 	# Conecta os sinais do fantasma para gerenciar suas ações
 	ghost_actions.ghost_attack.connect(_on_ghost_attack)
 	ghost_actions.ghost_haunt.connect(_on_ghost_haunt)
@@ -67,8 +77,104 @@ func _ready():
 	# Gera a sequência inicial de cores que o fantasma precisa receber
 	generate_ghost_sequence()
 	
+	# Integração com a UI de batalha
+	if ui_manager and ui_manager.battle_ui_instance:
+		battle_ui = ui_manager.battle_ui_instance
+		_connect_battle_ui()
+	else:
+		# Tenta conectar quando a UI abrir
+		if ui_manager:
+			ui_manager.ui_opened.connect(_on_ui_opened)
+	
 	# Inicia o primeiro turno (sempre começa com o jogador)
 	start_player_turn()
+
+func _on_ui_opened(ui_name):
+	if ui_name == "battle_ui" and ui_manager.battle_ui_instance:
+		battle_ui = ui_manager.battle_ui_instance
+		_connect_battle_ui()
+
+func _connect_battle_ui():
+	if not battle_ui:
+		return
+	# Conectar sinais dos botões
+	battle_ui.attack_pressed.connect(_on_attack_pressed)
+	battle_ui.defend_pressed.connect(_on_defend_pressed)
+	battle_ui.special_pressed.connect(_on_special_pressed)
+	battle_ui.item_pressed.connect(_on_item_pressed)
+	battle_ui.flee_pressed.connect(_on_flee_pressed)
+	# Atualizar status inicial
+	_update_battle_ui()
+
+func _update_battle_ui():
+	if not battle_ui:
+		return
+	battle_ui.update_player_status(player_stats.hp, player_stats.max_hp, player_stats.mp, player_stats.max_mp)
+	battle_ui.update_enemy_status(ghost_stats.hp, ghost_stats.max_hp)
+	battle_ui.update_turn_indicator(is_player_turn)
+
+func _on_attack_pressed():
+	if not is_player_turn:
+		return
+	# Exemplo de ataque simples
+	var damage = player_stats.ataque - ghost_stats.defesa
+	if damage < 1:
+		damage = 1
+	ghost_stats.hp -= damage
+	if battle_ui:
+		battle_ui.show_message("Você atacou o fantasma e causou %d de dano!" % damage)
+	_update_battle_ui()
+	if ghost_stats.hp <= 0:
+		ghost_stats.hp = 0
+		emit_signal("battle_ended", true)
+		return
+	end_player_turn()
+
+func _on_defend_pressed():
+	if not is_player_turn:
+		return
+	player_stats.defesa += 5
+	if battle_ui:
+		battle_ui.show_message("Você se defendeu! Defesa aumentada temporariamente.")
+	_update_battle_ui()
+	end_player_turn()
+
+func _on_special_pressed():
+	if not is_player_turn:
+		return
+	var damage = int(player_stats.ataque * 1.5) - ghost_stats.defesa
+	if damage < 1:
+		damage = 1
+	ghost_stats.hp -= damage
+	if battle_ui:
+		battle_ui.show_message("Você usou um ataque especial e causou %d de dano!" % damage)
+	_update_battle_ui()
+	if ghost_stats.hp <= 0:
+		ghost_stats.hp = 0
+		emit_signal("battle_ended", true)
+		return
+	end_player_turn()
+
+func _on_item_pressed():
+	if not is_player_turn:
+		return
+	player_stats.hp = min(player_stats.hp + 20, player_stats.max_hp)
+	if battle_ui:
+		battle_ui.show_message("Você usou um item e recuperou 20 de HP!")
+	_update_battle_ui()
+	end_player_turn()
+
+func _on_flee_pressed():
+	if not is_player_turn:
+		return
+	if randf() < 0.5:
+		if battle_ui:
+			battle_ui.show_message("Você fugiu da batalha!")
+		emit_signal("battle_ended", false)
+	else:
+		if battle_ui:
+			battle_ui.show_message("A fuga falhou!")
+		end_player_turn()
 
 # Gera uma sequência aleatória de 3 cores que o fantasma precisa receber
 func generate_ghost_sequence():
@@ -85,18 +191,22 @@ func generate_ghost_sequence():
 # Inicia o turno do jogador
 func start_player_turn():
 	is_player_turn = true
-	print("Turno do jogador iniciado")
+	if battle_ui:
+		battle_ui.show_message("Seu turno!")
+	_update_battle_ui()
 	emit_signal("player_turn_started")
 
 # Finaliza o turno do jogador e inicia o turno do fantasma
 func end_player_turn():
 	is_player_turn = false
-	print("Turno do jogador finalizado")
+	_update_battle_ui()
 	start_ghost_turn()
 
 # Inicia o turno do fantasma
 func start_ghost_turn():
-	print("Turno do fantasma iniciado")
+	if battle_ui:
+		battle_ui.show_message("Turno do fantasma!")
+	_update_battle_ui()
 	emit_signal("ghost_turn_started")
 	
 	# Verifica se o fantasma está atordoado
@@ -111,7 +221,6 @@ func start_ghost_turn():
 
 # Finaliza o turno do fantasma e volta para o turno do jogador
 func end_ghost_turn():
-	print("Turno do fantasma finalizado")
 	start_player_turn()
 
 # Processa o ataque do fantasma
@@ -316,21 +425,6 @@ func player_use_gift(gift_type):
 		return
 	
 	end_player_turn()
-
-# Processa a tentativa de fuga do jogador
-func player_flee():
-	if not is_player_turn:
-		return
-	
-	print("Jogador tentou fugir")
-	
-	# 50% de chance de fugir com sucesso
-	if randf() < 0.5:
-		print("Fuga bem-sucedida!")
-		emit_signal("battle_ended", false)
-	else:
-		print("Fuga falhou!")
-		end_player_turn()
 
 # Função para passar o turno
 func next_turn():

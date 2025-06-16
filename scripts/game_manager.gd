@@ -189,23 +189,33 @@ func _on_ghost_defeated():
 	if not is_instance_valid(state_manager):
 		push_error("[GameManager] Erro: state_manager não é válido!")
 		return
-		
-	if not is_instance_valid(scene_manager):
-		push_error("[GameManager] Erro: scene_manager não é válido!")
-		return
 	
-	print("[GameManager] Mudando para a cena de batalha...")
-	# Garante que a cena de batalha existe antes de tentar mudar
-	var battle_scene = load("res://battle_scene.tscn")
-	if battle_scene:
-		scene_manager.change_scene("battle")
-		print("[GameManager] Cena de batalha carregada com sucesso!")
-		
-		print("[GameManager] Fantasma derrotado! Trocando para estado BATTLE...")
-		state_manager.change_state(state_manager.GameState.BATTLE)
-		print("[GameManager] Estado após mudança: ", state_manager.current_state)
+	# Instancia BattleManager em /root se não existir
+	if not get_node_or_null("/root/BattleManager"):
+		var battle_manager_scene = preload("res://scripts/battle/battle_manager.gd")
+		var battle_manager = battle_manager_scene.new()
+		get_tree().get_root().add_child(battle_manager)
+		battle_manager.name = "BattleManager"
+		print("[GameManager] BattleManager instanciado em /root!")
 	else:
-		push_error("[GameManager] Erro: Não foi possível carregar a cena de batalha!")
+		print("[GameManager] BattleManager já existe em /root!")
+
+	# Troca o estado para BATTLE (UIManager cuidará da UI)
+	print("[GameManager] Fantasma derrotado! Trocando para estado BATTLE...")
+	state_manager.change_state(state_manager.GameState.BATTLE)
+	print("[GameManager] Estado após mudança: ", state_manager.current_state)
+
+	# Libera o mouse para uso na UI de batalha
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	# Esconde a arma da FirstPersonCamera
+	var players = get_tree().get_nodes_in_group("player")
+	if players.size() > 0:
+		var player = players[0]
+		if player.has_node("FirstPersonCamera"):
+			var fpcam = player.get_node("FirstPersonCamera")
+			if fpcam.has_method("hide_weapon"):
+				fpcam.hide_weapon()
+	print("[GameManager] Jogo pausado para batalha!")
 	print("[GameManager] ====== FIM DO SINAL ======\n")
 
 func _on_node_added(node: Node) -> void:

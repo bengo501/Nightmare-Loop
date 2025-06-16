@@ -22,6 +22,10 @@ func _ready():
 		print("Weapon found: ", weapon.name)
 		weapon.position = weapon_draw_start_pos
 		weapon.visible = false  # Começa invisível
+		if weapon.has_method("set_mouse_filter"):
+			weapon.set_mouse_filter(Control.MOUSE_FILTER_IGNORE)
+		elif weapon.has_property("mouse_filter"):
+			weapon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	else:
 		print("Weapon not found!")
 
@@ -91,5 +95,9 @@ func hide_weapon():
 	if weapon:
 		print("Hiding weapon...")
 		weapon.visible = false
+		if weapon.has_method("set_mouse_filter"):
+			weapon.set_mouse_filter(Control.MOUSE_FILTER_IGNORE)
+		elif weapon.has_property("mouse_filter"):
+			weapon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		is_drawing_weapon = false
 		print("Weapon hidden")

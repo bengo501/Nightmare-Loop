@@ -12,7 +12,7 @@ var ui_scenes := {
 	"pause_menu": preload("res://scenes/ui/pause_menu.tscn"),
 	"options_menu": preload("res://scenes/ui/options_menu.tscn"),
 	"game_over": preload("res://scenes/ui/game_over.tscn"),
-	#"battle_ui": preload("res://scenes/ui/battle_ui.tscn"),
+	"battle_ui": preload("res://scenes/ui/battle_ui.tscn"),
 	"hud": preload("res://scenes/ui/hud.tscn"),
 	"gifts_menu": preload("res://scenes/ui/GiftsMenu.tscn"),
 	"credits": preload("res://scenes/ui/credits.tscn"),
@@ -44,6 +44,15 @@ func _on_scene_changed(_scene_path: String):
 
 func _on_state_changed(new_state):
 	hide_all_ui()
+	if new_state == state_manager.GameState.BATTLE:
+		show_ui("battle_ui")
+		# Garante que só a battle_ui está visível
+		for key in active_ui.keys():
+			if key != "battle_ui":
+				active_ui[key].visible = false
+			else:
+				active_ui[key].visible = true
+		return
 	match new_state:
 		state_manager.GameState.MAIN_MENU:
 			show_ui("main_menu")
