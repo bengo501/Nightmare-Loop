@@ -163,7 +163,7 @@ func _create_skill_button(skill_data, category, skill_id):
 			button.add_theme_color_override("font_color", Color(0.8, 0.2, 0.2))
 	
 	# Desabilita o botão se o jogador não tiver MP suficiente
-	if player and player.current_mp < skill_data.mp_cost:
+	if player and player.stats["mp"] < skill_data.mp_cost:
 		button.disabled = true
 		button.add_theme_color_override("font_disabled_color", Color(0.5, 0.5, 0.5))
 	

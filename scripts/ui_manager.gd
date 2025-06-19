@@ -12,7 +12,7 @@ var ui_scenes := {
 	"pause_menu": preload("res://scenes/ui/pause_menu.tscn"),
 	"options_menu": preload("res://scenes/ui/options_menu.tscn"),
 	"game_over": preload("res://scenes/ui/game_over.tscn"),
-	"battle_ui": preload("res://scenes/ui/battle_ui.tscn"),
+	"battle_ui": preload("res://scenes/ui/BattleUI.tscn"),
 	"hud": preload("res://scenes/ui/hud.tscn"),
 	"gifts_menu": preload("res://scenes/ui/GiftsMenu.tscn"),
 	"credits": preload("res://scenes/ui/credits.tscn"),
