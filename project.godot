@@ -13,7 +13,6 @@ config_version=5
 config/name="Nightmare Loop"
 run/main_scene="res://scenes/ui/splash_screen.tscn"
 config/features=PackedStringArray("4.4", "Forward Plus")
-config/icon="res://icon.svg"
 
 [autoload]
 

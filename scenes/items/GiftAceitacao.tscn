@@ -1,13 +1,11 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://b2vnqpoqdtfsb"]
 
-[ext_resource type="Script" path="res://scripts/items/Gift.gd" id="1"]
+[ext_resource type="Script" uid="uid://wukykpodk5fp" path="res://scripts/items/Gift.gd" id="1"]
 
 [sub_resource type="BoxMesh" id="1_box"]
-size = Vector3(1, 1, 1)
 
 [node name="GiftAceitacao" type="Area3D"]
 script = ExtResource("1")
-gift_type = "aceitacao"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("1_box")
@@ -19,4 +17,4 @@ mesh = SubResource("1_box")
 [node name="InteractionPrompt" type="Node3D" parent="."]
 
 [node name="Label3D" type="Label3D" parent="InteractionPrompt"]
-text = "Pressione E para coletar" 
+text = "Pressione E para coletar"

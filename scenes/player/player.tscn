@@ -1,16 +1,17 @@
-[gd_scene load_steps=36 format=4 uid="uid://drs2ohyyh3uit"]
+[gd_scene load_steps=37 format=4 uid="uid://drs2ohyyh3uit"]
 
 [ext_resource type="Script" uid="uid://bs72uun8hw128" path="res://scripts/player/player.gd" id="1_8afob"]
-[ext_resource type="Texture2D" uid="uid://sv02x6ok5npi" path="res://assets/models/characters/misc/DarleneTexture256Fin.png" id="2_dovo2"]
+[ext_resource type="Texture2D" uid="uid://de4xhwntpqb72" path="res://assets/models/characters/misc/cac-1742477538010_0.png" id="2_0owmy"]
 [ext_resource type="Script" uid="uid://c03xjf26j01ix" path="res://scripts/ThirdPersonCamera.gd" id="3_gmlin"]
+[ext_resource type="Texture2D" uid="uid://bnpnsjk81jv8q" path="res://assets/models/characters/misc/cac-1742478932876_0.png" id="3_qek5x"]
 [ext_resource type="Texture2D" uid="uid://bcqhlm6vjmnhx" path="res://assets/textures/D4BC5953-C99A-43F1-A561-23D964912C34-removebg-preview.png" id="4_lvxji"]
 [ext_resource type="Script" uid="uid://bcjsu4wogpuou" path="res://scripts/camera/FirstPersonCamera.gd" id="4_p47bc"]
 [ext_resource type="Shader" uid="uid://d324kawi15ywl" path="res://shaders/laserRay.gdshader" id="6_75vfm"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_dovo2"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_75vfm"]
-albedo_texture = ExtResource("2_dovo2")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5gtgg"]
+albedo_texture = ExtResource("2_0owmy")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q7mom"]
 resource_name = "Material.002"
@@ -168,8 +169,8 @@ bind/41/name = &"toe.R"
 bind/41/bone = -1
 bind/41/pose = Transform3D(0.412119, 0.0193374, 0.0798746, 0.0769168, -0.234596, -0.340066, 0.0289418, 0.348119, -0.233606, -0.206831, 0.30425, 0.341227)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0owmy"]
-albedo_texture = ExtResource("2_dovo2")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h17s1"]
+albedo_texture = ExtResource("3_qek5x")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_8ifh7"]
 resource_name = "GamePucrsMC_Cylinder_001"
@@ -4964,12 +4965,12 @@ bones/41/rotation = Quaternion(0.00160671, 0.969707, -0.243245, -0.0223136)
 bones/41/scale = Vector3(1, 1, 1)
 
 [node name="Darlene Model_002" type="MeshInstance3D" parent="visuals/GamePucrsMC/metarig_001/Skeleton3D"]
-material_override = SubResource("StandardMaterial3D_75vfm")
+material_override = SubResource("StandardMaterial3D_5gtgg")
 mesh = SubResource("ArrayMesh_jx4ui")
 skin = SubResource("Skin_cgowi")
 
 [node name="Darlene Model_003" type="MeshInstance3D" parent="visuals/GamePucrsMC/metarig_001/Skeleton3D"]
-material_override = SubResource("StandardMaterial3D_0owmy")
+material_override = SubResource("StandardMaterial3D_h17s1")
 mesh = SubResource("ArrayMesh_8ifh7")
 skin = SubResource("Skin_cgowi")
 

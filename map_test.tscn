@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://b7gfka0hbt4hd"]
+[gd_scene load_steps=5 format=3 uid="uid://dbetjf7ckcuja"]
 
 [ext_resource type="Texture2D" uid="uid://ca44uy3jlfa6w" path="res://assets/textures/Floor/Horror_Floor_05-128x128.png" id="1_c7aqf"]
 [ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="2_eab4r"]

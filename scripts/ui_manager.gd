@@ -12,7 +12,7 @@ var ui_scenes := {
 	"pause_menu": preload("res://scenes/ui/pause_menu.tscn"),
 	"options_menu": preload("res://scenes/ui/options_menu.tscn"),
 	"game_over": preload("res://scenes/ui/game_over.tscn"),
-
+	"item_menu": preload("res://scenes/ui/ItemMenu.tscn"),
 	"hud": preload("res://scenes/ui/hud.tscn"),
 	"skill_tree": preload("res://scenes/ui/skill_tree.tscn")
 }

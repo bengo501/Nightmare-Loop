@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bq2riunq3vas"]
+[gd_scene load_steps=8 format=3 uid="uid://dxrua41us08ja"]
 
 [ext_resource type="Texture2D" uid="uid://gq5cb3qsjni1" path="res://assets/textures/Brick/Horror_Brick_06-128x128.png" id="1_5joda"]
 [ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="2_gf131"]
