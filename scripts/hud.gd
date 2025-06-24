@@ -13,6 +13,7 @@ extends CanvasLayer
 @onready var level_label = $TopBar/TopBar_ScoreLevelVBox/LevelLabel
 @onready var lucidity_points_label = $TopBar/TopBar_ScoreLevelVBox/LucidityPointsLabel
 @onready var crosshair = $Crosshair
+@onready var gift_color_indicator = $WeaponPanel/WeaponInfo/WeaponInfo/GiftColorIndicator
 @onready var item_icons = [
 	$ItemsPanel/ItemsContainer/ItemsContainer/ItemSlot1/ItemsContainer_ItemSlot1/ItemIcon1,
 	$ItemsPanel/ItemsContainer/ItemsContainer/ItemSlot2/ItemsContainer_ItemSlot2/ItemIcon2,
@@ -30,20 +31,29 @@ extends CanvasLayer
 
 # Referências para os labels de gifts
 @onready var gift_labels = {
-	"negacao": $GiftsPainel/GiftsList/NegacaoHBox/NegacaoLabel,
-	"raiva": $GiftsPainel/GiftsList/RaivaHBox/RaivaLabel,
-	"barganha": $GiftsPainel/GiftsList/BarganhaHBox/BarganhaLabel,
-	"depressao": $GiftsPainel/GiftsList/DepressaoHBox/DepressaoLabel,
-	"aceitacao": $GiftsPainel/GiftsList/AceitacaoHBox/AceitacaoLabel
+	"negacao": $GiftsPainel/GiftsList/NegacaoVBox/NegacaoLabel,
+	"raiva": $GiftsPainel/GiftsList/RaivaVBox/RaivaLabel,
+	"barganha": $GiftsPainel/GiftsList/BarganhaVBox/BarganhaLabel,
+	"depressao": $GiftsPainel/GiftsList/DepressaoVBox/DepressaoLabel,
+	"aceitacao": $GiftsPainel/GiftsList/AceitacaoVBox/AceitacaoLabel
 }
 
 # Referências para os ícones de gifts
 @onready var gift_icons = {
-	"negacao": $GiftsPainel/GiftsList/NegacaoHBox/NegacaoIcon,
-	"raiva": $GiftsPainel/GiftsList/RaivaHBox/RaivaIcon,
-	"barganha": $GiftsPainel/GiftsList/BarganhaHBox/BarganhaIcon,
-	"depressao": $GiftsPainel/GiftsList/DepressaoHBox/DepressaoIcon,
-	"aceitacao": $GiftsPainel/GiftsList/AceitacaoHBox/AceitacaoIcon
+	"negacao": $GiftsPainel/GiftsList/NegacaoVBox/NegacaoIcon,
+	"raiva": $GiftsPainel/GiftsList/RaivaVBox/RaivaIcon,
+	"barganha": $GiftsPainel/GiftsList/BarganhaVBox/BarganhaIcon,
+	"depressao": $GiftsPainel/GiftsList/DepressaoVBox/DepressaoIcon,
+	"aceitacao": $GiftsPainel/GiftsList/AceitacaoVBox/AceitacaoIcon
+}
+
+# Referências para os marcadores de gifts
+@onready var gift_markers = {
+	"negacao": $GiftsPainel/GiftsList/NegacaoVBox/NegacaoMarker,
+	"raiva": $GiftsPainel/GiftsList/RaivaVBox/RaivaMarker,
+	"barganha": $GiftsPainel/GiftsList/BarganhaVBox/BarganhaMarker,
+	"depressao": $GiftsPainel/GiftsList/DepressaoVBox/DepressaoMarker,
+	"aceitacao": $GiftsPainel/GiftsList/AceitacaoVBox/AceitacaoMarker
 }
 
 # Variáveis de estado da HUD
@@ -79,6 +89,19 @@ var font_label: Font = null # preload("res://assets/fonts/Roboto-Regular.ttf")
 # Variável para controlar o modo da crosshair
 var is_first_person_mode: bool = false
 
+# Variáveis para o sistema de marcador de gifts
+var current_gift_index: int = 0
+var gift_order: Array[String] = ["negacao", "raiva", "barganha", "depressao", "aceitacao"]
+
+# Cores correspondentes a cada gift
+var gift_colors: Dictionary = {
+	"negacao": Color(0, 0.6, 0.8, 1),      # Azul ciano/escuro
+	"raiva": Color(0.2, 0.8, 0.2, 1),      # Verde
+	"barganha": Color(0.5, 0.6, 0.7, 1),   # Cinza azulado
+	"depressao": Color(0.3, 0.1, 0.6, 1),  # Roxo escuro
+	"aceitacao": Color(1, 0.8, 0.2, 1)     # Amarelo/dourado
+}
+
 func _ready():
 	# Aplica fontes customizadas
 	_aplicar_fontes()
@@ -96,7 +119,23 @@ func _ready():
 		# Inicializa os gifts com os valores atuais
 		set_all_gifts(gift_manager.get_all_gifts())
 	
+	# Inicializa o marcador de gifts
+	_update_gift_marker()
+	
 	update_hud()
+
+func _input(event):
+	# Controle do marcador de gifts pelas teclas 1-5
+	if event.is_action_pressed("key_1"):
+		_set_gift_marker(0)
+	elif event.is_action_pressed("key_2"):
+		_set_gift_marker(1)
+	elif event.is_action_pressed("key_3"):
+		_set_gift_marker(2)
+	elif event.is_action_pressed("key_4"):
+		_set_gift_marker(3)
+	elif event.is_action_pressed("key_5"):
+		_set_gift_marker(4)
 
 # Atualiza a barra de vida
 func set_health(value: float, max_value: float = 100.0):
@@ -256,3 +295,37 @@ func reset_gifts_on_new_game():
 	if gift_manager:
 		gift_manager.reset_gifts()
 		set_all_gifts(gift_manager.get_all_gifts())
+
+# Funções para o sistema de marcador de gifts
+func _set_gift_marker(index: int):
+	if index >= 0 and index < gift_order.size():
+		current_gift_index = index
+		_update_gift_marker()
+
+func _update_gift_marker():
+	# Esconde todos os marcadores
+	for marker in gift_markers.values():
+		if marker and is_instance_valid(marker):
+			marker.visible = false
+	
+	# Mostra o marcador atual
+	if current_gift_index >= 0 and current_gift_index < gift_order.size():
+		var current_gift = gift_order[current_gift_index]
+		if current_gift in gift_markers:
+			var marker = gift_markers[current_gift]
+			if marker and is_instance_valid(marker):
+				marker.visible = true
+		
+		# Atualiza o indicador de cor perto da arma
+		if current_gift in gift_colors and gift_color_indicator and is_instance_valid(gift_color_indicator):
+			gift_color_indicator.color = gift_colors[current_gift]
+
+# Função para obter o gift atualmente selecionado
+func get_selected_gift() -> String:
+	if current_gift_index >= 0 and current_gift_index < gift_order.size():
+		return gift_order[current_gift_index]
+	return ""
+
+# Função para obter o índice do gift selecionado
+func get_selected_gift_index() -> int:
+	return current_gift_index

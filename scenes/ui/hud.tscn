@@ -1,17 +1,17 @@
 [gd_scene load_steps=13 format=3 uid="uid://c4rvwq52s3ajv"]
 
 [ext_resource type="Script" uid="uid://dkqmts8vihtpp" path="res://scripts/hud.gd" id="1_xxxxx"]
-[ext_resource type="Texture2D" uid="uid://dtcm260hhtsna" path="res://assets/textures/portrait-removebg-preview.png" id="2_bo48s"]
+[ext_resource type="Texture2D" uid="uid://bdvmkymfywaq0" path="res://assets/textures/portrait_final_stylized-removebg-preview.png" id="2_0h1do"]
 [ext_resource type="PackedScene" uid="uid://xv4cs6ahki25" path="res://scenes/ui/minimap.tscn" id="2_xxxxx"]
+[ext_resource type="Texture2D" uid="uid://b5we7e4w8gpyu" path="res://assets/textures/gun.png" id="4_4d46k"]
 [ext_resource type="Texture2D" uid="uid://cwfunle18xgoi" path="res://assets/textures/pngwing.com.png" id="4_8qguk"]
-[ext_resource type="Texture2D" uid="uid://crir3d3ao6rw5" path="res://assets/textures/pngimg.com_-_fallout_PNG49.png" id="4_gss2c"]
 [ext_resource type="Texture2D" uid="uid://b5cykxieqbnuf" path="res://assets/textures/compass.png" id="5_136eg"]
 [ext_resource type="Texture2D" uid="uid://d02xvpntngw1w" path="res://assets/textures/crosshair186.png" id="5_h022r"]
-[ext_resource type="Texture2D" uid="uid://f6ljqq20g04q" path="res://assets/textures/bliue.png" id="6_0h1do"]
-[ext_resource type="Texture2D" uid="uid://rb8lo3ebpve5" path="res://assets/textures/green.png" id="7_4d46k"]
-[ext_resource type="Texture2D" uid="uid://bnvka361m47nr" path="res://assets/textures/gray.png" id="8_erw67"]
-[ext_resource type="Texture2D" uid="uid://i4bmd8s3pmus" path="res://assets/textures/purple.png" id="9_gonto"]
-[ext_resource type="Texture2D" uid="uid://bfgja3vtm5igk" path="res://assets/textures/yellow.png" id="10_cwdlq"]
+[ext_resource type="Texture2D" uid="uid://bnkdk34583km4" path="res://assets/textures/blueGift.png" id="6_erw67"]
+[ext_resource type="Texture2D" uid="uid://db3xbnsnrygpx" path="res://assets/textures/greenGift.png" id="7_gonto"]
+[ext_resource type="Texture2D" uid="uid://6ydtk3l07l6p" path="res://assets/textures/grayGift.png" id="8_cwdlq"]
+[ext_resource type="Texture2D" uid="uid://hjchf45s1f00" path="res://assets/textures/purpleGift.png" id="9_o6xly"]
+[ext_resource type="Texture2D" uid="uid://cixqfnsule2um" path="res://assets/textures/yellowGift.png" id="10_we3sy"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_xxxxx")
@@ -19,17 +19,19 @@ script = ExtResource("1_xxxxx")
 [node name="TopBar" type="HBoxContainer" parent="."]
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = -19.0
-offset_top = 2.0
-offset_right = -19.0
-offset_bottom = 106.0
+offset_left = 4.0
+offset_top = -1.0
+offset_right = 4.0
+offset_bottom = 103.0
 grow_horizontal = 2
+scale = Vector2(1.2, 1.2)
 
 [node name="PlayerIcon" type="TextureRect" parent="TopBar"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(160, 120)
 layout_mode = 2
-texture = ExtResource("2_bo48s")
-expand_mode = 2
+texture = ExtResource("2_0h1do")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="TopBar_PlayerInfoVBox" type="VBoxContainer" parent="TopBar"]
 layout_mode = 2
@@ -37,20 +39,20 @@ size_flags_horizontal = 3
 
 [node name="PlayerNameLabel" type="Label" parent="TopBar/TopBar_PlayerInfoVBox"]
 layout_mode = 2
-text = "Player"
+text = "Protagonista"
 
 [node name="HealthBar" type="ProgressBar" parent="TopBar/TopBar_PlayerInfoVBox"]
 layout_mode = 2
 value = 100.0
 
 [node name="XPBar" type="ProgressBar" parent="TopBar/TopBar_PlayerInfoVBox"]
+visible = false
 layout_mode = 2
 value = 50.0
 
 [node name="TopBar_ScoreLevelVBox" type="VBoxContainer" parent="TopBar"]
 layout_mode = 2
-size_flags_horizontal = 3
-alignment = 2
+size_flags_horizontal = 2
 
 [node name="StageNameLabel" type="Label" parent="TopBar/TopBar_ScoreLevelVBox"]
 layout_mode = 2
@@ -58,11 +60,13 @@ text = "Fase 1"
 horizontal_alignment = 2
 
 [node name="ScoreLabel" type="Label" parent="TopBar/TopBar_ScoreLevelVBox"]
+visible = false
 layout_mode = 2
 text = "Score: 0"
 horizontal_alignment = 2
 
 [node name="LevelLabel" type="Label" parent="TopBar/TopBar_ScoreLevelVBox"]
+visible = false
 layout_mode = 2
 text = "Level: 1"
 horizontal_alignment = 2
@@ -104,10 +108,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -399.0
-offset_top = -111.0
-offset_right = -52.0
-offset_bottom = -11.0
+offset_left = -1018.0
+offset_top = -189.0
+offset_right = -779.0
+offset_bottom = -120.0
 grow_horizontal = 0
 grow_vertical = 0
 
@@ -123,10 +127,16 @@ grow_vertical = 2
 layout_mode = 2
 
 [node name="WeaponIcon" type="TextureRect" parent="WeaponPanel/WeaponInfo/WeaponInfo"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(140, 100)
 layout_mode = 2
-texture = ExtResource("4_gss2c")
-expand_mode = 3
+texture = ExtResource("4_4d46k")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="GiftColorIndicator" type="ColorRect" parent="WeaponPanel/WeaponInfo/WeaponInfo"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+color = Color(0, 0.6, 0.8, 1)
 
 [node name="AmmoLabel" type="Label" parent="WeaponPanel/WeaponInfo/WeaponInfo"]
 layout_mode = 2
@@ -170,6 +180,8 @@ grow_vertical = 2
 [node name="ItemIcon1" type="TextureRect" parent="ItemsPanel/ItemsContainer/ItemsContainer/ItemSlot1/ItemsContainer_ItemSlot1"]
 layout_mode = 2
 size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 5
 
 [node name="ItemCount1" type="Label" parent="ItemsPanel/ItemsContainer/ItemsContainer/ItemSlot1/ItemsContainer_ItemSlot1"]
 layout_mode = 2
@@ -191,6 +203,8 @@ grow_vertical = 2
 [node name="ItemIcon2" type="TextureRect" parent="ItemsPanel/ItemsContainer/ItemsContainer/ItemSlot2/ItemsContainer_ItemSlot2"]
 layout_mode = 2
 size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 5
 
 [node name="ItemCount2" type="Label" parent="ItemsPanel/ItemsContainer/ItemsContainer/ItemSlot2/ItemsContainer_ItemSlot2"]
 layout_mode = 2
@@ -212,6 +226,8 @@ grow_vertical = 2
 [node name="ItemIcon3" type="TextureRect" parent="ItemsPanel/ItemsContainer/ItemsContainer/ItemSlot3/ItemsContainer_ItemSlot3"]
 layout_mode = 2
 size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 5
 
 [node name="ItemCount3" type="Label" parent="ItemsPanel/ItemsContainer/ItemsContainer/ItemSlot3/ItemsContainer_ItemSlot3"]
 layout_mode = 2
@@ -233,6 +249,8 @@ grow_vertical = 2
 [node name="ItemIcon4" type="TextureRect" parent="ItemsPanel/ItemsContainer/ItemsContainer/ItemSlot4/ItemsContainer_ItemSlot4"]
 layout_mode = 2
 size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 5
 
 [node name="ItemCount4" type="Label" parent="ItemsPanel/ItemsContainer/ItemsContainer/ItemSlot4/ItemsContainer_ItemSlot4"]
 layout_mode = 2
@@ -254,6 +272,8 @@ grow_vertical = 2
 [node name="ItemIcon5" type="TextureRect" parent="ItemsPanel/ItemsContainer/ItemsContainer/ItemSlot5/ItemsContainer_ItemSlot5"]
 layout_mode = 2
 size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 5
 
 [node name="ItemCount5" type="Label" parent="ItemsPanel/ItemsContainer/ItemsContainer/ItemSlot5/ItemsContainer_ItemSlot5"]
 layout_mode = 2
@@ -274,6 +294,8 @@ offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("5_h022r")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="GiftsPainel" type="Panel" parent="."]
 anchors_preset = 3
@@ -281,10 +303,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -1013.0
-offset_top = -473.0
-offset_right = -813.0
-offset_bottom = -173.0
+offset_left = -857.0
+offset_top = -118.0
+offset_right = -139.0
+offset_bottom = -22.0
 grow_horizontal = 0
 grow_vertical = 0
 
@@ -298,10 +320,10 @@ offset_top = 10.0
 offset_right = 40.0
 offset_bottom = 36.0
 grow_horizontal = 2
-text = "Gifts"
+text = "Presentes do luto"
 horizontal_alignment = 1
 
-[node name="GiftsList" type="VBoxContainer" parent="GiftsPainel"]
+[node name="GiftsList" type="HBoxContainer" parent="GiftsPainel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -310,73 +332,121 @@ offset_top = 40.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="NegacaoHBox" type="HBoxContainer" parent="GiftsPainel/GiftsList"]
+[node name="NegacaoVBox" type="VBoxContainer" parent="GiftsPainel/GiftsList"]
 layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="NegacaoIcon" type="TextureRect" parent="GiftsPainel/GiftsList/NegacaoHBox"]
-custom_minimum_size = Vector2(24, 24)
+[node name="NegacaoMarker" type="ColorRect" parent="GiftsPainel/GiftsList/NegacaoVBox"]
+visible = false
 layout_mode = 2
-texture = ExtResource("6_0h1do")
+color = Color(1, 1, 0, 0.4)
 
-[node name="NegacaoLabel" type="Label" parent="GiftsPainel/GiftsList/NegacaoHBox"]
+[node name="NegacaoIcon" type="TextureRect" parent="GiftsPainel/GiftsList/NegacaoVBox"]
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.2, 0.2, 1)
+texture = ExtResource("6_erw67")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="RaivaHBox" type="HBoxContainer" parent="GiftsPainel/GiftsList"]
+[node name="NegacaoLabel" type="Label" parent="GiftsPainel/GiftsList/NegacaoVBox"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.6, 0.8, 1)
+horizontal_alignment = 1
 
-[node name="RaivaIcon" type="TextureRect" parent="GiftsPainel/GiftsList/RaivaHBox"]
-custom_minimum_size = Vector2(24, 24)
+[node name="RaivaVBox" type="VBoxContainer" parent="GiftsPainel/GiftsList"]
 layout_mode = 2
-texture = ExtResource("7_4d46k")
+size_flags_horizontal = 3
 
-[node name="RaivaLabel" type="Label" parent="GiftsPainel/GiftsList/RaivaHBox"]
+[node name="RaivaMarker" type="ColorRect" parent="GiftsPainel/GiftsList/RaivaVBox"]
+visible = false
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.4, 0, 1)
+color = Color(1, 1, 0, 0.4)
 
-[node name="BarganhaHBox" type="HBoxContainer" parent="GiftsPainel/GiftsList"]
+[node name="RaivaIcon" type="TextureRect" parent="GiftsPainel/GiftsList/RaivaVBox"]
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+texture = ExtResource("7_gonto")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="BarganhaIcon" type="TextureRect" parent="GiftsPainel/GiftsList/BarganhaHBox"]
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 2
-texture = ExtResource("8_erw67")
-
-[node name="BarganhaLabel" type="Label" parent="GiftsPainel/GiftsList/BarganhaHBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.8, 0.2, 1)
-
-[node name="DepressaoHBox" type="HBoxContainer" parent="GiftsPainel/GiftsList"]
-layout_mode = 2
-
-[node name="DepressaoIcon" type="TextureRect" parent="GiftsPainel/GiftsList/DepressaoHBox"]
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 2
-texture = ExtResource("9_gonto")
-
-[node name="DepressaoLabel" type="Label" parent="GiftsPainel/GiftsList/DepressaoHBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.2, 0.8, 1)
-
-[node name="AceitacaoHBox" type="HBoxContainer" parent="GiftsPainel/GiftsList"]
-layout_mode = 2
-
-[node name="AceitacaoIcon" type="TextureRect" parent="GiftsPainel/GiftsList/AceitacaoHBox"]
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 2
-texture = ExtResource("10_cwdlq")
-
-[node name="AceitacaoLabel" type="Label" parent="GiftsPainel/GiftsList/AceitacaoHBox"]
+[node name="RaivaLabel" type="Label" parent="GiftsPainel/GiftsList/RaivaVBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.2, 0.8, 0.2, 1)
+horizontal_alignment = 1
+
+[node name="BarganhaVBox" type="VBoxContainer" parent="GiftsPainel/GiftsList"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BarganhaMarker" type="ColorRect" parent="GiftsPainel/GiftsList/BarganhaVBox"]
+visible = false
+layout_mode = 2
+color = Color(1, 1, 0, 0.4)
+
+[node name="BarganhaIcon" type="TextureRect" parent="GiftsPainel/GiftsList/BarganhaVBox"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("8_cwdlq")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BarganhaLabel" type="Label" parent="GiftsPainel/GiftsList/BarganhaVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.6, 0.7, 1)
+horizontal_alignment = 1
+
+[node name="DepressaoVBox" type="VBoxContainer" parent="GiftsPainel/GiftsList"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DepressaoMarker" type="ColorRect" parent="GiftsPainel/GiftsList/DepressaoVBox"]
+visible = false
+layout_mode = 2
+color = Color(1, 1, 0, 0.4)
+
+[node name="DepressaoIcon" type="TextureRect" parent="GiftsPainel/GiftsList/DepressaoVBox"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("9_o6xly")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DepressaoLabel" type="Label" parent="GiftsPainel/GiftsList/DepressaoVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.1, 0.6, 1)
+horizontal_alignment = 1
+
+[node name="AceitacaoVBox" type="VBoxContainer" parent="GiftsPainel/GiftsList"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AceitacaoMarker" type="ColorRect" parent="GiftsPainel/GiftsList/AceitacaoVBox"]
+visible = false
+layout_mode = 2
+color = Color(1, 1, 0, 0.4)
+
+[node name="AceitacaoIcon" type="TextureRect" parent="GiftsPainel/GiftsList/AceitacaoVBox"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("10_we3sy")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AceitacaoLabel" type="Label" parent="GiftsPainel/GiftsList/AceitacaoVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+horizontal_alignment = 1
 
 [node name="PictureFrame" type="TextureRect" parent="."]
-offset_left = -8.0
-offset_top = 8.0
-offset_right = 1016.0
-offset_bottom = 1032.0
+visible = false
+offset_left = -5.0
+offset_top = -2.0
+offset_right = 1305.0
+offset_bottom = 1248.0
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("4_8qguk")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="MiniMapFrame" type="TextureRect" parent="."]
 visible = false
@@ -386,3 +456,5 @@ offset_right = 1435.0
 offset_bottom = 575.0
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("5_136eg")
+expand_mode = 1
+stretch_mode = 5
