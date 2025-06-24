@@ -1,4 +1,5 @@
 var scenes = {
+	"splash_screen": "res://scenes/ui/splash_screen.tscn",
 	"main_menu": "res://scenes/ui/main_menu.tscn",
 	"world": "res://scenes/world.tscn",
 	"battle": "res://scenes/BattleScene.tscn",

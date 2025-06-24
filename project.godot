@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Nightmare Loop"
-run/main_scene="uid://ddmh4ucs5i5hm"
+run/main_scene="res://scenes/ui/splash_screen.tscn"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 

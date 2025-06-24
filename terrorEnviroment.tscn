@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://pxh41fvblny8"]
+
+[sub_resource type="Environment" id="Environment_dark"]
+background_mode = 2
+background_color = Color(0.03, 0.03, 0.05, 1)
+tonemap_mode = 2
+tonemap_exposure = -0.5
+tonemap_white = 0.8
+fog_enabled = true
+fog_mode = 1
+fog_density = 1.0
+adjustment_enabled = true
+adjustment_brightness = 0.7
+adjustment_contrast = 1.1
+adjustment_saturation = 0.6
+
+[node name="WorldEnvironment" type="WorldEnvironment"]
+environment = SubResource("Environment_dark")

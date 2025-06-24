@@ -32,16 +32,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.38221)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 0, 10, 0)
+light_color = Color(0.5, 0.5, 0.6, 1)
+light_energy = 0.08
 shadow_enabled = true
 
 [node name="DirectionalLight3D3" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 26.1499, 10, -15.0977)
-light_energy = 0.2
+light_color = Color(0.3, 0.3, 0.4, 1)
+light_energy = 0.04
 shadow_enabled = true
 
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, -18.0102, 10, 10.3982)
-light_energy = 0.2
+light_color = Color(0.3, 0.3, 0.4, 1)
+light_energy = 0.04
 shadow_enabled = true
 
 [node name="Environment" type="Node3D" parent="."]
