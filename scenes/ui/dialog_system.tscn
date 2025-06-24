@@ -2,9 +2,12 @@
 
 [ext_resource type="Script" path="res://scripts/ui/dialog_system.gd" id="1_0"]
 [ext_resource type="Texture2D" path="res://assets/textures/dialog.png" id="2_dialog"]
+[ext_resource type="Texture2D" path="res://assets/textures/dialog_flipped.png" id="2_dialog_flipped"]
+[ext_resource type="Texture2D" path="res://assets/textures/dialog2.png" id="2_dialog2"]
 [ext_resource type="Texture2D" path="res://assets/textures/Mc1.png" id="3_mc1"]
 [ext_resource type="Texture2D" path="res://assets/textures/Mc2.png" id="4_mc2"]
 [ext_resource type="Texture2D" path="res://assets/textures/ghostFriend.png" id="5_ghost"]
+[ext_resource type="Texture2D" path="res://assets/textures/ghostFriend2.png" id="6_ghost2"]
 
 [node name="DialogSystem" type="CanvasLayer"]
 script = ExtResource("1_0")
@@ -96,4 +99,12 @@ one_shot = false
 
 [node name="BlinkTimer" type="Timer" parent="."]
 wait_time = 0.5
-autostart = true 
+autostart = true
+
+[node name="GhostAnimationTimer" type="Timer" parent="."]
+wait_time = 0.4
+autostart = false
+
+[node name="MCAnimationTimer" type="Timer" parent="."]
+wait_time = 0.4
+autostart = false

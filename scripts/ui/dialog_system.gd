@@ -2,22 +2,31 @@ extends CanvasLayer
 
 # Referências aos elementos da UI
 @onready var character_portrait = $CharacterContainer/CharacterPortrait
+@onready var dialog_box = $DialogContainer/DialogBox
 @onready var speaker_name = $DialogContainer/DialogBox/DialogContent/SpeakerName
 @onready var dialog_text = $DialogContainer/DialogBox/DialogContent/DialogText
 @onready var continue_prompt = $DialogContainer/DialogBox/ContinuePrompt
 @onready var typewriter_timer = $TypewriterTimer
 @onready var blink_timer = $BlinkTimer
+@onready var ghost_animation_timer = $GhostAnimationTimer
+@onready var mc_animation_timer = $MCAnimationTimer
 
 # Texturas dos personagens
 var mc1_texture = preload("res://assets/textures/Mc1.png")
 var mc2_texture = preload("res://assets/textures/Mc2.png")
 var ghost_texture = preload("res://assets/textures/ghostFriend.png")
+var ghost2_texture = preload("res://assets/textures/ghostFriend2.png")
+var dialog_texture = preload("res://assets/textures/dialog.png")
+var dialog_flipped_texture = preload("res://assets/textures/dialog_flipped.png")
+var dialog2_texture = preload("res://assets/textures/dialog2.png")
 
 # Estados do diálogo
 var current_dialog_index = 0
 var current_char_index = 0
 var is_typing = false
 var dialog_finished = false
+var ghost_mouth_open = false
+var mc_mouth_open = false
 
 # Script completo de diálogos
 var dialogs = [
@@ -388,6 +397,14 @@ func _ready():
 	# Conecta os timers
 	typewriter_timer.timeout.connect(_on_typewriter_timer_timeout)
 	blink_timer.timeout.connect(_on_blink_timer_timeout)
+	ghost_animation_timer.timeout.connect(_on_ghost_animation_timer_timeout)
+	mc_animation_timer.timeout.connect(_on_mc_animation_timer_timeout)
+	
+	# Verifica se as texturas foram carregadas
+	if not ghost_texture or not ghost2_texture or not mc1_texture or not mc2_texture:
+		print("[DialogSystem] ERRO: Algumas texturas não foram carregadas!")
+	else:
+		print("[DialogSystem] Todas as texturas carregadas com sucesso")
 	
 	# Inicia o primeiro diálogo
 	show_dialog(0)
@@ -424,13 +441,40 @@ func show_dialog(index: int):
 	start_typewriter(dialog_data.text)
 
 func set_character_portrait(character: String):
+	# Para todos os timers de animação antes de configurar novo personagem
+	ghost_animation_timer.stop()
+	mc_animation_timer.stop()
+	ghost_mouth_open = false
+	mc_mouth_open = false
+	
+	print("[DialogSystem] Configurando personagem: ", character)
+	
+	# Configuração padrão para todos os personagens: esquerda da tela, balão apontando para direita
+	character_portrait.anchors_preset = Control.PRESET_CENTER_LEFT
+	character_portrait.offset_left = 50.0
+	character_portrait.offset_right = 450.0
+	character_portrait.offset_top = -200.0
+	character_portrait.offset_bottom = 200.0
+	character_portrait.custom_minimum_size = Vector2(400, 400)
+	# Usa sempre o balão dialog2 (apontando para direita)
+	dialog_box.texture = dialog2_texture
+	
 	match character:
 		"mc1":
 			character_portrait.texture = mc1_texture
+			# Inicia animação da boca da protagonista
+			mc_animation_timer.start()
+			print("[DialogSystem] Protagonista MC1 configurada")
 		"mc2": 
 			character_portrait.texture = mc2_texture
+			# Inicia animação da boca da protagonista
+			mc_animation_timer.start()
+			print("[DialogSystem] Protagonista MC2 configurada")
 		"ghost":
 			character_portrait.texture = ghost_texture
+			# Inicia animação da boca do ghost
+			ghost_animation_timer.start()
+			print("[DialogSystem] Ghost configurado - texture: ", ghost_texture)
 
 func start_typewriter(text: String):
 	is_typing = true
@@ -470,11 +514,20 @@ func complete_text():
 	is_typing = false
 	typewriter_timer.stop()
 	
+	# Para a animação do ghost
+	if dialogs[current_dialog_index].character == "ghost":
+		ghost_animation_timer.stop()
+		character_portrait.texture = ghost_texture  # Retorna à textura padrão
+		ghost_mouth_open = false
+	
+	# Para a animação da protagonista
+	if dialogs[current_dialog_index].character == "mc1" or dialogs[current_dialog_index].character == "mc2":
+		mc_animation_timer.stop()
+		character_portrait.texture = mc1_texture  # Retorna à textura padrão (boca fechada)
+		mc_mouth_open = false
+	
 	# Mostra o texto completo
 	dialog_text.text = dialogs[current_dialog_index].text
-	
-	# Restaura o retrato correto
-	set_character_portrait(dialogs[current_dialog_index].character)
 	
 	# Mostra o prompt para continuar
 	if continue_prompt and is_instance_valid(continue_prompt):
@@ -488,6 +541,28 @@ func _on_blink_timer_timeout():
 	# Faz o prompt piscar
 	if continue_prompt.visible and not is_typing:
 		continue_prompt.modulate.a = 1.0 if continue_prompt.modulate.a < 0.5 else 0.3
+
+func _on_ghost_animation_timer_timeout():
+	# Alterna entre as texturas do ghost para simular fala
+	var dialog_data = dialogs[current_dialog_index]
+	if dialog_data.character == "ghost":
+		if ghost_mouth_open:
+			character_portrait.texture = ghost_texture
+			ghost_mouth_open = false
+		else:
+			character_portrait.texture = ghost2_texture
+			ghost_mouth_open = true
+
+func _on_mc_animation_timer_timeout():
+	# Alterna entre as texturas da protagonista para simular fala
+	var dialog_data = dialogs[current_dialog_index]
+	if dialog_data.character == "mc1" or dialog_data.character == "mc2":
+		if mc_mouth_open:
+			character_portrait.texture = mc1_texture
+			mc_mouth_open = false
+		else:
+			character_portrait.texture = mc2_texture
+			mc_mouth_open = true
 
 func finish_dialog_sequence():
 	print("[DialogSystem] Sequência de diálogos finalizada")
