@@ -17,23 +17,30 @@ func _on_body_entered(body):
 	if body.name == "Player":
 		player_inside = true
 		player_ref = body
-		pressE.visible = true
+		if pressE and is_instance_valid(pressE):
+			pressE.visible = true
 
 func _on_body_exited(body):
 	if body.name == "Player":
 		player_inside = false
 		player_ref = null
-		pressE.visible = false
+		if pressE and is_instance_valid(pressE):
+			pressE.visible = false
 
 func _input(event):
 	if player_inside and event.is_action_pressed("interact"):
 		# Ativa a câmera da TV
-		camera_tv.make_current()
+		if camera_tv:
+			camera_tv.make_current()
 		# Oculta a UI (opcional)
-		pressE.visible = false
+		if pressE and is_instance_valid(pressE):
+			pressE.visible = false
 		
-		hud.visible = false
+		if hud and is_instance_valid(hud):
+			hud.visible = false
 		
-		player.visible = false
+		if player and is_instance_valid(player):
+			player.visible = false
 		
-		crosshair.visible = false
+		if crosshair and is_instance_valid(crosshair):
+			crosshair.visible = false

@@ -51,16 +51,19 @@ func _process(_delta):
 func _on_Gift_body_entered(body):
 	if body.is_in_group("player"):
 		can_interact = true
-		interaction_prompt.visible = true
+		if interaction_prompt and is_instance_valid(interaction_prompt):
+			interaction_prompt.visible = true
 
 func _on_Gift_body_exited(body):
 	if body.is_in_group("player"):
 		can_interact = false
-		interaction_prompt.visible = false
+		if interaction_prompt and is_instance_valid(interaction_prompt):
+			interaction_prompt.visible = false
 
 func collect():
 	is_collected = true
-	interaction_prompt.visible = false
+	if interaction_prompt and is_instance_valid(interaction_prompt):
+		interaction_prompt.visible = false
 	
 	# Adicionar gift ao GiftManager
 	var gift_manager = get_node("/root/GiftManager")

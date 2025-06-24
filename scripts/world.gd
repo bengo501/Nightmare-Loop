@@ -91,7 +91,7 @@ func toggle_skill_tree():
 		# Mostra a skill tree
 		ui_manager.show_ui("skill_tree")
 		# Esconde a HUD
-		if ui_manager.hud_instance:
+		if ui_manager.hud_instance and is_instance_valid(ui_manager.hud_instance):
 			ui_manager.hud_instance.visible = false
 	else:
 		# Fecha a skill tree
@@ -102,7 +102,7 @@ func toggle_skill_tree():
 		# Esconde a skill tree
 		ui_manager.hide_ui("skill_tree")
 		# Mostra a HUD
-		if ui_manager.hud_instance:
+		if ui_manager.hud_instance and is_instance_valid(ui_manager.hud_instance):
 			ui_manager.hud_instance.visible = true
 
 func _on_player_health_changed(new_health: int):

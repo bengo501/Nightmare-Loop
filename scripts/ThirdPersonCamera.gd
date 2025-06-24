@@ -1,7 +1,7 @@
 extends Camera3D
 
 @export var target: Node3D
-@export var offset: Vector3 = Vector3(3, 5, 3)
+@export var offset: Vector3 = Vector3(2, 3.5, 2)  # Reduzido de (3, 5, 3) para ficar mais próximo
 @export var follow_speed: float = 5.0
 @export var mouse_influence: float = 1.5
 
@@ -21,7 +21,8 @@ func _ready():
 	debug_marker = MeshInstance3D.new()
 	debug_marker.mesh = SphereMesh.new()
 	debug_marker.mesh.radius = 0.15
-	debug_marker.visible = false
+	if debug_marker and is_instance_valid(debug_marker):
+		debug_marker.visible = false
 	add_child(debug_marker)
 
 func _process(delta):
@@ -54,9 +55,11 @@ func _process(delta):
 		mouse_ray.target_position = to - from
 		mouse_ray.force_raycast_update()
 
-		# Debug visual: mostra uma esfera no ponto de colisão
-		if mouse_ray.is_colliding():
+			# Debug visual: mostra uma esfera no ponto de colisão
+	if mouse_ray.is_colliding():
+		if debug_marker and is_instance_valid(debug_marker):
 			debug_marker.global_transform.origin = mouse_ray.get_collision_point()
 			debug_marker.visible = true
-		else:
+	else:
+		if debug_marker and is_instance_valid(debug_marker):
 			debug_marker.visible = false

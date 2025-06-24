@@ -44,7 +44,7 @@ func toggle_skill_tree():
 		state_manager.change_state(state_manager.GameState.PLAYING)
 		# Mostra a HUD do player se existir
 		var hud = get_node_or_null("/root/UIManager/hud_instance")
-		if hud:
+		if hud and is_instance_valid(hud):
 			hud.visible = true
 	else:
 		show()
@@ -53,7 +53,7 @@ func toggle_skill_tree():
 		state_manager.change_state(state_manager.GameState.SKILL_TREE)
 		# Esconde a HUD do player se existir
 		var hud = get_node_or_null("/root/UIManager/hud_instance")
-		if hud:
+		if hud and is_instance_valid(hud):
 			hud.visible = false
 
 func _on_close_pressed():
@@ -63,7 +63,7 @@ func _on_close_pressed():
 	state_manager.change_state(state_manager.GameState.PLAYING)
 	# Mostra a HUD do player se existir
 	var hud = get_node_or_null("/root/UIManager/hud_instance")
-	if hud:
+	if hud and is_instance_valid(hud):
 		hud.visible = true
 
 # Exemplo de handlers para cada botão de skill
@@ -114,5 +114,5 @@ func show_menu():
 	$Panel/SkillPoints.text = "Pontos de Habilidade: %d" % skill_points
 	# Esconde a HUD do player se existir
 	var hud = get_node_or_null("/root/UIManager/hud_instance")
-	if hud:
+	if hud and is_instance_valid(hud):
 		hud.visible = false

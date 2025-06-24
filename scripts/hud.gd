@@ -229,8 +229,12 @@ func _aplicar_fontes():
 # Define o modo da crosshair (primeira pessoa ou terceira pessoa)
 func set_first_person_mode(is_first_person: bool):
 	is_first_person_mode = is_first_person
-	if crosshair:
+	if crosshair and is_instance_valid(crosshair):
 		crosshair.visible = is_first_person_mode
+
+# Alias para compatibilidade
+func set_crosshair_mode(is_first_person: bool):
+	set_first_person_mode(is_first_person)
 
 # Callback para quando os pontos de lucidez mudarem
 func _on_lucidity_points_changed(points: int):

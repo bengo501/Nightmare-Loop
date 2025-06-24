@@ -39,7 +39,7 @@ func _ready():
 		mesh_instance.material_override = material
 	
 	# Esconde o prompt inicialmente
-	if interaction_prompt:
+	if interaction_prompt and is_instance_valid(interaction_prompt):
 		interaction_prompt.visible = false
 
 func _process(delta):
@@ -58,13 +58,13 @@ func _process(delta):
 func _on_body_entered(body):
 	if body.is_in_group("player"):
 		can_interact = true
-		if interaction_prompt:
+		if interaction_prompt and is_instance_valid(interaction_prompt):
 			interaction_prompt.visible = true
 
 func _on_body_exited(body):
 	if body.is_in_group("player"):
 		can_interact = false
-		if interaction_prompt:
+		if interaction_prompt and is_instance_valid(interaction_prompt):
 			interaction_prompt.visible = false
 
 func collect():

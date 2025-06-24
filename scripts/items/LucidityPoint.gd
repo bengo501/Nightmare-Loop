@@ -28,7 +28,8 @@ func _ready():
 	body_exited.connect(_on_LucidityPoint_body_exited)
 	
 	# Esconde o prompt inicialmente
-	interaction_prompt.visible = false
+	if interaction_prompt and is_instance_valid(interaction_prompt):
+		interaction_prompt.visible = false
 
 func _process(_delta):
 	if can_interact and Input.is_action_just_pressed("interact") and not is_collected:
@@ -37,16 +38,19 @@ func _process(_delta):
 func _on_LucidityPoint_body_entered(body):
 	if body.is_in_group("player"):
 		can_interact = true
-		interaction_prompt.visible = true
+		if interaction_prompt and is_instance_valid(interaction_prompt):
+			interaction_prompt.visible = true
 
 func _on_LucidityPoint_body_exited(body):
 	if body.is_in_group("player"):
 		can_interact = false
-		interaction_prompt.visible = false
+		if interaction_prompt and is_instance_valid(interaction_prompt):
+			interaction_prompt.visible = false
 
 func collect():
 	is_collected = true
-	interaction_prompt.visible = false
+	if interaction_prompt and is_instance_valid(interaction_prompt):
+		interaction_prompt.visible = false
 	
 	# Adicionar ponto de lucidez ao LucidityManager
 	var lucidity_manager = get_node("/root/LucidityManager")

@@ -18,7 +18,7 @@ var is_active = false
 
 func _ready():
 	print("FirstPersonCamera: Inicializado")
-	if weapon:
+	if weapon and is_instance_valid(weapon):
 		print("Weapon found: ", weapon.name)
 		weapon.position = weapon_draw_start_pos
 		weapon.visible = false  # Começa invisível
@@ -35,6 +35,7 @@ func _process(delta):
 		is_active = current
 		if is_active:
 			show_weapon()  # Mostra a arma quando a câmera é ativada
+			center_cursor()  # Centraliza o cursor quando ativa primeira pessoa
 		else:
 			hide_weapon()  # Esconde a arma quando a câmera é desativada
 	
@@ -82,7 +83,7 @@ func shake():
 
 # Função para mostrar a arma e iniciar a animação
 func show_weapon():
-	if weapon:
+	if weapon and is_instance_valid(weapon):
 		print("Showing weapon...")
 		weapon.visible = true
 		weapon.position = weapon_draw_start_pos
@@ -92,7 +93,7 @@ func show_weapon():
 
 # Função para esconder a arma
 func hide_weapon():
-	if weapon:
+	if weapon and is_instance_valid(weapon):
 		print("Hiding weapon...")
 		weapon.visible = false
 		if weapon.has_method("set_mouse_filter"):
@@ -101,3 +102,11 @@ func hide_weapon():
 			weapon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		is_drawing_weapon = false
 		print("Weapon hidden")
+
+# Função para centralizar o cursor na tela
+func center_cursor():
+	var viewport = get_viewport()
+	if viewport:
+		var screen_center = viewport.get_visible_rect().size / 2
+		viewport.warp_mouse(screen_center)
+		print("Cursor centralizado na posição: ", screen_center)

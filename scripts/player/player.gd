@@ -25,7 +25,7 @@ var defense_bonus: float = 1.0
 @onready var crosshair = $Crosshair
 @onready var mouse_ray = $ThirdPersonCamera/MouseRay
 # Ajuste o caminho do HUD para usar o UIManager:
-@onready var hud = get_node("/root/UIManager").hud_instance
+@onready var hud = null  # Será inicializado no _ready()
 @onready var damage_indicator_scene = preload("res://scenes/ui/damage_indicator.tscn")
 @onready var camera_shake_script = preload("res://scripts/camera/camera_shake.gd")
 
@@ -37,8 +37,8 @@ var attack_timer: Timer
 var current_target = null
 var can_move = true
 
-@export var camera_distance: float = -4.0
-@export var camera_height: float = 7.0
+@export var camera_distance: float = -3.0  # Reduzido de -4.0 para ficar mais próximo
+@export var camera_height: float = 5.0  # Reduzido de 7.0 para ficar mais próximo
 @export var camera_angle_deg: float = 45.0
 @export var camera_smooth: float = 8.0
 @export var sway_max_offset: float = 1.5
@@ -98,6 +98,11 @@ func _ready():
 	add_to_group("player")
 	current_health = max_health
 	emit_signal("health_changed", current_health)
+	
+	# Inicializa a referência da HUD
+	var ui_manager = get_node_or_null("/root/UIManager")
+	if ui_manager and ui_manager.has_method("get") and ui_manager.get("hud_instance"):
+		hud = ui_manager.hud_instance
 
 
 
@@ -140,7 +145,7 @@ func _ready():
 	# Inicialização de sistemas
 	if third_person_camera:
 		activate_third_person()
-	if laser_line:
+	if laser_line and is_instance_valid(laser_line):
 		laser_line.visible = false
 	setup_attack_system()
 	setup_animations()
@@ -295,12 +300,12 @@ func _input(event):
 		if event.button_index == MOUSE_BUTTON_LEFT and first_person_mode:
 			if event.pressed:
 				laser_active = true
-				if laser_line:
+				if laser_line and is_instance_valid(laser_line):
 					laser_line.visible = true
 				shoot_first_person()
 			else:
 				laser_active = false
-				if laser_line:
+				if laser_line and is_instance_valid(laser_line):
 					laser_line.visible = false
 				current_target = null
 	if first_person_mode and event is InputEventMouseMotion:
@@ -310,12 +315,12 @@ func _input(event):
 		if event.keycode == KEY_F:
 			if event.pressed and not event.echo:
 				laser_active = true
-				if laser_line:
+				if laser_line and is_instance_valid(laser_line):
 					laser_line.visible = true
 				shoot_first_person()
 			elif not event.pressed:
 				laser_active = false
-				if laser_line:
+				if laser_line and is_instance_valid(laser_line):
 					laser_line.visible = false
 				current_target = null
 
@@ -344,36 +349,46 @@ func rotate_camera(mouse_motion: Vector2):
 # === MODOS ===
 func activate_first_person():
 	first_person_mode = true
-	$visuals.visible = false
-	if crosshair:
+	if visuals:
+		visuals.visible = false
+	if crosshair and is_instance_valid(crosshair):
 		crosshair.visible = true
-	if hud:
+	if hud and is_instance_valid(hud):
 		hud.visible = true
 		# Alterna crosshair para modo centralizado
-		hud.set_crosshair_mode(true)
+		if hud.has_method("set_crosshair_mode"):
+			hud.set_crosshair_mode(true)
 	if first_person_camera:
 		first_person_camera.current = true
 	if third_person_camera:
 		third_person_camera.current = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	if weapon:
+	
+	# Centraliza o cursor na tela
+	var viewport = get_viewport()
+	var screen_center = viewport.get_visible_rect().size / 2
+	viewport.warp_mouse(screen_center)
+	
+	if weapon and is_instance_valid(weapon):
 		weapon.visible = true
 
 func activate_third_person():
 	first_person_mode = false
-	$visuals.visible = true
-	if crosshair:
+	if visuals:
+		visuals.visible = true
+	if crosshair and is_instance_valid(crosshair):
 		crosshair.visible = false
-	if hud:
+	if hud and is_instance_valid(hud):
 		hud.visible = true
 		# Alterna crosshair para seguir o mouse
-		hud.set_crosshair_mode(false)
+		if hud.has_method("set_crosshair_mode"):
+			hud.set_crosshair_mode(false)
 	if third_person_camera:
 		third_person_camera.current = true
 	if first_person_camera:
 		first_person_camera.current = false
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	if weapon:
+	if weapon and is_instance_valid(weapon):
 		weapon.visible = false
 
 # === LASER ===

@@ -17,19 +17,19 @@ func _on_body_entered(body):
 	if body.name == "Player":
 		player_inside = true
 		player_ref = body
-		if pressE:
+		if pressE and is_instance_valid(pressE):
 			pressE.visible = true
 
 func _on_body_exited(body):
 	if body.name == "Player":
 		player_inside = false
 		player_ref = null
-		if pressE:
+		if pressE and is_instance_valid(pressE):
 			pressE.visible = false
 
 func _input(event):
 	if player_inside and event.is_action_pressed("interact") and player_ref and teleport_position != null:
-		if pressE:
+		if pressE and is_instance_valid(pressE):
 			pressE.visible = false
 
 		if not fading and wave and wave.material is ShaderMaterial:
@@ -43,7 +43,7 @@ func fade_overlay_alpha():
 	var alpha := 0.0
 
 	# Oculta o HUD no início do efeito
-	if hud:
+	if hud and is_instance_valid(hud):
 		hud.visible = false
 
 	# FADE IN
@@ -76,7 +76,7 @@ func fade_overlay_alpha():
 		await get_tree().create_timer(fade_duration * step).timeout
 
 	# Exibe novamente o HUD ao final do efeito
-	if hud:
+	if hud and is_instance_valid(hud):
 		hud.visible = true
 
 	fading = false

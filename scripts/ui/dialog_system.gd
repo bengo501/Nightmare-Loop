@@ -436,7 +436,8 @@ func start_typewriter(text: String):
 	is_typing = true
 	current_char_index = 0
 	dialog_text.text = ""
-	continue_prompt.visible = false
+	if continue_prompt and is_instance_valid(continue_prompt):
+		continue_prompt.visible = false
 	
 	# Inicia o timer do typewriter
 	typewriter_timer.start()
@@ -476,7 +477,8 @@ func complete_text():
 	set_character_portrait(dialogs[current_dialog_index].character)
 	
 	# Mostra o prompt para continuar
-	continue_prompt.visible = true
+	if continue_prompt and is_instance_valid(continue_prompt):
+		continue_prompt.visible = true
 
 func next_dialog():
 	current_dialog_index += 1
