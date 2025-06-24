@@ -6,23 +6,38 @@ extends Control
 @onready var ui_manager = get_node("/root/UIManager")
 @onready var game_manager = get_node("/root/GameManager")
 
+var fade_rect: ColorRect = null
+
 func _ready():
-	$NewGameButton.pressed.connect(_on_new_game_pressed)
-	$OptionsButton.pressed.connect(_on_options_pressed)
-	$CreditsButton.pressed.connect(_on_credits_pressed)
-	$QuitButton.pressed.connect(_on_quit_pressed)
+	if has_node("NewGameButton"):
+		$NewGameButton.pressed.connect(_on_new_game_pressed)
+	if has_node("OptionsButton"):
+		$OptionsButton.pressed.connect(_on_options_pressed)
+	if has_node("CreditsButton"):
+		$CreditsButton.pressed.connect(_on_credits_pressed)
+	if has_node("QuitButton"):
+		$QuitButton.pressed.connect(_on_quit_pressed)
 
 func _on_new_game_pressed():
 	# Primeiro reseta o jogo
 	game_manager.reset_game()
-	
-	# Esconde o menu atual
+	# Transição suave
+	_show_fade_and_start_game()
+
+func _show_fade_and_start_game():
+	fade_rect = ColorRect.new()
+	fade_rect.color = Color(0,0,0,0)
+	fade_rect.anchor_right = 1.0
+	fade_rect.anchor_bottom = 1.0
+	fade_rect.z_index = 1000
+	add_child(fade_rect)
+	var tween = create_tween()
+	tween.tween_property(fade_rect, "color:a", 1.0, 0.8)
+	tween.tween_callback(Callable(self, "_on_fade_complete"))
+
+func _on_fade_complete():
 	queue_free()
-	
-	# Muda a cena
 	scene_manager.change_scene("world")
-	
-	# Muda o estado para PLAYING
 	state_manager.change_state(state_manager.GameState.PLAYING)
 
 func _on_options_pressed():

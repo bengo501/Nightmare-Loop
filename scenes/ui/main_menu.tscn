@@ -1,4 +1,4 @@
-[gd_scene load_steps=75 format=3 uid="uid://ddmh4ucs5i5hm"]
+[gd_scene load_steps=83 format=3 uid="uid://ddmh4ucs5i5hm"]
 
 [ext_resource type="Script" uid="uid://dnu14bhp0ix7r" path="res://scripts/ui/main_menu.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://cqvbaj2ycbhhk" path="res://assets/textures/ezgif-split/frame_00_delay-0.02s.png" id="2_7cu7f"]
@@ -302,6 +302,23 @@ animations = [{
 "speed": 30.0
 }]
 
+[sub_resource type="Theme" id="Theme_jg1pe"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uibjs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jsak6"]
+
+[sub_resource type="Theme" id="Theme_uibjs"]
+default_font_size = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1xwyt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sqcof"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqict"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fv10w"]
+
 [node name="MainMenu" type="CanvasLayer"]
 
 [node name="Background" type="ColorRect" parent="."]
@@ -318,44 +335,44 @@ autoplay = "default"
 frame_progress = 0.335598
 
 [node name="TitleAnimGif" type="AnimatedSprite2D" parent="Background"]
-position = Vector2(719, 258)
-scale = Vector2(1.2, 1.039)
+position = Vector2(479.55, 125.463)
+scale = Vector2(1.36931, 1.17151)
 sprite_frames = SubResource("SpriteFrames_68i3f")
 autoplay = "default"
 frame_progress = 0.115851
 
 [node name="MenuContainer" type="VBoxContainer" parent="."]
+modulate = Color(1, 0.32549, 0.486275, 1)
 anchors_preset = -1
 anchor_left = 0.4
 anchor_top = 0.3
 anchor_right = 0.6
 anchor_bottom = 0.7
-offset_left = -264.6
-offset_top = -34.0
-offset_right = -264.6
-offset_bottom = -34.0
+offset_left = -23.6
+offset_top = 3.0
+offset_right = -23.4
+offset_bottom = 58.0
+theme = SubResource("Theme_jg1pe")
+alignment = 1
 script = ExtResource("1_script")
-
-[node name="Title" type="Label" parent="MenuContainer"]
-layout_mode = 2
-text = "Nightmare Loop"
 
 [node name="NewGameButton" type="Button" parent="MenuContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_uibjs")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jsak6")
 text = "Novo Jogo"
-
-[node name="ContinueButton" type="Button" parent="MenuContainer"]
-layout_mode = 2
-text = "Continuar"
 
 [node name="OptionsButton" type="Button" parent="MenuContainer"]
 layout_mode = 2
+theme = SubResource("Theme_uibjs")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_1xwyt")
+theme_override_styles/hover = SubResource("StyleBoxFlat_sqcof")
 text = "Opções"
-
-[node name="CreditsButton" type="Button" parent="MenuContainer"]
-layout_mode = 2
-text = "Créditos"
 
 [node name="QuitButton" type="Button" parent="MenuContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_wqict")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fv10w")
 text = "Sair"
