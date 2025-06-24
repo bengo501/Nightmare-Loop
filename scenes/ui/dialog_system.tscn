@@ -1,0 +1,99 @@
+[gd_scene load_steps=6 format=3 uid="uid://bq8m7n2qp4r8"]
+
+[ext_resource type="Script" path="res://scripts/ui/dialog_system.gd" id="1_0"]
+[ext_resource type="Texture2D" path="res://assets/textures/dialog.png" id="2_dialog"]
+[ext_resource type="Texture2D" path="res://assets/textures/Mc1.png" id="3_mc1"]
+[ext_resource type="Texture2D" path="res://assets/textures/Mc2.png" id="4_mc2"]
+[ext_resource type="Texture2D" path="res://assets/textures/ghostFriend.png" id="5_ghost"]
+
+[node name="DialogSystem" type="CanvasLayer"]
+script = ExtResource("1_0")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.8)
+
+[node name="CharacterContainer" type="Control" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="CharacterPortrait" type="TextureRect" parent="CharacterContainer"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 50.0
+offset_top = -150.0
+offset_right = 350.0
+offset_bottom = 150.0
+texture = ExtResource("3_mc1")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DialogContainer" type="Control" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -250.0
+
+[node name="DialogBox" type="NinePatchRect" parent="DialogContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = 20.0
+offset_right = -50.0
+offset_bottom = -20.0
+texture = ExtResource("2_dialog")
+
+[node name="DialogContent" type="VBoxContainer" parent="DialogContainer/DialogBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = 30.0
+offset_right = -30.0
+offset_bottom = -30.0
+
+[node name="SpeakerName" type="Label" parent="DialogContainer/DialogBox/DialogContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.4, 1)
+theme_override_font_sizes/font_size = 24
+text = "Protagonista"
+
+[node name="DialogText" type="RichTextLabel" parent="DialogContainer/DialogBox/DialogContent"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "Texto do diálogo aparece aqui..."
+fit_content = true
+
+[node name="ContinuePrompt" type="Label" parent="DialogContainer/DialogBox"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -30.0
+offset_right = -20.0
+offset_bottom = -10.0
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 16
+text = "Pressione ENTER"
+horizontal_alignment = 2
+
+[node name="TypewriterTimer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = false
+
+[node name="BlinkTimer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true 

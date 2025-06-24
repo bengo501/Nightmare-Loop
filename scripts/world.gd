@@ -13,6 +13,11 @@ extends Node3D
 var is_paused: bool = false
 var is_skill_tree_open: bool = false
 var current_map: Node = null
+var dialog_system: CanvasLayer = null
+var intro_dialog_shown: bool = false
+
+# Cena do sistema de diálogos
+var dialog_scene = preload("res://scenes/ui/dialog_system.tscn")
 
 func _ready():
 	# Inicializa o estado do jogo como PLAYING
@@ -27,6 +32,10 @@ func _ready():
 	
 	# Conecta sinais do SceneManager
 	scene_manager.connect("map_changed", _on_map_changed)
+	
+	# Inicia a sequência de diálogos de introdução
+	if not intro_dialog_shown:
+		start_intro_dialog()
 
 func _on_map_changed(map_path: String):
 	# Remove o mapa atual se existir
@@ -127,4 +136,33 @@ func save_game_state():
 
 # Função para carregar o estado do jogo
 func load_game_state():
-	game_manager.load_game() 
+	game_manager.load_game()
+
+# Função para iniciar a sequência de diálogos de introdução
+func start_intro_dialog():
+	print("[World] Iniciando sequência de diálogos de introdução...")
+	
+	# Pausa o jogador durante os diálogos
+	if player:
+		player.set_physics_process(false)
+		player.set_process_input(false)
+	
+	# Instancia o sistema de diálogos
+	dialog_system = dialog_scene.instantiate()
+	add_child(dialog_system)
+	
+	# Conecta o sinal de finalização (quando o sistema se remove)
+	dialog_system.tree_exiting.connect(_on_dialog_finished)
+	
+	intro_dialog_shown = true
+
+# Função chamada quando os diálogos terminam
+func _on_dialog_finished():
+	print("[World] Diálogos finalizados, liberando controle do jogador...")
+	
+	# Libera o jogador para se mover
+	if player:
+		player.set_physics_process(true)
+		player.set_process_input(true)
+	
+	dialog_system = null 
