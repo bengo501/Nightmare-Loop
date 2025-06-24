@@ -103,6 +103,11 @@ func _ready():
 	var ui_manager = get_node_or_null("/root/UIManager")
 	if ui_manager and ui_manager.has_method("get") and ui_manager.get("hud_instance"):
 		hud = ui_manager.hud_instance
+	
+	# Conecta ao SkillManager
+	var skill_manager = get_node_or_null("/root/SkillManager")
+	if skill_manager:
+		skill_manager.skill_upgraded.connect(_on_skill_upgraded)
 
 
 
@@ -230,8 +235,8 @@ func move_isometric(delta: float):
 		var direction = (camera_basis.x * input_vector.x) + (camera_basis.z * input_vector.z)
 		direction.y = 0
 		direction = direction.normalized()
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+		velocity.x = direction.x * SPEED * speed_multiplier
+		velocity.z = direction.z * SPEED * speed_multiplier
 		play_animation("walk_front")
 	else:
 		velocity.x = lerp(velocity.x, 0.0, 0.2)
@@ -251,8 +256,8 @@ func move_first_person(delta: float):
 		input_dir += first_person_camera.global_transform.basis.x
 	input_dir.y = 0
 	input_dir = input_dir.normalized()
-	velocity.x = input_dir.x * SPEED
-	velocity.z = input_dir.z * SPEED
+	velocity.x = input_dir.x * SPEED * speed_multiplier
+	velocity.z = input_dir.z * SPEED * speed_multiplier
 
 # === ANIMAÇÕES ===
 func play_animation(anim_name: String):
@@ -547,6 +552,75 @@ func gain_xp(amount):
 	stats.xp += amount
 	emit_signal("player_xp_changed", stats.xp)
 	print("Ganhou ", amount, " de XP. XP total: ", stats.xp)
+
+# Função para aplicar upgrades de habilidades da TV
+func apply_skill_upgrade(branch: String, level: int):
+	print("[Player] Aplicando upgrade de habilidade: ", branch, " nível ", level)
+	
+	match branch:
+		"speed":
+			match level:
+				1:
+					speed_multiplier += 0.1  # +10%
+					print("[Player] Velocidade aumentada em 10%")
+				2:
+					speed_multiplier += 0.1  # +20% total
+					print("[Player] Velocidade aumentada em 20% (total)")
+				3:
+					speed_multiplier += 0.1  # +30% total
+					print("[Player] Velocidade aumentada em 30% (total)")
+		
+		"damage":
+			match level:
+				1:
+					damage_multiplier += 0.15  # +15%
+					attack_damage *= 1.15
+					print("[Player] Dano aumentado em 15%")
+				2:
+					damage_multiplier += 0.1   # +25% total
+					attack_damage *= 1.087  # Para chegar a 25% total
+					print("[Player] Dano aumentado em 25% (total)")
+				3:
+					damage_multiplier += 0.1   # +35% total
+					attack_damage *= 1.08   # Para chegar a 35% total
+					print("[Player] Dano aumentado em 35% (total)")
+		
+		"health":
+			match level:
+				1:
+					health_multiplier += 0.2  # +20%
+					var old_max = stats.max_hp
+					stats.max_hp = int(stats.max_hp * 1.2)
+					stats.hp = int(stats.hp * (stats.max_hp / float(old_max)))
+					max_health = stats.max_hp
+					current_health = stats.hp
+					emit_signal("player_health_changed", stats.hp, stats.max_hp)
+					print("[Player] Vida máxima aumentada em 20%")
+				2:
+					health_multiplier += 0.1  # +30% total
+					var old_max = stats.max_hp
+					stats.max_hp = int(stats.max_hp * 1.083)  # Para chegar a 30% total
+					stats.hp = int(stats.hp * (stats.max_hp / float(old_max)))
+					max_health = stats.max_hp
+					current_health = stats.hp
+					emit_signal("player_health_changed", stats.hp, stats.max_hp)
+					print("[Player] Vida máxima aumentada em 30% (total)")
+				3:
+					health_multiplier += 0.1  # +40% total
+					var old_max = stats.max_hp
+					stats.max_hp = int(stats.max_hp * 1.077)  # Para chegar a 40% total
+					stats.hp = int(stats.hp * (stats.max_hp / float(old_max)))
+					max_health = stats.max_hp
+					current_health = stats.hp
+					emit_signal("player_health_changed", stats.hp, stats.max_hp)
+					print("[Player] Vida máxima aumentada em 40% (total)")
+	
+	# Atualiza as estatísticas
+	emit_signal("player_stats_changed", stats)
+
+# Callback para quando uma habilidade é melhorada via SkillManager
+func _on_skill_upgraded(branch: String, level: int):
+	apply_skill_upgrade(branch, level)
 
 # Função para alterar a consciência
 func change_consciencia(amount):

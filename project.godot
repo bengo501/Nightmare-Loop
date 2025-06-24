@@ -24,6 +24,7 @@ BattleData="*res://scripts/battle_data.gd"
 DamageCounterManager="*res://scripts/managers/damage_counter_manager.gd"
 LucidityManager="*res://scripts/managers/LucidityManager.gd"
 GiftManager="*res://scripts/managers/GiftManager.gd"
+SkillManager="*res://scripts/managers/SkillManager.gd"
 
 [display]
 
