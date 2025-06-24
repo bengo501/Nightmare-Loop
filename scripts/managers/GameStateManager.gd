@@ -7,7 +7,6 @@ enum GameState {
 	GAME_OVER,  # Game over
 	MENU,       # Menu principal
 	DIALOGUE,   # Em diálogo
-	BATTLE,     # Em batalha
 	SKILL_TREE  # Menu de habilidades
 }
 
@@ -39,7 +38,5 @@ func change_state(new_state: GameState):
 				get_tree().paused = true
 			GameState.DIALOGUE:
 				get_tree().paused = true
-			GameState.BATTLE:
-				get_tree().paused = false  # Não pausa durante a batalha
 			GameState.SKILL_TREE:
 				get_tree().paused = true 

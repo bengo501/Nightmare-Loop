@@ -13,16 +13,12 @@ var available_items = {
 		"perfume": {"name": "Perfume de Proteção", "quantity": 1, "effect": "boost_defense", "value": 20, "description": "Aumenta a defesa em 20 pontos"},
 		"amulet": {"name": "Amuleto da Sorte", "quantity": 1, "effect": "boost_luck", "value": 15, "description": "Aumenta a sorte em 15 pontos"}
 	},
-	"battle": {
-		"smoke": {"name": "Bomba de Fumaça", "quantity": 2, "effect": "escape", "value": 0, "description": "Permite fugir da batalha"},
-		"grenade": {"name": "Granada", "quantity": 1, "effect": "damage", "value": 100, "description": "Causa 100 pontos de dano"},
-		"glitter": {"name": "Pó de Brilho", "quantity": 3, "effect": "blind", "value": 0, "description": "Cega o inimigo por um turno"}
-	}
+
 }
 
 @onready var healing_list = $MenuContainer/Categories/HealingItems/ItemList
 @onready var status_list = $MenuContainer/Categories/StatusItems/ItemList
-@onready var battle_list = $MenuContainer/Categories/BattleItems/ItemList
+
 @onready var description_label = $MenuContainer/Description
 @onready var close_button = $MenuContainer/CloseButton
 
@@ -36,8 +32,7 @@ func _populate_item_lists():
 		child.queue_free()
 	for child in status_list.get_children():
 		child.queue_free()
-	for child in battle_list.get_children():
-		child.queue_free()
+
 	
 	# Adiciona itens de cura
 	for item_id in available_items.healing:
@@ -51,11 +46,7 @@ func _populate_item_lists():
 		var button = _create_item_button(item, "status", item_id)
 		status_list.add_child(button)
 	
-	# Adiciona itens de batalha
-	for item_id in available_items.battle:
-		var item = available_items.battle[item_id]
-		var button = _create_item_button(item, "battle", item_id)
-		battle_list.add_child(button)
+
 
 func _create_item_button(item_data, category, item_id):
 	var button = Button.new()

@@ -1,10 +1,12 @@
-[gd_scene load_steps=13 format=3 uid="uid://bhk71lctrycc"]
+[gd_scene load_steps=15 format=3 uid="uid://bhk71lctrycc"]
 
 [ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="1_rwgxs"]
 [ext_resource type="Script" uid="uid://bwhtkocfb8obw" path="res://scripts/world.gd" id="1_xxxxx"]
 [ext_resource type="PackedScene" uid="uid://bg2js05m4ohci" path="res://world1.tscn" id="2_e3hyu"]
 [ext_resource type="PackedScene" uid="uid://drs2ohyyh3uit" path="res://scenes/player/player.tscn" id="3_4wyf3"]
+[ext_resource type="PackedScene" uid="uid://ddlldwbytxok2" path="res://map_2.tscn" id="3_jhx03"]
 [ext_resource type="PackedScene" uid="uid://bd1iioahw58ht" path="res://scenes/enemies/ghost1.tscn" id="4_e68xj"]
+[ext_resource type="PackedScene" uid="uid://85t2oe4cyf02" path="res://objetos.tscn" id="4_o8fc1"]
 [ext_resource type="PackedScene" uid="uid://ytaetvi5ig5r" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Couch/Couch.fbx_Scene.fbm/Couch.fbx.fbx" id="7_q5onr"]
 [ext_resource type="PackedScene" uid="uid://cj47gniftse4d" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Dresser/Dresser.fbx_Scene/Dresser.fbx_Scene.fbx" id="8_jhx03"]
 [ext_resource type="PackedScene" uid="uid://c8q7v4j6y5n3q" path="res://scenes/items/GriefGifts.tscn" id="9_7r4gi"]
@@ -26,6 +28,10 @@ vertices_per_polygon = 4.0
 script = ExtResource("1_xxxxx")
 
 [node name="world" parent="." instance=ExtResource("2_e3hyu")]
+
+[node name="map2" parent="." instance=ExtResource("3_jhx03")]
+
+[node name="Objetos" parent="." instance=ExtResource("4_o8fc1")]
 
 [node name="Player" parent="." instance=ExtResource("3_4wyf3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.38221)
@@ -51,17 +57,17 @@ shadow_enabled = true
 [node name="Environment" type="Node3D" parent="."]
 
 [node name="Floor" type="CSGBox3D" parent="Environment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 2.89917)
 use_collision = true
 collision_layer = 129
 collision_mask = 129
-size = Vector3(40, 0.2, 40)
+size = Vector3(40, 0.2, 34.2017)
 material = ExtResource("1_rwgxs")
 
 [node name="Walls" type="Node3D" parent="Environment"]
 
 [node name="Wall1" type="CSGBox3D" parent="Environment/Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -20)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -14.0763)
 size = Vector3(40, 4, 0.2)
 material = ExtResource("1_rwgxs")
 
@@ -71,13 +77,13 @@ size = Vector3(40, 4, 0.2)
 material = ExtResource("1_rwgxs")
 
 [node name="Wall3" type="CSGBox3D" parent="Environment/Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 2, 0)
-size = Vector3(0.2, 4, 40)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 2, 2.98145)
+size = Vector3(0.2, 4, 34.0371)
 material = ExtResource("1_rwgxs")
 
 [node name="Wall4" type="CSGBox3D" parent="Environment/Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 2, 0)
-size = Vector3(0.2, 4, 40)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 2, 2.88379)
+size = Vector3(0.2, 4, 34.2324)
 material = ExtResource("1_rwgxs")
 
 [node name="Furniture" type="Node3D" parent="Environment"]

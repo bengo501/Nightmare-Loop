@@ -6,7 +6,6 @@ enum GameState {
 	PLAYING,
 	PAUSED,
 	GAME_OVER,
-	BATTLE,
 	DIALOGUE,
 	INVENTORY,
 	SKILL_TREE
@@ -45,9 +44,6 @@ func change_state(new_state: GameState) -> void:
 		GameState.GAME_OVER:
 			print("[GameStateManager] Executando lógica do estado GAME_OVER")
 			handle_game_over()
-		GameState.BATTLE:
-			print("[GameStateManager] Executando lógica do estado BATTLE")
-			handle_battle()
 		GameState.DIALOGUE:
 			print("[GameStateManager] Executando lógica do estado DIALOGUE")
 			handle_dialogue()
@@ -76,10 +72,6 @@ func handle_paused() -> void:
 
 func handle_game_over() -> void:
 	# Pausa o jogo quando game over
-	get_tree().paused = true
-
-func handle_battle() -> void:
-	# Pausa o jogo durante batalha
 	get_tree().paused = true
 
 func handle_dialogue() -> void:

@@ -21,8 +21,8 @@ func _ready():
 func _on_new_game_pressed():
 	# Primeiro reseta o jogo
 	game_manager.reset_game()
-	# Transição suave
-	_show_fade_and_start_game()
+	# Exibe os slides da história antes de iniciar o jogo
+	get_tree().change_scene_to_file("res://scenes/ui/story_slides.tscn")
 
 func _show_fade_and_start_game():
 	fade_rect = ColorRect.new()

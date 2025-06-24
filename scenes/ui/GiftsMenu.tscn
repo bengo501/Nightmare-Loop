@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://b21pprh3f73tq"]
+[gd_scene format=3 uid="uid://c8msl2viss5nh"]
 
 [node name="GiftsMenu" type="Control"]
 visible = false

@@ -60,8 +60,7 @@ var health_multiplier: float = 1.0
 @onready var camera = $CameraMount/Camera3D
 @onready var ray_cast = $CameraMount/RayCast3D
 
-# Flag para modo batalha em turno
-var is_battle_mode: bool = false
+
 
 signal game_over
 
@@ -100,8 +99,7 @@ func _ready():
 	current_health = max_health
 	emit_signal("health_changed", current_health)
 
-	if is_battle_mode:
-		return # Não buscar por nós específicos de gameplay normal
+
 
 	# Tenta encontrar os nós, se existirem
 	if has_node("../ThirdPersonCamera"):
@@ -389,63 +387,7 @@ func update_laser_color():
 		if laser_line and laser_line.material_override is ShaderMaterial:
 			laser_line.material_override.set_shader_parameter("core_color", cross_color)
 
-func _on_battle_started():
-	can_move = false
-	velocity = Vector3.ZERO
-	laser_active = false
-	if laser_line:
-		laser_line.visible = false
-	if weapon:
-		weapon.visible = false
-	if crosshair:
-		crosshair.visible = false
-	
-	# Esconde o modelo do player
-	if visuals:
-		visuals.visible = false
-	
-	# Esconde a HUD normal
-	if hud:
-		hud.visible = false
-	
-	# Desativa as câmeras do player
-	if first_person_camera:
-		first_person_camera.current = false
-	if third_person_camera:
-		third_person_camera.current = false
-	
-	# Ativa a câmera de batalha
-	var battle_camera = get_node_or_null("/root/battleScene/BattleCamera")
-	if battle_camera:
-		battle_camera.current = true
 
-func _on_battle_ended():
-	can_move = true
-	
-	# Mostra o modelo do player novamente
-	if visuals:
-		visuals.visible = true
-	
-	# Mostra a HUD normal
-	if hud:
-		hud.visible = true
-	
-	# Desativa a câmera de batalha
-	var battle_camera = get_node_or_null("/root/battleScene/BattleCamera")
-	if battle_camera:
-		battle_camera.current = false
-	
-	# Reativa a câmera apropriada baseada no modo atual
-	if first_person_mode:
-		if first_person_camera:
-			first_person_camera.current = true
-		if weapon:
-			weapon.visible = true
-		if crosshair:
-			crosshair.visible = true
-	else:
-		if third_person_camera:
-			third_person_camera.current = true
 
 func die() -> void:
 	print("DEBUG: Jogador morreu!")

@@ -4991,8 +4991,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312904, 1.59825, 0.36499)
 script = ExtResource("4_p47bc")
 
 [node name="weapon" type="TextureRect" parent="FirstPersonCamera"]
-offset_right = 1032.0
-offset_bottom = 600.0
+offset_left = -3.0
+offset_top = 48.0
+offset_right = 1029.0
+offset_bottom = 648.0
 texture = ExtResource("4_lvxji")
 
 [node name="ShootRay" type="RayCast3D" parent="FirstPersonCamera"]

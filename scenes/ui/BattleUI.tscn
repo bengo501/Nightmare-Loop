@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://8vhvb0uk5ru2"]
+[gd_scene load_steps=3 format=3 uid="uid://crmbd0qsl7o3d"]
 
 [ext_resource type="Script" uid="uid://bygjpx31qykif" path="res://scripts/ui/battle_ui.gd" id="1_eei8m"]
 [ext_resource type="Texture2D" uid="uid://db165i60ph6b3" path="res://assets/textures/Poltergeistart.PNG-removebg-preview.png" id="2_ebl3e"]

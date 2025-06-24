@@ -12,17 +12,14 @@ var ui_scenes := {
 	"pause_menu": preload("res://scenes/ui/pause_menu.tscn"),
 	"options_menu": preload("res://scenes/ui/options_menu.tscn"),
 	"game_over": preload("res://scenes/ui/game_over.tscn"),
-	"battle_ui": preload("res://scenes/ui/BattleUI.tscn"),
+
 	"hud": preload("res://scenes/ui/hud.tscn"),
-	"gifts_menu": preload("res://scenes/ui/GiftsMenu.tscn"),
-	"credits": preload("res://scenes/ui/credits.tscn"),
-	"item_menu": preload("res://scenes/ui/ItemMenu.tscn"),
 	"skill_tree": preload("res://scenes/ui/skill_tree.tscn")
 }
 
 # Gerenciamento de instâncias
 var active_ui := {}
-var battle_ui_instance = null  # Referência específica para a UI de batalha
+
 var hud_instance = null       # Referência específica para a HUD
 
 @onready var state_manager = get_node("/root/GameStateManager")
@@ -44,25 +41,6 @@ func _on_scene_changed(_scene_path: String):
 
 func _on_state_changed(new_state):
 	hide_all_ui()
-	if new_state == state_manager.GameState.BATTLE:
-		show_ui("battle_ui")
-		# Garante que só a battle_ui está visível
-		for key in active_ui.keys():
-			if key != "battle_ui":
-				active_ui[key].visible = false
-			else:
-				active_ui[key].visible = true
-		# Esconde a arma do player (FirstPersonCamera)
-		var players = get_tree().get_nodes_in_group("player")
-		for player in players:
-			if player.has_node("FirstPersonCamera"):
-				var fpcam = player.get_node("FirstPersonCamera")
-				if fpcam.has_method("hide_weapon"):
-					fpcam.hide_weapon()
-			# Garante que o player entra no modo batalha
-			if player.has_method("_on_battle_started"):
-				player._on_battle_started()
-		return
 	match new_state:
 		state_manager.GameState.MAIN_MENU:
 			show_ui("main_menu")
@@ -70,8 +48,6 @@ func _on_state_changed(new_state):
 			show_ui("hud")
 		state_manager.GameState.GAME_OVER:
 			show_ui("game_over")
-		state_manager.GameState.BATTLE:
-			show_ui("battle_ui")
 		state_manager.GameState.DIALOGUE:
 			# Mantém a UI atual durante diálogos
 			pass
@@ -96,15 +72,9 @@ func show_ui(ui_name: String, data: Dictionary = {}):
 			
 		# Special handling for specific UI types
 		match ui_name:
-			"battle_ui":
-				battle_ui_instance = instance
-				print("[UIManager] Battle UI instanciada e referenciada")
 			"hud":
 				hud_instance = instance
 				print("[UIManager] HUD instanciada e referenciada")
-		# Garante que a battle_ui está sempre no topo
-		if ui_name == "battle_ui":
-			move_child(instance, get_child_count() - 1)
 
 func hide_ui(ui_name: String):
 	if active_ui.has(ui_name):
@@ -114,8 +84,6 @@ func hide_ui(ui_name: String):
 		
 		# Clear specific references
 		match ui_name:
-			"battle_ui":
-				battle_ui_instance = null
 			"hud":
 				hud_instance = null
 

@@ -196,22 +196,11 @@ func _on_ghost_defeated():
 	
 	
 
-	# Troca o estado para BATTLE (UIManager cuidará da UI)
-	print("[GameManager] Fantasma derrotado! Trocando para estado BATTLE...")
-	state_manager.change_state(state_manager.GameState.BATTLE)
-	print("[GameManager] Estado após mudança: ", state_manager.current_state)
+	# O fantasma foi derrotado, mas não há mais sistema de batalha
+	print("[GameManager] Fantasma derrotado!")
+	print("[GameManager] Sistema de batalha foi removido - continuando jogo normal")
 
-	# Libera o mouse para uso na UI de batalha
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	# Esconde a arma da FirstPersonCamera
-	var players = get_tree().get_nodes_in_group("player")
-	if players.size() > 0:
-		var player = players[0]
-		if player.has_node("FirstPersonCamera"):
-			var fpcam = player.get_node("FirstPersonCamera")
-			if fpcam.has_method("hide_weapon"):
-				fpcam.hide_weapon()
-	print("[GameManager] Jogo pausado para batalha!")
+	print("[GameManager] Continuando jogo normal")
 	print("[GameManager] ====== FIM DO SINAL ======\n")
 
 func _on_node_added(node: Node) -> void:

@@ -1,9 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://b8j6y4q3n5x2m"]
+[gd_scene load_steps=2 format=3 uid="uid://ddr4y5j6bbm74"]
 
 [ext_resource type="Script" uid="uid://bnaxto1gkod7e" path="res://scripts/ui/skill_menu.gd" id="1_2k4m3"]
 
 [node name="SkillMenu" type="Control"]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

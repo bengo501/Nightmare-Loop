@@ -9,7 +9,6 @@ signal scene_changed(scene_path: String)
 var scenes = {
 	"main_menu": "res://scenes/ui/main_menu.tscn",
 	"world": "res://scenes/world.tscn",
-	"battle": "res://battle_scene.tscn",
 	"options_menu": "res://scenes/ui/options_menu.tscn",
 	"pause_menu": "res://scenes/ui/pause_menu.tscn",
 	"hud": "res://scenes/ui/hud.tscn",

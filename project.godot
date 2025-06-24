@@ -31,6 +31,7 @@ GiftManager="*res://scripts/managers/GiftManager.gd"
 window/size/viewport_width=1024
 window/size/viewport_height=600
 window/stretch/mode="canvas_items"
+mouse_cursor/custom_image="uid://d02xvpntngw1w"
 
 [input]
 
