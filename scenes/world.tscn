@@ -2,12 +2,12 @@
 
 [ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="1_rwgxs"]
 [ext_resource type="Script" uid="uid://bwhtkocfb8obw" path="res://scripts/world.gd" id="1_xxxxx"]
+[ext_resource type="PackedScene" uid="uid://bg2js05m4ohci" path="res://world1.tscn" id="2_e3hyu"]
 [ext_resource type="PackedScene" uid="uid://drs2ohyyh3uit" path="res://scenes/player/player.tscn" id="3_4wyf3"]
 [ext_resource type="PackedScene" uid="uid://bd1iioahw58ht" path="res://scenes/enemies/ghost1.tscn" id="4_e68xj"]
 [ext_resource type="PackedScene" uid="uid://ytaetvi5ig5r" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Couch/Couch.fbx_Scene.fbm/Couch.fbx.fbx" id="7_q5onr"]
 [ext_resource type="PackedScene" uid="uid://cj47gniftse4d" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Dresser/Dresser.fbx_Scene/Dresser.fbx_Scene.fbx" id="8_jhx03"]
 [ext_resource type="PackedScene" uid="uid://c8q7v4j6y5n3q" path="res://scenes/items/GriefGifts.tscn" id="9_7r4gi"]
-[ext_resource type="PackedScene" uid="uid://c4rvwq52s3ajv" path="res://scenes/items/LucidityPoint.tscn" id="11_e3hyu"]
 [ext_resource type="PackedScene" uid="uid://ct6ppkdyv5tix" path="res://scenes/items/GiftBarganha.tscn" id="12_q5onr"]
 [ext_resource type="PackedScene" uid="uid://4u41su83a4ma" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Boombox_/Boombox.fbx_Scene/Boombox.fbx_Scene.fbx" id="17_1dgkn"]
 [ext_resource type="PackedScene" uid="uid://blm23tt5thlmu" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Bathroom Sink/BathroomSink.fbx_Scene/BathroomSink.fbx_Scene.fbx" id="27_rup4s"]
@@ -25,7 +25,10 @@ vertices_per_polygon = 4.0
 [node name="World" type="Node3D"]
 script = ExtResource("1_xxxxx")
 
+[node name="world" parent="." instance=ExtResource("2_e3hyu")]
+
 [node name="Player" parent="." instance=ExtResource("3_4wyf3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.38221)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 0, 10, 0)
@@ -76,13 +79,13 @@ material = ExtResource("1_rwgxs")
 [node name="Furniture" type="Node3D" parent="Environment"]
 
 [node name="Couch" parent="Environment/Furniture" instance=ExtResource("7_q5onr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.30632, 0, -1.6261)
 
 [node name="Dresser" parent="Environment/Furniture" instance=ExtResource("8_jhx03")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.170139, 0, -0.172218)
 
 [node name="Boombox" parent="Environment/Furniture" instance=ExtResource("17_1dgkn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.02103, 0, 2.62874)
 
 [node name="BathroomSink" parent="Environment/Furniture" instance=ExtResource("27_rup4s")]
 
@@ -107,9 +110,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.12269, 0, -8.5535)
 
 [node name="GiftBarganha" parent="." instance=ExtResource("12_q5onr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.3124, 1.1888, -13.0021)
-
-[node name="LucidityPoint" parent="." instance=ExtResource("11_e3hyu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.7956, 1.43091, -11.2369)
-
-[node name="LucidityPoint2" parent="." instance=ExtResource("11_e3hyu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.166809, 1.44448, -12.42)

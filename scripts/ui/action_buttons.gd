@@ -24,4 +24,4 @@ func set_buttons_enabled(enabled: bool):
 	talk_button.disabled = not enabled
 	gifts_button.disabled = not enabled
 	flee_button.disabled = not enabled
-	next_button.disabled = not enabled 
+	next_button.disabled = not enabled

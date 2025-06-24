@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://3s1u27dlmait"]
+
+[ext_resource type="Shader" uid="uid://dfbg35n7n8gwe" path="res://shaders/psx.gdshader" id="1_rbxnt"]
+[ext_resource type="PackedScene" uid="uid://csv22yqit6mlw" path="res://cr_tshader.tscn" id="2_gcxxy"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qfnet"]
+shader = ExtResource("1_rbxnt")
+shader_parameter/enabled = true
+shader_parameter/dithering = true
+shader_parameter/colors = 12
+shader_parameter/dither_size = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer"]
+material = SubResource("ShaderMaterial_qfnet")
+offset_right = 1152.0
+offset_bottom = 648.0
+scale = Vector2(4, 4)
+
+[node name="SubViewport" type="SubViewport" parent="."]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="CRTshader" parent="SubViewport" instance=ExtResource("2_gcxxy")]

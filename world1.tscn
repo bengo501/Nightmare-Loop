@@ -1,0 +1,75 @@
+[gd_scene load_steps=12 format=3 uid="uid://bg2js05m4ohci"]
+
+[ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="1_rwgxs"]
+[ext_resource type="Texture2D" uid="uid://ca44uy3jlfa6w" path="res://assets/textures/Floor/Horror_Floor_05-128x128.png" id="2_w7kh3"]
+[ext_resource type="Texture2D" uid="uid://cmd33s4pp6r0d" path="res://assets/textures/Wall/Horror_Wall_07-128x128.png" id="4_e3hyu"]
+[ext_resource type="PackedScene" uid="uid://ytaetvi5ig5r" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Couch/Couch.fbx_Scene.fbm/Couch.fbx.fbx" id="7_q5onr"]
+[ext_resource type="PackedScene" uid="uid://cj47gniftse4d" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Dresser/Dresser.fbx_Scene/Dresser.fbx_Scene.fbx" id="8_jhx03"]
+[ext_resource type="Material" uid="uid://d3j53d06bnt3h" path="res://shaders/ditherTransparency.tres" id="14_npbic"]
+[ext_resource type="Script" uid="uid://c40fe800olgwg" path="res://scripts/wall.gd" id="15_e6ckp"]
+[ext_resource type="PackedScene" uid="uid://4u41su83a4ma" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Boombox_/Boombox.fbx_Scene/Boombox.fbx_Scene.fbx" id="17_1dgkn"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w7kh3"]
+albedo_texture = ExtResource("2_w7kh3")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o8fc1"]
+albedo_texture = ExtResource("4_e3hyu")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dss4m"]
+albedo_texture = ExtResource("4_e3hyu")
+
+[node name="world" type="Node3D"]
+
+[node name="map" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1296, 0.0184145, -0.0769463)
+
+[node name="Piso" type="CSGBox3D" parent="map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0157991, -0.159011, 0.0428863)
+material_override = SubResource("StandardMaterial3D_w7kh3")
+use_collision = true
+collision_layer = 129
+collision_mask = 129
+size = Vector3(10, 1, 10)
+material = ExtResource("1_rwgxs")
+
+[node name="Parede1" type="CSGBox3D" parent="map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.47631, 2.74651, 0.0631443)
+use_collision = true
+size = Vector3(1, 4.81104, 10)
+material = ExtResource("14_npbic")
+script = ExtResource("15_e6ckp")
+
+[node name="Parede2" type="CSGBox3D" parent="map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.54139, 2.75951, 0.0428863)
+material_override = SubResource("StandardMaterial3D_o8fc1")
+use_collision = true
+size = Vector3(1, 4.83704, 10)
+
+[node name="Parede3" type="CSGBox3D" parent="map"]
+transform = Transform3D(-0.00487012, 0.000765077, -0.999988, 0.00052374, 1, 0.000762528, 0.999988, -0.000520009, -0.00487051, -0.0625975, 2.76742, 4.54235)
+use_collision = true
+size = Vector3(1, 4.84814, 8)
+material = ExtResource("14_npbic")
+script = ExtResource("15_e6ckp")
+
+[node name="Parede4" type="CSGBox3D" parent="map"]
+transform = Transform3D(-0.00487012, 0.000765077, -0.999988, 0.00052374, 1, 0.000762528, 0.999988, -0.000520009, -0.00487051, -0.0187636, 2.76636, -4.45754)
+material_override = SubResource("StandardMaterial3D_dss4m")
+use_collision = true
+size = Vector3(1, 4.85547, 8)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.12756, 0)
+light_color = Color(0.988223, 0.917531, 0.843076, 1)
+light_energy = 1.808
+light_volumetric_fog_energy = 5.635
+omni_range = 8.25571
+
+[node name="Couch_fbx" parent="map" instance=ExtResource("7_q5onr")]
+transform = Transform3D(-1.99986, 0, 0.0179592, 0, 1, 0, -0.0239455, 0, -1.49989, 3.43594, 0.731322, -0.959917)
+
+[node name="Dresser_fbx_Scene" parent="map" instance=ExtResource("8_jhx03")]
+transform = Transform3D(-1.49891, 0, -0.057294, 0, 1.2, 0, 0.057294, 0, -1.49891, -1.65783, 0.419282, 3.03416)
+
+[node name="Boombox_fbx_Scene" parent="map" instance=ExtResource("17_1dgkn")]
+transform = Transform3D(-0.33629, 0, 0.941759, 0, 1, 0, -0.941759, 0, -0.33629, -3.45807, 1.14868, -0.229952)

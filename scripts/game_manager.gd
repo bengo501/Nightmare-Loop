@@ -194,15 +194,7 @@ func _on_ghost_defeated():
 		push_error("[GameManager] Erro: state_manager não é válido!")
 		return
 	
-	# Instancia BattleManager em /root se não existir
-	if not get_node_or_null("/root/BattleManager"):
-		var battle_manager_scene = preload("res://scripts/battle/battle_manager.gd")
-		var battle_manager = battle_manager_scene.new()
-		get_tree().get_root().add_child(battle_manager)
-		battle_manager.name = "BattleManager"
-		print("[GameManager] BattleManager instanciado em /root!")
-	else:
-		print("[GameManager] BattleManager já existe em /root!")
+	
 
 	# Troca o estado para BATTLE (UIManager cuidará da UI)
 	print("[GameManager] Fantasma derrotado! Trocando para estado BATTLE...")

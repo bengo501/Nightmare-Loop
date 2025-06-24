@@ -1,0 +1,62 @@
+[gd_scene load_steps=7 format=4 uid="uid://3dqgy2xopa1e"]
+
+[ext_resource type="Script" uid="uid://b01w3nsee7y30" path="res://scripts/tv.gd" id="1_0yerh"]
+[ext_resource type="Texture2D" uid="uid://d2uatmqbw2yp6" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/TV_1/Tv.jpg" id="2_dpr0r"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fmd5y"]
+resource_name = "Material"
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("2_dpr0r")
+emission_enabled = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_rwea5"]
+_surfaces = [{
+"aabb": AABB(-0.003, -0.003, -1.78814e-10, 0.006, 0.0054, 0.006),
+"format": 34359742465,
+"index_count": 60,
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAQAAAAQAAwACAAUAAAADAAYABgAEAAAABQAGAAMABwAEAAYABAAHAAEABgAFAAcACAABAAcACQACAAEAAQAIAAkABQACAAkABwAKAAgACgAHAAUACQAIAAoABQALAAoACgALAAkACQALAAUA"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("pZtEO6WbRLulm0SvpZtEOwGx+jilm0SvpZtEuwGx+jilm0SvpZtEu6WbRLulm0SvpZtEO6WbRLulm8Q7pZtEuwGx+jilm8Q7pZtEu6WbRLulm8Q7pZtEOwGx+jilm8Q7YfSsOlFJHTvoQtw6YfSsulFJHTvoQtw6YfSsOlFJHTvrio07YfSsulFJHTvrio07")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_epwc4"]
+resource_name = "Cube"
+_surfaces = [{
+"aabb": AABB(-0.003, -0.003, -1.78814e-10, 0.006, 0.0054, 0.006),
+"attribute_data": PackedByteArray("q6qqPgAAAACrqig/AAAAAKuqKD8AAIA/q6qqPgAAgD8AAAAAAAAAAKuqqj4AAAAAq6qqPgAAgD8AAACAAACAP6uqJj8AAAAAq6qqPgAAAACrqqo+AACAP6uqJj8AAIA/q6qqPgAAAACrqig/AAAAAKuqKD8AAIA/q6qqPgAAgD+rqqo+AAAAAKuqKD8AAAAAq6ooPwAAgD+rqqo+AACAPwAAaD8AADg/AACAPwAAgD8AACw/AACAP6uqQj8AADg/q6pCPwAAOD8AACw/AACAPwAALD8AAAAAq6pCPwAAkD4AAIA/AAAAAAAAgD8AAIA/AABoPwAAOD8AAGg/AACQPquqQj8AAJA+AAAsPwAAAAAAAIA/AAAAAAAAaD8AAJA+q6pCPwAAkD4AAGg/AACQPgAAaD8AADg/q6pCPwAAOD8="),
+"format": 34359742487,
+"index_count": 60,
+"index_data": PackedByteArray("AAABAAIAAgADAAAABAAFAAYABgAHAAQACAAJAAoACgALAAgADAANAA4ADgAPAAwAEAARABIAEgATABAAFAAVABYAFgAXABQAGAAZABoAGgAbABgAHAAdAB4AHgAfABwAIAAhACIAIgAjACAAJAAlACYAJgAnACQA"),
+"material": SubResource("StandardMaterial3D_fmd5y"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 40,
+"vertex_data": PackedByteArray("pZtEO6WbRLulm0SvpZtEOwGx+jilm0SvpZtEuwGx+jilm0SvpZtEu6WbRLulm0SvpZtEu6WbRLulm8Q7pZtEO6WbRLulm8Q7pZtEO6WbRLulm0SvpZtEu6WbRLulm0SvpZtEuwGx+jilm8Q7pZtEu6WbRLulm8Q7pZtEu6WbRLulm0SvpZtEuwGx+jilm0SvpZtEu6WbRLulm8Q7pZtEuwGx+jilm8Q7pZtEOwGx+jilm8Q7pZtEO6WbRLulm8Q7pZtEO6WbRLulm8Q7pZtEOwGx+jilm8Q7pZtEOwGx+jilm0SvpZtEO6WbRLulm0SvYfSsulFJHTvoQtw6pZtEuwGx+jilm0SvpZtEOwGx+jilm0SvYfSsOlFJHTvoQtw6YfSsOlFJHTvoQtw6pZtEOwGx+jilm0SvpZtEOwGx+jilm8Q7YfSsOlFJHTvrio07pZtEuwGx+jilm8Q7pZtEuwGx+jilm0SvYfSsulFJHTvoQtw6YfSsulFJHTvrio07YfSsOlFJHTvrio07pZtEOwGx+jilm8Q7pZtEuwGx+jilm8Q7YfSsulFJHTvrio07YfSsOlFJHTvrio07YfSsulFJHTvrio07YfSsulFJHTvoQtw6YfSsOlFJHTvoQtw6//////9//////////3//////////f/////////9/////fwAA////v/9/AAD///+//38AAP///7//fwAA////vwAA/3//fwAAAAD/f/9/AAAAAP9//38AAAAA/3//fwAA/3//f/9/////f/9//3////9//3//f////3//f/9///////9//3///////3//f///////f/9///////9//3///7HJ//8AAP+/scn//wAA/7+xyf//AAD/v7HJ//8AAP+/sclNtq5J2eSxyU22kEnk5LHJTba8SdDksclNtulJseRNNk22okkgm002TbbKSTebTTZNtrNJKJtNNk22ZUkKm/9/TbYAAP+//39NtgAA/7//f022AAD/v/9/TbYAAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/78=")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_rwea5")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e75v4"]
+
+[node name="TV_fbx_Scene" type="Node3D"]
+transform = Transform3D(0.148823, 0, 1.29359, 0, 1.3, 0, -1.4926, 0, 0.12898, 0, 0, 0)
+script = ExtResource("1_0yerh")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.666446, 0, -0.0171224, 0, 0.769231, 0, 0.0197564, 0, 0.768975, -0.0245734, 0.333155, 0.624885)
+
+[node name="Tv" type="MeshInstance3D" parent="."]
+transform = Transform3D(100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, 0, 0, 0)
+mesh = SubResource("ArrayMesh_epwc4")
+skeleton = NodePath("")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, -1.49012e-08, 0, 1, 0, 1.49012e-08, 0, 1, 0.00529414, 0.275907, 0.0731795)
+shape = SubResource("BoxShape3D_e75v4")

@@ -1,94 +1,171 @@
 extends CanvasLayer
 
-signal attack_pressed
-signal defend_pressed
-signal special_pressed
-signal item_pressed
-signal flee_pressed
-signal skill_chosen(skill_data)
+# Sinais que podem ser usados para comunicação com o sistema de batalha
+signal skill_chosen(skill_name)
+signal talk_chosen(talk_option)
+signal gift_chosen(gift_option)
+signal flee_selected
+signal next_turn_selected
 
-@onready var player_hp_label = $MainPanel/StatusPanel/PlayerStatus/PlayerHP
-@onready var player_mp_label = $MainPanel/StatusPanel/PlayerStatus/PlayerMP
-@onready var enemy_hp_label = $MainPanel/StatusPanel/EnemyStatus/EnemyHP
-@onready var turn_indicator = $MainPanel/TurnIndicator
-@onready var message_area = $MainPanel/MessageArea
-@onready var enemy_sprite = $MainPanel/EnemySprite
+# Referências principais
+@onready var skills_menu = $MainPanel/SkillsMenu
+@onready var talk_menu = $MainPanel/TalkMenu
+@onready var gifts_menu = $MainPanel/GiftsMenu
+@onready var message_label = $MainPanel/MessageBox/MessageLabel
 
-@onready var action_buttons = $MainPanel/ActionButtons
-@onready var skills_button = $MainPanel/ActionButtons/SkillsButton
-@onready var skills_menu = $MainPanel/ActionButtons/SkillsButton/skillsMenu
-@onready var skills_menu_atacar = $MainPanel/ActionButtons/SkillsButton/skillsMenu/VBoxContainer/AtacarButton
-@onready var skills_menu_presente = $MainPanel/ActionButtons/SkillsButton/skillsMenu/VBoxContainer/PresenteButton
-
-# --- Gifts UI ---
-@onready var gifts_panel = $MainPanel/GiftsPanel if has_node("MainPanel/GiftsPanel") else null
-@onready var negacao_label = gifts_panel.get_node("NegacaoLabel") if gifts_panel else null
-@onready var raiva_label = gifts_panel.get_node("RaivaLabel") if gifts_panel else null
-@onready var barganha_label = gifts_panel.get_node("BarganhaLabel") if gifts_panel else null
-@onready var depressao_label = gifts_panel.get_node("DepressaoLabel") if gifts_panel else null
-@onready var aceitacao_label = gifts_panel.get_node("AceitacaoLabel") if gifts_panel else null
-
-var float_time := 0.0
-var enemy_base_y: float = 0.0
 
 func _ready():
-	set_action_buttons_enabled(true)
-	enemy_sprite.visible = true
-	skills_menu.visible = false
-	skills_button.pressed.connect(_show_skills_menu)
-	skills_menu_atacar.pressed.connect(_on_skills_menu_atacar)
-	skills_menu_presente.pressed.connect(_on_skills_menu_presente)
+	_close_all_menus()
+	print("Battle UI carregada e pronta!")
+	
 
-func update_player_status(hp: int, max_hp: int, mp: int, max_mp: int):
-	player_hp_label.text = "HP: %d/%d" % [hp, max_hp]
-	player_mp_label.text = "MP: %d/%d" % [mp, max_mp]
+# === Funções dos botões principais ===
+
+func _on_skills_pressed():
+	_toggle_menu(skills_menu)
+	print("Botão Skills clicado!")
+
+func _on_talk_pressed():
+	_toggle_menu(talk_menu)
+	print("Botão Talk clicado!")
+
+func _on_gifts_pressed():
+	_toggle_menu(gifts_menu)
+	print("Botão Gifts clicado!")
+
+func _on_flee_pressed():
+	_close_all_menus()
+	show_message("Você fugiu da batalha.")
+	print("Botão Flee clicado!")
+	emit_signal("flee_selected")
+
+func _on_next_pressed():
+	_close_all_menus()
+	show_message("Você passou o turno.")
+	print("Botão Next clicado!")
+	emit_signal("next_turn_selected")
+
+
+# === Funções do submenu Skills ===
+
+func _on_atacar_pressed():
+	_close_all_menus()
+	show_message("Você atacou o inimigo!")
+	print("Botão Atacar clicado!")
+	emit_signal("skill_chosen", "Atacar")
+
+func _on_presente_plus_pressed():
+	_close_all_menus()
+	show_message("Você usou Presente++!")
+	print("Botão Presente++ clicado!")
+	emit_signal("skill_chosen", "Presente++")
+
+
+# === Funções do submenu Talk ===
+
+func _on_fala1_pressed():
+	_close_all_menus()
+	show_message("Você disse algo amigável.")
+	print("Botão Fala 1 clicado!")
+	emit_signal("talk_chosen", "Fala1")
+
+func _on_fala2_pressed():
+	_close_all_menus()
+	show_message("Você tentou entender o inimigo.")
+	print("Botão Fala 2 clicado!")
+	emit_signal("talk_chosen", "Fala2")
+
+func _on_fala3_pressed():
+	_close_all_menus()
+	show_message("Você falou sobre sentimentos.")
+	print("Botão Fala 3 clicado!")
+	emit_signal("talk_chosen", "Fala3")
+
+
+# === Funções do submenu Gifts ===
+
+func _on_negacao_pressed():
+	_close_all_menus()
+	show_message("Você ofereceu Negação.")
+	print("Botão Negação clicado!")
+	emit_signal("gift_chosen", "Negação")
+
+func _on_raiva_pressed():
+	_close_all_menus()
+	show_message("Você ofereceu Raiva.")
+	print("Botão Raiva clicado!")
+	emit_signal("gift_chosen", "Raiva")
+
+func _on_barganha_pressed():
+	_close_all_menus()
+	show_message("Você ofereceu Barganha.")
+	print("Botão Barganha clicado!")
+	emit_signal("gift_chosen", "Barganha")
+
+func _on_depressao_pressed():
+	_close_all_menus()
+	show_message("Você ofereceu Depressão.")
+	print("Botão Depressão clicado!")
+	emit_signal("gift_chosen", "Depressão")
+
+func _on_aceitacao_pressed():
+	_close_all_menus()
+	show_message("Você ofereceu Aceitação.")
+	print("Botão Aceitação clicado!")
+	emit_signal("gift_chosen", "Aceitação")
+
+
+# === Controle dos Menus ===
+
+func _toggle_menu(menu: Control):
+	if menu.visible:
+		_close_all_menus()
+	else:
+		_close_all_menus()
+		menu.visible = true
+
+
+func _close_all_menus():
+	skills_menu.visible = false
+	talk_menu.visible = false
+	gifts_menu.visible = false
+
+
+# === Caixa de Mensagem ===
+
+func show_message(text: String):
+	message_label.text = text
+
+
+# === Mouse Hover Prints ===
+
+func _on_skills_button_mouse_entered():
+	print("Mouse passou sobre Skills")
+
+func _on_talk_button_mouse_entered():
+	print("Mouse passou sobre Talk")
+
+func _on_gifts_button_mouse_entered():
+	print("Mouse passou sobre Gifts")
+
+func _on_flee_button_mouse_entered():
+	print("Mouse passou sobre Flee")
+
+func _on_next_button_mouse_entered():
+	print("Mouse passou sobre Next")
+	
+func update_player_status(hp: int, max_hp: int):
+	$MainPanel/PlayerStatus/PlayerHPBar.value = hp
+	$MainPanel/PlayerStatus/PlayerHPBar.max_value = max_hp
+	$MainPanel/PlayerStatus/PlayerHPLabel.text = "HP: %d/%d" % [hp, max_hp]
 
 func update_enemy_status(hp: int, max_hp: int):
-	enemy_hp_label.text = "Inimigo HP: %d/%d" % [hp, max_hp]
+	$MainPanel/EnemyStatus/EnemyHPBar.value = hp
+	$MainPanel/EnemyStatus/EnemyHPBar.max_value = max_hp
+	$MainPanel/EnemyStatus/EnemyHPLabel.text = "HP: %d/%d" % [hp, max_hp]
 
 func update_turn_indicator(is_player_turn: bool):
 	if is_player_turn:
-		turn_indicator.text = "Seu Turno"
+		$MainPanel/TurnIndicator.text = "Seu Turno"
 	else:
-		turn_indicator.text = "Turno do Inimigo"
-
-func show_message(msg: String):
-	message_area.text = msg
-
-func set_action_buttons_enabled(enabled: bool):
-	action_buttons.set_buttons_enabled(enabled)
-
-func set_enemy_texture(texture: Texture2D):
-	enemy_sprite.texture = texture
-
-func _process(delta):
-	# Animação de levitação suave
-	float_time += delta
-	var float_offset = sin(float_time * 2.0) * 10.0
-	enemy_sprite.position.y = enemy_base_y + float_offset
-
-func update_gifts_quantities(gifts: Dictionary):
-	if negacao_label:
-		negacao_label.text = "x%d" % gifts.get("negacao", 0)
-	if raiva_label:
-		raiva_label.text = "x%d" % gifts.get("raiva", 0)
-	if barganha_label:
-		barganha_label.text = "x%d" % gifts.get("barganha", 0)
-	if depressao_label:
-		depressao_label.text = "x%d" % gifts.get("depressao", 0)
-	if aceitacao_label:
-		aceitacao_label.text = "x%d" % gifts.get("aceitacao", 0)
-
-func _on_skills_menu_atacar():
-	skills_menu.visible = false
-	action_buttons.set_buttons_enabled(true)
-	emit_signal("skill_chosen", {"name": "Atacar"})
-
-func _on_skills_menu_presente():
-	skills_menu.visible = false
-	action_buttons.set_buttons_enabled(true)
-	emit_signal("skill_chosen", {"name": "Presente++"})
-
-func _show_skills_menu():
-	skills_menu.visible = true
-	action_buttons.set_buttons_enabled(false)
+		$MainPanel/TurnIndicator.text = "Turno do Inimigo"
