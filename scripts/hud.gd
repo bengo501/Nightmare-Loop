@@ -1,19 +1,19 @@
 extends CanvasLayer
 
-# Referências para os elementos da HUD
-@onready var health_bar = $TopBar/TopBar_PlayerInfoVBox/HealthBar
-@onready var xp_bar = $TopBar/TopBar_PlayerInfoVBox/XPBar
-@onready var ammo_label = $WeaponPanel/WeaponInfo/WeaponInfo/AmmoLabel
-@onready var player_name_label = $TopBar/TopBar_PlayerInfoVBox/PlayerNameLabel
-@onready var player_icon = $TopBar/PlayerIcon
-@onready var weapon_icon = $WeaponPanel/WeaponInfo/WeaponInfo/WeaponIcon
-@onready var stage_name_label = $TopBar/TopBar_ScoreLevelVBox/StageNameLabel
-@onready var minimap = $TopBar/TopBar_ScoreLevelVBox/MinimapPanel/Minimap/Minimap
+# Referências para os elementos da HUD (atualizadas para nova estrutura)
+@onready var health_bar = $PlayerIcon/HealthBar
+@onready var xp_bar = $PlayerIcon/XPBar
+@onready var ammo_label = null  # Removido temporariamente - não existe na nova estrutura
+@onready var player_name_image = $PlayerIcon/PlayerNameImage
+@onready var player_icon = $PlayerIcon
+@onready var weapon_icon = $WeaponPanel/WeaponIcon
+@onready var stage_image = $StageImage
+@onready var minimap = $MinimapPanel/Minimap/Minimap
 @onready var score_label = $TopBar/TopBar_ScoreLevelVBox/ScoreLabel
 @onready var level_label = $TopBar/TopBar_ScoreLevelVBox/LevelLabel
-@onready var lucidity_points_label = $TopBar/TopBar_ScoreLevelVBox/LucidityPointsLabel
+@onready var lucidity_label = $LucidityPanel/LucidityContainer/LucidityLabel
 @onready var crosshair = $Crosshair
-@onready var gift_color_indicator = $WeaponPanel/WeaponInfo/WeaponInfo/GiftColorIndicator
+@onready var gift_color_indicator = $WeaponPanel/GiftColorIndicator
 @onready var item_icons = [
 	$ItemsPanel/ItemsContainer/ItemsContainer/ItemSlot1/ItemsContainer_ItemSlot1/ItemIcon1,
 	$ItemsPanel/ItemsContainer/ItemsContainer/ItemSlot2/ItemsContainer_ItemSlot2/ItemIcon2,
@@ -65,6 +65,11 @@ var ammo: int = 30
 var max_ammo: int = 30
 var player_name: String = "Player"
 var stage_name: String = "Fase 1"
+var current_scene_path: String = ""
+
+# Texturas para indicadores de cenário
+var quarto_texture: Texture2D = preload("res://assets/textures/quartoTitle.png")
+var estagio1_texture: Texture2D = preload("res://assets/textures/estagio1Title.png")
 var score: int = 0
 var level: int = 1
 var lucidity_points: int = 0
@@ -103,6 +108,9 @@ var gift_colors: Dictionary = {
 }
 
 func _ready():
+	# Verifica se os nós essenciais existem
+	_verify_nodes()
+	
 	# Aplica fontes customizadas
 	_aplicar_fontes()
 	
@@ -122,7 +130,33 @@ func _ready():
 	# Inicializa o marcador de gifts
 	_update_gift_marker()
 	
+	# Detecta o cenário atual e atualiza a imagem
+	_detect_and_update_scene()
+	
 	update_hud()
+
+# Verifica se os nós essenciais existem e reporta problemas
+func _verify_nodes():
+	var missing_nodes = []
+	
+	if not health_bar:
+		missing_nodes.append("PlayerIcon/HealthBar")
+	if not player_icon:
+		missing_nodes.append("PlayerIcon")
+	if not lucidity_label:
+		missing_nodes.append("LucidityPanel/LucidityContainer/LucidityLabel")
+	if not stage_image:
+		missing_nodes.append("StageImage")
+	if not weapon_icon:
+		missing_nodes.append("WeaponPanel/WeaponIcon")
+	if not gift_color_indicator:
+		missing_nodes.append("WeaponPanel/GiftColorIndicator")
+	
+	if missing_nodes.size() > 0:
+		print("[HUD] AVISO: Nós não encontrados: ", missing_nodes)
+		print("[HUD] Algumas funcionalidades podem não funcionar corretamente")
+	else:
+		print("[HUD] Todos os nós essenciais foram encontrados com sucesso")
 
 func _input(event):
 	# Controle do marcador de gifts pelas teclas 1-5
@@ -142,9 +176,13 @@ func set_health(value: float, max_value: float = 100.0):
 	print("[HUD] set_health chamado: ", value, "/", max_value)
 	health = value
 	max_health = max_value
-	if health_bar:
+	
+	if health_bar and is_instance_valid(health_bar):
 		health_bar.max_value = max_health
 		health_bar.value = health
+	else:
+		print("[HUD] AVISO: health_bar não está disponível")
+	
 	update_hud()
 
 # Atualiza a barra de XP
@@ -220,49 +258,80 @@ func set_item(slot: int, icon: Texture2D, count: int):
 
 # Atualiza todos os elementos da HUD
 func update_hud():
-	health_bar.max_value = max_health
-	health_bar.value = health
-	xp_bar.max_value = max_xp
-	xp_bar.value = xp
-	player_name_label.text = player_name
-	stage_name_label.text = "Fase: %s" % stage_name
-	score_label.text = "Score: %d" % score
-	level_label.text = "Level: %d" % level
-	lucidity_points_label.text = "Pontos de Lucidez: %d" % lucidity_points
+	# Verificações de segurança para evitar erros de null instance
+	if health_bar and is_instance_valid(health_bar):
+		health_bar.max_value = max_health
+		health_bar.value = health
+	
+	if xp_bar and is_instance_valid(xp_bar):
+		xp_bar.max_value = max_xp
+		xp_bar.value = xp
+	
+	# player_name_image é uma imagem fixa, não precisa de atualização
+	
+	# Detecta e atualiza a imagem do cenário automaticamente
+	_detect_and_update_scene()
+	
+	if score_label and is_instance_valid(score_label):
+		score_label.text = "Score: %d" % score
+	
+	if level_label and is_instance_valid(level_label):
+		level_label.text = "Level: %d" % level
+	
+	if lucidity_label and is_instance_valid(lucidity_label):
+		lucidity_label.text = str(lucidity_points)
 	
 	# Atualiza os labels de gifts
 	for gift_type in gift_labels:
-		gift_labels[gift_type].text = "%s: %d" % [gift_type.capitalize(), gifts[gift_type]]
+		var label = gift_labels[gift_type]
+		if label and is_instance_valid(label):
+			label.text = "%s: %d" % [gift_type.capitalize(), gifts[gift_type]]
 	
-	if weapon_icon_texture:
+	if weapon_icon_texture and weapon_icon and is_instance_valid(weapon_icon):
 		weapon_icon.texture = weapon_icon_texture
-	if player_icon_texture:
+	
+	if player_icon_texture and player_icon and is_instance_valid(player_icon):
 		player_icon.texture = player_icon_texture
-	if minimap_texture:
+	
+	if minimap_texture and minimap and is_instance_valid(minimap):
 		minimap.texture = minimap_texture
+	
+	# Atualiza itens do inventário
 	for i in range(5):
-		if items[i]:
-			item_icons[i].texture = items[i]["icon"]
-			item_counts[i].text = "x%d" % items[i]["count"]
-		else:
-			item_icons[i].texture = null
-			item_counts[i].text = "x0"
+		if i < item_icons.size() and item_icons[i] and is_instance_valid(item_icons[i]):
+			if items[i]:
+				item_icons[i].texture = items[i]["icon"]
+			else:
+				item_icons[i].texture = null
+		
+		if i < item_counts.size() and item_counts[i] and is_instance_valid(item_counts[i]):
+			if items[i]:
+				item_counts[i].text = "x%d" % items[i]["count"]
+			else:
+				item_counts[i].text = "x0"
 
 # Aplica fontes customizadas aos principais elementos
 func _aplicar_fontes():
 	if font_title:
-		stage_name_label.add_theme_font_override("font", font_title)
-		score_label.add_theme_font_override("font", font_title)
-		level_label.add_theme_font_override("font", font_title)
-		lucidity_points_label.add_theme_font_override("font", font_title)
-		$GiftsPainel/GiftsTitle.add_theme_font_override("font", font_title)
+		if level_label and is_instance_valid(level_label):
+			level_label.add_theme_font_override("font", font_title)
+		if lucidity_label and is_instance_valid(lucidity_label):
+			lucidity_label.add_theme_font_override("font", font_title)
+		var gifts_title = get_node_or_null("GiftsPainel/GiftsTitle")
+		if gifts_title and is_instance_valid(gifts_title):
+			gifts_title.add_theme_font_override("font", font_title)
+	
 	if font_label:
-		ammo_label.add_theme_font_override("font", font_label)
-		player_name_label.add_theme_font_override("font", font_label)
-		for label in item_counts:
-			label.add_theme_font_override("font", font_label)
+		# ammo_label foi removido temporariamente
+		# player_name_image é uma imagem, não precisa de fonte
+		
+		for i in range(item_counts.size()):
+			if item_counts[i] and is_instance_valid(item_counts[i]):
+				item_counts[i].add_theme_font_override("font", font_label)
+		
 		for label in gift_labels.values():
-			label.add_theme_font_override("font", font_label)
+			if label and is_instance_valid(label):
+				label.add_theme_font_override("font", font_label)
 
 # Define o modo da crosshair (primeira pessoa ou terceira pessoa)
 func set_first_person_mode(is_first_person: bool):
@@ -328,3 +397,28 @@ func get_selected_gift() -> String:
 # Função para obter o índice do gift selecionado
 func get_selected_gift_index() -> int:
 	return current_gift_index
+
+# Detecta o cenário atual e atualiza a imagem correspondente
+func _detect_and_update_scene():
+	var current_scene = get_tree().current_scene
+	if current_scene:
+		current_scene_path = current_scene.scene_file_path
+		print("[HUD] Cenário atual detectado: ", current_scene_path)
+		_update_stage_image()
+
+# Atualiza a imagem do cenário baseado na cena atual
+func _update_stage_image():
+	if not stage_image:
+		return
+		
+	if current_scene_path.contains("map_2.tscn"):
+		stage_image.texture = estagio1_texture
+		print("[HUD] Imagem atualizada para Estágio 1")
+	else:
+		# Para hub/world ou qualquer outra cena
+		stage_image.texture = quarto_texture
+		print("[HUD] Imagem atualizada para Quarto")
+
+# Função para ser chamada quando a cena muda
+func update_scene_indicator():
+	_detect_and_update_scene()

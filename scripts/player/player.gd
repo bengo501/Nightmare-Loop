@@ -14,6 +14,32 @@ const MOUSE_SENSITIVITY = 0.003
 var current_health: float
 var defense_bonus: float = 1.0
 
+# === SISTEMA DE MODOS DE ATAQUE ===
+enum AttackMode {
+	NEGACAO = 0,    # Azul - Contra fantasmas de Negação
+	RAIVA = 1,      # Verde - Contra fantasmas de Raiva  
+	BARGANHA = 2,   # Azul escuro/cinza - Contra fantasmas de Barganha
+	DEPRESSAO = 3,  # Roxo - Contra fantasmas de Depressão
+	ACEITACAO = 4   # Amarelo - Contra fantasmas de Aceitação
+}
+
+var current_attack_mode: AttackMode = AttackMode.NEGACAO
+var attack_mode_colors: Dictionary = {
+	AttackMode.NEGACAO: Color(0, 0.6, 1, 1),      # Azul
+	AttackMode.RAIVA: Color(0.2, 1, 0.2, 1),      # Verde
+	AttackMode.BARGANHA: Color(0.4, 0.5, 0.6, 1), # Azul escuro/cinza
+	AttackMode.DEPRESSAO: Color(0.6, 0.2, 1, 1),  # Roxo
+	AttackMode.ACEITACAO: Color(1, 0.9, 0.2, 1)   # Amarelo
+}
+
+var attack_mode_names: Dictionary = {
+	AttackMode.NEGACAO: "Negação",
+	AttackMode.RAIVA: "Raiva", 
+	AttackMode.BARGANHA: "Barganha",
+	AttackMode.DEPRESSAO: "Depressão",
+	AttackMode.ACEITACAO: "Aceitação"
+}
+
 # === NÓS (referências adaptadas) ===
 @onready var third_person_camera = $ThirdPersonCamera
 @onready var first_person_camera = $FirstPersonCamera
@@ -157,6 +183,9 @@ func _ready():
 		laser_line.visible = false
 	setup_attack_system()
 	setup_animations()
+	
+	# Inicializa o sistema de modos de ataque
+	setup_attack_modes()
 
 	# Configurações iniciais
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -187,6 +216,35 @@ func setup_animations():
 	]
 	for pair in transitions:
 		animation_player.set_blend_time(pair[0], pair[1], 0.3)
+
+func setup_attack_modes():
+	# Inicializa o modo de ataque padrão
+	current_attack_mode = AttackMode.NEGACAO
+	print("========================================")
+	print("SISTEMA DE MODOS DE ATAQUE INICIALIZADO")
+	print("========================================")
+	print("Modo padrão: ", get_current_attack_name())
+	print("Cor padrão: ", get_current_attack_color())
+	
+	# Configura o shader do laser com a cor inicial
+	if laser_line and is_instance_valid(laser_line):
+		update_laser_color()
+		print("✓ Laser configurado com cor inicial")
+	else:
+		print("⚠️ LaseLine não encontrado ou inválido")
+	
+	# Configura o crosshair com a cor inicial
+	update_crosshair_color()
+	print("✓ Crosshair configurado com cor inicial")
+	
+	print("========================================")
+	print("CONTROLES DOS MODOS DE ATAQUE:")
+	print("1 - Negação (Azul) - Efetivo contra fantasmas Verdes")
+	print("2 - Raiva (Verde) - Efetivo contra fantasmas Cinzas")
+	print("3 - Barganha (Cinza) - Efetivo contra fantasmas Azuis")
+	print("4 - Depressão (Roxo) - Efetivo contra fantasmas Roxos")
+	print("5 - Aceitação (Amarelo) - Efetivo contra fantasmas Amarelos")
+	print("========================================")
 
 # === FÍSICA ===
 func _physics_process(delta: float):
@@ -289,8 +347,9 @@ func perform_attack(target = null):
 	can_attack = false
 	attack_timer.start()
 	if target.has_method("take_damage"):
-		print("DEBUG: Causando ", attack_damage, " de dano em ", target.name)
-		target.take_damage(attack_damage)
+		var final_damage = calculate_damage_against_target(target)
+		print("DEBUG: Causando ", final_damage, " de dano em ", target.name, " (modo: ", get_current_attack_name(), ")")
+		target.take_damage(final_damage)
 
 func _on_attack_timer_timeout():
 	can_attack = true
@@ -331,6 +390,20 @@ func _input(event):
 				if laser_line and is_instance_valid(laser_line):
 					laser_line.visible = false
 				current_target = null
+	
+	# === SISTEMA DE SELEÇÃO DE MODO DE ATAQUE ===
+	if event is InputEventKey and event.pressed and not event.echo:
+		match event.keycode:
+			KEY_1:
+				set_attack_mode(AttackMode.NEGACAO)
+			KEY_2:
+				set_attack_mode(AttackMode.RAIVA)
+			KEY_3:
+				set_attack_mode(AttackMode.BARGANHA)
+			KEY_4:
+				set_attack_mode(AttackMode.DEPRESSAO)
+			KEY_5:
+				set_attack_mode(AttackMode.ACEITACAO)
 
 func shoot_first_person():
 	if not shoot_ray:
@@ -340,8 +413,9 @@ func shoot_first_person():
 		var collider = shoot_ray.get_collider()
 		if collider and collider.is_in_group("enemy"):
 			if collider.has_method("take_damage"):
-				collider.take_damage(attack_damage)
-				print("DEBUG: Acertou inimigo em primeira pessoa!")
+				var final_damage = calculate_damage_against_target(collider)
+				collider.take_damage(final_damage)
+				print("DEBUG: Acertou inimigo em primeira pessoa! Dano: ", final_damage, " (modo: ", get_current_attack_name(), ")")
 
 func rotate_camera(mouse_motion: Vector2):
 	if not first_person_camera:
@@ -399,16 +473,80 @@ func activate_third_person():
 	if weapon and is_instance_valid(weapon):
 		weapon.visible = false
 
+# === SISTEMA DE MODOS DE ATAQUE ===
+func set_attack_mode(mode: AttackMode):
+	current_attack_mode = mode
+	var mode_name = attack_mode_names[mode]
+	var mode_color = attack_mode_colors[mode]
+	
+	print("Modo de ataque alterado para: ", mode_name, " (", mode_color, ")")
+	
+	# Atualiza a cor do laser
+	update_laser_color()
+	
+	# Atualiza a cor do crosshair se estiver disponível
+	update_crosshair_color()
+
+func get_current_attack_mode() -> AttackMode:
+	return current_attack_mode
+
+func get_current_attack_color() -> Color:
+	return attack_mode_colors[current_attack_mode]
+
+func get_current_attack_name() -> String:
+	return attack_mode_names[current_attack_mode]
+
+func calculate_damage_against_target(target) -> float:
+	var base_damage = attack_damage
+	
+	# Verifica se o alvo é um fantasma com estágio de luto
+	if target.has_method("get_grief_stage"):
+		var target_stage = target.get_grief_stage()
+		
+		# Mapeia os estágios dos fantasmas para os modos de ataque
+		var stage_to_mode = {
+			0: AttackMode.NEGACAO,    # GriefStage.DENIAL
+			1: AttackMode.RAIVA,      # GriefStage.ANGER  
+			2: AttackMode.BARGANHA,   # GriefStage.BARGAINING
+			3: AttackMode.DEPRESSAO,  # GriefStage.DEPRESSION
+			4: AttackMode.ACEITACAO   # GriefStage.ACCEPTANCE
+		}
+		
+		# Se o modo de ataque corresponde ao estágio do fantasma, dano duplo
+		if target_stage in stage_to_mode and stage_to_mode[target_stage] == current_attack_mode:
+			base_damage *= 2.0
+			print("DANO CRÍTICO! Modo de ataque ", get_current_attack_name(), " é efetivo contra fantasma do estágio ", target_stage)
+		else:
+			print("Dano normal. Modo ", get_current_attack_name(), " contra fantasma estágio ", target_stage)
+	
+	return base_damage
+
 # === LASER ===
 func update_laser_color():
-	if crosshair and crosshair.material is ShaderMaterial:
-		var cross_color = crosshair.material.get_shader_parameter("dot_color")
-		if laser_line and laser_line.material_override == null:
+	if laser_line and is_instance_valid(laser_line):
+		# Garante que o laser tem um material shader
+		if laser_line.material_override == null:
 			var shader_material = ShaderMaterial.new()
 			shader_material.shader = preload("res://shaders/laserRay.gdshader")
 			laser_line.material_override = shader_material
-		if laser_line and laser_line.material_override is ShaderMaterial:
-			laser_line.material_override.set_shader_parameter("core_color", cross_color)
+		
+		# Atualiza a cor baseada no modo de ataque atual
+		if laser_line.material_override is ShaderMaterial:
+			var current_color = get_current_attack_color()
+			laser_line.material_override.set_shader_parameter("core_color", current_color)
+			print("Cor do laser atualizada para: ", current_color)
+
+func update_crosshair_color():
+	# Atualiza a cor do crosshair se disponível
+	if crosshair and is_instance_valid(crosshair) and crosshair.material is ShaderMaterial:
+		var current_color = get_current_attack_color()
+		crosshair.material.set_shader_parameter("dot_color", current_color)
+		crosshair.material.set_shader_parameter("line_color", current_color)
+		print("Cor do crosshair atualizada para: ", current_color)
+	
+	# Também atualiza no HUD se disponível
+	if hud and hud.has_method("set_crosshair_color"):
+		hud.set_crosshair_color(get_current_attack_color())
 
 
 

@@ -75,6 +75,10 @@ func change_scene(scene_name: String):
 		get_tree().current_scene = new_scene
 		
 		emit_signal("scene_changed", path)
+		
+		# Notifica o HUD para atualizar o indicador de cenário
+		_notify_hud_scene_change()
+		
 		print("[SceneManager] Cena alterada com sucesso!")
 	else:
 		push_error("[SceneManager] Cena não encontrada: " + scene_name)
@@ -275,6 +279,9 @@ func _execute_hub_change(hub_name: String, fade_duration: float, player: Node):
 		if new_fade_overlay and is_instance_valid(new_fade_overlay):
 			new_fade_overlay.queue_free()
 		
+		# Notifica o HUD para atualizar o indicador de cenário
+		_notify_hud_scene_change()
+		
 		print("[SceneManager] Troca de hub concluída com sucesso!")
 	else:
 		print("[SceneManager] ERRO: Nova cena não encontrada!")
@@ -361,3 +368,22 @@ func _on_change_timeout():
 func _reset_change_state():
 	is_changing_scene = false
 	print("[SceneManager] Estado de mudança resetado")
+
+func _notify_hud_scene_change():
+	"""
+	Notifica o HUD para atualizar o indicador de cenário
+	"""
+	# Aguarda alguns frames para garantir que a cena foi carregada
+	await get_tree().process_frame
+	await get_tree().process_frame
+	
+	# Procura pelo HUD no UIManager
+	var ui_manager = get_node_or_null("/root/UIManager")
+	if ui_manager and ui_manager.hud_instance:
+		if ui_manager.hud_instance.has_method("update_scene_indicator"):
+			ui_manager.hud_instance.update_scene_indicator()
+			print("[SceneManager] HUD notificado para atualizar indicador de cenário")
+		else:
+			print("[SceneManager] HUD não tem método update_scene_indicator")
+	else:
+		print("[SceneManager] UIManager ou HUD não encontrado para atualizar indicador")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=175 format=3 uid="uid://ddlldwbytxok2"]
+[gd_scene load_steps=176 format=3 uid="uid://ddlldwbytxok2"]
 
 [ext_resource type="PackedScene" uid="uid://cdooq3wu5wgv3" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/FloorLamp.fbx_Scene/FloorLamp.fbx_Scene.fbx" id="1_6cupr"]
 [ext_resource type="Texture2D" uid="uid://ca44uy3jlfa6w" path="res://assets/textures/Floor/Horror_Floor_05-128x128.png" id="1_mdskg"]
@@ -31,6 +31,7 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/GhostDepression.tscn" id="20_depression"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/GhostAcceptance.tscn" id="21_acceptance"]
 [ext_resource type="Script" uid="uid://cgwj4282tvlde" path="res://scripts/map_2_controller.gd" id="22_map2_controller"]
+[ext_resource type="Environment" uid="uid://12p1ky83ikyg" path="res://environments/green_nightmare_environment.tres" id="23_green_environment"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r5yoc"]
 albedo_texture = ExtResource("1_mdskg")
@@ -543,8 +544,11 @@ albedo_texture = ExtResource("8_7e46u")
 [sub_resource type="NavigationMesh" id="NavigationMesh_q57r8"]
 
 [node name="map2" type="Node3D"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, -24.6221, 0)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, -24.6221, 0)
 script = ExtResource("22_map2_controller")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("23_green_environment")
 
 [node name="Objetos" type="Node3D" parent="."]
 
@@ -562,24 +566,24 @@ transform = Transform3D(1.3, 0, 0, 0, 1.4, 0, 0, 0, 1, -24.2146, 0.340989, -30.7
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Objetos/FloorLamp_fbx_Scene2"]
 transform = Transform3D(0.769231, 0, 0, 0, 0.714286, 0, 0, 0, 1, 0, 1.43947, 0)
-light_color = Color(1, 1, 0.807843, 1)
-light_energy = 0.5
+light_color = Color(0.6, 1, 0.4, 1)
+light_energy = 0.3
 
 [node name="FloorLamp_fbx_Scene4" parent="Objetos" instance=ExtResource("1_6cupr")]
 transform = Transform3D(1.3, 0, 0, 0, 1.4, 0, 0, 0, 1, -21.8254, 0.340989, -38.5232)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Objetos/FloorLamp_fbx_Scene4"]
 transform = Transform3D(0.769231, 0, 0, 0, 0.714286, 0, 0, 0, 1, 0, 1.43947, 0)
-light_color = Color(1, 1, 0.807843, 1)
-light_energy = 0.5
+light_color = Color(0.6, 1, 0.4, 1)
+light_energy = 0.3
 
 [node name="FloorLamp_fbx_Scene5" parent="Objetos" instance=ExtResource("1_6cupr")]
 transform = Transform3D(1.73211, 0, 0, 0, 1.615, 0, 0, 0, 1.24113, -12.6096, 0.340989, -38.5232)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Objetos/FloorLamp_fbx_Scene5"]
 transform = Transform3D(0.769231, 0, 0, 0, 0.714286, 0, 0, 0, 1, 0, 1.43947, 0)
-light_color = Color(1, 1, 0.807843, 1)
-light_energy = 0.5
+light_color = Color(0.6, 1, 0.4, 1)
+light_energy = 0.3
 
 [node name="Single Bed_fbx_Scene" parent="Objetos" instance=ExtResource("2_b03pn")]
 transform = Transform3D(-0.031533, -1.09138e-09, 1.29935, -0.623133, 0.815391, -0.0255567, -0.626912, -0.413508, -0.0257117, -26.5345, 0.77271, -30.8691)
@@ -589,72 +593,72 @@ transform = Transform3D(1.3, 0, 0, 0, 1.4, 0, 0, 0, 1, -28.4401, 0.340989, -30.7
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="Objetos/FloorLamp_fbx_Scene3"]
 transform = Transform3D(0.769231, 0, 0, 0, 0.714286, 0, 0, 0, 1, -0.102974, 1.43947, 0)
-light_color = Color(1, 1, 0.807843, 1)
-light_energy = 0.5
+light_color = Color(0.6, 1, 0.4, 1)
+light_energy = 0.3
 
 [node name="FloorLamp_fbx_Scene6" parent="Objetos" instance=ExtResource("1_6cupr")]
 transform = Transform3D(1.3, 0, 0, 0, 1.4, 0, 0, 0, 1, -28.4401, 0.340989, -35.3437)
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="Objetos/FloorLamp_fbx_Scene6"]
 transform = Transform3D(0.769231, 0, 0, 0, 0.714286, 0, 0, 0, 1, -0.102974, 1.43947, 0)
-light_color = Color(1, 1, 0.807843, 1)
-light_energy = 0.5
+light_color = Color(0.6, 1, 0.4, 1)
+light_energy = 0.3
 
 [node name="FloorLamp_fbx_Scene7" parent="Objetos" instance=ExtResource("1_6cupr")]
 transform = Transform3D(1.3, 0, 0, 0, 1.4, 0, 0, 0, 1, -28.4401, 0.340989, -46.4396)
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="Objetos/FloorLamp_fbx_Scene7"]
 transform = Transform3D(0.769231, 0, 0, 0, 0.714286, 0, 0, 0, 1, -0.102974, 1.43947, 0)
-light_color = Color(1, 1, 0.807843, 1)
-light_energy = 0.5
+light_color = Color(0.6, 1, 0.4, 1)
+light_energy = 0.3
 
 [node name="FloorLamp_fbx_Scene8" parent="Objetos" instance=ExtResource("1_6cupr")]
 transform = Transform3D(1.3, 0, 0, 0, 1.4, 0, 0, 0, 1, -24.2848, 0.340989, -48.431)
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="Objetos/FloorLamp_fbx_Scene8"]
 transform = Transform3D(0.769231, 0, 0, 0, 0.714286, 0, 0, 0, 1, -0.102974, 1.43947, 0)
-light_color = Color(1, 1, 0.807843, 1)
-light_energy = 0.5
+light_color = Color(0.6, 1, 0.4, 1)
+light_energy = 0.3
 
 [node name="FloorLamp_fbx_Scene9" parent="Objetos" instance=ExtResource("1_6cupr")]
 transform = Transform3D(1.3, 0, 0, 0, 1.4, 0, 0, 0, 1, -15.4646, 0.340989, -50.5165)
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="Objetos/FloorLamp_fbx_Scene9"]
 transform = Transform3D(0.769231, 0, 0, 0, 0.714286, 0, 0, 0, 1, -0.102974, 1.43947, 0)
-light_color = Color(1, 1, 0.807843, 1)
-light_energy = 0.5
+light_color = Color(0.6, 1, 0.4, 1)
+light_energy = 0.3
 
 [node name="FloorLamp_fbx_Scene10" parent="Objetos" instance=ExtResource("1_6cupr")]
 transform = Transform3D(1.3, 0, 0, 0, 1.4, 0, 0, 0, 1, -15.4646, 0.340989, -45.1558)
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="Objetos/FloorLamp_fbx_Scene10"]
 transform = Transform3D(0.769231, 0, 0, 0, 0.714286, 0, 0, 0, 1, -0.102974, 1.43947, 0)
-light_color = Color(1, 1, 0.807843, 1)
-light_energy = 0.5
+light_color = Color(0.6, 1, 0.4, 1)
+light_energy = 0.3
 
 [node name="FloorLamp_fbx_Scene11" parent="Objetos" instance=ExtResource("1_6cupr")]
 transform = Transform3D(1.3, 0, 0, 0, 1.4, 0, 0, 0, 1, -25.6976, 0.340989, -53.8766)
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="Objetos/FloorLamp_fbx_Scene11"]
 transform = Transform3D(0.769231, 0, 0, 0, 0.714286, 0, 0, 0, 1, -0.102974, 1.43947, 0)
-light_color = Color(1, 1, 0.807843, 1)
-light_energy = 0.5
+light_color = Color(0.6, 1, 0.4, 1)
+light_energy = 0.3
 
 [node name="FloorLamp_fbx_Scene12" parent="Objetos" instance=ExtResource("1_6cupr")]
 transform = Transform3D(1.3, 0, 0, 0, 1.4, 0, 0, 0, 1, -22.0447, 0.340989, -58.1485)
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="Objetos/FloorLamp_fbx_Scene12"]
 transform = Transform3D(0.769231, 0, 0, 0, 0.714286, 0, 0, 0, 1, -0.102974, 1.43947, 0)
-light_color = Color(1, 1, 0.807843, 1)
-light_energy = 0.5
+light_color = Color(0.6, 1, 0.4, 1)
+light_energy = 0.3
 
 [node name="FloorLamp_fbx_Scene13" parent="Objetos" instance=ExtResource("1_6cupr")]
 transform = Transform3D(1.3, 0, 0, 0, 1.4, 0, 0, 0, 1, -14.6534, 0.340989, -58.1485)
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="Objetos/FloorLamp_fbx_Scene13"]
 transform = Transform3D(0.769231, 0, 0, 0, 0.714286, 0, 0, 0, 1, -0.102974, 1.43947, 0)
-light_color = Color(1, 1, 0.807843, 1)
-light_energy = 0.5
+light_color = Color(0.6, 1, 0.4, 1)
+light_energy = 0.3
 
 [node name="Stove_fbx_Scene" parent="Objetos" instance=ExtResource("3_owjsh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.9726, 0.341189, -38.283)

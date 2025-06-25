@@ -293,4 +293,8 @@ func _create_explosion_effect():
 
 func _connect_ghost_signal():
 	# Conecta sinais necessários
-	pass 
+	pass
+
+# Método para o sistema de dano do player
+func get_grief_stage() -> int:
+	return grief_stage 

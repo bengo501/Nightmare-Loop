@@ -1,7 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://c4rvwq52s3ajv"]
+[gd_scene load_steps=20 format=3 uid="uid://c4rvwq52s3ajv"]
 
 [ext_resource type="Script" uid="uid://dkqmts8vihtpp" path="res://scripts/hud.gd" id="1_xxxxx"]
-[ext_resource type="Texture2D" uid="uid://bdvmkymfywaq0" path="res://assets/textures/portrait_final_stylized-removebg-preview.png" id="2_0h1do"]
 [ext_resource type="PackedScene" uid="uid://xv4cs6ahki25" path="res://scenes/ui/minimap.tscn" id="2_xxxxx"]
 [ext_resource type="Texture2D" uid="uid://b5we7e4w8gpyu" path="res://assets/textures/gun.png" id="4_4d46k"]
 [ext_resource type="Texture2D" uid="uid://cwfunle18xgoi" path="res://assets/textures/pngwing.com.png" id="4_8qguk"]
@@ -12,6 +11,75 @@
 [ext_resource type="Texture2D" uid="uid://6ydtk3l07l6p" path="res://assets/textures/grayGift.png" id="8_cwdlq"]
 [ext_resource type="Texture2D" uid="uid://hjchf45s1f00" path="res://assets/textures/purpleGift.png" id="9_o6xly"]
 [ext_resource type="Texture2D" uid="uid://cixqfnsule2um" path="res://assets/textures/yellowGift.png" id="10_we3sy"]
+[ext_resource type="Texture2D" uid="uid://86gnmogsn157" path="res://assets/textures/PlayerInfo.png" id="11_playerinfo"]
+[ext_resource type="Texture2D" uid="uid://bnmds20dvd7q0" path="res://assets/textures/PlayerName.png" id="12_playername"]
+[ext_resource type="Texture2D" uid="uid://douqs785t2pf8" path="res://assets/textures/xpcontainer-removebg-preview.png" id="13_gonto"]
+[ext_resource type="Texture2D" uid="uid://cw75yeiu7rkp3" path="res://assets/textures/lunacy.png" id="13_lunacy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cwdlq"]
+bg_color = Color(0.811765, 0.811765, 0.811765, 0)
+border_color = Color(0.647059, 0, 0.0901961, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o6xly"]
+bg_color = Color(1, 1, 1, 1)
+draw_center = false
+skew = Vector2(1, 0)
+border_width_left = 40
+border_width_top = 40
+border_width_right = 40
+border_width_bottom = 40
+border_color = Color(0.647059, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 2
+expand_margin_left = 63.0
+expand_margin_right = 76.0
+shadow_color = Color(0, 0, 0, 0.878431)
+shadow_size = 15
+shadow_offset = Vector2(2, 2)
+anti_aliasing_size = 0.01
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_we3sy"]
+bg_color = Color(0.827451, 0.827451, 0.827451, 0)
+skew = Vector2(0, 0.2)
+border_width_left = 30
+border_width_top = 30
+border_width_right = 30
+border_width_bottom = 30
+border_color = Color(0.50903, 0, 0.109148, 1)
+border_blend = true
+corner_radius_top_left = 10
+corner_radius_top_right = 30
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 30
+corner_detail = 6
+expand_margin_left = 14.0
+shadow_color = Color(0, 0, 0, 1)
+shadow_size = 2
+shadow_offset = Vector2(9, 10)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_65nxt"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+skew = Vector2(1, 0)
+border_width_left = 30
+border_width_top = 30
+border_width_right = 30
+border_width_bottom = 30
+border_color = Color(0.65098, 0, 0.145098, 1)
+border_blend = true
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 11.0
+expand_margin_right = 19.0
+shadow_color = Color(0, 0, 0, 1)
+shadow_size = 14
+shadow_offset = Vector2(10, 5)
+anti_aliasing_size = 0.01
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_xxxxx")
@@ -26,38 +94,9 @@ offset_bottom = 103.0
 grow_horizontal = 2
 scale = Vector2(1.2, 1.2)
 
-[node name="PlayerIcon" type="TextureRect" parent="TopBar"]
-custom_minimum_size = Vector2(160, 120)
-layout_mode = 2
-texture = ExtResource("2_0h1do")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="TopBar_PlayerInfoVBox" type="VBoxContainer" parent="TopBar"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="PlayerNameLabel" type="Label" parent="TopBar/TopBar_PlayerInfoVBox"]
-layout_mode = 2
-text = "Protagonista"
-
-[node name="HealthBar" type="ProgressBar" parent="TopBar/TopBar_PlayerInfoVBox"]
-layout_mode = 2
-value = 100.0
-
-[node name="XPBar" type="ProgressBar" parent="TopBar/TopBar_PlayerInfoVBox"]
-visible = false
-layout_mode = 2
-value = 50.0
-
 [node name="TopBar_ScoreLevelVBox" type="VBoxContainer" parent="TopBar"]
 layout_mode = 2
 size_flags_horizontal = 2
-
-[node name="StageNameLabel" type="Label" parent="TopBar/TopBar_ScoreLevelVBox"]
-layout_mode = 2
-text = "Fase 1"
-horizontal_alignment = 2
 
 [node name="ScoreLabel" type="Label" parent="TopBar/TopBar_ScoreLevelVBox"]
 visible = false
@@ -69,11 +108,6 @@ horizontal_alignment = 2
 visible = false
 layout_mode = 2
 text = "Level: 1"
-horizontal_alignment = 2
-
-[node name="LucidityPointsLabel" type="Label" parent="TopBar/TopBar_ScoreLevelVBox"]
-layout_mode = 2
-text = "Pontos de Lucidez: 0"
 horizontal_alignment = 2
 
 [node name="MinimapPanel" type="Panel" parent="."]
@@ -102,42 +136,6 @@ handle_input_locally = false
 size = Vector2i(160, 150)
 render_target_update_mode = 0
 
-[node name="WeaponPanel" type="Panel" parent="."]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -1018.0
-offset_top = -189.0
-offset_right = -779.0
-offset_bottom = -120.0
-grow_horizontal = 0
-grow_vertical = 0
-
-[node name="WeaponInfo" type="VBoxContainer" parent="WeaponPanel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="WeaponInfo" type="HBoxContainer" parent="WeaponPanel/WeaponInfo"]
-layout_mode = 2
-
-[node name="WeaponIcon" type="TextureRect" parent="WeaponPanel/WeaponInfo/WeaponInfo"]
-custom_minimum_size = Vector2(140, 100)
-layout_mode = 2
-texture = ExtResource("4_4d46k")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="GiftColorIndicator" type="ColorRect" parent="WeaponPanel/WeaponInfo/WeaponInfo"]
-custom_minimum_size = Vector2(60, 40)
-layout_mode = 2
-color = Color(0, 0.6, 0.8, 1)
-
 [node name="ItemsPanel" type="Panel" parent="."]
 visible = false
 anchors_preset = 3
@@ -149,6 +147,7 @@ offset_left = -200.0
 offset_top = -200.0
 grow_horizontal = 0
 grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_cwdlq")
 
 [node name="ItemsContainer" type="VBoxContainer" parent="ItemsPanel"]
 layout_mode = 1
@@ -299,24 +298,31 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -857.0
-offset_top = -118.0
-offset_right = -139.0
-offset_bottom = -22.0
+offset_left = -952.0
+offset_top = -131.0
+offset_right = -234.0
+offset_bottom = -35.0
 grow_horizontal = 0
 grow_vertical = 0
+scale = Vector2(0.7, 0.7)
+theme_override_styles/panel = SubResource("StyleBoxFlat_o6xly")
 
 [node name="GiftsTitle" type="Label" parent="GiftsPainel"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -40.0
-offset_top = 10.0
-offset_right = 40.0
-offset_bottom = 36.0
+offset_left = -7.57144
+offset_top = -51.0
+offset_right = 228.429
+offset_bottom = -17.0
 grow_horizontal = 2
-text = "Presentes do luto"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/line_spacing = 21
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 24
+text = "PRESENTES DE LUTO"
 horizontal_alignment = 1
 
 [node name="GiftsList" type="HBoxContainer" parent="GiftsPainel"]
@@ -324,13 +330,18 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 40.0
+offset_left = -77.0
+offset_top = 15.0
+offset_right = -77.0
+offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(1.3, 1.3)
 
 [node name="NegacaoVBox" type="VBoxContainer" parent="GiftsPainel/GiftsList"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 20
 
 [node name="NegacaoMarker" type="ColorRect" parent="GiftsPainel/GiftsList/NegacaoVBox"]
 visible = false
@@ -352,6 +363,7 @@ horizontal_alignment = 1
 [node name="RaivaVBox" type="VBoxContainer" parent="GiftsPainel/GiftsList"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 20
 
 [node name="RaivaMarker" type="ColorRect" parent="GiftsPainel/GiftsList/RaivaVBox"]
 visible = false
@@ -373,6 +385,7 @@ horizontal_alignment = 1
 [node name="BarganhaVBox" type="VBoxContainer" parent="GiftsPainel/GiftsList"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 20
 
 [node name="BarganhaMarker" type="ColorRect" parent="GiftsPainel/GiftsList/BarganhaVBox"]
 visible = false
@@ -394,6 +407,7 @@ horizontal_alignment = 1
 [node name="DepressaoVBox" type="VBoxContainer" parent="GiftsPainel/GiftsList"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 20
 
 [node name="DepressaoMarker" type="ColorRect" parent="GiftsPainel/GiftsList/DepressaoVBox"]
 visible = false
@@ -415,11 +429,13 @@ horizontal_alignment = 1
 [node name="AceitacaoVBox" type="VBoxContainer" parent="GiftsPainel/GiftsList"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 20
 
 [node name="AceitacaoMarker" type="ColorRect" parent="GiftsPainel/GiftsList/AceitacaoVBox"]
 visible = false
+modulate = Color(0.980392, 1, 1, 1)
 layout_mode = 2
-color = Color(1, 1, 0, 0.4)
+color = Color(1, 1, 0, 1)
 
 [node name="AceitacaoIcon" type="TextureRect" parent="GiftsPainel/GiftsList/AceitacaoVBox"]
 custom_minimum_size = Vector2(40, 40)
@@ -454,3 +470,130 @@ scale = Vector2(0.4, 0.4)
 texture = ExtResource("5_136eg")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="PlayerIcon" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(160, 120)
+offset_left = -31.0
+offset_top = -18.0
+offset_right = 363.0
+offset_bottom = 182.0
+texture = ExtResource("11_playerinfo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PlayerNameImage" type="TextureRect" parent="PlayerIcon"]
+custom_minimum_size = Vector2(200, 30)
+layout_mode = 2
+offset_left = -54.0
+offset_top = 19.0
+offset_right = 264.0
+offset_bottom = 129.0
+rotation = -0.0709725
+texture = ExtResource("12_playername")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HealthBar" type="ProgressBar" parent="PlayerIcon"]
+modulate = Color(0, 1, 0, 1)
+layout_mode = 2
+offset_left = 132.0
+offset_top = 144.0
+offset_right = 365.0
+offset_bottom = 171.0
+rotation = -0.0425818
+scale = Vector2(0.7, 0.7)
+value = 100.0
+
+[node name="XPBar" type="ProgressBar" parent="PlayerIcon"]
+visible = false
+layout_mode = 2
+offset_left = 164.0
+offset_right = 168.0
+offset_bottom = 27.0
+value = 50.0
+
+[node name="StageImage" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(200, 50)
+offset_left = 595.0
+offset_top = 15.0
+offset_right = 933.0
+offset_bottom = 109.0
+scale = Vector2(1.2, 1.2)
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LucidityPanel" type="Panel" parent="."]
+custom_minimum_size = Vector2(200, 50)
+offset_left = 795.0
+offset_top = 144.0
+offset_right = 995.0
+offset_bottom = 194.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_we3sy")
+
+[node name="LucidityContainer" type="HBoxContainer" parent="LucidityPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Xpcontainer-removebg-preview" type="Sprite2D" parent="LucidityPanel/LucidityContainer"]
+position = Vector2(145, -38)
+scale = Vector2(0.510832, 0.386259)
+texture = ExtResource("13_gonto")
+
+[node name="LucidityIcon" type="TextureRect" parent="LucidityPanel/LucidityContainer"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("13_lunacy")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LucidityLabel" type="Label" parent="LucidityPanel/LucidityContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WeaponPanel" type="Panel" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -958.0
+offset_top = -201.0
+offset_right = -656.0
+offset_bottom = -132.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.7, 0.7)
+theme_override_styles/panel = SubResource("StyleBoxFlat_65nxt")
+
+[node name="WeaponIcon" type="TextureRect" parent="WeaponPanel"]
+custom_minimum_size = Vector2(140, 100)
+layout_mode = 2
+offset_left = 5.0
+offset_top = -18.0
+offset_right = 145.0
+offset_bottom = 82.0
+texture = ExtResource("4_4d46k")
+expand_mode = 1
+
+[node name="GiftColorIndicator" type="ColorRect" parent="WeaponPanel"]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+offset_left = 201.0
+offset_top = 15.0
+offset_right = 261.0
+offset_bottom = 55.0
+color = Color(0, 0.6, 0.8, 1)
+
+[node name="Compass" type="Sprite2D" parent="WeaponPanel"]
+position = Vector2(226, 33.5)
+scale = Vector2(0.183333, 0.143154)
+texture = ExtResource("5_136eg")
