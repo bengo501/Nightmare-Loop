@@ -197,13 +197,6 @@ func _connect_to_intro_signal():
 				print("[Map2Controller] Conectado ao sinal intro_finished")
 		else:
 			print("[Map2Controller] AVISO: Sinal intro_finished não encontrado")
-		
-		# TESTE: Chama função de teste para verificar se funciona
-		print("[Map2Controller] Chamando função de teste...")
-		if ui_manager.stage_intro_instance.has_method("test_intro"):
-			ui_manager.stage_intro_instance.test_intro()
-		else:
-			print("[Map2Controller] ERRO: Método test_intro não encontrado")
 	else:
 		print("[Map2Controller] AVISO: stage_intro_instance não disponível para conexão")
 

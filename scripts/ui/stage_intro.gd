@@ -9,9 +9,9 @@ extends CanvasLayer
 @onready var timer = $Timer
 
 # Configurações da introdução
-@export var display_duration: float = 3.0
-@export var fade_in_duration: float = 1.0
-@export var fade_out_duration: float = 1.0
+@export var display_duration: float = 8.0
+@export var fade_in_duration: float = 2.0
+@export var fade_out_duration: float = 2.0
 
 # Sinais
 signal intro_finished
@@ -35,6 +35,10 @@ func _ready():
 	await get_tree().process_frame
 	
 	print("[StageIntro] _ready() iniciado")
+	
+	# === CONFIGURAÇÃO DE PRIORIDADE ===
+	# Define prioridade alta para processar input antes de outros nós
+	process_priority = 100  # Prioridade alta
 	
 	# Verifica se todos os nós foram carregados corretamente
 	if not _validate_nodes():
@@ -148,17 +152,39 @@ func _show_stage_intro_deferred(stage_name: String):
 		print("[StageIntro] ERRO: Texturas não carregadas para estágio: ", stage_name)
 		return
 	
+	# === PROTEÇÃO CONTRA INTERFERÊNCIA DE OUTROS INPUTS ===
 	# Define o modo de processamento para funcionar mesmo pausado
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	print("[StageIntro] Modo de processamento definido para ALWAYS")
+	
+	# Desabilita input de outros nós temporariamente
+	_disable_other_inputs()
 	
 	# Pausa o jogo temporariamente
 	get_tree().paused = true
 	print("[StageIntro] Jogo pausado")
 	
-	# Torna visível
+	# === FORÇA VISIBILIDADE COM PROTEÇÃO EXTRA ===
+	print("[StageIntro] Estado ANTES de tornar visível: ", visible)
 	visible = true
-	print("[StageIntro] Nó definido como visível")
+	print("[StageIntro] Estado DEPOIS de tornar visível: ", visible)
+	
+	# FORÇA visibilidade também nos containers
+	if center_container and is_instance_valid(center_container):
+		center_container.visible = true
+		print("[StageIntro] CenterContainer forçado para visível")
+	
+	if margin_container and is_instance_valid(margin_container):
+		margin_container.visible = true
+		print("[StageIntro] MarginContainer forçado para visível")
+	
+	# FORÇA alpha inicial para 0 para animação de fade in
+	if center_container:
+		center_container.modulate.a = 0.0
+		print("[StageIntro] CenterContainer alpha resetado para 0.0")
+	if margin_container:
+		margin_container.modulate.a = 0.0
+		print("[StageIntro] MarginContainer alpha resetado para 0.0")
 	
 	# Verifica se center_container existe antes de animar
 	if not center_container or not is_instance_valid(center_container):
@@ -170,6 +196,10 @@ func _show_stage_intro_deferred(stage_name: String):
 		return
 	
 	print("[StageIntro] Containers validados, iniciando fade in")
+	print("[StageIntro] ESTADO FINAL antes do fade in - visible: ", visible)
+	
+	# Aguarda um frame para garantir que as mudanças sejam aplicadas
+	await get_tree().process_frame
 	
 	# Inicia a animação de fade in
 	_start_fade_in()
@@ -179,6 +209,15 @@ func _start_fade_in():
 	Inicia a animação de fade in
 	"""
 	print("[StageIntro] _start_fade_in() iniciado")
+	
+	# === VERIFICAÇÃO FINAL DE VISIBILIDADE ===
+	print("[StageIntro] Verificação final - visible: ", visible)
+	if not visible:
+		print("[StageIntro] ERRO: Nó não está visível! Forçando visibilidade...")
+		visible = true
+	
+	print("[StageIntro] CenterContainer visible: ", center_container.visible if center_container else "null")
+	print("[StageIntro] MarginContainer visible: ", margin_container.visible if margin_container else "null")
 	
 	# Animação de fade in
 	_cleanup_tween()
@@ -194,23 +233,32 @@ func _start_fade_in():
 	current_tween.parallel().tween_property(margin_container, "modulate:a", 1.0, fade_in_duration)
 	
 	print("[StageIntro] Propriedades de tween configuradas")
+	print("[StageIntro] Fade in duration: ", fade_in_duration, " segundos")
 	
 	# Conecta ao sinal de conclusão
 	current_tween.connect("finished", _on_fade_in_finished)
-	print("[StageIntro] Sinal 'finished' conectado")
+	print("[StageIntro] Sinal 'finished' conectado - animação iniciada!")
+	
+	# Log final do estado
+	print("[StageIntro] ESTADO DURANTE FADE IN:")
+	print("  - Nó visible: ", visible)
+	print("  - CenterContainer alpha: ", center_container.modulate.a if center_container else "null")
+	print("  - MarginContainer alpha: ", margin_container.modulate.a if margin_container else "null")
 
 func _on_fade_in_finished():
 	"""
 	Chamado quando o fade in termina
 	"""
 	print("[StageIntro] _on_fade_in_finished() chamado")
+	print("[StageIntro] Display duration configurada: ", display_duration, " segundos")
 	current_tween = null
 	
-	# Aguarda o tempo de exibição
+	# Aguarda o tempo de exibição - FORÇA a duração programaticamente
 	if timer and is_instance_valid(timer):
 		timer.wait_time = display_duration
 		timer.start()
-		print("[StageIntro] Timer iniciado com duração: ", display_duration)
+		print("[StageIntro] Timer iniciado com duração FORÇADA: ", timer.wait_time, " segundos")
+		print("[StageIntro] Tempo total da introdução: ", fade_in_duration + display_duration + fade_out_duration, " segundos")
 	else:
 		print("[StageIntro] ERRO: Timer não é válido")
 
@@ -265,21 +313,49 @@ func _on_fade_out_finished():
 	current_tween = null
 	_finish_intro()
 
-func _force_finish():
+func _disable_other_inputs():
 	"""
-	Força o fim da introdução sem animação
+	Desabilita input de outros nós temporariamente
 	"""
-	_cleanup_tween()
-	visible = false
-	get_tree().paused = false
-	is_hiding = false
-	emit_signal("intro_finished")
-	print("[StageIntro] Introdução forçada a terminar")
+	print("[StageIntro] Desabilitando inputs de outros sistemas...")
+	
+	# Desabilita o world input
+	var world = get_tree().current_scene
+	if world and world.has_method("set_process_input"):
+		world.set_process_input(false)
+		print("[StageIntro] Input do world desabilitado")
+	
+	# Desabilita input do player se existir
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.has_method("set_process_input"):
+		player.set_process_input(false)
+		print("[StageIntro] Input do player desabilitado")
+
+func _enable_other_inputs():
+	"""
+	Reabilita input de outros nós
+	"""
+	print("[StageIntro] Reabilitando inputs de outros sistemas...")
+	
+	# Reabilita o world input
+	var world = get_tree().current_scene
+	if world and world.has_method("set_process_input"):
+		world.set_process_input(true)
+		print("[StageIntro] Input do world reabilitado")
+	
+	# Reabilita input do player se existir
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.has_method("set_process_input"):
+		player.set_process_input(true)
+		print("[StageIntro] Input do player reabilitado")
 
 func _finish_intro():
 	"""
 	Finaliza a introdução normalmente
 	"""
+	# Reabilita inputs de outros sistemas
+	_enable_other_inputs()
+	
 	# Esconde e despausa o jogo
 	visible = false
 	get_tree().paused = false
@@ -289,15 +365,47 @@ func _finish_intro():
 	emit_signal("intro_finished")
 	print("[StageIntro] Introdução do estágio concluída")
 
+func _force_finish():
+	"""
+	Força o fim da introdução sem animação
+	"""
+	_cleanup_tween()
+	
+	# Reabilita inputs de outros sistemas
+	_enable_other_inputs()
+	
+	visible = false
+	get_tree().paused = false
+	is_hiding = false
+	emit_signal("intro_finished")
+	print("[StageIntro] Introdução forçada a terminar")
+
 func _input(event):
 	"""
-	Permite pular a introdução pressionando qualquer tecla
+	Permite pular a introdução pressionando qualquer tecla - mas com proteção robusta contra pulos acidentais
 	"""
-	if visible and (event.is_action_pressed("ui_accept") or event.is_action_pressed("ui_cancel") or event.is_action_pressed("interact")):
+	# PROTEÇÃO EXTRA: Só processa input se a introdução estiver realmente visível e ativa
+	if not visible or is_hiding:
+		return
+	
+	# PROTEÇÃO EXTRA: Só permite pular após fade-in completo E após tempo mínimo
+	if current_tween != null:  # Ainda está fazendo fade-in
+		print("[StageIntro] Tentativa de pular durante fade in - ignorada")
+		return
+	
+	# PROTEÇÃO EXTRA: Verifica se o timer já rodou por pelo menos 2 segundos
+	if timer and is_instance_valid(timer) and timer.time_left > (display_duration - 2.0):
+		print("[StageIntro] Tentativa de pular muito cedo - ignorada (tempo restante: ", timer.time_left, ")")
+		return
+	
+	# Agora sim, permite pular
+	if event.is_action_pressed("ui_accept") or event.is_action_pressed("interact"):
 		print("[StageIntro] Introdução pulada pelo jogador")
 		if timer and is_instance_valid(timer):
 			timer.stop()
 		hide_stage_intro()
+		# Consume o evento para evitar que outros nós o processem
+		get_viewport().set_input_as_handled()
 
 func set_stage_textures(image_texture: Texture2D, title_texture: Texture2D):
 	"""
@@ -361,36 +469,72 @@ func _load_stage_textures(stage_name: String) -> Dictionary:
 	
 	return textures
 
+func force_show_intro_emergency():
+	"""
+	FUNÇÃO DE EMERGÊNCIA: Força a exibição da introdução de forma agressiva
+	"""
+	print("[StageIntro] === FUNÇÃO DE EMERGÊNCIA ATIVADA ===")
+	
+	# FORÇA tudo para visível
+	visible = true
+	show()  # Chama show() do nó
+	
+	# FORÇA containers para visível
+	if center_container:
+		center_container.visible = true
+		center_container.show()
+		center_container.modulate.a = 1.0
+		print("[StageIntro] EMERGÊNCIA: CenterContainer forçado")
+	
+	if margin_container:
+		margin_container.visible = true
+		margin_container.show()
+		margin_container.modulate.a = 1.0
+		print("[StageIntro] EMERGÊNCIA: MarginContainer forçado")
+	
+	if background:
+		background.visible = true
+		background.show()
+		print("[StageIntro] EMERGÊNCIA: Background forçado")
+	
+	# FORÇA texturas
+	var textures = _load_stage_textures("estagio1")
+	if not textures.is_empty():
+		if stage_image:
+			stage_image.texture = textures.image
+			stage_image.visible = true
+			stage_image.show()
+			print("[StageIntro] EMERGÊNCIA: StageImage forçado")
+		
+		if stage_title:
+			stage_title.texture = textures.title
+			stage_title.visible = true
+			stage_title.show()
+			print("[StageIntro] EMERGÊNCIA: StageTitle forçado")
+	
+	# FORÇA modo de processamento
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	
+	# FORÇA layer no topo
+	layer = 1000
+	
+	print("[StageIntro] === FUNÇÃO DE EMERGÊNCIA CONCLUÍDA ===")
+	print("[StageIntro] Estado final:")
+	print("  - Nó visible: ", visible)
+	print("  - Layer: ", layer)
+	print("  - Process mode: ", process_mode)
+	
+	# Inicia timer para auto-esconder após 10 segundos
+	if timer:
+		timer.wait_time = 10.0
+		timer.start()
+		print("[StageIntro] Timer de emergência iniciado (10s)")
+
 func test_intro():
 	"""
 	Função de teste para verificar se a introdução funciona
 	"""
 	print("[StageIntro] test_intro() chamado")
 	
-	# Força visibilidade
-	visible = true
-	
-	# Força alpha dos containers
-	if center_container:
-		center_container.modulate.a = 1.0
-		print("[StageIntro] CenterContainer forçado para alpha 1.0")
-	
-	if margin_container:
-		margin_container.modulate.a = 1.0
-		print("[StageIntro] MarginContainer forçado para alpha 1.0")
-	
-	if background:
-		background.modulate.a = 1.0
-		print("[StageIntro] Background forçado para alpha 1.0")
-	
-	# Carrega texturas diretamente
-	var textures = _load_stage_textures("estagio1")
-	if not textures.is_empty():
-		if stage_image:
-			stage_image.texture = textures.image
-			print("[StageIntro] Textura de imagem aplicada no teste")
-		if stage_title:
-			stage_title.texture = textures.title
-			print("[StageIntro] Textura de título aplicada no teste")
-	
-	print("[StageIntro] Teste concluído - a introdução deve estar visível agora")
+	# Chama a função de emergência
+	force_show_intro_emergency()

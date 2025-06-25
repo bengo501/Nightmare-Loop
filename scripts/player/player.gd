@@ -342,6 +342,11 @@ func check_ray_collision():
 		current_target = null
 
 func perform_attack(target = null):
+	# GARANTIA EXTRA: Só funciona se estiver realmente no modo primeira pessoa
+	if not first_person_mode:
+		print("DEBUG: Tentativa de ataque bloqueada - não está no modo primeira pessoa")
+		return
+		
 	if not can_attack or target == null:
 		return
 	can_attack = false
@@ -406,6 +411,11 @@ func _input(event):
 				set_attack_mode(AttackMode.ACEITACAO)
 
 func shoot_first_person():
+	# GARANTIA EXTRA: Só funciona se estiver realmente no modo primeira pessoa
+	if not first_person_mode:
+		print("DEBUG: Tentativa de ataque bloqueada - não está no modo primeira pessoa")
+		return
+		
 	if not shoot_ray:
 		return
 	shoot_ray.force_raycast_update()
@@ -431,6 +441,14 @@ func rotate_camera(mouse_motion: Vector2):
 # === MODOS ===
 func activate_first_person():
 	first_person_mode = true
+	
+	# === REABILITA O SISTEMA DE LASER E ATAQUE ===
+	# Reabilita o ShootRay para permitir detecção de colisões
+	if shoot_ray and is_instance_valid(shoot_ray):
+		shoot_ray.enabled = true
+		print("DEBUG: ShootRay reabilitado no modo primeira pessoa")
+	
+	# === CONFIGURAÇÕES VISUAIS E DE CÂMERA ===
 	if visuals:
 		visuals.visible = false
 	if crosshair and is_instance_valid(crosshair):
@@ -453,9 +471,27 @@ func activate_first_person():
 	
 	if weapon and is_instance_valid(weapon):
 		weapon.visible = true
+	
+	print("DEBUG: Modo primeira pessoa ativado - Laser e ataques habilitados")
 
 func activate_third_person():
 	first_person_mode = false
+	
+	# === DESABILITA COMPLETAMENTE O SISTEMA DE LASER E ATAQUE ===
+	laser_active = false
+	current_target = null
+	
+	# Garante que o laser está invisível e desabilitado
+	if laser_line and is_instance_valid(laser_line):
+		laser_line.visible = false
+		print("DEBUG: LaseLine desabilitado no modo terceira pessoa")
+	
+	# Desabilita o ShootRay para evitar detecção de colisões
+	if shoot_ray and is_instance_valid(shoot_ray):
+		shoot_ray.enabled = false
+		print("DEBUG: ShootRay desabilitado no modo terceira pessoa")
+	
+	# === CONFIGURAÇÕES VISUAIS E DE CÂMERA ===
 	if visuals:
 		visuals.visible = true
 	if crosshair and is_instance_valid(crosshair):
@@ -472,6 +508,8 @@ func activate_third_person():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	if weapon and is_instance_valid(weapon):
 		weapon.visible = false
+	
+	print("DEBUG: Modo terceira pessoa ativado - Laser e ataques desabilitados")
 
 # === SISTEMA DE MODOS DE ATAQUE ===
 func set_attack_mode(mode: AttackMode):
