@@ -1,20 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://b2vnqpoqdtfsb"]
 
-[ext_resource type="Script" uid="uid://wukykpodk5fp" path="res://scripts/items/Gift.gd" id="1"]
+[ext_resource type="Script" uid="uid://ccp0fpkgidmjh" path="res://scripts/items/SpecialGift.gd" id="1_special"]
+[ext_resource type="PackedScene" uid="uid://c8yvxqj6yvnxq" path="res://scenes/items/CollectibleItem.tscn" id="2_base"]
 
-[sub_resource type="BoxMesh" id="1_box"]
-
-[node name="GiftAceitacao" type="Area3D"]
-script = ExtResource("1")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("1_box")
-
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-
-[node name="InteractionPrompt" type="Node3D" parent="."]
-
-[node name="Label3D" type="Label3D" parent="InteractionPrompt"]
-text = "Pressione E para coletar"
+[node name="GiftAceitacao" instance=ExtResource("2_base")]
+script = ExtResource("1_special")
+grief_stage = "aceitacao"
+item_description = "Um presente especial que representa a aceitação da perda. Adiciona +5 pontos de Aceitação."
+bonus_points = 5

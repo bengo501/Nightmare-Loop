@@ -13,7 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://cj47gniftse4d" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Dresser/Dresser.fbx_Scene/Dresser.fbx_Scene.fbx" id="8_jhx03"]
 [ext_resource type="PackedScene" uid="uid://c8q7v4j6y5n3q" path="res://scenes/items/GriefGifts.tscn" id="9_7r4gi"]
 [ext_resource type="PackedScene" uid="uid://87m6nvqs6nke" path="res://assets/models/props/DoubleBed.fbx" id="11_lakw3"]
-[ext_resource type="Script" path="res://scripts/bed_interaction.gd" id="12_bed_script"]
+[ext_resource type="Script" uid="uid://dh2tqiu2d2827" path="res://scripts/bed_interaction.gd" id="12_bed_script"]
 [ext_resource type="PackedScene" uid="uid://ct6ppkdyv5tix" path="res://scenes/items/GiftBarganha.tscn" id="12_q5onr"]
 [ext_resource type="PackedScene" uid="uid://4u41su83a4ma" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Boombox_/Boombox.fbx_Scene/Boombox.fbx_Scene.fbx" id="17_1dgkn"]
 [ext_resource type="PackedScene" uid="uid://blm23tt5thlmu" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Bathroom Sink/BathroomSink.fbx_Scene/BathroomSink.fbx_Scene.fbx" id="27_rup4s"]
@@ -61,16 +61,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1296, -0.0184145, 0.076946
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.30632, 0, -1.6261)
 
 [node name="Dresser" parent="Hub/Hub/Furniture" instance=ExtResource("8_jhx03")]
-transform = Transform3D(-1.99982, 0, -0.026947, 0, 1.66092, 0, 0.026947, 0, -1.99982, 2.47286, 0, 3.43775)
+transform = Transform3D(0.0535755, 0, 1.99928, 0, 1.66092, 0, -1.99928, 0, 0.0535755, -3.13913, 0.344429, -2.05221)
 
 [node name="Boombox" parent="Hub/Hub/Furniture" instance=ExtResource("17_1dgkn")]
-transform = Transform3D(-1.44007, 0, -0.419744, 0, 1.5, 0, 0.419744, 0, -1.44007, 1.98082, 1.69187, 3.37466)
+transform = Transform3D(-0.0705043, 0, 1.49834, 0, 1.5, 0, -1.49834, 0, -0.0705043, -3.15775, 2.04519, -1.48868)
 
 [node name="BathroomSink" parent="Hub/Hub/Furniture" instance=ExtResource("27_rup4s")]
 transform = Transform3D(-0.984832, 0, -0.173511, 0, 1, 0, 0.173511, 0, -0.984832, 0.56901, 0, 3.91121)
 
 [node name="TV_fbx_Scene" parent="Hub/Hub" instance=ExtResource("2_7t5mc")]
-transform = Transform3D(0.148823, 0, 1.29359, 0, 1.3, 0, -1.4926, 0, 0.12898, -3.68628, 1.32552, -1.51791)
+transform = Transform3D(-2.56367, 0, 0.252123, 0, 1.75394, 0, -0.336148, 0, -1.92285, -1.61529, 1.83148, 3.18439)
 
 [node name="Piso" type="CSGBox3D" parent="Hub/Hub"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0157991, -0.159011, 0.0428863)
@@ -122,10 +122,7 @@ omni_range = 8.25571
 transform = Transform3D(-1.99071, 0, 0.00997814, 0, 1, 0, -0.0238359, 0, -0.833339, 2.95825, 0.731322, -2.3346)
 
 [node name="Dresser_fbx_Scene" parent="Hub/Hub" instance=ExtResource("8_jhx03")]
-transform = Transform3D(-1.49891, 0, -0.057294, 0, 1.2, 0, 0.057294, 0, -1.49891, -1.65783, 0.419282, 3.03416)
-
-[node name="Boombox_fbx_Scene" parent="Hub/Hub" instance=ExtResource("17_1dgkn")]
-transform = Transform3D(-0.33629, 0, 0.941759, 0, 1, 0, -0.941759, 0, -0.33629, -3.45807, 1.14868, -0.229952)
+transform = Transform3D(-2.25582, 0, -0.0941888, 0, 1.47284, 0, 0.0862259, 0, -2.46414, -1.65783, 0.419282, 3.03416)
 
 [node name="DoubleBed" parent="Hub/Hub" instance=ExtResource("11_lakw3")]
 transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 1.94432, 0.832325, -0.403638)
@@ -239,7 +236,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 10)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.12269, 0, 13.361)
 
 [node name="GriefGifts3" parent="." instance=ExtResource("9_7r4gi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.12269, 0, 2.25806)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.12269, 1.76123, 8.80024)
 
 [node name="GriefGifts2" parent="." instance=ExtResource("9_7r4gi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.12269, 0, -8.5535)

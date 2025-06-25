@@ -2,11 +2,7 @@
 
 [ext_resource type="Script" uid="uid://wukykpodk5fp" path="res://scripts/items/Gift.gd" id="1_xxxxx"]
 
-[sub_resource type="SphereMesh3D" id="SphereMesh3D_xxxxx"]
-resource_local_to_scene = false
-resource_name = ""
-radius = 0.5
-height = 1.0
+[sub_resource type="SphereMesh" id="SphereMesh3D_xxxxx"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_xxxxx"]
 

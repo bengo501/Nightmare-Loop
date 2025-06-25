@@ -1,4 +1,4 @@
-[gd_scene load_steps=176 format=3 uid="uid://ddlldwbytxok2"]
+[gd_scene load_steps=179 format=3 uid="uid://ddlldwbytxok2"]
 
 [ext_resource type="PackedScene" uid="uid://cdooq3wu5wgv3" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/FloorLamp.fbx_Scene/FloorLamp.fbx_Scene.fbx" id="1_6cupr"]
 [ext_resource type="Texture2D" uid="uid://ca44uy3jlfa6w" path="res://assets/textures/Floor/Horror_Floor_05-128x128.png" id="1_mdskg"]
@@ -32,6 +32,9 @@
 [ext_resource type="PackedScene" uid="uid://bjm4f5itju6nb" path="res://scenes/enemies/GhostAcceptance.tscn" id="21_acceptance"]
 [ext_resource type="Script" uid="uid://cgwj4282tvlde" path="res://scripts/map_2_controller.gd" id="22_map2_controller"]
 [ext_resource type="Environment" uid="uid://12p1ky83ikyg" path="res://environments/green_nightmare_environment.tres" id="23_green_environment"]
+[ext_resource type="PackedScene" uid="uid://b2vnqpoqdtfsb" path="res://scenes/items/GiftAceitacao.tscn" id="33_cyjou"]
+[ext_resource type="PackedScene" uid="uid://ct6ppkdyv5tix" path="res://scenes/items/GiftBarganha.tscn" id="34_ya2kv"]
+[ext_resource type="PackedScene" uid="uid://b32bfkl2u1lu2" path="res://scenes/items/GiftNegacao.tscn" id="35_ya2kv"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r5yoc"]
 albedo_texture = ExtResource("1_mdskg")
@@ -584,6 +587,38 @@ transform = Transform3D(1.73211, 0, 0, 0, 1.615, 0, 0, 0, 1.24113, -12.6096, 0.3
 transform = Transform3D(0.769231, 0, 0, 0, 0.714286, 0, 0, 0, 1, 0, 1.43947, 0)
 light_color = Color(0.6, 1, 0.4, 1)
 light_energy = 0.3
+
+[node name="FloorLamp_fbx_Scene16" parent="Objetos" instance=ExtResource("1_6cupr")]
+transform = Transform3D(1.73211, 0, 0, 0, 1.615, 0, 0, 0, 1.24113, -6.33922, 0.340988, -19.8448)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Objetos/FloorLamp_fbx_Scene16"]
+transform = Transform3D(0.769231, 0, 0, 0, 0.714286, 0, 0, 0, 1, 0, 1.43947, 0)
+light_color = Color(0.6, 1, 0.4, 1)
+light_energy = 0.3
+
+[node name="FloorLamp_fbx_Scene17" parent="Objetos" instance=ExtResource("1_6cupr")]
+transform = Transform3D(1.73211, 0, 0, 0, 1.615, 0, 0, 0, 1.24113, -6.33922, 0.340988, -26.0784)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Objetos/FloorLamp_fbx_Scene17"]
+transform = Transform3D(0.769231, 0, 0, 0, 0.714286, 0, 0, 0, 1, 0, 1.43947, 0)
+light_color = Color(0.6, 1, 0.4, 1)
+light_energy = 0.6
+
+[node name="FloorLamp_fbx_Scene18" parent="Objetos" instance=ExtResource("1_6cupr")]
+transform = Transform3D(1.73211, 0, 0, 0, 1.615, 0, 0, 0, 1.24113, -17.3924, 0.340988, -30.1611)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Objetos/FloorLamp_fbx_Scene18"]
+transform = Transform3D(0.769231, 0, 0, 0, 0.714286, 0, 0, 0, 1, 0, 1.43947, 0)
+light_color = Color(0.6, 1, 0.4, 1)
+light_energy = 0.6
+
+[node name="FloorLamp_fbx_Scene19" parent="Objetos" instance=ExtResource("1_6cupr")]
+transform = Transform3D(1.73211, 0, 0, 0, 1.615, 0, 0, 0, 1.24113, -17.3924, 0.340988, -20.3719)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Objetos/FloorLamp_fbx_Scene19"]
+transform = Transform3D(0.769231, 0, 0, 0, 0.714286, 0, 0, 0, 1, 0, 1.43947, 0)
+light_color = Color(0.6, 1, 0.4, 1)
+light_energy = 0.623
 
 [node name="Single Bed_fbx_Scene" parent="Objetos" instance=ExtResource("2_b03pn")]
 transform = Transform3D(-0.031533, -1.09138e-09, 1.29935, -0.623133, 0.815391, -0.0255567, -0.626912, -0.413508, -0.0257117, -26.5345, 0.77271, -30.8691)
@@ -2282,3 +2317,39 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.9, 1.36202, -60.4)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_q57r8")
+
+[node name="GiftAceitacao" parent="." instance=ExtResource("33_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -24.2839, 1.13667, -24.1956)
+
+[node name="GiftBarganha" parent="." instance=ExtResource("34_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -21.0798, 0.490988, -26.4873)
+
+[node name="GiftBarganha2" parent="." instance=ExtResource("34_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -26.589, 0.490988, -23.0573)
+
+[node name="GiftBarganha3" parent="." instance=ExtResource("34_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -27.8836, 0.490988, -21.2053)
+
+[node name="GiftBarganha4" parent="." instance=ExtResource("34_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -25.078, 0.490988, -21.817)
+
+[node name="GiftBarganha5" parent="." instance=ExtResource("34_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -22.3811, 0.490988, -23.5957)
+
+[node name="GiftBarganha6" parent="." instance=ExtResource("34_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -22.2976, 0.490988, -22.0764)
+
+[node name="GiftBarganha7" parent="." instance=ExtResource("34_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20.0012, 0.490988, -24.0518)
+
+[node name="GiftNegacao" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -23.8019, 0.490988, -20.0803)
+
+[node name="GiftNegacao2" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -23.9786, 0.490988, -20.8654)
+
+[node name="GiftNegacao3" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -23.9476, 0.490988, -21.4384)
+
+[node name="GiftNegacao4" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -23.6199, 0.490988, -20.6345)

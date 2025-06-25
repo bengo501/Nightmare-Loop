@@ -1,22 +1,10 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://dgvusvrjwfwou"]
 
-[ext_resource type="Script" path="res://scripts/items/Gift.gd" id="1"]
+[ext_resource type="Script" uid="uid://ccp0fpkgidmjh" path="res://scripts/items/SpecialGift.gd" id="1_special"]
+[ext_resource type="PackedScene" uid="uid://c8yvxqj6yvnxq" path="res://scenes/items/CollectibleItem.tscn" id="2_base"]
 
-[sub_resource type="BoxMesh" id="1_box"]
-size = Vector3(1, 1, 1)
-
-[node name="GiftRaiva" type="Area3D"]
-script = ExtResource("1")
-gift_type = "raiva"
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("1_box")
-
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-
-[node name="InteractionPrompt" type="Node3D" parent="."]
-
-[node name="Label3D" type="Label3D" parent="InteractionPrompt"]
-text = "Pressione E para coletar" 
+[node name="GiftRaiva" instance=ExtResource("2_base")]
+script = ExtResource("1_special")
+grief_stage = "raiva"
+item_description = "Um presente especial que representa a raiva da perda. Adiciona +5 pontos de Raiva."
+bonus_points = 5
