@@ -759,6 +759,167 @@ func start_tv_dialog():
 	show_dialog(0)
 	print("[DialogSystem] Iniciando diálogos da TV com William")
 
+# Função para iniciar os diálogos do Estágio 1 (Negação)
+func start_stage1_dialog():
+	print("[DialogSystem] start_stage1_dialog() chamada")
+	
+	# Diálogos específicos do Estágio 1 - Negação
+	var stage1_dialogs = [
+		{
+			"speaker": "Gregor",
+			"text": "Então… é aqui que começa a tua jornada pelos cinco estágios, garota.",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Gregor",
+			"text": "Este é o primeiro: Negação.",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Gregor",
+			"text": "A casa que conheces… está diferente, né?",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Gregor",
+			"text": "Distante, fria… como se recusasse a aceitar o que aconteceu.",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Protagonista",
+			"text": "Sim… tudo parece fora do lugar.",
+			"character": "mc1",
+			"mouth_animation": true
+		},
+		{
+			"speaker": "Protagonista",
+			"text": "Como se eu estivesse andando num sonho que insiste em parecer real.",
+			"character": "mc2",
+			"mouth_animation": true
+		},
+		{
+			"speaker": "Gregor",
+			"text": "Porque é isso mesmo.",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Gregor",
+			"text": "Este lugar representa tua tentativa de negar a perda.",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Gregor",
+			"text": "Tudo aqui vai tentar te convencer de que nada mudou…",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Gregor",
+			"text": "Mas cuidado. Fantasmas da negação vão tentar te enganar,",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Gregor",
+			"text": "e os teus recursos são limitados.",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Protagonista",
+			"text": "Recursos?",
+			"character": "mc1",
+			"mouth_animation": true
+		},
+		{
+			"speaker": "Gregor",
+			"text": "Presentes do luto.",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Gregor",
+			"text": "Itens que carregam significado emocional — são tua arma e tua esperança.",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Gregor",
+			"text": "Usa com sabedoria… cada escolha aqui importa.",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "William",
+			"text": "Aaarrr! Vejo que a maré virou, moça!",
+			"character": "william",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "William",
+			"text": "Ouvi dizer que vais zarpar pelos mares do sofrimento!",
+			"character": "william",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "William",
+			"text": "Que Poseidon te guarde — essa fase vai testar teu coração mais do que tua espada.",
+			"character": "william",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "William",
+			"text": "Se cuida! E lembra: até a maior das tempestades… passa!",
+			"character": "william",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Protagonista",
+			"text": "Obrigada, William.",
+			"character": "mc2",
+			"mouth_animation": true
+		},
+		{
+			"speaker": "Protagonista",
+			"text": "Obrigada, Gregor…",
+			"character": "mc1",
+			"mouth_animation": true
+		},
+		{
+			"speaker": "Protagonista",
+			"text": "Vou fazer o meu melhor. Mas... vou precisar de sorte.",
+			"character": "mc2",
+			"mouth_animation": true
+		},
+		{
+			"speaker": "Gregor",
+			"text": "E coragem. Mas isso tu tens.",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Gregor",
+			"text": "Vai… enfrenta a negação de frente.",
+			"character": "ghost",
+			"mouth_animation": false
+		}
+	]
+	
+	# Substitui os diálogos pelos diálogos do estágio 1
+	dialogs = stage1_dialogs
+	current_dialog_index = 0
+	
+	initialize_buttons()
+	print("[DialogSystem] Diálogos do Estágio 1 carregados, chamando show_dialog(0)")
+	show_dialog(0)
+	print("[DialogSystem] Iniciando diálogos do Estágio 1 - Negação")
+
 func _on_blink_timer_timeout():
 	# Faz o prompt piscar
 	if continue_prompt.visible and not is_typing:

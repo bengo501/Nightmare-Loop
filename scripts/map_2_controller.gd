@@ -2,6 +2,7 @@ extends Node3D
 
 # Referência para controlar a introdução do estágio
 var intro_shown = false
+var stage1_dialog_shown = false
 
 # Referência ao WorldEnvironment
 @onready var world_environment = $WorldEnvironment
@@ -212,5 +213,94 @@ func _on_intro_finished():
 	"""
 	print("[Map2Controller] Introdução do estágio concluída")
 	
-	# Aqui podem ser adicionadas outras ações pós-introdução
-	# Como ativar música ambiente, spawnar inimigos, etc. 
+	# Inicia o diálogo entre os três personagens após a intro
+	print("[Map2Controller] Iniciando diálogo do estágio 1...")
+	call_deferred("start_stage1_dialog")
+
+func start_stage1_dialog():
+	"""
+	Inicia o diálogo entre Protagonista, Gregor e William após a introdução
+	"""
+	print("[Map2Controller] start_stage1_dialog() iniciado")
+	
+	# Verifica se o diálogo já foi mostrado para evitar duplicação
+	if stage1_dialog_shown:
+		print("[Map2Controller] Diálogo do estágio 1 já foi mostrado, pulando")
+		return
+	
+	stage1_dialog_shown = true
+	
+	# Referência ao sistema de diálogo
+	var dialog_system_scene = preload("res://scenes/ui/dialog_system.tscn")
+	
+	# Procura pelo player para pausar
+	var player = find_player_in_scene()
+	if player:
+		print("[Map2Controller] Pausando jogador para diálogo...")
+		player.set_physics_process(false)
+		player.set_process_input(false)
+	else:
+		print("[Map2Controller] AVISO: Player não encontrado para pausar")
+	
+	# Esconde a HUD principal
+	var ui_manager = get_node_or_null("/root/UIManager")
+	if ui_manager and ui_manager.hud_instance and is_instance_valid(ui_manager.hud_instance):
+		ui_manager.hud_instance.visible = false
+		print("[Map2Controller] HUD escondida para diálogo")
+	else:
+		print("[Map2Controller] AVISO: HUD não encontrada ou inválida")
+	
+	print("[Map2Controller] Criando instância do sistema de diálogo...")
+	# Cria e mostra o sistema de diálogo
+	var dialog_instance = dialog_system_scene.instantiate()
+	if not dialog_instance:
+		print("[Map2Controller] ERRO: Falha ao instanciar sistema de diálogo!")
+		return
+	
+	print("[Map2Controller] Adicionando sistema de diálogo à cena...")
+	get_tree().current_scene.add_child(dialog_instance)
+	
+	print("[Map2Controller] Conectando sinal de fim do diálogo...")
+	# Conecta o sinal de fim do diálogo
+	dialog_instance.connect("dialog_sequence_finished", _on_stage1_dialog_finished)
+	
+	print("[Map2Controller] Pausando jogo...")
+	# Pausa o jogo ANTES de iniciar o diálogo
+	get_tree().paused = true
+	
+	print("[Map2Controller] Iniciando diálogos do estágio 1...")
+	# Inicia os diálogos do estágio 1
+	dialog_instance.start_stage1_dialog()
+	
+	print("[Map2Controller] Liberando cursor...")
+	# Libera o cursor
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+	print("[Map2Controller] Diálogo do estágio 1 iniciado com sucesso!")
+
+func _on_stage1_dialog_finished():
+	"""
+	Chamado quando o diálogo do estágio 1 termina
+	"""
+	print("[Map2Controller] Diálogo do estágio 1 finalizado")
+	
+	# Despausa o jogo
+	get_tree().paused = false
+	
+	# Reativa o player
+	var player = find_player_in_scene()
+	if player:
+		player.set_physics_process(true)
+		player.set_process_input(true)
+		print("[Map2Controller] Player reativado após diálogo")
+	
+	# Mostra a HUD novamente
+	var ui_manager = get_node_or_null("/root/UIManager")
+	if ui_manager and ui_manager.hud_instance and is_instance_valid(ui_manager.hud_instance):
+		ui_manager.hud_instance.visible = true
+		print("[Map2Controller] HUD reexibida após diálogo")
+	
+	# Retorna o cursor ao modo capturado (se necessário)
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	
+	print("[Map2Controller] Jogo retomado após diálogo do estágio 1") 
