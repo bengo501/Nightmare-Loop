@@ -207,7 +207,7 @@ func activate_skill_tree():
 	# Salva a câmera original
 	original_camera = get_viewport().get_camera_3d()
 	
-	# Ativa a câmera da TV
+		# Ativa a câmera da TV
 	if tv_camera:
 		tv_camera.make_current()
 	

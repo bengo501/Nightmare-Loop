@@ -58,6 +58,11 @@ func _on_body_exited(body):
 func _input(event):
 	if player_inside and event.is_action_pressed("interact") and not interaction_active:
 		sleep_interaction()
+	
+	# Função de emergência para destravar o jogo
+	if event.is_action_pressed("ui_cancel") and interaction_active:
+		print("[BedInteraction] EMERGÊNCIA: Destravando jogo")
+		emergency_unlock()
 
 func show_interaction_prompt():
 	if interaction_prompt and is_instance_valid(interaction_prompt):
@@ -90,44 +95,60 @@ func sleep_interaction():
 	interaction_active = true
 	hide_interaction_prompt()
 	
-	# Pausa o jogador
-	if player_ref:
-		player_ref.set_physics_process(false)
-		player_ref.set_process_input(false)
+	# NÃO pausa o jogador aqui - deixa o SceneManager gerenciar isso
+	print("[BedInteraction] Player não pausado - SceneManager irá gerenciar")
 	
-	# Esconde a HUD
-	if ui_manager and ui_manager.hud_instance and is_instance_valid(ui_manager.hud_instance):
-		ui_manager.hud_instance.visible = false
-	
-	# Cria efeito de fade out
+	# Cria efeito de fade out e troca apenas o hub
 	create_sleep_transition()
 
 func create_sleep_transition():
-	print("[BedInteraction] Criando transição de sono")
+	print("[BedInteraction] Criando transição de sono com preservação do player")
 	
-	# Usa o SceneManager para fazer a transição com fade
-	if scene_manager:
-		print("[BedInteraction] Usando SceneManager para transição com fade")
-		await scene_manager.change_scene_with_fade("map_2", 2.0)
+	# Usa o SceneManager para trocar apenas o hub mantendo o player
+	if SceneManager and SceneManager.has_method("change_hub_with_fade"):
+		print("[BedInteraction] Usando SceneManager para trocar hub")
+		
+		# Chama de forma assíncrona para evitar travamentos
+		call_deferred("_start_hub_change")
 	else:
-		print("[BedInteraction] ERRO: SceneManager não disponível, criando fade manual")
-		# Fallback para fade manual
-		var fade_overlay = ColorRect.new()
-		fade_overlay.name = "SleepFadeOverlay"
-		fade_overlay.anchors_preset = Control.PRESET_FULL_RECT
-		fade_overlay.color = Color(0, 0, 0, 0)
-		fade_overlay.z_index = 1000
-		
-		# Adiciona à cena
-		get_tree().current_scene.add_child(fade_overlay)
-		
-		# Animação de fade out
-		var tween = create_tween()
-		tween.tween_property(fade_overlay, "color", Color(0, 0, 0, 1), 2.0)
-		
-		await tween.finished
-		
-		# Carregamento direto
+		print("[BedInteraction] AVISO: SceneManager não disponível, usando método alternativo")
+		# Fallback para o método tradicional
 		get_tree().change_scene_to_file("res://map_2.tscn")
+
+func _start_hub_change():
+	"""
+	Inicia a mudança de hub de forma diferida
+	"""
+	print("[BedInteraction] Iniciando mudança de hub diferida")
+	print("[BedInteraction] Estado atual - Jogo pausado: ", get_tree().paused)
+	print("[BedInteraction] SceneManager válido: ", SceneManager != null)
+	
+	if SceneManager:
+		print("[BedInteraction] Chamando SceneManager.change_hub_with_fade...")
+		SceneManager.change_hub_with_fade("map_2", 2.0)
+		print("[BedInteraction] Chamada para change_hub_with_fade concluída")
+	else:
+		print("[BedInteraction] ERRO: SceneManager é null!")
+		interaction_active = false
+
+func emergency_unlock():
+	"""
+	Função de emergência para destravar o jogo
+	"""
+	print("[BedInteraction] Executando destravamento de emergência")
+	interaction_active = false
+	get_tree().paused = false
+	
+	# Reativa o player se existir
+	if player_ref and is_instance_valid(player_ref):
+		player_ref.set_physics_process(true)
+		player_ref.set_process_input(true)
+		print("[BedInteraction] Player reativado")
+	
+	# Mostra a HUD
+	if ui_manager and ui_manager.has_method("show_ui"):
+		ui_manager.show_ui("hud")
+	
+	print("[BedInteraction] Destravamento de emergência concluído")
 
  

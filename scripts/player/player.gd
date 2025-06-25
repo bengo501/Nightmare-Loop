@@ -99,6 +99,9 @@ func _ready():
 	current_health = max_health
 	emit_signal("health_changed", current_health)
 	
+	# Garante que o player pode se mover
+	can_move = true
+	
 	# Inicializa a referência da HUD
 	var ui_manager = get_node_or_null("/root/UIManager")
 	if ui_manager and ui_manager.has_method("get") and ui_manager.get("hud_instance"):
@@ -685,3 +688,30 @@ func load_state(save_data):
 	emit_signal("player_xp_changed", stats.xp)
 	emit_signal("player_consciencia_changed", stats.consciencia)
 	emit_signal("player_stats_changed", stats)
+
+# Função para reativar completamente o player após transições
+func reactivate_player():
+	"""
+	Reativa completamente o player após transições de cena
+	"""
+	print("[Player] Reativando player completamente")
+	
+	# Reativa todos os processos
+	set_physics_process(true)
+	set_process_input(true)
+	set_process(true)
+	
+	# Garante que pode se mover
+	can_move = true
+	
+	# Reseta velocidade se for CharacterBody3D
+	if self is CharacterBody3D:
+		velocity = Vector3.ZERO
+	
+	# Reativa o modo de mouse se necessário
+	if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED and first_person_mode:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	elif Input.mouse_mode != Input.MOUSE_MODE_VISIBLE and not first_person_mode:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+	print("[Player] Player reativado - can_move: ", can_move, " physics: ", is_physics_processing(), " input: ", is_processing_input())

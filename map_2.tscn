@@ -1,4 +1,4 @@
-[gd_scene load_steps=174 format=3 uid="uid://ddlldwbytxok2"]
+[gd_scene load_steps=175 format=3 uid="uid://ddlldwbytxok2"]
 
 [ext_resource type="PackedScene" uid="uid://cdooq3wu5wgv3" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/FloorLamp.fbx_Scene/FloorLamp.fbx_Scene.fbx" id="1_6cupr"]
 [ext_resource type="Texture2D" uid="uid://ca44uy3jlfa6w" path="res://assets/textures/Floor/Horror_Floor_05-128x128.png" id="1_mdskg"]
@@ -30,6 +30,7 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/GhostBargaining.tscn" id="19_bargaining"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/GhostDepression.tscn" id="20_depression"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/GhostAcceptance.tscn" id="21_acceptance"]
+[ext_resource type="Script" uid="uid://cgwj4282tvlde" path="res://scripts/map_2_controller.gd" id="22_map2_controller"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r5yoc"]
 albedo_texture = ExtResource("1_mdskg")
@@ -542,6 +543,8 @@ albedo_texture = ExtResource("8_7e46u")
 [sub_resource type="NavigationMesh" id="NavigationMesh_q57r8"]
 
 [node name="map2" type="Node3D"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, -24.6221, 0)
+script = ExtResource("22_map2_controller")
 
 [node name="Objetos" type="Node3D" parent="."]
 

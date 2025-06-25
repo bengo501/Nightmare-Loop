@@ -1,0 +1,55 @@
+[gd_scene load_steps=4 format=3 uid="uid://bkxqwv8n7h2iq"]
+
+[ext_resource type="Texture2D" uid="uid://dkyt4t11lux4i" path="res://assets/textures/estagio1Image.png" id="1_4h2vq"]
+[ext_resource type="Script" uid="uid://p5i01r0we5x4" path="res://scripts/ui/stage_intro.gd" id="1_u8xqv"]
+[ext_resource type="Texture2D" uid="uid://xbyh428jm1ei" path="res://assets/textures/estagio1Title.png" id="2_5i3wr"]
+
+[node name="StageIntro" type="CanvasLayer"]
+process_mode = 3
+layer = 100
+script = ExtResource("1_u8xqv")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.9)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -145.0
+offset_right = 992.0
+offset_bottom = 835.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="StageImage" type="TextureRect" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("1_4h2vq")
+stretch_mode = 5
+
+[node name="Timer" type="Timer" parent="."]
+process_mode = 3
+wait_time = 3.0
+one_shot = true
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+offset_left = -12.0
+offset_top = 117.0
+offset_right = 1012.0
+offset_bottom = 413.0
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="StageTitle" type="TextureRect" parent="MarginContainer"]
+layout_mode = 2
+texture = ExtResource("2_5i3wr")
+stretch_mode = 5
