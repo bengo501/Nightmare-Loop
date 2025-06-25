@@ -105,12 +105,12 @@ func show_slide(index: int):
 		overlay.color = Color(0, 0, 0, 0.8)
 		slide_text.add_theme_font_size_override("font_size", 48)
 		slide_text.add_theme_color_override("font_color", Color(0.9, 0.9, 1.0, 1.0))
-		next_button.text = "Começar Jogo"
+		# TextureButton não precisa de texto - a imagem já indica a função
 	else:
 		overlay.color = Color(0, 0, 0, 0.4)
 		slide_text.add_theme_font_size_override("font_size", 32)
 		slide_text.add_theme_color_override("font_color", Color(1, 1, 1, 1))
-		next_button.text = "Continuar"
+		# TextureButton não precisa de texto - a imagem já indica a função
 
 func _on_next_pressed():
 	if is_transitioning:

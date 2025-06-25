@@ -1,6 +1,7 @@
-[gd_scene load_steps=160 format=3 uid="uid://ddlldwbytxok2"]
+[gd_scene load_steps=161 format=3 uid="uid://ddlldwbytxok2"]
 
 [ext_resource type="Texture2D" uid="uid://ca44uy3jlfa6w" path="res://assets/textures/Floor/Horror_Floor_05-128x128.png" id="1_mdskg"]
+[ext_resource type="PackedScene" uid="uid://drs2ohyyh3uit" path="res://scenes/player/player.tscn" id="1_player"]
 [ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="2_tu8f1"]
 [ext_resource type="Texture2D" uid="uid://dnvokh1nct6js" path="res://assets/textures/Floor/Horror_Floor_11-128x128.png" id="3_5x3so"]
 [ext_resource type="Script" uid="uid://c40fe800olgwg" path="res://scripts/wall.gd" id="4_dbeie"]
@@ -528,6 +529,12 @@ albedo_texture = ExtResource("8_7e46u")
 [sub_resource type="NavigationMesh" id="NavigationMesh_q57r8"]
 
 [node name="map2" type="Node3D"]
+
+[node name="PontoNascimento" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 1, -30)
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 1, -30)
 
 [node name="Piso" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4912, -0.159011, -33.7358)

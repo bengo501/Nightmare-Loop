@@ -9,6 +9,8 @@ signal dialog_sequence_finished
 @onready var speaker_name = $DialogContainer/DialogBox/DialogContent/SpeakerName
 @onready var dialog_text = $DialogContainer/DialogBox/DialogContent/DialogText
 @onready var continue_prompt = $DialogContainer/DialogBox/ContinuePrompt
+@onready var continue_button = $ContinueButton
+@onready var skip_button = $SkipButton
 @onready var typewriter_timer = $TypewriterTimer
 @onready var blink_timer = $BlinkTimer
 @onready var ghost_animation_timer = $GhostAnimationTimer
@@ -34,6 +36,9 @@ var dialog_finished = false
 var ghost_mouth_open = false
 var mc_mouth_open = false
 var william_mouth_open = false
+
+# Variáveis para animação dos botões
+var button_tween: Tween
 
 # Script completo de diálogos
 var dialogs = [
@@ -504,6 +509,13 @@ func _ready():
 	william_animation_timer.timeout.connect(_on_william_animation_timer_timeout)
 	print("[DialogSystem] Timers conectados com sucesso")
 	
+	# Conecta os botões
+	if continue_button:
+		continue_button.pressed.connect(_on_continue_button_pressed)
+	if skip_button:
+		skip_button.pressed.connect(_on_skip_button_pressed)
+	print("[DialogSystem] Botões conectados com sucesso")
+	
 	# Verifica se as texturas foram carregadas
 	if not ghost_texture or not ghost2_texture or not mc1_texture or not mc2_texture or not william_texture or not william2_texture:
 		print("[DialogSystem] ERRO: Algumas texturas não foram carregadas!")
@@ -542,7 +554,10 @@ func show_dialog(index: int):
 	print("[DialogSystem] Diálogo atual - Speaker: ", dialog_data.speaker, " Character: ", dialog_data.character)
 	
 	# Define o nome do falante
-	speaker_name.text = dialog_data.speaker
+	if speaker_name and is_instance_valid(speaker_name):
+		speaker_name.text = dialog_data.speaker
+	else:
+		print("[DialogSystem] ERRO: speaker_name é null!")
 	
 	# Define o retrato do personagem
 	set_character_portrait(dialog_data.character)
@@ -569,7 +584,10 @@ func set_character_portrait(character: String):
 	character_portrait.offset_bottom = 200.0
 	character_portrait.custom_minimum_size = Vector2(400, 400)
 	# Usa sempre o balão dialog2 (apontando para direita)
-	dialog_box.texture = dialog2_texture
+	if dialog_box and is_instance_valid(dialog_box) and dialog2_texture:
+		dialog_box.texture = dialog2_texture
+	else:
+		print("[DialogSystem] ERRO: dialog_box ou dialog2_texture é null!")
 	
 	match character:
 		"mc1":
@@ -598,7 +616,18 @@ func start_typewriter(text: String):
 	
 	is_typing = true
 	current_char_index = 0
-	dialog_text.text = ""
+	if dialog_text and is_instance_valid(dialog_text):
+		dialog_text.text = ""
+	else:
+		print("[DialogSystem] ERRO: dialog_text é null no start_typewriter!")
+	
+	# Mostra os botões sempre durante o diálogo
+	if continue_button and is_instance_valid(continue_button):
+		continue_button.visible = true
+	if skip_button and is_instance_valid(skip_button):
+		skip_button.visible = true
+	animate_buttons()
+	
 	if continue_prompt and is_instance_valid(continue_prompt):
 		continue_prompt.visible = false
 	
@@ -617,7 +646,8 @@ func _on_typewriter_timer_timeout():
 	if current_char_index < full_text.length():
 		# Adiciona o próximo caractere
 		current_char_index += 1
-		dialog_text.text = full_text.substr(0, current_char_index)
+		if dialog_text and is_instance_valid(dialog_text):
+			dialog_text.text = full_text.substr(0, current_char_index)
 		
 		# Animação da boca para protagonista
 		if dialog_data.has("mouth_animation") and dialog_data.mouth_animation:
@@ -657,19 +687,61 @@ func complete_text():
 		william_mouth_open = false
 	
 	# Mostra o texto completo
-	dialog_text.text = dialogs[current_dialog_index].text
+	if dialog_text and is_instance_valid(dialog_text):
+		dialog_text.text = dialogs[current_dialog_index].text
+	else:
+		print("[DialogSystem] ERRO: dialog_text é null!")
 	
-	# Mostra o prompt para continuar
+	# Os botões já estão visíveis, apenas garante que continuem animados
 	if continue_prompt and is_instance_valid(continue_prompt):
-		continue_prompt.visible = true
+		continue_prompt.visible = false  # Mantém o prompt de texto escondido
 
 func next_dialog():
 	current_dialog_index += 1
 	show_dialog(current_dialog_index)
 
+func _on_continue_button_pressed():
+	if is_typing:
+		# Se estiver digitando, completa o texto imediatamente
+		complete_text()
+	else:
+		# Se o texto está completo, avança para o próximo diálogo
+		next_dialog()
+
+func _on_skip_button_pressed():
+	# Pula toda a sequência de diálogos
+	finish_dialog_sequence()
+
+func animate_buttons():
+	if button_tween:
+		button_tween.kill()
+	
+	button_tween = create_tween()
+	button_tween.set_loops()
+	button_tween.set_parallel(true)
+	
+	# Anima o botão de continuar
+	if continue_button and is_instance_valid(continue_button):
+		button_tween.tween_property(continue_button, "modulate:a", 0.7, 0.8)
+		button_tween.tween_property(continue_button, "modulate:a", 1.0, 0.8)
+	
+	# Anima o botão de pular
+	if skip_button and is_instance_valid(skip_button):
+		button_tween.tween_property(skip_button, "modulate:a", 0.7, 0.8)
+		button_tween.tween_property(skip_button, "modulate:a", 1.0, 0.8)
+
+func initialize_buttons():
+	# Garante que os botões estão visíveis e animados desde o início
+	if continue_button and is_instance_valid(continue_button):
+		continue_button.visible = true
+	if skip_button and is_instance_valid(skip_button):
+		skip_button.visible = true
+	animate_buttons()
+
 # Função para iniciar os diálogos padrão (Gregor)
 func start_default_dialog():
 	current_dialog_index = 0
+	initialize_buttons()
 	show_dialog(0)
 	print("[DialogSystem] Iniciando diálogos padrão")
 
@@ -682,6 +754,7 @@ func start_tv_dialog():
 	dialogs = tv_dialogs
 	current_dialog_index = 0
 	
+	initialize_buttons()
 	print("[DialogSystem] Dialogs substituídos, chamando show_dialog(0)")
 	show_dialog(0)
 	print("[DialogSystem] Iniciando diálogos da TV com William")
@@ -734,6 +807,10 @@ func finish_dialog_sequence():
 	william_animation_timer.stop()
 	typewriter_timer.stop()
 	blink_timer.stop()
+	
+	# Para a animação dos botões
+	if button_tween:
+		button_tween.kill()
 	
 	# Fade out
 	var fade_overlay = ColorRect.new()

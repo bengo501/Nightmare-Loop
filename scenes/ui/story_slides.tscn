@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://oqf11ce474d3"]
+[gd_scene load_steps=4 format=3 uid="uid://oqf11ce474d3"]
 
 [ext_resource type="Script" uid="uid://bcxyhelkfy13h" path="res://scripts/ui/story_slides.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://b2vgvvxi1x6p7" path="res://assets/textures/avancarButton.png" id="2_avancar"]
+[ext_resource type="Texture2D" uid="uid://bdxesjkyhwbbf" path="res://assets/textures/pularButton.png" id="3_pular"]
 
 [node name="StorySlides" type="CanvasLayer"]
 script = ExtResource("1_script")
@@ -31,6 +33,10 @@ anchor_left = 0.1
 anchor_top = 0.7
 anchor_right = 0.9
 anchor_bottom = 0.95
+offset_left = 6.6
+offset_top = -75.0
+offset_right = 6.59998
+offset_bottom = -75.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
 theme_override_constants/shadow_offset_x = 2
@@ -40,27 +46,33 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="NextButton" type="Button" parent="."]
+[node name="NextButton" type="TextureButton" parent="."]
 anchors_preset = -1
 anchor_left = 0.4
 anchor_top = 0.88
 anchor_right = 0.6
 anchor_bottom = 0.95
-theme_override_colors/font_hover_color = Color(0.8, 0.8, 0.8, 1)
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 24
-text = "Continuar"
+offset_left = 349.4
+offset_top = -36.0
+offset_right = 539.6
+offset_bottom = 73.0
+scale = Vector2(0.7, 0.7)
+texture_normal = ExtResource("2_avancar")
+stretch_mode = 5
 
-[node name="SkipButton" type="Button" parent="."]
+[node name="SkipButton" type="TextureButton" parent="."]
 anchors_preset = -1
 anchor_left = 0.85
 anchor_top = 0.05
 anchor_right = 0.95
 anchor_bottom = 0.12
-theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
-theme_override_font_sizes/font_size = 18
-text = "Pular"
+offset_left = -3.40002
+offset_top = -19.0
+offset_right = 506.2
+offset_bottom = 347.0
+scale = Vector2(0.25, 0.25)
+texture_normal = ExtResource("3_pular")
+stretch_mode = 5
 
 [node name="AmbientAudio" type="AudioStreamPlayer" parent="."]
 volume_db = -10.0

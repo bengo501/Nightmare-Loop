@@ -224,7 +224,6 @@ func update_hud():
 	health_bar.value = health
 	xp_bar.max_value = max_xp
 	xp_bar.value = xp
-	ammo_label.text = "Munição: %d/%d" % [ammo, max_ammo]
 	player_name_label.text = player_name
 	stage_name_label.text = "Fase: %s" % stage_name
 	score_label.text = "Score: %d" % score

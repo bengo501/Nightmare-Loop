@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bxm8k7n2qp4r8"]
+[gd_scene load_steps=3 format=3 uid="uid://bxm8k7n2qp4r8"]
 
 [ext_resource type="Script" path="res://scripts/ui/loading_screen.gd" id="1_0"]
+[ext_resource type="Texture2D" uid="uid://bv2y8j54ilxpq" path="res://assets/textures/slideJogo10-removebg-preview.png" id="2_q4fso"]
 
 [node name="LoadingScreen" type="CanvasLayer"]
 script = ExtResource("1_0")
@@ -11,38 +12,48 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0.05, 0.05, 0.1, 1)
 
+[node name="Title" type="TextureRect" parent="Background"]
+layout_mode = 2
+offset_left = 262.0
+offset_top = -2.0
+offset_right = 762.0
+offset_bottom = 498.0
+texture = ExtResource("2_q4fso")
+
 [node name="CenterContainer" type="CenterContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 82.0
+offset_right = -2.0
+offset_bottom = 82.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
 layout_mode = 2
 
-[node name="GameTitle" type="Label" parent="CenterContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 64
-text = "NIGHTMARE LOOP"
-horizontal_alignment = 1
-
 [node name="LoadingText" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.513726, 0.792157, 0.792157, 1)
 theme_override_font_sizes/font_size = 28
 text = "Carregando..."
 horizontal_alignment = 1
 
 [node name="ProgressBar" type="ProgressBar" parent="CenterContainer/VBoxContainer"]
-layout_mode = 2
 custom_minimum_size = Vector2(400, 20)
-max_value = 100.0
-value = 0.0
+layout_mode = 2
+indeterminate = true
+editor_preview_indeterminate = true
 
 [node name="StatusText" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.729412, 1, 1, 1)
 theme_override_font_sizes/font_size = 18
 text = "Inicializando sistemas..."
 horizontal_alignment = 1
 
 [node name="LoadingTimer" type="Timer" parent="."]
 wait_time = 0.1
-autostart = true 
+autostart = true
