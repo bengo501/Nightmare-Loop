@@ -4,6 +4,11 @@ var player_inside = false
 var player_ref: Node3D
 var skill_tree_active = false
 var original_camera: Camera3D = null
+var first_interaction = true
+var dialog_active = false
+
+# Arquivo para salvar o estado da primeira interação
+const SAVE_FILE = "user://tv_william_dialog_seen.save"
 
 # Referências aos nós da TV
 @onready var tv_camera = $TVCamera
@@ -15,7 +20,13 @@ var original_camera: Camera3D = null
 @onready var state_manager = get_node("/root/GameStateManager")
 @onready var skill_manager = get_node("/root/SkillManager")
 
+# Referência ao sistema de diálogo
+var dialog_system_scene = preload("res://scenes/ui/dialog_system.tscn")
+
 func _ready():
+	# Carrega o estado da primeira interação
+	load_dialog_state()
+	
 	# Conecta os sinais da área de interação
 	$Area3D.body_entered.connect(_on_body_entered)
 	$Area3D.body_exited.connect(_on_body_exited)
@@ -34,18 +45,30 @@ func _on_body_entered(body):
 	if body.is_in_group("player"):
 		player_inside = true
 		player_ref = body
-		show_interaction_prompt()
+		
+		if first_interaction:
+			# Primeira vez - inicia diálogo automaticamente
+			start_william_dialog()
+		else:
+			# Demais vezes - mostra prompt normal
+			show_interaction_prompt()
+		
 		print("[TV] Jogador entrou na área da TV")
 
 func _on_body_exited(body):
 	if body.is_in_group("player"):
 		player_inside = false
 		player_ref = null
-		hide_interaction_prompt()
+		
+		# Só esconde o prompt se não estiver em diálogo
+		if not dialog_active:
+			hide_interaction_prompt()
+		
 		print("[TV] Jogador saiu da área da TV")
 
 func _input(event):
-	if player_inside and event.is_action_pressed("interact") and not skill_tree_active:
+	if player_inside and event.is_action_pressed("interact") and not skill_tree_active and not dialog_active:
+		# Agora só ativa skill tree, pois o diálogo acontece automaticamente na primeira aproximação
 		activate_skill_tree()
 	elif skill_tree_active and (event.is_action_pressed("ui_cancel") or event.is_action_pressed("skill_tree")):
 		deactivate_skill_tree()
@@ -57,6 +80,121 @@ func show_interaction_prompt():
 func hide_interaction_prompt():
 	if interaction_prompt and is_instance_valid(interaction_prompt):
 		interaction_prompt.visible = false
+
+func load_dialog_state():
+	# Verifica se o arquivo de save existe
+	if FileAccess.file_exists(SAVE_FILE):
+		var file = FileAccess.open(SAVE_FILE, FileAccess.READ)
+		if file:
+			var loaded_value = file.get_var()
+			if loaded_value != null:
+				first_interaction = loaded_value
+			file.close()
+			print("[TV] Estado do diálogo carregado: primeira_interacao = ", first_interaction)
+		else:
+			print("[TV] Erro ao abrir arquivo de save, primeira interação será verdadeira")
+	else:
+		print("[TV] Arquivo de save não encontrado, primeira interação será verdadeira")
+
+func save_dialog_state():
+	var file = FileAccess.open(SAVE_FILE, FileAccess.WRITE)
+	if file:
+		file.store_var(first_interaction)
+		file.close()
+		print("[TV] Estado do diálogo salvo: primeira_interacao = ", first_interaction)
+
+# Função para resetar o estado do diálogo (para novo jogo)
+func reset_dialog_state():
+	first_interaction = true
+	save_dialog_state()
+	print("[TV] Estado do diálogo resetado para novo jogo")
+
+func start_william_dialog():
+	print("[TV] Iniciando diálogo com William pela primeira vez")
+	
+	first_interaction = false
+	dialog_active = true
+	
+	# Salva o estado para que não aconteça novamente
+	save_dialog_state()
+	
+	# Esconde o prompt de interação
+	hide_interaction_prompt()
+	
+	print("[TV] Pausando jogador...")
+	# Pausa o jogador
+	if player_ref:
+		player_ref.set_physics_process(false)
+		player_ref.set_process_input(false)
+		print("[TV] Jogador pausado com sucesso")
+	else:
+		print("[TV] AVISO: player_ref é null!")
+	
+	print("[TV] Escondendo HUD...")
+	# Esconde a HUD principal
+	if ui_manager and ui_manager.hud_instance and is_instance_valid(ui_manager.hud_instance):
+		ui_manager.hud_instance.visible = false
+		print("[TV] HUD escondida com sucesso")
+	else:
+		print("[TV] AVISO: HUD não encontrada ou inválida")
+	
+	print("[TV] Criando instância do sistema de diálogo...")
+	# Cria e mostra o sistema de diálogo
+	var dialog_instance = dialog_system_scene.instantiate()
+	if not dialog_instance:
+		print("[TV] ERRO: Falha ao instanciar sistema de diálogo!")
+		return
+	
+	print("[TV] Adicionando sistema de diálogo à cena...")
+	get_tree().current_scene.add_child(dialog_instance)
+	
+	print("[TV] Conectando sinal de fim do diálogo...")
+	# Conecta o sinal de fim do diálogo
+	dialog_instance.connect("dialog_sequence_finished", _on_dialog_finished)
+	
+	print("[TV] Pausando jogo...")
+	# Pausa o jogo ANTES de iniciar o diálogo
+	get_tree().paused = true
+	
+	print("[TV] Iniciando diálogos da TV...")
+	# Inicia os diálogos da TV
+	dialog_instance.start_tv_dialog()
+	
+	print("[TV] Liberando cursor...")
+	# Libera o cursor
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+	print("[TV] Diálogo com William iniciado com sucesso!")
+
+func _on_dialog_finished():
+	print("[TV] Diálogo com William finalizado")
+	
+	dialog_active = false
+	
+	# Mostra o prompt de interação novamente se o jogador ainda estiver na área
+	if player_inside:
+		show_interaction_prompt()
+	
+	# Libera o jogador
+	if player_ref:
+		player_ref.set_physics_process(true)
+		player_ref.set_process_input(true)
+	
+	# Mostra a HUD principal
+	if ui_manager and ui_manager.hud_instance and is_instance_valid(ui_manager.hud_instance):
+		ui_manager.hud_instance.visible = true
+	
+	# Despausa o jogo
+	get_tree().paused = false
+	
+	# Restaura o modo do cursor baseado no modo da câmera do jogador
+	if player_ref and player_ref.has_method("get") and player_ref.get("first_person_mode"):
+		if player_ref.first_person_mode:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		else:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func activate_skill_tree():
 	if skill_tree_active:

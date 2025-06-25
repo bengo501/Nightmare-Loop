@@ -80,6 +80,9 @@ func reset_game() -> void:
 	var gift_manager = get_node_or_null("/root/GiftManager")
 	if gift_manager:
 		gift_manager.reset_gifts()
+	
+	# Resetar estado do diálogo da TV para novo jogo
+	reset_tv_dialog_state()
 
 func take_damage(amount: int) -> void:
 	player_health = max(0, player_health - amount)
@@ -183,7 +186,15 @@ func load_settings() -> void:
 	var config = ConfigFile.new()
 	if config.load("user://options.cfg") == OK:
 		for key in settings.keys():
-			settings[key] = config.get_value("options", key, settings[key]) 
+			settings[key] = config.get_value("options", key, settings[key])
+
+# Função para resetar o estado do diálogo da TV
+func reset_tv_dialog_state() -> void:
+	# Remove o arquivo de save do diálogo da TV
+	var save_file_path = "user://tv_william_dialog_seen.save"
+	if FileAccess.file_exists(save_file_path):
+		DirAccess.remove_absolute(save_file_path)
+		print("[GameManager] Estado do diálogo da TV resetado para novo jogo") 
 
 func _on_ghost_defeated():
 	print("\n[GameManager] ====== SINAL RECEBIDO ======")

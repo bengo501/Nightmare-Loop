@@ -1,5 +1,8 @@
 extends CanvasLayer
 
+# Sinal emitido quando a sequência de diálogos termina
+signal dialog_sequence_finished
+
 # Referências aos elementos da UI
 @onready var character_portrait = $CharacterContainer/CharacterPortrait
 @onready var dialog_box = $DialogContainer/DialogBox
@@ -10,12 +13,15 @@ extends CanvasLayer
 @onready var blink_timer = $BlinkTimer
 @onready var ghost_animation_timer = $GhostAnimationTimer
 @onready var mc_animation_timer = $MCAnimationTimer
+@onready var william_animation_timer = $WilliamAnimationTimer
 
 # Texturas dos personagens
 var mc1_texture = preload("res://assets/textures/Mc1.png")
 var mc2_texture = preload("res://assets/textures/Mc2.png")
 var ghost_texture = preload("res://assets/textures/ghostFriend.png")
 var ghost2_texture = preload("res://assets/textures/ghostFriend2.png")
+var william_texture = preload("res://assets/textures/pirate_ghost_flipped2.png")
+var william2_texture = preload("res://assets/textures/pirate_ghost_flipped.png")
 var dialog_texture = preload("res://assets/textures/dialog.png")
 var dialog_flipped_texture = preload("res://assets/textures/dialog_flipped.png")
 var dialog2_texture = preload("res://assets/textures/dialog2.png")
@@ -27,6 +33,7 @@ var is_typing = false
 var dialog_finished = false
 var ghost_mouth_open = false
 var mc_mouth_open = false
+var william_mouth_open = false
 
 # Script completo de diálogos
 var dialogs = [
@@ -393,23 +400,120 @@ var dialogs = [
 	}
 ]
 
+# Diálogos específicos para a TV (William)
+var tv_dialogs = [
+	{
+		"speaker": "William",
+		"text": "Ahooy! Finalmente alguém com olhos e juízo pra escutar um velho marujo preso neste caixote brilhante.",
+		"character": "william",
+		"mouth_animation": false
+	},
+	{
+		"speaker": "Protagonista",
+		"text": "U-um fantasma… na televisão?! O que... o que é isso?",
+		"character": "mc1",
+		"mouth_animation": true
+	},
+	{
+		"speaker": "William",
+		"text": "Ahn-hahn! O próprio! William Dente-de-Sombra, astro de sete mares… e de uns bons filmes de pirata nos anos 80. Agora, mentor de sonhadores perdidos como tu.",
+		"character": "william",
+		"mouth_animation": false
+	},
+	{
+		"speaker": "Protagonista",
+		"text": "Mentor? Do quê exatamente?",
+		"character": "mc2",
+		"mouth_animation": true
+	},
+	{
+		"speaker": "William",
+		"text": "Deste mundo, menina. Este ciclo maldito que te arrastou – o Loop. Aqui, a realidade se dobra, o tempo se engasga, e tu... tu vais precisar ser mais forte se quiser sair viva.",
+		"character": "william",
+		"mouth_animation": false
+	},
+	{
+		"speaker": "Protagonista",
+		"text": "E como eu faço isso?",
+		"character": "mc1",
+		"mouth_animation": true
+	},
+	{
+		"speaker": "William",
+		"text": "Toc, toc! Através desta engenhoca! Nesta TV mágica, podemos aprimorar tuas habilidades. Mas nada é de graça... vais precisar dos Pontos de Consciência.",
+		"character": "william",
+		"mouth_animation": false
+	},
+	{
+		"speaker": "Protagonista",
+		"text": "Pontos de... Consciência?",
+		"character": "mc2",
+		"mouth_animation": true
+	},
+	{
+		"speaker": "William",
+		"text": "Sim! Fragmentos da tua mente desperta. Encontrados espalhados pelas fases do Loop. Cada pedacinho te deixa mais lúcida, mais rápida, mais... letal!",
+		"character": "william",
+		"mouth_animation": false
+	},
+	{
+		"speaker": "Protagonista",
+		"text": "Então eu coleto esses pontos e volto aqui?",
+		"character": "mc1",
+		"mouth_animation": true
+	},
+	{
+		"speaker": "William",
+		"text": "Exato como uma bússola que retorna ao norte! Entregue-os a mim e, com minha sabedoria de pirata místico, destravaremos poderes, habilidades e resistência pra aguentar os terrores que te esperam.",
+		"character": "william",
+		"mouth_animation": false
+	},
+	{
+		"speaker": "Protagonista",
+		"text": "E se eu morrer?",
+		"character": "mc2",
+		"mouth_animation": true
+	},
+	{
+		"speaker": "William",
+		"text": "Arrrr! Tu vais acordar de novo, menina... neste mesmo pesadelo. Mas cada ponto guardado aqui permanece! A cada nova tentativa, estarás mais forte. Mais próxima da verdade.",
+		"character": "william",
+		"mouth_animation": false
+	},
+	{
+		"speaker": "Protagonista",
+		"text": "Tá... isso é meio insano. Mas se isso me ajuda a sair daqui... vou fazer funcionar.",
+		"character": "mc1",
+		"mouth_animation": true
+	},
+	{
+		"speaker": "William",
+		"text": "Sabes aprender rápido! Agora vá, brava navegante do pesadelo. E não esqueça: a luz da consciência é tua arma contra a escuridão.",
+		"character": "william",
+		"mouth_animation": false
+	}
+]
+
 func _ready():
 	# Conecta os timers
+	print("[DialogSystem] Conectando timers...")
 	typewriter_timer.timeout.connect(_on_typewriter_timer_timeout)
 	blink_timer.timeout.connect(_on_blink_timer_timeout)
 	ghost_animation_timer.timeout.connect(_on_ghost_animation_timer_timeout)
 	mc_animation_timer.timeout.connect(_on_mc_animation_timer_timeout)
+	william_animation_timer.timeout.connect(_on_william_animation_timer_timeout)
+	print("[DialogSystem] Timers conectados com sucesso")
 	
 	# Verifica se as texturas foram carregadas
-	if not ghost_texture or not ghost2_texture or not mc1_texture or not mc2_texture:
+	if not ghost_texture or not ghost2_texture or not mc1_texture or not mc2_texture or not william_texture or not william2_texture:
 		print("[DialogSystem] ERRO: Algumas texturas não foram carregadas!")
 	else:
 		print("[DialogSystem] Todas as texturas carregadas com sucesso")
 	
-	# Inicia o primeiro diálogo
-	show_dialog(0)
+	# Configura o sistema para não ser pausado quando o jogo for pausado
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	
-	print("[DialogSystem] Sistema de diálogos iniciado")
+	print("[DialogSystem] Sistema de diálogos inicializado e pronto")
 
 func _input(event):
 	if event.is_action_pressed("ui_accept") or event.is_action_pressed("ui_select") or \
@@ -424,12 +528,18 @@ func _input(event):
 			next_dialog()
 
 func show_dialog(index: int):
+	print("[DialogSystem] show_dialog() chamada com index: ", index)
+	print("[DialogSystem] dialogs.size(): ", dialogs.size())
+	
 	if index >= dialogs.size():
+		print("[DialogSystem] Index maior que tamanho do array, finalizando")
 		finish_dialog_sequence()
 		return
 	
 	current_dialog_index = index
 	var dialog_data = dialogs[index]
+	
+	print("[DialogSystem] Diálogo atual - Speaker: ", dialog_data.speaker, " Character: ", dialog_data.character)
 	
 	# Define o nome do falante
 	speaker_name.text = dialog_data.speaker
@@ -444,8 +554,10 @@ func set_character_portrait(character: String):
 	# Para todos os timers de animação antes de configurar novo personagem
 	ghost_animation_timer.stop()
 	mc_animation_timer.stop()
+	william_animation_timer.stop()
 	ghost_mouth_open = false
 	mc_mouth_open = false
+	william_mouth_open = false
 	
 	print("[DialogSystem] Configurando personagem: ", character)
 	
@@ -475,8 +587,15 @@ func set_character_portrait(character: String):
 			# Inicia animação da boca do ghost
 			ghost_animation_timer.start()
 			print("[DialogSystem] Ghost configurado - texture: ", ghost_texture)
+		"william":
+			character_portrait.texture = william_texture
+			# Inicia animação da boca do William
+			william_animation_timer.start()
+			print("[DialogSystem] William configurado - texture: ", william_texture)
 
 func start_typewriter(text: String):
+	print("[DialogSystem] Iniciando typewriter para: ", text.substr(0, 30), "...")
+	
 	is_typing = true
 	current_char_index = 0
 	dialog_text.text = ""
@@ -485,8 +604,13 @@ func start_typewriter(text: String):
 	
 	# Inicia o timer do typewriter
 	typewriter_timer.start()
+	print("[DialogSystem] Timer do typewriter iniciado")
 
 func _on_typewriter_timer_timeout():
+	if current_dialog_index >= dialogs.size():
+		print("[DialogSystem] ERRO: current_dialog_index fora do range!")
+		return
+	
 	var dialog_data = dialogs[current_dialog_index]
 	var full_text = dialog_data.text
 	
@@ -526,6 +650,12 @@ func complete_text():
 		character_portrait.texture = mc1_texture  # Retorna à textura padrão (boca fechada)
 		mc_mouth_open = false
 	
+	# Para a animação do William
+	if dialogs[current_dialog_index].character == "william":
+		william_animation_timer.stop()
+		character_portrait.texture = william_texture  # Retorna à textura padrão (boca fechada)
+		william_mouth_open = false
+	
 	# Mostra o texto completo
 	dialog_text.text = dialogs[current_dialog_index].text
 	
@@ -536,6 +666,25 @@ func complete_text():
 func next_dialog():
 	current_dialog_index += 1
 	show_dialog(current_dialog_index)
+
+# Função para iniciar os diálogos padrão (Gregor)
+func start_default_dialog():
+	current_dialog_index = 0
+	show_dialog(0)
+	print("[DialogSystem] Iniciando diálogos padrão")
+
+# Função para iniciar os diálogos da TV (William)
+func start_tv_dialog():
+	print("[DialogSystem] start_tv_dialog() chamada")
+	print("[DialogSystem] tv_dialogs.size(): ", tv_dialogs.size())
+	
+	# Substitui os diálogos pelos diálogos da TV
+	dialogs = tv_dialogs
+	current_dialog_index = 0
+	
+	print("[DialogSystem] Dialogs substituídos, chamando show_dialog(0)")
+	show_dialog(0)
+	print("[DialogSystem] Iniciando diálogos da TV com William")
 
 func _on_blink_timer_timeout():
 	# Faz o prompt piscar
@@ -564,8 +713,27 @@ func _on_mc_animation_timer_timeout():
 			character_portrait.texture = mc2_texture
 			mc_mouth_open = true
 
+func _on_william_animation_timer_timeout():
+	# Alterna entre as texturas do William para simular fala
+	if current_dialog_index < dialogs.size():
+		var dialog_data = dialogs[current_dialog_index]
+		if dialog_data.character == "william":
+			if william_mouth_open:
+				character_portrait.texture = william_texture
+				william_mouth_open = false
+			else:
+				character_portrait.texture = william2_texture
+				william_mouth_open = true
+
 func finish_dialog_sequence():
 	print("[DialogSystem] Sequência de diálogos finalizada")
+	
+	# Para todos os timers
+	ghost_animation_timer.stop()
+	mc_animation_timer.stop()
+	william_animation_timer.stop()
+	typewriter_timer.stop()
+	blink_timer.stop()
 	
 	# Fade out
 	var fade_overlay = ColorRect.new()
@@ -579,6 +747,9 @@ func finish_dialog_sequence():
 	tween.tween_property(fade_overlay, "color", Color(0, 0, 0, 1), 1.0)
 	
 	await tween.finished
+	
+	# Emite o sinal de fim do diálogo
+	dialog_sequence_finished.emit()
 	
 	# Remove o sistema de diálogos e permite que o jogo continue normalmente
 	queue_free() 

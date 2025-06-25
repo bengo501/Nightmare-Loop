@@ -8,8 +8,11 @@
 [ext_resource type="Texture2D" path="res://assets/textures/Mc2.png" id="4_mc2"]
 [ext_resource type="Texture2D" path="res://assets/textures/ghostFriend.png" id="5_ghost"]
 [ext_resource type="Texture2D" path="res://assets/textures/ghostFriend2.png" id="6_ghost2"]
+[ext_resource type="Texture2D" path="res://assets/textures/pirate_ghost_flipped2.png" id="7_william"]
+[ext_resource type="Texture2D" path="res://assets/textures/pirate_ghost_flipped.png" id="8_william2"]
 
 [node name="DialogSystem" type="CanvasLayer"]
+process_mode = 3
 script = ExtResource("1_0")
 
 [node name="Background" type="ColorRect" parent="."]
@@ -94,17 +97,26 @@ text = "Pressione ENTER"
 horizontal_alignment = 2
 
 [node name="TypewriterTimer" type="Timer" parent="."]
+process_mode = 3
 wait_time = 0.05
 one_shot = false
 
 [node name="BlinkTimer" type="Timer" parent="."]
+process_mode = 3
 wait_time = 0.5
 autostart = true
 
 [node name="GhostAnimationTimer" type="Timer" parent="."]
+process_mode = 3
 wait_time = 0.4
 autostart = false
 
 [node name="MCAnimationTimer" type="Timer" parent="."]
+process_mode = 3
+wait_time = 0.4
+autostart = false
+
+[node name="WilliamAnimationTimer" type="Timer" parent="."]
+process_mode = 3
 wait_time = 0.4
 autostart = false
