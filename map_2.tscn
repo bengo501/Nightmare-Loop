@@ -1010,6 +1010,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.8871, 1, -27.3619)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4912, -0.159011, -33.7358)
 material_override = SubResource("StandardMaterial3D_r5yoc")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(5.13269, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1043,6 +1045,8 @@ size = Vector3(10, 1, 10)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.8138, -0.159011, -23.7369)
 material_override = SubResource("StandardMaterial3D_4kmvx")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1050,6 +1054,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.8, -0.159011, -23.7369)
 material_override = SubResource("StandardMaterial3D_40xph")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 
 [node name="Piso46" type="CSGBox3D" parent="."]
@@ -1065,6 +1071,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.8331, -0.159011, -23.7369)
 material_override = SubResource("StandardMaterial3D_40xph")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 
 [node name="Piso34" type="CSGBox3D" parent="."]
@@ -1088,6 +1096,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.7398, -0.159011, -33.6381)
 material_override = SubResource("StandardMaterial3D_1m1ue")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1095,12 +1105,16 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.8331, -0.159011, -43.6724)
 material_override = SubResource("StandardMaterial3D_40xph")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 
 [node name="Piso51" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.7398, -0.159011, -53.5735)
 material_override = SubResource("StandardMaterial3D_1m1ue")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1126,6 +1140,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.9806, -0.159011, -53.5284)
 material_override = SubResource("StandardMaterial3D_l137e")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1133,6 +1149,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.9326, -0.159011, -53.5284)
 material_override = SubResource("StandardMaterial3D_mvg0v")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1140,6 +1158,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.8646, -0.159011, -63.4766)
 material_override = SubResource("StandardMaterial3D_1v02h")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1147,6 +1167,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.9806, -0.159011, -63.4764)
 material_override = SubResource("StandardMaterial3D_shehe")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1154,6 +1176,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.9806, -0.159011, -73.4075)
 material_override = SubResource("StandardMaterial3D_l137e")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1161,6 +1185,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.9326, -0.159011, -73.4075)
 material_override = SubResource("StandardMaterial3D_mvg0v")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1168,6 +1194,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.341379, -0.159011, -43.6239)
 material_override = SubResource("StandardMaterial3D_rga7q")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(9.28564, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1184,6 +1212,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.55746, -0.159011, -43.6239)
 material_override = SubResource("StandardMaterial3D_ygn2i")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10.8584, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1191,6 +1221,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.39509, -0.159011, -53.554)
 material_override = SubResource("StandardMaterial3D_iexy4")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(7.17822, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1198,6 +1230,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.55893, -0.159011, -53.554)
 material_override = SubResource("StandardMaterial3D_swu3i")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(12.8555, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1205,6 +1239,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0157991, -0.159011, -63.4421)
 material_override = SubResource("StandardMaterial3D_oexs8")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1212,6 +1248,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.98666, -0.159011, -63.4421)
 material_override = SubResource("StandardMaterial3D_ntuqo")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1219,6 +1257,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.98666, -0.159011, -63.4421)
 material_override = SubResource("StandardMaterial3D_i688p")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1235,6 +1275,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9051, -0.159011, -43.6239)
 material_override = SubResource("StandardMaterial3D_6oujy")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1242,6 +1284,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.93422, -0.159011, -43.6239)
 material_override = SubResource("StandardMaterial3D_1jxku")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1249,6 +1293,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9051, -0.159011, -53.554)
 material_override = SubResource("StandardMaterial3D_h3odw")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 script = ExtResource("4_dbeie")
@@ -1257,6 +1303,8 @@ script = ExtResource("4_dbeie")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.93422, -0.159011, -53.554)
 material_override = SubResource("StandardMaterial3D_5hl1e")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1264,6 +1312,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9051, -0.159011, -63.4421)
 material_override = SubResource("StandardMaterial3D_c15v2")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1271,6 +1321,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.93422, -0.159011, -63.4421)
 material_override = SubResource("StandardMaterial3D_grmox")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1278,6 +1330,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0157991, -0.159011, -73.3059)
 material_override = SubResource("StandardMaterial3D_66tox")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1285,6 +1339,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.98666, -0.159011, -73.3059)
 material_override = SubResource("StandardMaterial3D_kcpaj")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1292,6 +1348,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0157991, -0.159011, -83.194)
 material_override = SubResource("StandardMaterial3D_q57r8")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1299,6 +1357,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.98666, -0.159011, -83.194)
 material_override = SubResource("StandardMaterial3D_frq1x")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1306,6 +1366,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0157991, -0.159011, -93.1241)
 material_override = SubResource("StandardMaterial3D_7echp")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1313,6 +1375,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.98666, -0.159011, -93.1241)
 material_override = SubResource("StandardMaterial3D_hg3bl")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1320,6 +1384,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0157991, -0.159011, -103.012)
 material_override = SubResource("StandardMaterial3D_edbjg")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1327,6 +1393,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.98666, -0.159011, -103.012)
 material_override = SubResource("StandardMaterial3D_hl1kq")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1334,6 +1402,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9051, -0.159011, -73.3059)
 material_override = SubResource("StandardMaterial3D_xgy6y")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1341,6 +1411,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.8075, -0.159011, -53.554)
 material_override = SubResource("StandardMaterial3D_h3odw")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 script = ExtResource("4_dbeie")
@@ -1349,6 +1421,8 @@ script = ExtResource("4_dbeie")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.8075, -0.159011, -63.4421)
 material_override = SubResource("StandardMaterial3D_c15v2")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1356,6 +1430,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.8075, -0.159011, -73.3059)
 material_override = SubResource("StandardMaterial3D_xgy6y")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1363,6 +1439,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.7741, -0.159011, -53.554)
 material_override = SubResource("StandardMaterial3D_h3odw")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 script = ExtResource("4_dbeie")
@@ -1371,6 +1449,8 @@ script = ExtResource("4_dbeie")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.7741, -0.159011, -63.4421)
 material_override = SubResource("StandardMaterial3D_c15v2")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1378,6 +1458,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.7741, -0.159011, -73.3059)
 material_override = SubResource("StandardMaterial3D_xgy6y")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1385,6 +1467,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49.6765, -0.159011, -73.3059)
 material_override = SubResource("StandardMaterial3D_xgy6y")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1392,6 +1476,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.8075, -0.159011, -83.2952)
 material_override = SubResource("StandardMaterial3D_6oujy")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1399,6 +1485,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.8075, -0.159011, -93.2253)
 material_override = SubResource("StandardMaterial3D_h3odw")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 script = ExtResource("4_dbeie")
@@ -1407,6 +1495,8 @@ script = ExtResource("4_dbeie")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.8075, -0.159011, -103.113)
 material_override = SubResource("StandardMaterial3D_c15v2")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1414,6 +1504,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.8075, -0.159011, -112.977)
 material_override = SubResource("StandardMaterial3D_yhtv1")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1421,6 +1513,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.7741, -0.159011, -83.2952)
 material_override = SubResource("StandardMaterial3D_6oujy")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1428,6 +1522,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.7741, -0.159011, -93.2253)
 material_override = SubResource("StandardMaterial3D_h3odw")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 script = ExtResource("4_dbeie")
@@ -1436,6 +1532,8 @@ script = ExtResource("4_dbeie")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.7741, -0.159011, -103.113)
 material_override = SubResource("StandardMaterial3D_c15v2")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1443,6 +1541,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49.6765, -0.159011, -83.2952)
 material_override = SubResource("StandardMaterial3D_6oujy")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1450,6 +1550,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49.6765, -0.159011, -93.2253)
 material_override = SubResource("StandardMaterial3D_h3odw")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 script = ExtResource("4_dbeie")
@@ -1458,6 +1560,8 @@ script = ExtResource("4_dbeie")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49.6765, -0.159011, -103.113)
 material_override = SubResource("StandardMaterial3D_c15v2")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1465,6 +1569,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.8075, -0.159011, -122.647)
 material_override = SubResource("StandardMaterial3D_c7mri")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 script = ExtResource("4_dbeie")
@@ -1473,6 +1579,8 @@ script = ExtResource("4_dbeie")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.8075, -0.159011, -132.535)
 material_override = SubResource("StandardMaterial3D_t2jyq")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1480,6 +1588,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.10183, -0.159011, -112.977)
 material_override = SubResource("StandardMaterial3D_7n6r0")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1487,6 +1597,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.83636, -0.159011, -112.977)
 material_override = SubResource("StandardMaterial3D_xgy6y")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1494,6 +1606,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.0684, -0.159011, -112.977)
 material_override = SubResource("StandardMaterial3D_gom0u")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1501,6 +1615,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9708, -0.159011, -112.977)
 material_override = SubResource("StandardMaterial3D_iqfx1")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1508,6 +1624,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.10183, -0.159011, -122.647)
 material_override = SubResource("StandardMaterial3D_x3v50")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 script = ExtResource("4_dbeie")
@@ -1516,6 +1634,8 @@ script = ExtResource("4_dbeie")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.10183, -0.159011, -132.535)
 material_override = SubResource("StandardMaterial3D_3fb5j")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1523,6 +1643,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.0684, -0.159011, -122.647)
 material_override = SubResource("StandardMaterial3D_sjp3e")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 script = ExtResource("4_dbeie")
@@ -1531,6 +1653,8 @@ script = ExtResource("4_dbeie")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.0684, -0.159011, -132.535)
 material_override = SubResource("StandardMaterial3D_3r8ca")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1538,6 +1662,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.0684, -0.159011, -142.398)
 material_override = SubResource("StandardMaterial3D_xgy6y")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1545,6 +1671,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9708, -0.159011, -122.647)
 material_override = SubResource("StandardMaterial3D_2xejd")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 script = ExtResource("4_dbeie")
@@ -1553,6 +1681,8 @@ script = ExtResource("4_dbeie")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9708, -0.159011, -132.535)
 material_override = SubResource("StandardMaterial3D_5aihc")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1560,6 +1690,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9708, -0.159011, -142.398)
 material_override = SubResource("StandardMaterial3D_xgy6y")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1567,6 +1699,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.8075, -0.159011, -152.278)
 material_override = SubResource("StandardMaterial3D_xgy6y")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1574,6 +1708,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.10183, -0.159011, -152.278)
 material_override = SubResource("StandardMaterial3D_xgy6y")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1581,6 +1717,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9179, -0.159012, -152.278)
 material_override = SubResource("StandardMaterial3D_xgy6y")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10.1057, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1588,6 +1726,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.86084, -0.159011, -152.278)
 material_override = SubResource("StandardMaterial3D_xgy6y")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1595,6 +1735,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.8075, -0.159011, -162.244)
 material_override = SubResource("StandardMaterial3D_xgy6y")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1602,6 +1744,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.10183, -0.159011, -162.244)
 material_override = SubResource("StandardMaterial3D_xgy6y")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1609,6 +1753,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9708, -0.159011, -162.244)
 material_override = SubResource("StandardMaterial3D_xgy6y")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1616,6 +1762,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.86084, -0.159011, -162.244)
 material_override = SubResource("StandardMaterial3D_xgy6y")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1623,6 +1771,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.93422, -0.159011, -73.3059)
 material_override = SubResource("StandardMaterial3D_myjip")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1630,6 +1780,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9051, -0.159011, -83.194)
 material_override = SubResource("StandardMaterial3D_8j4su")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1637,6 +1789,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.93422, -0.159011, -83.194)
 material_override = SubResource("StandardMaterial3D_5nedk")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1644,6 +1798,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9051, -0.159011, -93.1241)
 material_override = SubResource("StandardMaterial3D_edwmm")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1651,6 +1807,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.93422, -0.159011, -93.1241)
 material_override = SubResource("StandardMaterial3D_cagmf")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1658,6 +1816,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9051, -0.159011, -103.012)
 material_override = SubResource("StandardMaterial3D_befh3")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1665,6 +1825,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.93422, -0.159011, -103.012)
 material_override = SubResource("StandardMaterial3D_a43o0")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 

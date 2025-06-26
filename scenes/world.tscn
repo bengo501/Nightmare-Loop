@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://bhk71lctrycc"]
+[gd_scene load_steps=34 format=3 uid="uid://bhk71lctrycc"]
 
 [ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="1_rwgxs"]
 [ext_resource type="Script" uid="uid://bwhtkocfb8obw" path="res://scripts/world.gd" id="1_xxxxx"]
@@ -7,7 +7,9 @@
 [ext_resource type="PackedScene" uid="uid://drs2ohyyh3uit" path="res://scenes/player/player.tscn" id="3_4wyf3"]
 [ext_resource type="PackedScene" uid="uid://bd1iioahw58ht" path="res://scenes/enemies/ghost1.tscn" id="4_e68xj"]
 [ext_resource type="Material" uid="uid://d3j53d06bnt3h" path="res://shaders/ditherTransparency.tres" id="5_lakw3"]
+[ext_resource type="PackedScene" uid="uid://bad23dmold2ay" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Phone.fbx_Scene/Phone.fbx_Scene.fbx" id="5_munwf"]
 [ext_resource type="Script" uid="uid://c40fe800olgwg" path="res://scripts/wall.gd" id="6_pm21f"]
+[ext_resource type="PackedScene" uid="uid://d3h18t4d2rwml" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Toaster/Toaster.fbx_Scene.fbx" id="6_ts3gi"]
 [ext_resource type="PackedScene" uid="uid://ytaetvi5ig5r" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Couch/Couch.fbx_Scene.fbm/Couch.fbx.fbx" id="7_q5onr"]
 [ext_resource type="PackedScene" uid="uid://cj47gniftse4d" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Dresser/Dresser.fbx_Scene/Dresser.fbx_Scene.fbx" id="8_jhx03"]
 [ext_resource type="PackedScene" uid="uid://c8q7v4j6y5n3q" path="res://scenes/items/GriefGifts.tscn" id="9_7r4gi"]
@@ -16,6 +18,13 @@
 [ext_resource type="Script" uid="uid://dh2tqiu2d2827" path="res://scripts/bed_interaction.gd" id="12_bed_script"]
 [ext_resource type="PackedScene" uid="uid://ct6ppkdyv5tix" path="res://scenes/items/GiftBarganha.tscn" id="12_q5onr"]
 [ext_resource type="PackedScene" uid="uid://4u41su83a4ma" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Boombox_/Boombox.fbx_Scene/Boombox.fbx_Scene.fbx" id="17_1dgkn"]
+[ext_resource type="PackedScene" uid="uid://b8gi8r3xcek13" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Cardboard/Box.fbx_Scene/Box.fbx_Scene.fbx" id="20_0nbtd"]
+[ext_resource type="PackedScene" uid="uid://cjj2xgm31ck3y" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Small_Tablefbx.fbx_Scene/Small_Tablefbx.fbx_Scene.fbx" id="21_37qwj"]
+[ext_resource type="PackedScene" uid="uid://dmf4ff5if6si" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Music Keyboard/Music_Keyboard/Music_Keyboard.fbx" id="22_navra"]
+[ext_resource type="PackedScene" uid="uid://c1ca1opky73lk" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Microwave/Microwave.fbx_Scene/Microwave.fbx_Scene.fbx" id="23_luhhm"]
+[ext_resource type="PackedScene" uid="uid://b08ab3c5apij3" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Pillow/Pillow.fbx_Scene.fbx_Scene/Pillow.fbx_Scene.fbx_Scene.fbx" id="24_fh13f"]
+[ext_resource type="PackedScene" uid="uid://ddxjat72utvl4" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/TopCupboard/TopCupboard.fbx_Scene.fbx" id="25_rup4s"]
+[ext_resource type="PackedScene" uid="uid://cdooq3wu5wgv3" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/FloorLamp.fbx_Scene/FloorLamp.fbx_Scene.fbx" id="26_4kbfs"]
 [ext_resource type="PackedScene" uid="uid://blm23tt5thlmu" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Bathroom Sink/BathroomSink.fbx_Scene/BathroomSink.fbx_Scene.fbx" id="27_rup4s"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w7kh3"]
@@ -72,14 +81,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1296, -0.0184145, 0.076946
 [node name="Couch" parent="Hub/Hub/Furniture" instance=ExtResource("7_q5onr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.30632, 0, -1.6261)
 
-[node name="Dresser" parent="Hub/Hub/Furniture" instance=ExtResource("8_jhx03")]
-transform = Transform3D(0.0535755, 0, 1.99928, 0, 1.66092, 0, -1.99928, 0, 0.0535755, -3.13913, 0.344429, -2.05221)
-
 [node name="Boombox" parent="Hub/Hub/Furniture" instance=ExtResource("17_1dgkn")]
-transform = Transform3D(-0.0705043, 0, 1.49834, 0, 1.5, 0, -1.49834, 0, -0.0705043, -3.15775, 2.04519, -1.48868)
+transform = Transform3D(-0.0705043, 0, 1.49834, 0, 1.5, 0, -1.49834, 0, -0.0705043, -3.15775, 1.40584, -1.48868)
 
 [node name="BathroomSink" parent="Hub/Hub/Furniture" instance=ExtResource("27_rup4s")]
-transform = Transform3D(-0.984832, 0, -0.173511, 0, 1, 0, 0.173511, 0, -0.984832, 0.56901, 0, 3.91121)
+transform = Transform3D(-1.36319, 0, -0.0225826, 0, 1.19405, 0, 0.0241283, 0, -1.27587, 0.789249, 0.400547, 3.92635)
+
+[node name="Phone_fbx_Scene" parent="Hub/Hub/Furniture" instance=ExtResource("5_munwf")]
+transform = Transform3D(0.579018, -0.932905, 0.0357716, 0, 0.0451205, 0.995661, -0.984077, -0.548909, 0.0210475, -2.03154, 0.920567, 0.0354596)
+
+[node name="Toaster_fbx_Scene" parent="Hub/Hub/Furniture" instance=ExtResource("6_ts3gi")]
+transform = Transform3D(0.820581, 0, 0.57153, 0, 1, 0, -0.57153, 0, 0.820581, -3.00165, 1.38623, -2.74502)
 
 [node name="TV_fbx_Scene" parent="Hub/Hub" instance=ExtResource("2_7t5mc")]
 transform = Transform3D(-2.56367, 0, 0.252123, 0, 1.75394, 0, -0.336148, 0, -1.92285, -1.61529, 1.83148, 3.18439)
@@ -263,3 +275,69 @@ visible = false
 [node name="GiftBarganha" parent="." instance=ExtResource("12_q5onr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.3124, 1.1888, -13.0021)
 visible = false
+
+[node name="Box_fbx_Scene" parent="." instance=ExtResource("20_0nbtd")]
+transform = Transform3D(1.58482, 0, 0, 0, 1.44211, 0, 0, 0, 1.73942, 3.2973, 0.362404, 3.26818)
+
+[node name="Box_fbx_Scene2" parent="." instance=ExtResource("20_0nbtd")]
+transform = Transform3D(1.17508, 0, 1.16714, 0, 1.44211, 0, -1.06341, 0, 1.28971, 2.03746, 0.362404, 3.17062)
+
+[node name="Box_fbx_Scene3" parent="." instance=ExtResource("20_0nbtd")]
+transform = Transform3D(1.46799, 0, -0.65548, 0, 1.44211, 0, 0.597223, 0, 1.61119, 2.86737, 1.27901, 3.30378)
+
+[node name="Box_fbx_Scene4" parent="." instance=ExtResource("20_0nbtd")]
+transform = Transform3D(1.57672, 0, -0.175719, 0, 1.4421, 0, 0.160101, 0, 1.73052, 1.86341, 1.27901, 3.30378)
+
+[node name="Box_fbx_Scene5" parent="." instance=ExtResource("20_0nbtd")]
+transform = Transform3D(1.57672, 0, -0.175719, 0, 1.4421, 0, 0.160101, 0, 1.73052, 2.51854, 2.21109, 3.30378)
+
+[node name="Small_Tablefbx_fbx_Scene" parent="." instance=ExtResource("21_37qwj")]
+transform = Transform3D(1.40288, 0, 0, 0, 1.60078, 0, 0, 0, 4.43551, -3.05685, 0.231897, -1.47024)
+
+[node name="Music_Keyboard" parent="." instance=ExtResource("22_navra")]
+transform = Transform3D(-0.922531, 0, -0.385922, 0, 1, 0, 0.385922, 0, -0.922531, -2.70121, 1.86331, 2.89435)
+
+[node name="Microwave_fbx_Scene" parent="." instance=ExtResource("23_luhhm")]
+transform = Transform3D(-0.4257, 0, -0.904864, 0, 1, 0, 0.904864, 0, -0.4257, 1.82634, 2.21315, 3.27556)
+
+[node name="Pillow_fbx_Scene_fbx_Scene" parent="." instance=ExtResource("24_fh13f")]
+transform = Transform3D(0.608388, 0, -0.79364, 0, 1, 0, 0.79364, 0, 0.608388, 3.04927, 1.12844, -3.09352)
+
+[node name="Pillow_fbx_Scene_fbx_Scene2" parent="." instance=ExtResource("24_fh13f")]
+transform = Transform3D(0.608388, 0, -0.79364, 0, 1, 0, 0.79364, 0, 0.608388, 3.04927, 1.12844, -2.36074)
+
+[node name="Pillow_fbx_Scene_fbx_Scene3" parent="." instance=ExtResource("24_fh13f")]
+transform = Transform3D(-1.00539, 0, -1.3937, 0, 1, 0, 1.56203, 0, -0.897043, 3.04927, 1.44259, -0.590798)
+
+[node name="Pillow_fbx_Scene_fbx_Scene4" parent="." instance=ExtResource("24_fh13f")]
+transform = Transform3D(-1.00539, 0, -1.3937, 0, 1, 0, 1.56203, 0, -0.897043, 3.04927, 1.44259, 0.38617)
+
+[node name="TopCupboard_fbx_Scene" parent="." instance=ExtResource("25_rup4s")]
+transform = Transform3D(-0.0808721, 0, 1.01988, 0, 1, 0, -1.87252, 0, -0.0440473, -3.59318, 1.50546, 1.67986)
+
+[node name="TopCupboard_fbx_Scene4" parent="." instance=ExtResource("25_rup4s")]
+transform = Transform3D(-0.0808721, 0, 1.01988, 0, 1, 0, -1.87252, 0, -0.0440473, -3.59318, 2.16292, 1.67986)
+
+[node name="TopCupboard_fbx_Scene2" parent="." instance=ExtResource("25_rup4s")]
+transform = Transform3D(-0.0808721, 0, 1.01988, 0, 1, 0, -1.87252, 0, -0.0440473, -3.59318, 1.50546, -0.240835)
+
+[node name="TopCupboard_fbx_Scene3" parent="." instance=ExtResource("25_rup4s")]
+transform = Transform3D(-0.0808721, 0, 1.01988, 0, 1, 0, -1.87252, 0, -0.0440473, -3.59318, 2.12356, -0.240835)
+
+[node name="FloorLamp_fbx_Scene" parent="." instance=ExtResource("26_4kbfs")]
+transform = Transform3D(1.79975, 0, 0, 0, 1.44828, 0, 0, 0, 1.7442, 3.55353, 0.359404, 2.12055)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="FloorLamp_fbx_Scene"]
+transform = Transform3D(0.555634, 0, 0, 0, 0.690474, 0, 0, 0, 0.573328, 0, 1.55716, 0)
+
+[node name="FloorLamp_fbx_Scene2" parent="." instance=ExtResource("26_4kbfs")]
+transform = Transform3D(1.79975, 0, 0, 0, 1.44828, 0, 0, 0, 1.7442, -3.58184, 0.359404, -3.46023)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="FloorLamp_fbx_Scene2"]
+transform = Transform3D(0.555634, 0, 0, 0, 0.690474, 0, 0, 0, 0.573328, 0, 1.45696, 0)
+
+[node name="FloorLamp_fbx_Scene3" parent="." instance=ExtResource("26_4kbfs")]
+transform = Transform3D(1.79975, 0, 0, 0, 1.44828, 0, 0, 0, 1.7442, -3.58184, 0.359404, 3.26702)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="FloorLamp_fbx_Scene3"]
+transform = Transform3D(0.555634, 0, 0, 0, 0.690474, 0, 0, 0, 0.573328, 0, 1.49241, 0)

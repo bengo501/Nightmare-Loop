@@ -100,13 +100,24 @@ func _ready():
 	emit_signal("boss_health_changed", current_health, max_health)
 
 func _setup_boss_health_bar():
-	# Procura pela barra de vida do boss na UI
+	# Não mostra a barra de vida imediatamente - apenas prepara a referência
+	var ui_manager = get_node_or_null("/root/UIManager")
+	if ui_manager:
+		print("🎯 Sistema de barra de vida do boss encontrado - aguardando primeiro diálogo")
+	else:
+		print("⚠️ Sistema de barra de vida do boss não encontrado")
+
+func _show_boss_health_bar_after_dialog():
+	"""Mostra a barra de vida do boss após o primeiro diálogo terminar"""
+	print("👑 Mostrando barra de vida do boss após diálogo de confronto")
+	
 	var ui_manager = get_node_or_null("/root/UIManager")
 	if ui_manager and ui_manager.has_method("show_boss_health_bar"):
 		ui_manager.show_boss_health_bar("Chefe da Negação", max_health)
 		boss_health_bar = ui_manager.get_boss_health_bar()
+		print("✅ Barra de vida do boss mostrada com sucesso!")
 	else:
-		print("⚠️ Sistema de barra de vida do boss não encontrado")
+		print("❌ Erro: Sistema de barra de vida do boss não encontrado")
 
 func _setup_dialog_system():
 	print("💬 Configurando sistema de diálogo do Boss Negação...")
@@ -626,6 +637,10 @@ func _on_boss_victory_finished():
 
 func _on_dialog_finished():
 	print("💬 Sinal de fim de diálogo recebido")
+	
+	# AGORA MOSTRA A BARRA DE VIDA DO BOSS APÓS O PRIMEIRO DIÁLOGO
+	_show_boss_health_bar_after_dialog()
+	
 	# Após o diálogo de confronto, o boss se enfraquece significativamente
 	# Representa que aceitar a verdade diminui o poder da negação
 	current_health = max_health * 0.3  # Fica com apenas 30% da vida
