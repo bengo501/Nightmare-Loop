@@ -943,21 +943,47 @@ func get_current_ammo_count() -> int:
 	return gift_manager.get_gift_count(ammo_type)
 
 func die() -> void:
-	print("DEBUG: Jogador morreu!")
+	print("💀 [Player] Executando função die()...")
+	can_move = false  # Impede movimento
+	
+	# Emite sinais de morte
+	emit_signal("player_died")
 	emit_signal("game_over")
-	queue_free()
+	
+	# Garante que o estado muda para GAME_OVER
+	var state_manager = get_node_or_null("/root/GameStateManager")
+	if state_manager:
+		state_manager.change_state(state_manager.GameState.GAME_OVER)
+		print("💀 [Player] Estado mudado para GAME_OVER")
+	else:
+		print("❌ [Player] GameStateManager não encontrado!")
+	
+	# Mostra o menu de game over via UIManager
+	var ui_manager = get_node_or_null("/root/UIManager")
+	if ui_manager:
+		ui_manager.show_ui("game_over")
+		print("💀 [Player] Menu de Game Over mostrado")
+	else:
+		print("❌ [Player] UIManager não encontrado!")
+	
+	print("💀 [Player] Sequência de morte concluída")
 
 # Função para receber dano
 func take_damage(amount: float):
 	var actual_damage = amount * (1.0 - (stats.defesa / 100.0))
 	stats.hp = max(0, stats.hp - actual_damage)
+	current_health = stats.hp  # Sincroniza com current_health
+	
 	emit_signal("health_changed", stats.hp)
 	emit_signal("player_health_changed", stats.hp, stats.max_hp)
 	
+	print("🩸 [Player] Dano recebido: ", actual_damage, " | Vida atual: ", stats.hp, "/", stats.max_hp)
+	
 	# Mostra o indicador de dano
-	var damage_indicator = damage_indicator_scene.instantiate()
-	add_child(damage_indicator)
-	damage_indicator.set_damage(int(actual_damage))
+	if damage_indicator_scene:
+		var damage_indicator = damage_indicator_scene.instantiate()
+		add_child(damage_indicator)
+		damage_indicator.set_damage(int(actual_damage))
 	
 	# Aplica o efeito de shake nas câmeras
 	print("Tentando aplicar shake nas câmeras...")
@@ -980,9 +1006,10 @@ func take_damage(amount: float):
 		else:
 			print("CameraShake não encontrado na câmera de primeira pessoa")
 	
+	# VERIFICA SE O PLAYER MORREU
 	if stats.hp <= 0:
-		emit_signal("player_died")
-		game_over.emit()
+		print("💀 [Player] PLAYER MORREU! Iniciando Game Over...")
+		die()
 
 func _process(delta):
 	if not first_person_mode and third_person_camera:

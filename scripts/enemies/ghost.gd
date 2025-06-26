@@ -82,7 +82,21 @@ func _physics_process(delta):
 	else:
 		var next_path_position = navigation_agent.get_next_path_position()
 		var direction = (next_path_position - global_position).normalized()
-		direction.y = 0 # Mantém o ghost no mesmo nível
+		
+		# Usa o NavigationMesh para obter a altura correta
+		var navigation_map = get_world_3d().navigation_map
+		var nav_position = NavigationServer3D.map_get_closest_point(navigation_map, global_position)
+		var target_height = nav_position.y
+		
+		# Se não conseguir obter a altura da navegação, usa 1.5 como fallback
+		if target_height == 0.0 or is_nan(target_height):
+			target_height = 1.5
+		
+		# Corrige a altura se necessário
+		if abs(global_position.y - target_height) > 0.3:
+			global_position.y = target_height
+		
+		direction.y = 0 # Mantém o movimento apenas no plano horizontal
 		velocity = direction * speed
 		
 		# Rotaciona o ghost para a direção do movimento

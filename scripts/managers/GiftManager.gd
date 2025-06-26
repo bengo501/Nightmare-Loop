@@ -37,6 +37,16 @@ func use_gift(gift_type: String, amount: int = 1) -> bool:
 func get_gift_count(gift_type: String) -> int:
 	return gifts.get(gift_type, 0)
 
+# Define a quantidade específica de um gift
+func set_gift_count(gift_type: String, amount: int) -> void:
+	if gift_type in gifts:
+		gifts[gift_type] = max(0, amount)  # Garante que não seja negativo
+		emit_signal("gifts_changed", gifts)
+		save_gifts()
+		print("Gift count set: %s = %d" % [gift_type, gifts[gift_type]])
+	else:
+		print("ERRO: Tipo de gift inválido: %s" % gift_type)
+
 # Retorna todos os gifts
 func get_all_gifts() -> Dictionary:
 	return gifts.duplicate()

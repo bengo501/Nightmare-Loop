@@ -8,40 +8,53 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.7)
+color = Color(0, 0, 0, 0.8)
 
 [node name="MenuContainer" type="VBoxContainer" parent="."]
-anchors_preset = -1
-anchor_left = 0.4
-anchor_top = 0.3
-anchor_right = 0.6
-anchor_bottom = 0.7
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
 offset_left = -200.0
-offset_top = -150.0
+offset_top = -200.0
 offset_right = 200.0
-offset_bottom = 150.0
+offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 30
+theme_override_constants/separation = 20
 
 [node name="Title" type="Label" parent="MenuContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.2, 0.2, 1)
 theme_override_font_sizes/font_size = 48
-text = "GAME OVER"
+text = "VOCÊ MORREU"
 horizontal_alignment = 1
 
-[node name="RestartButton" type="Button" parent="MenuContainer"]
+[node name="SubTitle" type="Label" parent="MenuContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 20
+text = "O pesadelo te consumiu..."
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="MenuContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 20)
+
+[node name="WakeUpButton" type="Button" parent="MenuContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 1, 0.2, 1)
 theme_override_font_sizes/font_size = 24
-text = "Reiniciar"
+text = "🌅 Acordar/Continuar"
 
 [node name="MainMenuButton" type="Button" parent="MenuContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-text = "Menu Inicial"
+text = "🏠 Menu Principal"
 
 [node name="QuitButton" type="Button" parent="MenuContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.5, 0.5, 1)
 theme_override_font_sizes/font_size = 24
-text = "Sair do Jogo"
+text = "❌ Sair do Jogo"

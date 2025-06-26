@@ -144,6 +144,32 @@ func _ready():
 	_setup_ghost_appearance()
 	_setup_patrol_points()
 	_start_patrolling()
+	
+	# Corrige a altura inicial para ficar alinhado com o NavigationMesh
+	await get_tree().process_frame
+	_correct_initial_height()
+
+func _correct_initial_height():
+	"""Corrige a altura inicial do fantasma para ficar alinhado com o NavigationMesh"""
+	if get_world_3d() == null:
+		print("⚠️ [Ghost] World3D não disponível para correção de altura")
+		return
+	
+	var navigation_map = get_world_3d().navigation_map
+	var nav_position = NavigationServer3D.map_get_closest_point(navigation_map, global_position)
+	var target_height = nav_position.y
+	
+	# Se não conseguir obter a altura da navegação, usa 1.5 como fallback
+	if target_height == 0.0 or is_nan(target_height):
+		target_height = 1.5
+		print("⚠️ [Ghost] Usando altura fallback: ", target_height)
+	
+	# Atualiza a posição inicial e o spawn_position
+	var old_height = global_position.y
+	global_position.y = target_height
+	spawn_position.y = target_height
+	
+	print("🔧 [Ghost] Altura inicial corrigida de ", old_height, " para ", target_height)
 
 func _setup_stage_properties():
 	if not stage_properties.has(grief_stage):
@@ -217,14 +243,22 @@ func _setup_patrol_points():
 	var num_points = 4
 	var radius = wander_radius * 0.7
 	
+	var navigation_map = get_world_3d().navigation_map if get_world_3d() else null
+	
 	for i in range(num_points):
 		var angle = (i * 2.0 * PI) / num_points
-		var point = spawn_position + Vector3(
+		var base_point = spawn_position + Vector3(
 			cos(angle) * radius,
 			0,
 			sin(angle) * radius
 		)
-		patrol_points.append(point)
+		
+		# Usa o NavigationMesh para obter a altura correta do ponto de patrulha
+		if navigation_map:
+			var nav_position = NavigationServer3D.map_get_closest_point(navigation_map, base_point)
+			base_point.y = nav_position.y if nav_position.y != 0.0 and not is_nan(nav_position.y) else spawn_position.y
+		
+		patrol_points.append(base_point)
 
 func _start_patrolling():
 	movement_state = MovementState.PATROLLING
@@ -272,21 +306,30 @@ func _setup_ghost_appearance():
 func _setup_navigation():
 	# Aguarda um frame para o NavigationServer estar pronto
 	await get_tree().process_frame
+	await get_tree().process_frame  # Frame extra para garantir
 	
-	navigation_agent.path_desired_distance = 0.5
-	navigation_agent.target_desired_distance = 1.0
-	navigation_agent.path_max_distance = 25.0
-	navigation_agent.avoidance_enabled = true
-	navigation_agent.radius = 0.4
-	navigation_agent.neighbor_distance = 8.0
-	navigation_agent.max_neighbors = 6
-	navigation_agent.time_horizon = 1.5
+	if not navigation_agent:
+		print("❌ [Ghost] NavigationAgent3D não encontrado!")
+		return
+	
+	# Configurações básicas de navegação
+	navigation_agent.path_desired_distance = 1.0
+	navigation_agent.target_desired_distance = 2.0
+	navigation_agent.path_max_distance = 50.0
+	navigation_agent.avoidance_enabled = false  # Desabilitado para simplicidade
+	navigation_agent.radius = 0.5
+	navigation_agent.height = 2.0
 	navigation_agent.max_speed = speed
 	
 	# Conecta sinais de navegação
-	navigation_agent.navigation_finished.connect(_on_navigation_finished)
+	if not navigation_agent.navigation_finished.is_connected(_on_navigation_finished):
+		navigation_agent.navigation_finished.connect(_on_navigation_finished)
 	
 	print("🧭 [Ghost] NavigationAgent3D configurado - Speed: ", speed, " Max Speed: ", navigation_agent.max_speed)
+	print("🧭 [Ghost] Navigation Map: ", NavigationServer3D.map_get_closest_point_owner(get_world_3d().navigation_map, global_position))
+	
+	# Força uma atualização da navegação
+	NavigationServer3D.map_force_update(get_world_3d().navigation_map)
 
 func _find_player():
 	var players = get_tree().get_nodes_in_group("player")
@@ -456,35 +499,66 @@ func _move_towards_target():
 	if not navigation_agent:
 		print("❌ [Ghost] NavigationAgent3D não encontrado!")
 		return
-		
+	
+	# Verifica se há um caminho válido
 	if navigation_agent.is_navigation_finished():
 		velocity = Vector3.ZERO
-		print("🏁 [Ghost] Navegação finalizada")
+		print("🏁 [Ghost] Navegação finalizada - Posição: ", global_position)
 		return
 	
+	# Obtém a próxima posição do caminho
 	var next_path_position = navigation_agent.get_next_path_position()
 	var direction = (next_path_position - global_position).normalized()
-	direction.y = 0  # Mantém no plano horizontal
+	
+	# Usa o NavigationAgent para obter a altura correta do NavigationMesh
+	var navigation_map = get_world_3d().navigation_map
+	var nav_position = NavigationServer3D.map_get_closest_point(navigation_map, global_position)
+	var target_height = nav_position.y
+	
+	# Se não conseguir obter a altura da navegação, usa 1.5 como fallback
+	if target_height == 0.0 or is_nan(target_height):
+		target_height = 1.5
+	
+	# Corrige a altura do fantasma se estiver muito longe da navegação
+	if abs(global_position.y - target_height) > 0.5:
+		global_position.y = target_height
+		print("🔧 [Ghost] Altura corrigida para NavigationMesh: ", target_height)
+	
+	# Aplica movimento apenas no plano horizontal
+	direction.y = 0
 	
 	# Debug do movimento
-	print("🚶 [Ghost] Movendo para: ", next_path_position, " Direção: ", direction)
+	if randf() < 0.05:  # Debug ocasional para não spam
+		print("🚶 [Ghost] Movendo para: ", next_path_position, " | Distância: ", global_position.distance_to(next_path_position), " | Altura: ", global_position.y)
 	
-	# Adiciona flutuação vertical suave
-	var float_offset = sin(Time.get_time_dict_from_system().second * 2.0) * 0.15
+	# Aplica velocidade horizontal
+	velocity.x = direction.x * speed
+	velocity.z = direction.z * speed
 	
-	velocity = direction * speed
-	velocity.y = float_offset
+	# Adiciona flutuação vertical suave (pequena oscilação)
+	var float_time = Time.get_time_dict_from_system()["second"] + randf() * 10.0
+	velocity.y = sin(float_time * 2.0) * 0.1  # Flutuação muito sutil
 	
 	# Rotaciona o fantasma na direção do movimento
 	if direction.length() > 0.1:
 		var target_rotation = atan2(direction.x, direction.z)
-		rotation.y = lerp_angle(rotation.y, target_rotation, rotation_speed * get_physics_process_delta_time())
+		rotation.y = lerp_angle(rotation.y, target_rotation, 0.1)
+		if randf() < 0.05:  # Debug ocasional da rotação
+			print("🔄 Rotacionando para: ", rad_to_deg(target_rotation), "°")
 	
-	# Debug do movimento
-	if randf() < 0.1:  # Debug ocasional para não poluir console
-		print("👻 [Ghost] Velocity: ", velocity, " Position: ", global_position)
-	
+	# Aplica o movimento
 	move_and_slide()
+	
+	# Garante que a altura seja mantida após o movimento usando a altura do NavigationMesh
+	var final_nav_position = NavigationServer3D.map_get_closest_point(navigation_map, global_position)
+	var final_target_height = final_nav_position.y
+	
+	# Se não conseguir obter a altura da navegação, usa 1.5 como fallback
+	if final_target_height == 0.0 or is_nan(final_target_height):
+		final_target_height = 1.5
+	
+	if global_position.y < final_target_height - 0.2 or global_position.y > final_target_height + 0.5:
+		global_position.y = final_target_height
 
 func _on_navigation_finished():
 	match movement_state:

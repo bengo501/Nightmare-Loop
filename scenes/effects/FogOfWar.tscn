@@ -1,12 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bvhxm8k3n7d8p"]
 
-[ext_resource type="Script" path="res://scripts/fog_of_war.gd" id="1_fog_script"]
+[ext_resource type="Script" uid="uid://bvy4d43ly8kfj" path="res://scripts/fog_of_war.gd" id="1_fog_script"]
 
 [node name="FogOfWar" type="Node3D"]
 script = ExtResource("1_fog_script")
-fog_plane_size = Vector2(300, 300)
-fog_height = 8.0
-reveal_radius = 6.0
-fade_distance = 2.0
-fog_intensity = 0.9
-update_interval = 0.05 

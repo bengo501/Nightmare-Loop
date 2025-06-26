@@ -1,4 +1,4 @@
-[gd_scene load_steps=186 format=3 uid="uid://ddlldwbytxok2"]
+[gd_scene load_steps=188 format=3 uid="uid://ddlldwbytxok2"]
 
 [ext_resource type="PackedScene" uid="uid://cdooq3wu5wgv3" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/FloorLamp.fbx_Scene/FloorLamp.fbx_Scene.fbx" id="1_6cupr"]
 [ext_resource type="Texture2D" uid="uid://ca44uy3jlfa6w" path="res://assets/textures/Floor/Horror_Floor_05-128x128.png" id="1_mdskg"]
@@ -571,6 +571,16 @@ shader_parameter/dither_intensity = 0.6
 albedo_texture = ExtResource("8_7e46u")
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_q57r8"]
+vertices = PackedVector3Array(-45, 1.5, -170, 50, 1.5, -170, 50, 1.5, -15, -45, 1.5, -15)
+polygons = [PackedInt32Array(0, 1, 2, 3)]
+agent_height = 2.0
+agent_max_climb = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_NavFloor"]
+size = Vector3(95, 0.2, 155)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_NavFloor"]
+size = Vector3(95, 0.2, 155)
 
 [node name="map2" type="Node3D"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, -24.6221, 0)
@@ -2837,6 +2847,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.9, 1.36202, -60.4)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_q57r8")
+
+[node name="NavigationFloor" type="StaticBody3D" parent="NavigationRegion3D"]
+
+[node name="NavigationMesh" type="MeshInstance3D" parent="NavigationRegion3D/NavigationFloor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 1.5, -92.5)
+visible = false
+mesh = SubResource("BoxMesh_NavFloor")
+
+[node name="NavigationCollision" type="CollisionShape3D" parent="NavigationRegion3D/NavigationFloor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 1.5, -92.5)
+shape = SubResource("BoxShape3D_NavFloor")
 
 [node name="DebugSystem" type="Node" parent="."]
 script = ExtResource("42_debug")
