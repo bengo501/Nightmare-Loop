@@ -14,6 +14,18 @@ class_name DenialBoss
 @export var teleport_cooldown: float = 6.0  # Tempo entre teletransportes
 @export var area_attack_cooldown: float = 12.0  # Tempo entre ataques em área
 
+# === SISTEMA DE DIÁLOGO ===
+@export var dialog_trigger_distance: float = 8.0  # Distância para mostrar prompt de diálogo
+var player_in_dialog_area: bool = false
+var dialog_active: bool = false
+var first_encounter: bool = true
+var dialog_completed: bool = false
+var interaction_prompt: Node3D = null
+var dialog_area: Area3D = null
+
+# Referência ao sistema de diálogo
+var dialog_system_scene = preload("res://scenes/ui/dialog_system.tscn")
+
 # === ESTADOS DO BOSS ===
 enum BossPhase {
 	PHASE_1_DENIAL,      # Fase 1: Negação básica
@@ -39,6 +51,8 @@ var max_summoned_ghosts: int = 3
 signal boss_phase_changed(new_phase: BossPhase)
 signal boss_defeated
 signal boss_health_changed(current_health: float, max_health: float)
+signal dialog_started
+signal dialog_finished
 
 func _ready():
 	# Configura propriedades específicas do boss
@@ -72,9 +86,14 @@ func _ready():
 	# Conecta sinais
 	boss_health_changed.connect(_on_boss_health_changed)
 	boss_phase_changed.connect(_on_boss_phase_changed)
+	dialog_started.connect(_on_dialog_started)
+	dialog_finished.connect(_on_dialog_finished)
 	
 	# Procura pela barra de vida do boss
 	_setup_boss_health_bar()
+	
+	# Configura sistema de diálogo
+	_setup_dialog_system()
 	
 	# Emite sinal inicial de vida
 	emit_signal("boss_health_changed", current_health, max_health)
@@ -88,21 +107,65 @@ func _setup_boss_health_bar():
 	else:
 		print("⚠️ Sistema de barra de vida do boss não encontrado")
 
+func _setup_dialog_system():
+	print("💬 Configurando sistema de diálogo do Boss Negação...")
+	
+	# Cria área de diálogo ao redor do boss
+	dialog_area = Area3D.new()
+	dialog_area.name = "DialogArea"
+	add_child(dialog_area)
+	
+	# Configura colisão da área de diálogo
+	var collision_shape = CollisionShape3D.new()
+	var sphere_shape = SphereShape3D.new()
+	sphere_shape.radius = dialog_trigger_distance
+	collision_shape.shape = sphere_shape
+	dialog_area.add_child(collision_shape)
+	
+	# Conecta sinais da área de diálogo
+	dialog_area.body_entered.connect(_on_dialog_area_entered)
+	dialog_area.body_exited.connect(_on_dialog_area_exited)
+	
+	# Cria prompt de interação
+	_create_interaction_prompt()
+	
+	print("✅ Sistema de diálogo configurado com sucesso!")
+
+func _create_interaction_prompt():
+	# Cria um Label3D para mostrar o prompt de interação
+	interaction_prompt = Label3D.new()
+	interaction_prompt.name = "InteractionPrompt"
+	interaction_prompt.text = "Pressione E para conversar\ncom o Chefe da Negação"
+	interaction_prompt.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	interaction_prompt.font_size = 24
+	interaction_prompt.outline_size = 4
+	interaction_prompt.outline_color = Color(0, 0, 0, 1)
+	interaction_prompt.modulate = Color(1, 0.8, 0.4, 1)  # Cor dourada
+	interaction_prompt.position = Vector3(0, 6, 0)  # Acima do boss
+	interaction_prompt.visible = false
+	add_child(interaction_prompt)
+
 func _physics_process(delta):
-	# Atualiza timers dos ataques especiais
-	_update_special_attack_timers(delta)
+	# Verifica entrada para diálogo se o jogador estiver na área
+	if player_in_dialog_area and not dialog_active and not dialog_completed:
+		if Input.is_action_just_pressed("interact"):
+			start_boss_dialog()
 	
-	# Atualiza estado de negação
-	if is_in_denial_state:
-		denial_state_timer -= delta
-		if denial_state_timer <= 0:
-			_end_denial_state()
-	
-	# Executa ataques especiais baseados na fase
-	_execute_boss_special_attacks()
-	
-	# Chama o _physics_process da classe pai
-	super._physics_process(delta)
+	# Atualiza timers dos ataques especiais (apenas se não estiver em diálogo)
+	if not dialog_active:
+		_update_special_attack_timers(delta)
+		
+		# Atualiza estado de negação
+		if is_in_denial_state:
+			denial_state_timer -= delta
+			if denial_state_timer <= 0:
+				_end_denial_state()
+		
+		# Executa ataques especiais baseados na fase
+		_execute_boss_special_attacks()
+		
+		# Chama o _physics_process da classe pai
+		super._physics_process(delta)
 
 func _update_special_attack_timers(delta):
 	last_summon_time += delta
@@ -248,7 +311,7 @@ func _change_to_phase_2():
 
 # === OVERRIDE DAS FUNÇÕES DA CLASSE PAI ===
 func take_damage(amount: int):
-	if is_dying:
+	if is_dying or dialog_active:
 		return
 	
 	# Boss resiste a dano durante estado de negação
@@ -378,3 +441,141 @@ func _execute_special_ability():
 	# Força entrada em estado de negação
 	if not is_in_denial_state:
 		_enter_denial_state()
+
+# === SISTEMA DE DIÁLOGO ===
+func _on_dialog_area_entered(body):
+	if body.is_in_group("player") and not dialog_completed:
+		player_in_dialog_area = true
+		player_ref = body
+		if interaction_prompt and is_instance_valid(interaction_prompt):
+			interaction_prompt.visible = true
+			# Adiciona animação piscante
+			var tween = create_tween()
+			tween.set_loops()
+			tween.tween_property(interaction_prompt, "modulate:a", 0.6, 0.8)
+			tween.tween_property(interaction_prompt, "modulate:a", 1.0, 0.8)
+		print("💬 Jogador entrou na área de diálogo do Boss Negação")
+
+func _on_dialog_area_exited(body):
+	if body.is_in_group("player"):
+		player_in_dialog_area = false
+		if interaction_prompt and is_instance_valid(interaction_prompt):
+			interaction_prompt.visible = false
+		print("💬 Jogador saiu da área de diálogo do Boss Negação")
+
+func start_boss_dialog():
+	if dialog_active or dialog_completed:
+		return
+	
+	print("💬 Iniciando diálogo com o Boss da Negação...")
+	dialog_active = true
+	first_encounter = false
+	
+	# Esconde o prompt de interação
+	if interaction_prompt and is_instance_valid(interaction_prompt):
+		interaction_prompt.visible = false
+	
+	# Pausa o jogador
+	if player_ref:
+		player_ref.set_physics_process(false)
+		player_ref.set_process_input(false)
+		print("💬 Jogador pausado para diálogo com boss")
+	
+	# Esconde a HUD principal
+	var ui_manager = get_node_or_null("/root/UIManager")
+	if ui_manager and ui_manager.hud_instance and is_instance_valid(ui_manager.hud_instance):
+		ui_manager.hud_instance.visible = false
+		print("💬 HUD escondida para diálogo")
+	
+	# Cria e mostra o sistema de diálogo
+	var dialog_instance = dialog_system_scene.instantiate()
+	if not dialog_instance:
+		print("💬 ERRO: Falha ao instanciar sistema de diálogo!")
+		return
+	
+	get_tree().current_scene.add_child(dialog_instance)
+	
+	# Conecta o sinal de fim do diálogo
+	dialog_instance.connect("dialog_sequence_finished", _on_boss_dialog_finished)
+	
+	# Pausa o jogo
+	get_tree().paused = true
+	
+	# Inicia os diálogos específicos do boss
+	dialog_instance.start_denial_boss_dialog()
+	
+	# Libera o cursor
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+	# Emite sinal
+	emit_signal("dialog_started")
+	
+	print("💬 Diálogo com Boss da Negação iniciado com sucesso!")
+
+func _on_boss_dialog_finished():
+	print("💬 Diálogo com Boss da Negação finalizado")
+	
+	dialog_active = false
+	dialog_completed = true
+	
+	# Libera o jogador
+	if player_ref:
+		player_ref.set_physics_process(true)
+		player_ref.set_process_input(true)
+	
+	# Mostra a HUD principal
+	var ui_manager = get_node_or_null("/root/UIManager")
+	if ui_manager and ui_manager.hud_instance and is_instance_valid(ui_manager.hud_instance):
+		ui_manager.hud_instance.visible = true
+		print("💬 HUD restaurada após diálogo")
+	
+	# Despausa o jogo
+	get_tree().paused = false
+	
+	# Restaura o modo do cursor
+	if player_ref and player_ref.has_method("get") and player_ref.get("first_person_mode"):
+		if player_ref.first_person_mode:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		else:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+	# Emite sinal
+	emit_signal("dialog_finished")
+	
+	print("💬 Boss da Negação agora está pronto para o combate!")
+
+func _on_dialog_started():
+	print("💬 Sinal de início de diálogo recebido")
+
+func _on_dialog_finished():
+	print("💬 Sinal de fim de diálogo recebido")
+	# Após o diálogo, o boss se enfraquece significativamente
+	# Representa que aceitar a verdade diminui o poder da negação
+	current_health = max_health * 0.3  # Fica com apenas 30% da vida
+	emit_signal("boss_health_changed", current_health, max_health)
+	print("💬 Boss da Negação enfraquecido pela aceitação da verdade!")
+	
+	# Muda a aparência para mostrar que foi "derrotado" pelo diálogo
+	if ghost_cylinder and ghost_cylinder.material is ShaderMaterial:
+		ghost_cylinder.material.set_shader_parameter("ghost_color", Vector4(0.3, 0.6, 0.3, 0.6))
+		ghost_cylinder.material.set_shader_parameter("fuwafuwa_speed", 1.0)
+	
+	# Remove os fantasmas invocados já que o boss está enfraquecido
+	for ghost in summoned_ghosts:
+		if is_instance_valid(ghost):
+			ghost.queue_free()
+	summoned_ghosts.clear()
+	
+	# Remove a área de diálogo já que não será mais necessária
+	if dialog_area and is_instance_valid(dialog_area):
+		dialog_area.queue_free()
+		dialog_area = null
+	
+	# Remove o prompt de interação
+	if interaction_prompt and is_instance_valid(interaction_prompt):
+		interaction_prompt.queue_free()
+		interaction_prompt = null
+	
+	print("💬 Área de diálogo removida - Boss pronto para combate final!")
