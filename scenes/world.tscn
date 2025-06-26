@@ -284,6 +284,9 @@ visible = false
 [node name="GiftBarganha" parent="." instance=ExtResource("12_q5onr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.3124, 1.1888, -13.0021)
 visible = false
+collision_layer = 1
+collision_mask = 1
+monitorable = true
 
 [node name="Box_fbx_Scene" parent="." instance=ExtResource("20_0nbtd")]
 transform = Transform3D(1.58482, 0, 0, 0, 1.44211, 0, 0, 0, 1.73942, 3.2973, 0.362404, 3.26818)

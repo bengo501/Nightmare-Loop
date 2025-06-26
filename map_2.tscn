@@ -1,4 +1,4 @@
-[gd_scene load_steps=185 format=3 uid="uid://ddlldwbytxok2"]
+[gd_scene load_steps=186 format=3 uid="uid://ddlldwbytxok2"]
 
 [ext_resource type="PackedScene" uid="uid://cdooq3wu5wgv3" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/FloorLamp.fbx_Scene/FloorLamp.fbx_Scene.fbx" id="1_6cupr"]
 [ext_resource type="Texture2D" uid="uid://ca44uy3jlfa6w" path="res://assets/textures/Floor/Horror_Floor_05-128x128.png" id="1_mdskg"]
@@ -41,6 +41,7 @@
 [ext_resource type="PackedScene" uid="uid://dgvusvrjwfwou" path="res://scenes/items/GiftRaiva.tscn" id="39_prrio"]
 [ext_resource type="PackedScene" uid="uid://xpvkqaknnd4i" path="res://scenes/items/GiftDepressao.tscn" id="40_1ae16"]
 [ext_resource type="PackedScene" uid="uid://bvhxm8k3n7d8p" path="res://scenes/effects/FogOfWar.tscn" id="41_fog_of_war"]
+[ext_resource type="Script" path="res://scripts/debug_system.gd" id="42_debug"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r5yoc"]
 albedo_texture = ExtResource("1_mdskg")
@@ -2836,6 +2837,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.9, 1.36202, -60.4)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_q57r8")
+
+[node name="DebugSystem" type="Node" parent="."]
+script = ExtResource("42_debug")
 
 [node name="GiftAceitacao" parent="." instance=ExtResource("33_cyjou")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -24.2839, 1.13667, -24.1956)

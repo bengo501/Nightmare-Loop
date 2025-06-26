@@ -231,6 +231,14 @@ func _start_patrolling():
 	current_patrol_index = 0
 	if patrol_points.size() > 0:
 		navigation_agent.target_position = patrol_points[current_patrol_index]
+		print("👻 [Ghost] Patrulhamento iniciado - Target: ", patrol_points[current_patrol_index])
+	else:
+		print("👻 [Ghost] ❌ ERRO: Nenhum ponto de patrulha definido!")
+		# Cria pontos de patrulha de emergência
+		_setup_patrol_points()
+		if patrol_points.size() > 0:
+			navigation_agent.target_position = patrol_points[current_patrol_index]
+			print("👻 [Ghost] Pontos de patrulha de emergência criados - Target: ", patrol_points[current_patrol_index])
 
 func _setup_ghost_appearance():
 	if not stage_properties.has(grief_stage):
@@ -277,6 +285,8 @@ func _setup_navigation():
 	
 	# Conecta sinais de navegação
 	navigation_agent.navigation_finished.connect(_on_navigation_finished)
+	
+	print("🧭 [Ghost] NavigationAgent3D configurado - Speed: ", speed, " Max Speed: ", navigation_agent.max_speed)
 
 func _find_player():
 	var players = get_tree().get_nodes_in_group("player")
@@ -378,12 +388,16 @@ func _on_vision_body_exited(body):
 
 func _update_ai_state():
 	if not player_ref:
+		print("👻 [Ghost] Player não encontrado para IA")
 		return
 	
 	var distance_to_player = global_position.distance_to(player_ref.global_position)
 	
+	print("👻 [Ghost] AI Update - Distance: ", distance_to_player, " State: ", MovementState.keys()[movement_state])
+	
 	# Verifica se pode atacar
 	if distance_to_player <= attack_range and player_spotted and can_attack:
+		print("👻 [Ghost] Iniciando ataque!")
 		_start_attacking()
 		return
 	
@@ -391,16 +405,19 @@ func _update_ai_state():
 	if player_spotted:
 		# Player visível - perseguir
 		if movement_state != MovementState.CHASING_PLAYER:
+			print("👻 [Ghost] Mudando para CHASING_PLAYER")
 			_start_chasing()
 	else:
 		# Player não visível
 		if last_known_player_position != Vector3.ZERO:
 			# Tem última posição conhecida - investigar
 			if movement_state != MovementState.INVESTIGATING:
+				print("👻 [Ghost] Mudando para INVESTIGATING")
 				_start_investigating()
 		else:
 			# Sem informação do player - patrulhar
 			if movement_state not in [MovementState.PATROLLING, MovementState.IDLE]:
+				print("👻 [Ghost] Mudando para PATROLLING")
 				_start_patrolling()
 
 func _start_chasing():
@@ -436,13 +453,21 @@ func _handle_movement(delta):
 				_start_patrolling()
 
 func _move_towards_target():
+	if not navigation_agent:
+		print("❌ [Ghost] NavigationAgent3D não encontrado!")
+		return
+		
 	if navigation_agent.is_navigation_finished():
 		velocity = Vector3.ZERO
+		print("🏁 [Ghost] Navegação finalizada")
 		return
 	
 	var next_path_position = navigation_agent.get_next_path_position()
 	var direction = (next_path_position - global_position).normalized()
 	direction.y = 0  # Mantém no plano horizontal
+	
+	# Debug do movimento
+	print("🚶 [Ghost] Movendo para: ", next_path_position, " Direção: ", direction)
 	
 	# Adiciona flutuação vertical suave
 	var float_offset = sin(Time.get_time_dict_from_system().second * 2.0) * 0.15
@@ -454,6 +479,10 @@ func _move_towards_target():
 	if direction.length() > 0.1:
 		var target_rotation = atan2(direction.x, direction.z)
 		rotation.y = lerp_angle(rotation.y, target_rotation, rotation_speed * get_physics_process_delta_time())
+	
+	# Debug do movimento
+	if randf() < 0.1:  # Debug ocasional para não poluir console
+		print("👻 [Ghost] Velocity: ", velocity, " Position: ", global_position)
 	
 	move_and_slide()
 

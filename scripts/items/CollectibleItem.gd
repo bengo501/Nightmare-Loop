@@ -41,6 +41,14 @@ func _ready():
 	# Esconde o prompt inicialmente
 	if interaction_prompt and is_instance_valid(interaction_prompt):
 		interaction_prompt.visible = false
+	
+	# Debug detalhado
+	print("🎁 [CollectibleItem] Item criado: ", grief_stage)
+	print("🎁 [CollectibleItem] Collision Layer: ", collision_layer)
+	print("🎁 [CollectibleItem] Collision Mask: ", collision_mask)
+	print("🎁 [CollectibleItem] Monitoring: ", monitoring)
+	print("🎁 [CollectibleItem] Posição: ", global_position)
+	print("🎁 [CollectibleItem] GiftManager: ", gift_manager != null)
 
 func _process(delta):
 	# Verifica interação com a tecla E
@@ -56,16 +64,22 @@ func _process(delta):
 		mesh_instance.position.y = sin(Time.get_ticks_msec() * 0.001) * 0.2
 
 func _on_body_entered(body):
+	print("🎁 [CollectibleItem] Corpo detectado: ", body.name, " Grupos: ", body.get_groups())
 	if body.is_in_group("player"):
 		can_interact = true
 		if interaction_prompt and is_instance_valid(interaction_prompt):
 			interaction_prompt.visible = true
+		print("🎁 [CollectibleItem] ✅ PLAYER DETECTADO! Prompt ativado para: ", grief_stage)
+	else:
+		print("🎁 [CollectibleItem] ❌ Corpo não é player: ", body.name)
 
 func _on_body_exited(body):
+	print("🎁 [CollectibleItem] Corpo saiu: ", body.name)
 	if body.is_in_group("player"):
 		can_interact = false
 		if interaction_prompt and is_instance_valid(interaction_prompt):
 			interaction_prompt.visible = false
+		print("🎁 [CollectibleItem] 👋 Player saiu da área do item: ", grief_stage)
 
 func collect():
 	if is_collected:

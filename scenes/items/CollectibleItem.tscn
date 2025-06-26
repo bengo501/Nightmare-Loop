@@ -13,6 +13,9 @@ size = Vector3(0.3, 0.3, 0.3)
 size = Vector3(0.3, 0.3, 0.3)
 
 [node name="CollectibleItem" type="Area3D"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
 script = ExtResource("1_2k4m3")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
