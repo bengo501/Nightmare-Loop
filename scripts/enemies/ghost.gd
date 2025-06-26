@@ -160,6 +160,16 @@ func die() -> void:
 	is_dying = true
 	print("[Ghost] Iniciando sequência de morte...")
 	
+	# === CONCEDE PONTOS DE HABILIDADE ===
+	# Conecta ao SkillManager para conceder pontos
+	# Concede pontos de lucidez quando o fantasma morre
+	var lucidity_manager = get_node("/root/LucidityManager")
+	if lucidity_manager:
+		lucidity_manager.add_lucidity_point(1)
+		print("🎯 Fantasma derrotado! +1 ponto de lucidez concedido")
+	else:
+		print("[Ghost] AVISO: SkillManager não encontrado - pontos não concedidos")
+	
 	# Toca animação de morte
 	if animation_player:
 		animation_player.play("die")

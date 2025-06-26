@@ -14,8 +14,8 @@ var ui_scenes := {
 	"game_over": preload("res://scenes/ui/game_over.tscn"),
 	"item_menu": preload("res://scenes/ui/ItemMenu.tscn"),
 	"hud": preload("res://scenes/ui/hud.tscn"),
-	"skill_tree": preload("res://scenes/ui/skill_tree.tscn"),
-	"stage_intro": preload("res://scenes/ui/stage_intro.tscn")
+	"stage_intro": preload("res://scenes/ui/stage_intro.tscn"),
+	"boss_health_bar": preload("res://scenes/ui/BossHealthBar.tscn")
 }
 
 # Gerenciamento de instâncias
@@ -23,6 +23,7 @@ var active_ui := {}
 
 var hud_instance = null       # Referência específica para a HUD
 var stage_intro_instance = null  # Referência específica para a introdução de estágio
+var boss_health_bar_instance = null  # Referência específica para a barra de vida do boss
 
 @onready var state_manager = get_node("/root/GameStateManager")
 @onready var scene_manager = get_node("/root/SceneManager")
@@ -58,8 +59,6 @@ func _on_state_changed(new_state):
 			pass
 		state_manager.GameState.INVENTORY:
 			show_ui("item_menu")
-		state_manager.GameState.SKILL_TREE:
-			show_ui("skill_tree")
 
 func show_ui(ui_name: String, data: Dictionary = {}):
 	print("[UIManager] show_ui() chamado para: ", ui_name)
@@ -96,6 +95,9 @@ func show_ui(ui_name: String, data: Dictionary = {}):
 				"stage_intro":
 					stage_intro_instance = instance
 					print("[UIManager] Introdução de estágio instanciada e referenciada")
+				"boss_health_bar":
+					boss_health_bar_instance = instance
+					print("[UIManager] Barra de vida do boss instanciada e referenciada")
 		else:
 			print("[UIManager] ERRO: Falha ao instanciar UI ", ui_name)
 	else:
@@ -122,6 +124,9 @@ func hide_ui(ui_name: String):
 			"stage_intro":
 				if stage_intro_instance == ui_instance:
 					stage_intro_instance = null
+			"boss_health_bar":
+				if boss_health_bar_instance == ui_instance:
+					boss_health_bar_instance = null
 
 func hide_all_ui():
 	var ui_names = active_ui.keys().duplicate()  # Cria uma cópia para evitar modificação durante iteração
@@ -144,6 +149,11 @@ func cleanup_invalid_references():
 		print("[UIManager] Limpando referência inválida da stage_intro")
 		stage_intro_instance = null
 	
+	# Limpa referência da boss_health_bar se inválida
+	if boss_health_bar_instance != null and (not is_instance_valid(boss_health_bar_instance) or boss_health_bar_instance.is_queued_for_deletion()):
+		print("[UIManager] Limpando referência inválida da boss_health_bar")
+		boss_health_bar_instance = null
+	
 	# Limpa instâncias inválidas do dicionário active_ui
 	var invalid_keys = []
 	for ui_name in active_ui.keys():
@@ -161,6 +171,84 @@ func request_scene_change(scene_name: String):
 
 func request_map_change(map_name: String):
 	scene_manager.change_map(map_name)
+
+# === FUNÇÕES DA BARRA DE VIDA DO BOSS ===
+func show_boss_health_bar(boss_name: String, max_health: float):
+	"""
+	Mostra a barra de vida do boss
+	"""
+	print("[UIManager] Solicitando exibição da barra de vida do boss: ", boss_name)
+	
+	# Cria a instância se não existir ou se for inválida
+	if boss_health_bar_instance == null or not is_instance_valid(boss_health_bar_instance) or boss_health_bar_instance.is_queued_for_deletion():
+		print("[UIManager] Criando nova instância de boss_health_bar")
+		show_ui("boss_health_bar")
+	
+	# Aguarda um frame para garantir que foi criada
+	call_deferred("_show_boss_health_bar_deferred", boss_name, max_health)
+
+func _show_boss_health_bar_deferred(boss_name: String, max_health: float):
+	"""
+	Função auxiliar para mostrar a barra após um frame
+	"""
+	print("[UIManager] _show_boss_health_bar_deferred() executado")
+	
+	if boss_health_bar_instance != null and is_instance_valid(boss_health_bar_instance) and not boss_health_bar_instance.is_queued_for_deletion():
+		if boss_health_bar_instance.has_method("show_boss_health_bar"):
+			boss_health_bar_instance.show_boss_health_bar(boss_name, max_health)
+			print("[UIManager] Barra de vida do boss mostrada com sucesso")
+		else:
+			print("[UIManager] ERRO: Método show_boss_health_bar não encontrado na instância")
+	else:
+		print("[UIManager] ERRO: Não foi possível criar ou acessar a instância da barra de vida do boss")
+
+func update_boss_health(current_health: float, max_health: float = -1):
+	"""
+	Atualiza a vida do boss
+	"""
+	if boss_health_bar_instance != null and is_instance_valid(boss_health_bar_instance) and not boss_health_bar_instance.is_queued_for_deletion():
+		if boss_health_bar_instance.has_method("update_health"):
+			boss_health_bar_instance.update_health(current_health, max_health)
+		else:
+			print("[UIManager] AVISO: Método update_health não encontrado na barra do boss")
+	else:
+		print("[UIManager] AVISO: Barra de vida do boss não está ativa")
+
+func update_boss_phase(phase: int):
+	"""
+	Atualiza a fase do boss
+	"""
+	if boss_health_bar_instance != null and is_instance_valid(boss_health_bar_instance) and not boss_health_bar_instance.is_queued_for_deletion():
+		if boss_health_bar_instance.has_method("update_phase"):
+			boss_health_bar_instance.update_phase(phase)
+		else:
+			print("[UIManager] AVISO: Método update_phase não encontrado na barra do boss")
+	else:
+		print("[UIManager] AVISO: Barra de vida do boss não está ativa")
+
+func hide_boss_health_bar():
+	"""
+	Esconde a barra de vida do boss
+	"""
+	print("[UIManager] hide_boss_health_bar() chamado")
+	
+	if boss_health_bar_instance != null and is_instance_valid(boss_health_bar_instance) and not boss_health_bar_instance.is_queued_for_deletion():
+		if boss_health_bar_instance.has_method("hide_boss_health_bar"):
+			boss_health_bar_instance.hide_boss_health_bar()
+			print("[UIManager] Método hide_boss_health_bar chamado na instância")
+		else:
+			print("[UIManager] AVISO: Método hide_boss_health_bar não encontrado, forçando remoção")
+	else:
+		print("[UIManager] boss_health_bar_instance não é válida ou já foi liberada")
+	
+	# Remove a UI independentemente
+	hide_ui("boss_health_bar")
+
+func get_boss_health_bar():
+	"""
+	Retorna a instância da barra de vida do boss
+	"""
+	return boss_health_bar_instance
 
 # Função específica para mostrar introdução de estágio
 func show_stage_intro(stage_name: String = "estagio1"):

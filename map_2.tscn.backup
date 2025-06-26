@@ -1,4 +1,4 @@
-[gd_scene load_steps=182 format=3 uid="uid://ddlldwbytxok2"]
+[gd_scene load_steps=181 format=3 uid="uid://ddlldwbytxok2"]
 
 [ext_resource type="PackedScene" uid="uid://cdooq3wu5wgv3" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/FloorLamp.fbx_Scene/FloorLamp.fbx_Scene.fbx" id="1_6cupr"]
 [ext_resource type="Texture2D" uid="uid://ca44uy3jlfa6w" path="res://assets/textures/Floor/Horror_Floor_05-128x128.png" id="1_mdskg"]
@@ -37,7 +37,7 @@
 [ext_resource type="PackedScene" uid="uid://b32bfkl2u1lu2" path="res://scenes/items/GiftNegacao.tscn" id="35_ya2kv"]
 [ext_resource type="PackedScene" uid="uid://cgc3p4t7c63mb" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Bed_Double/Bed_Double.fbx.fbx" id="36_vlako"]
 [ext_resource type="PackedScene" uid="uid://cewd237rs3tm8" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Cupboard/Cupboard.fbx_Scene/Cupboard.fbx_Scene.fbx" id="37_inn4y"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/DenialBoss.tscn" id="38_inn4y"]
+[ext_resource type="PackedScene" uid="uid://boss_denial_nightmare" path="res://scenes/enemies/DenialBoss.tscn" id="38_boss_denial"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r5yoc"]
 albedo_texture = ExtResource("1_mdskg")
@@ -1968,6 +1968,13 @@ size = Vector3(1, 1.6355, 6.21584)
 material = SubResource("StandardMaterial3D_fmmry")
 script = ExtResource("4_dbeie")
 
+[node name="Parede129" type="CSGBox3D" parent="."]
+transform = Transform3D(0.01843, 0, -0.99983, 0, 3.1322, 0, 0.99983, 0, 0.01843, 14.9896, -0.276686, -130.712)
+use_collision = true
+size = Vector3(1, 1.6355, 6.21584)
+material = SubResource("StandardMaterial3D_fmmry")
+script = ExtResource("4_dbeie")
+
 [node name="Parede98" type="CSGBox3D" parent="."]
 transform = Transform3D(-0.999985, 0, 0.00554976, 0, 3.1322, 0, -0.00554976, 0, -0.999985, 12.338, 1.86026, -142.61)
 use_collision = true
@@ -2708,7 +2715,7 @@ transform = Transform3D(-1.25915, 0, 0.305545, 0, 1.2, 0, -0.292226, 0, -1.31654
 transform = Transform3D(-0.416396, 0, 1.27949, 0, 1.2, 0, -1.22371, 0, -0.435374, 15.8607, 0.331247, -160.251)
 
 [node name="Cupboard_fbx_Scene18" parent="." instance=ExtResource("37_inn4y")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -120)
+transform = Transform3D(-0.705486, 0, 1.13249, 0, 1.2, 0, -1.08312, 0, -0.73764, 15.8607, 1.53895, -160.251)
 
-[node name="DenialBoss" parent="." instance=ExtResource("38_inn4y")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 14.848, 2.96099, -130.179)
+[node name="DenialBoss" parent="." instance=ExtResource("38_boss_denial")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0, -120.0)

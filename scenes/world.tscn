@@ -194,6 +194,7 @@ shadow_enabled = true
 
 [node name="Floor" type="CSGBox3D" parent="Environment"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 2.89917)
+visible = false
 use_collision = true
 collision_layer = 129
 collision_mask = 129
@@ -201,6 +202,7 @@ size = Vector3(40, 0.2, 34.2017)
 material = ExtResource("1_rwgxs")
 
 [node name="Walls" type="Node3D" parent="Environment"]
+visible = false
 
 [node name="Wall1" type="CSGBox3D" parent="Environment/Walls"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -14.0763)
@@ -223,9 +225,11 @@ size = Vector3(0.2, 4, 34.2324)
 material = ExtResource("1_rwgxs")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="Environment"]
+visible = false
 navigation_mesh = SubResource("NavigationMesh_xxxxx")
 
 [node name="Enemies" type="Node3D" parent="."]
+visible = false
 
 [node name="Ghost1" parent="Enemies" instance=ExtResource("4_e68xj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 10)
@@ -234,12 +238,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 10)
 
 [node name="GriefGifts" parent="." instance=ExtResource("9_7r4gi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.12269, 0, 13.361)
+visible = false
 
 [node name="GriefGifts3" parent="." instance=ExtResource("9_7r4gi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.12269, 1.76123, 8.80024)
+visible = false
 
 [node name="GriefGifts2" parent="." instance=ExtResource("9_7r4gi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.12269, 0, -8.5535)
+visible = false
 
 [node name="GiftBarganha" parent="." instance=ExtResource("12_q5onr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.3124, 1.1888, -13.0021)
+visible = false

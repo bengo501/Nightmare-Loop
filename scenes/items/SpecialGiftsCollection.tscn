@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://b32bfkl2u1lu2" path="res://scenes/items/GiftNegacao.tscn" id="1_negacao"]
 [ext_resource type="PackedScene" uid="uid://dgvusvrjwfwou" path="res://scenes/items/GiftRaiva.tscn" id="2_raiva"]
 [ext_resource type="PackedScene" uid="uid://ct6ppkdyv5tix" path="res://scenes/items/GiftBarganha.tscn" id="3_barganha"]
-[ext_resource type="PackedScene" path="res://scenes/items/GiftDepressao.tscn" id="4_depressao"]
+[ext_resource type="PackedScene" uid="uid://xpvkqaknnd4i" path="res://scenes/items/GiftDepressao.tscn" id="4_depressao"]
 [ext_resource type="PackedScene" uid="uid://b2vnqpoqdtfsb" path="res://scenes/items/GiftAceitacao.tscn" id="5_aceitacao"]
 
 [node name="SpecialGiftsCollection" type="Node3D"]

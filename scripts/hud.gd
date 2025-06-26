@@ -108,6 +108,9 @@ var gift_colors: Dictionary = {
 }
 
 func _ready():
+	# Adiciona ao grupo hud para facilitar localização
+	add_to_group("hud")
+	
 	# Verifica se os nós essenciais existem
 	_verify_nodes()
 	
@@ -118,6 +121,11 @@ func _ready():
 	var lucidity_manager = get_node("/root/LucidityManager")
 	if lucidity_manager:
 		lucidity_manager.connect("lucidity_points_changed", _on_lucidity_points_changed)
+		print("[HUD] Conectado ao LucidityManager com sucesso")
+		# Inicializa com os pontos atuais
+		set_lucidity_points(lucidity_manager.get_lucidity_points())
+	else:
+		print("[HUD] ERRO: LucidityManager não encontrado!")
 	
 	# Conectar ao GiftManager
 	var gift_manager = get_node("/root/GiftManager")
@@ -345,6 +353,7 @@ func set_crosshair_mode(is_first_person: bool):
 
 # Callback para quando os pontos de lucidez mudarem
 func _on_lucidity_points_changed(points: int):
+	print("[HUD] Pontos de lucidez atualizados: ", points)
 	set_lucidity_points(points)
 
 # Callback para quando os gifts mudarem

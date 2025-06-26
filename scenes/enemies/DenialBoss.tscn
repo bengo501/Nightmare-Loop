@@ -1,0 +1,96 @@
+[gd_scene load_steps=6 format=3 uid="uid://boss_denial_nightmare"]
+
+[ext_resource type="Script" path="res://scripts/enemies/DenialBoss.gd" id="1_boss_denial"]
+[ext_resource type="Texture2D" uid="uid://bu06ngsdgpbbs" path="res://assets/textures/greenGhost.png" id="2_boss_texture"]
+[ext_resource type="Shader" uid="uid://dpxf1ywmm4un0" path="res://shaders/ghost.gdshader" id="3_boss_shader"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_boss"]
+margin = 0.2
+height = 4.0
+radius = 1.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_boss"]
+render_priority = 0
+shader = ExtResource("3_boss_shader")
+shader_parameter/fuwafuwa_speed = 2.5
+shader_parameter/fuwafuwa_size = 0.08
+shader_parameter/ghost_color = Vector4(0.1, 0.8, 0.1, 0.95)
+shader_parameter/outline_ratio = 3.0
+shader_parameter/noise_speed = 2.5
+shader_parameter/noise_scale = 2.5
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_attack"]
+radius = 2.5
+
+[node name="DenialBoss" type="CharacterBody3D" groups=["boss", "enemy"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_boss_denial")
+boss_max_health = 500.0
+boss_speed = 2.5
+boss_attack_damage = 40.0
+boss_scale = Vector3(2.5, 2.5, 2.5)
+phase_change_threshold = 0.5
+denial_phase_duration = 3.0
+summon_cooldown = 8.0
+teleport_cooldown = 6.0
+area_attack_cooldown = 12.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." groups=["boss", "enemy"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0, 0)
+shape = SubResource("CylinderShape3D_boss")
+debug_color = Color(0.1, 0.8, 0.1, 0.42)
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 1.0
+target_desired_distance = 1.0
+path_max_distance = 20.0
+avoidance_enabled = true
+radius = 1.5
+neighbor_distance = 100.0
+max_neighbors = 15
+time_horizon = 2.0
+max_speed = 2.5
+
+[node name="AttackArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AttackArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0, 0)
+shape = SubResource("SphereShape3D_attack")
+debug_color = Color(0.8, 0.1, 0.1, 0.42)
+
+[node name="GhostCylinder" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+layers = 2
+cast_shadow = 3
+operation = 1
+radius = 1.8
+height = 7.0
+material = SubResource("ShaderMaterial_boss")
+
+[node name="Billboard" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0, 0)
+
+[node name="Sprite3D" type="Sprite3D" parent="Billboard"]
+transform = Transform3D(2.0, 0, 0, 0, 2.0, 0, 0, 0, 2.0, 0, 1.5, 0)
+billboard = 1
+texture_filter = 0
+texture = ExtResource("2_boss_texture")
+modulate = Color(0.1, 0.8, 0.1, 0.9)
+
+[node name="BossEffects" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0, 0)
+
+[node name="AuraEffect" type="CSGSphere3D" parent="BossEffects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+layers = 2
+cast_shadow = 0
+operation = 1
+radius = 3.0
+material = SubResource("ShaderMaterial_boss")
+
+[node name="FloatingAnimation" type="AnimationPlayer" parent="."]
+
+[node name="BossAudio" type="AudioStreamPlayer3D" parent="."]
+max_distance = 50.0
+attenuation_model = 2

@@ -7,12 +7,17 @@ const MOUSE_SENSITIVITY = 0.003
 @export var rotation_speed: float = 35.0
 
 # === VARIÁVEIS DE ATAQUE ===
-@export var attack_damage: float = 10.0
+@export var attack_damage: float = 20.0  # Dano base aumentado para 20
 @export var attack_range: float = 10.0
 @export var attack_cooldown: float = 0.2
 @export var max_health: float = 100.0
 var current_health: float
 var defense_bonus: float = 1.0
+
+# === SISTEMA DE MUNIÇÃO BASEADO NOS PONTOS DO LUTO ===
+@export var ammo_consumption_rate: float = 0.3  # Reduzido para tiro mais rápido
+var last_shot_time: float = 0.0
+var ammo_timer: Timer
 
 # === SISTEMA DE MODOS DE ATAQUE ===
 enum AttackMode {
@@ -55,11 +60,13 @@ var attack_mode_names: Dictionary = {
 @onready var damage_indicator_scene = preload("res://scenes/ui/damage_indicator.tscn")
 @onready var camera_shake_script = preload("res://scripts/camera/camera_shake.gd")
 
+# === REFERÊNCIA PARA O SISTEMA DE MUNIÇÃO ===
+@onready var gift_manager = null  # Será inicializado no _ready()
+
 # === ESTADOS ===
 var first_person_mode = false
 var laser_active = false
 var can_attack: bool = true
-var attack_timer: Timer
 var current_target = null
 var can_move = true
 
@@ -86,7 +93,15 @@ var health_multiplier: float = 1.0
 @onready var camera = $CameraMount/Camera3D
 @onready var ray_cast = $CameraMount/RayCast3D
 
+# === SISTEMA DE TIRO CONTÍNUO ===
+var is_shooting: bool = false  # Indica se está segurando o botão de tiro
+var can_shoot_continuous: bool = true  # Controla se pode atirar continuamente
 
+# === SISTEMA DE ANIMAÇÕES SUAVES ===
+var current_animation: String = "idle"
+var target_animation: String = "idle"
+var animation_blend_time: float = 0.3  # Tempo de transição entre animações
+var is_transitioning: bool = false
 
 signal game_over
 
@@ -137,8 +152,30 @@ func _ready():
 	var skill_manager = get_node_or_null("/root/SkillManager")
 	if skill_manager:
 		skill_manager.skill_upgraded.connect(_on_skill_upgraded)
+	
+	# === INICIALIZA SISTEMA DE MUNIÇÃO ===
+	# Conecta ao GiftManager
+	gift_manager = get_node_or_null("/root/GiftManager")
+	if not gift_manager:
+		print("ERRO: GiftManager não encontrado! Sistema de munição desabilitado.")
+	else:
+		print("✓ GiftManager conectado - Sistema de munição ativo")
+	
+	# Configura o timer de munição
+	setup_ammo_system()
 
-
+	# === DEBUG DO SISTEMA DE MOVIMENTO ===
+	print("========================================")
+	print("🎮 SISTEMA DE MOVIMENTO INICIALIZADO")
+	print("========================================")
+	print("can_move: ", can_move)
+	print("SPEED: ", SPEED)
+	print("speed_multiplier: ", speed_multiplier)
+	print("third_person_camera: ", third_person_camera != null)
+	print("animation_player: ", animation_player != null)
+	print("visuals: ", visuals != null)
+	print("mouse_ray: ", mouse_ray != null)
+	print("========================================")
 
 	# Tenta encontrar os nós, se existirem
 	if has_node("../ThirdPersonCamera"):
@@ -172,19 +209,24 @@ func _ready():
 		visuals = get_node("visuals")
 		if visuals.has_node("GamePucrsMC/AnimationPlayer"):
 			animation_player = visuals.get_node("GamePucrsMC/AnimationPlayer")
+			print("✓ AnimationPlayer encontrado: ", animation_player.get_animation_list())
 	# MouseRay pode estar na câmera de terceira pessoa
 	if third_person_camera and third_person_camera.has_node("MouseRay"):
 		mouse_ray = third_person_camera.get_node("MouseRay")
+		print("✓ MouseRay encontrado na câmera de terceira pessoa")
 
 	# Inicialização de sistemas
 	if third_person_camera:
 		activate_third_person()
+		print("✓ Modo terceira pessoa ativado por padrão")
 	if laser_line and is_instance_valid(laser_line):
 		laser_line.visible = false
-	setup_attack_system()
+	
+	# === CONFIGURA SISTEMA DE ANIMAÇÕES SUAVES ===
 	setup_animations()
 	
-	# Inicializa o sistema de modos de ataque
+	# === CONFIGURA OUTROS SISTEMAS ===
+	setup_attack_system()
 	setup_attack_modes()
 
 	# Configurações iniciais
@@ -194,12 +236,9 @@ func _ready():
 		connect("player_health_changed", Callable(hud, "set_health"))
 
 func setup_attack_system():
-	attack_timer = Timer.new()
-	attack_timer.wait_time = attack_cooldown
-	attack_timer.one_shot = true
-	attack_timer.connect("timeout", _on_attack_timer_timeout)
-	add_child(attack_timer)
-
+	# Sistema de attack_timer removido - agora usando sistema de tiro contínuo
+	# Timer de munição é configurado em setup_ammo_system()
+	
 	if shoot_ray:
 		shoot_ray.target_position = Vector3(0, 0, -attack_range)
 		shoot_ray.collision_mask = 2
@@ -207,15 +246,20 @@ func setup_attack_system():
 
 func setup_animations():
 	if animation_player == null:
+		print("⚠️ AnimationPlayer não encontrado para configurar transições")
 		return
-	var transitions = [
-		["idle", "walk_front"], ["idle", "walk_back"],
-		["idle", "walk_left"], ["idle", "walk_right"],
-		["walk_front", "idle"], ["walk_back", "idle"],
-		["walk_left", "idle"], ["walk_right", "idle"]
-	]
-	for pair in transitions:
-		animation_player.set_blend_time(pair[0], pair[1], 0.3)
+	
+	# Lista de todas as animações possíveis
+	var animations = ["idle", "walk_front", "walk_back", "walk_left", "walk_right", "walk", "run"]
+	
+	# Configura transições suaves entre todas as animações
+	for from_anim in animations:
+		for to_anim in animations:
+			if from_anim != to_anim and animation_player.has_animation(from_anim) and animation_player.has_animation(to_anim):
+				animation_player.set_blend_time(from_anim, to_anim, animation_blend_time)
+	
+	print("✅ Transições de animação configuradas com tempo de blend: ", animation_blend_time, " segundos")
+	print("📋 Animações disponíveis: ", animation_player.get_animation_list())
 
 func setup_attack_modes():
 	# Inicializa o modo de ataque padrão
@@ -246,67 +290,154 @@ func setup_attack_modes():
 	print("5 - Aceitação (Amarelo) - Efetivo contra fantasmas Amarelos")
 	print("========================================")
 
+# === CONFIGURAÇÃO DO SISTEMA DE MUNIÇÃO ===
+func setup_ammo_system():
+	# Configura o timer de munição
+	ammo_timer = Timer.new()
+	ammo_timer.wait_time = ammo_consumption_rate
+	ammo_timer.one_shot = true
+	add_child(ammo_timer)
+	
+	print("========================================")
+	print("SISTEMA DE MUNIÇÃO INICIALIZADO")
+	print("========================================")
+	print("Taxa de consumo: ", ammo_consumption_rate, " segundos entre tiros")
+	print("Cada tiro consome 1 ponto do estágio do luto correspondente")
+	print("========================================")
+
 # === FÍSICA ===
 func _physics_process(delta: float):
-	if not can_move:
-		return
+	# Verifica se deve continuar atirando
+	if is_shooting and first_person_mode and can_shoot_continuous:
+		# Só atira se tiver munição para o modo atual
+		if has_ammo_for_current_mode():
+			# Verifica se pode atirar (cooldown)
+			if can_shoot():
+				shoot_first_person()
+		else:
+			# Para o tiro se não tiver munição
+			print("🚫 Tiro contínuo interrompido: Sem munição de ", get_current_attack_name())
+			is_shooting = false
+			laser_active = false
+			if laser_line and is_instance_valid(laser_line):
+				laser_line.visible = false
+			stop_continuous_shooting()
+	
+	# Sistema de gravidade
 	if not is_on_floor():
-		velocity += get_gravity() * delta
+		velocity.y -= gravity * delta
+	
+	# Sistema de pulo
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
-	if not first_person_mode:
-		move_isometric(delta)
-		rotate_toward_mouse(delta)
-	else:
-		move_first_person(delta)
-	if laser_active and first_person_mode:
-		check_ray_collision()
+	
+	# Sistema de movimento baseado no modo da câmera
+	if can_move:
+		if not first_person_mode:
+			# Movimento isométrico no modo terceira pessoa
+			move_isometric(delta)
+			# Rotação para o mouse
+			rotate_toward_mouse(delta)
+		else:
+			# Movimento em primeira pessoa
+			handle_first_person_movement()
+	
+	# Aplica o movimento
 	move_and_slide()
 
 # === ROTAÇÃO PARA O MOUSE ===
 func rotate_toward_mouse(delta):
 	if not third_person_camera or not mouse_ray:
 		return
+		
+	# Força a atualização do raycast
 	mouse_ray.force_raycast_update()
+	
 	if mouse_ray.is_colliding():
 		var hit_point = mouse_ray.get_collision_point()
 		var player_pos = global_transform.origin
 		var dir = hit_point - player_pos
-		dir.y = 0
+		dir.y = 0  # Mantém no plano horizontal
+		
+		# Só rotaciona se a direção for significativa
 		if dir.length_squared() > 0.01:
 			var target_angle = atan2(dir.x, dir.z)
 			rotation.y = lerp_angle(rotation.y, target_angle, delta * rotation_speed)
+			
+			# Aplica a rotação também aos visuais se disponível
 			if visuals:
 				visuals.rotation.y = rotation.y
+				
+			print("🔄 Rotacionando para: ", rad_to_deg(rotation.y), "°")
 
 # === MOVIMENTO ISOMÉTRICO ===
 func move_isometric(delta: float):
 	var input_vector = Vector3.ZERO
+	var raw_input = Vector2.ZERO
+	
+	# Captura as entradas do jogador
 	if Input.is_action_pressed("foward"):
 		input_vector.z -= 1
+		raw_input.y -= 1
 	if Input.is_action_pressed("backward"):
 		input_vector.z += 1
+		raw_input.y += 1
 	if Input.is_action_pressed("left"):
 		input_vector.x -= 1
+		raw_input.x -= 1
 	if Input.is_action_pressed("right"):
 		input_vector.x += 1
+		raw_input.x += 1
+	
+	# Se há movimento, aplica o movimento isométrico
 	if input_vector != Vector3.ZERO:
 		input_vector = input_vector.normalized()
-		var camera_basis = third_person_camera.global_transform.basis
-		var direction = (camera_basis.x * input_vector.x) + (camera_basis.z * input_vector.z)
-		direction.y = 0
-		direction = direction.normalized()
-		velocity.x = direction.x * SPEED * speed_multiplier
-		velocity.z = direction.z * SPEED * speed_multiplier
-		play_animation("walk_front")
+		
+		# Converte o input para movimento isométrico baseado na câmera
+		if third_person_camera:
+			var camera_basis = third_person_camera.global_transform.basis
+			var direction = (camera_basis.x * input_vector.x) + (camera_basis.z * input_vector.z)
+			direction.y = 0
+			direction = direction.normalized()
+			
+			# Aplica a velocidade
+			velocity.x = direction.x * SPEED * speed_multiplier
+			velocity.z = direction.z * SPEED * speed_multiplier
+		else:
+			# Fallback se não tiver câmera
+			velocity.x = input_vector.x * SPEED * speed_multiplier
+			velocity.z = input_vector.z * SPEED * speed_multiplier
+		
+		# Determina a animação baseada na direção do input
+		var animation_to_play = get_movement_animation(raw_input)
+		play_animation(animation_to_play)
 	else:
+		# Para o movimento suavemente quando não há input
 		velocity.x = lerp(velocity.x, 0.0, 0.2)
 		velocity.z = lerp(velocity.z, 0.0, 0.2)
+		
+		# Toca a animação idle
 		play_animation("idle")
 
+# === SISTEMA DE ANIMAÇÕES DIRECIONAIS ===
+func get_movement_animation(input_dir: Vector2) -> String:
+	# Determina a direção principal do movimento
+	if abs(input_dir.x) > abs(input_dir.y):
+		# Movimento horizontal dominante
+		if input_dir.x > 0:
+			return "walk_right"
+		else:
+			return "walk_left"
+	else:
+		# Movimento vertical dominante
+		if input_dir.y < 0:
+			return "walk_front"
+		else:
+			return "walk_back"
+
 # === MOVIMENTO EM PRIMEIRA PESSOA ===
-func move_first_person(delta: float):
-	var input_dir = Vector3.ZERO
+func handle_first_person_movement():
+	var input_dir = Vector3()
 	if Input.is_action_pressed("foward"):
 		input_dir -= first_person_camera.global_transform.basis.z
 	if Input.is_action_pressed("backward"):
@@ -322,44 +453,108 @@ func move_first_person(delta: float):
 
 # === ANIMAÇÕES ===
 func play_animation(anim_name: String):
-	if animation_player and animation_player.current_animation != anim_name:
-		animation_player.play(anim_name)
+	if not animation_player:
+		print("⚠️ AnimationPlayer não encontrado!")
+		return
+	
+	# Normaliza o nome da animação e encontra a melhor disponível
+	var final_animation = get_best_available_animation(anim_name)
+	
+	if final_animation == "":
+		print("⚠️ Nenhuma animação disponível para: ", anim_name)
+		return
+	
+	# Se já está tocando a animação desejada, não faz nada
+	if current_animation == final_animation and animation_player.is_playing():
+		return
+	
+	# Atualiza o estado da animação
+	target_animation = final_animation
+	
+	# Se não há animação atual ou é a primeira vez, toca diretamente
+	if current_animation == "" or not animation_player.is_playing():
+		_play_animation_direct(final_animation)
+		return
+	
+	# Se há uma animação tocando, faz a transição suave
+	_play_animation_with_transition(final_animation)
+
+# === SISTEMA DE TRANSIÇÕES SUAVES ===
+func get_best_available_animation(requested_anim: String) -> String:
+	# Primeiro, tenta a animação exata
+	if animation_player.has_animation(requested_anim):
+		return requested_anim
+	
+	# Se não encontrar, tenta alternativas baseadas no tipo
+	match requested_anim:
+		"walk_front", "walk_back", "walk_left", "walk_right":
+			# Tenta animações de caminhada genéricas
+			if animation_player.has_animation("walk"):
+				return "walk"
+			elif animation_player.has_animation("run"):
+				return "run"
+			elif animation_player.has_animation("idle"):
+				return "idle"
+		"idle":
+			# Para idle, tenta variações
+			if animation_player.has_animation("idle"):
+				return "idle"
+			elif animation_player.has_animation("default"):
+				return "default"
+		_:
+			# Para outras animações, tenta idle como fallback
+			if animation_player.has_animation("idle"):
+				return "idle"
+	
+	return ""  # Nenhuma animação encontrada
+
+func _play_animation_direct(anim_name: String):
+	animation_player.play(anim_name)
+	current_animation = anim_name
+	target_animation = anim_name
+	is_transitioning = false
+	print("🎭 Tocando animação direta: ", anim_name)
+
+func _play_animation_with_transition(anim_name: String):
+	# Se já está em transição para a mesma animação, não faz nada
+	if is_transitioning and target_animation == anim_name:
+		return
+	
+	is_transitioning = true
+	
+	# Usa o sistema de blend do Godot para transição suave
+	var blend_time = animation_blend_time
+	
+	# Ajusta o tempo de blend baseado no tipo de transição
+	if (current_animation == "idle" and anim_name.begins_with("walk")) or \
+	   (current_animation.begins_with("walk") and anim_name == "idle"):
+		blend_time = animation_blend_time * 0.7  # Transição mais rápida idle <-> walk
+	elif current_animation.begins_with("walk") and anim_name.begins_with("walk"):
+		blend_time = animation_blend_time * 0.5  # Transição muito rápida entre direções
+	
+	# Executa a transição
+	animation_player.play(anim_name, -1, 1.0, false)
+	current_animation = anim_name
+	target_animation = anim_name
+	
+	print("🔄 Transição suave: ", current_animation, " -> ", anim_name, " (", blend_time, "s)")
+	
+	# Agenda o fim da transição
+	await get_tree().create_timer(blend_time).timeout
+	is_transitioning = false
+
+# === FUNÇÃO AUXILIAR PARA VERIFICAR ESTADO DAS ANIMAÇÕES ===
+func get_current_animation_info() -> Dictionary:
+	return {
+		"current": current_animation,
+		"target": target_animation,
+		"is_playing": animation_player.is_playing() if animation_player else false,
+		"is_transitioning": is_transitioning,
+		"player_animation": animation_player.current_animation if animation_player else ""
+	}
 
 # === LASER E ATAQUE ===
-func check_ray_collision():
-	if not shoot_ray:
-		return
-	shoot_ray.force_raycast_update()
-	if shoot_ray.is_colliding():
-		var collider = shoot_ray.get_collider()
-		if collider and collider.is_in_group("enemy"):
-			if collider != current_target:
-				current_target = collider
-				perform_attack(collider)
-		else:
-			current_target = null
-	else:
-		current_target = null
-
-func perform_attack(target = null):
-	# GARANTIA EXTRA: Só funciona se estiver realmente no modo primeira pessoa
-	if not first_person_mode:
-		print("DEBUG: Tentativa de ataque bloqueada - não está no modo primeira pessoa")
-		return
-		
-	if not can_attack or target == null:
-		return
-	can_attack = false
-	attack_timer.start()
-	if target.has_method("take_damage"):
-		var final_damage = calculate_damage_against_target(target)
-		print("DEBUG: Causando ", final_damage, " de dano em ", target.name, " (modo: ", get_current_attack_name(), ")")
-		target.take_damage(final_damage)
-
-func _on_attack_timer_timeout():
-	can_attack = true
-	if current_target and is_instance_valid(current_target):
-		perform_attack(current_target)
+# Funções antigas removidas - agora usando sistema de tiro contínuo
 
 # === ENTRADAS E TIRO EM PRIMEIRA PESSOA ===
 func _input(event):
@@ -371,30 +566,38 @@ func _input(event):
 				activate_third_person()
 		if event.button_index == MOUSE_BUTTON_LEFT and first_person_mode:
 			if event.pressed:
+				# Inicia tiro contínuo
+				is_shooting = true
 				laser_active = true
 				if laser_line and is_instance_valid(laser_line):
 					laser_line.visible = true
-				shoot_first_person()
+				start_continuous_shooting()
 			else:
+				# Para tiro contínuo
+				is_shooting = false
 				laser_active = false
 				if laser_line and is_instance_valid(laser_line):
 					laser_line.visible = false
-				current_target = null
+				stop_continuous_shooting()
 	if first_person_mode and event is InputEventMouseMotion:
 		rotate_camera(event.relative)
 	# Ativação do laser/ataque com a tecla F
 	if first_person_mode and event is InputEventKey:
 		if event.keycode == KEY_F:
 			if event.pressed and not event.echo:
+				# Inicia tiro contínuo
+				is_shooting = true
 				laser_active = true
 				if laser_line and is_instance_valid(laser_line):
 					laser_line.visible = true
-				shoot_first_person()
+				start_continuous_shooting()
 			elif not event.pressed:
+				# Para tiro contínuo
+				is_shooting = false
 				laser_active = false
 				if laser_line and is_instance_valid(laser_line):
 					laser_line.visible = false
-				current_target = null
+				stop_continuous_shooting()
 	
 	# === SISTEMA DE SELEÇÃO DE MODO DE ATAQUE ===
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -409,11 +612,57 @@ func _input(event):
 				set_attack_mode(AttackMode.DEPRESSAO)
 			KEY_5:
 				set_attack_mode(AttackMode.ACEITACAO)
+			# === TESTE: GANHA PONTOS DE LUCIDEZ ===
+			KEY_P:
+				# Tecla P para ganhar pontos de lucidez (apenas para teste)
+				var lucidity_manager = get_node_or_null("/root/LucidityManager")
+				if lucidity_manager:
+					lucidity_manager.add_lucidity_point(1)
+					print("🎯 [TESTE] +1 ponto de lucidez concedido! Total: ", lucidity_manager.get_lucidity_points())
+			KEY_T:
+				# Tecla T para debug do sistema de animações
+				print("========================================")
+				print("🎭 DEBUG SISTEMA DE ANIMAÇÕES")
+				print("========================================")
+				var info = get_current_animation_info()
+				print("Animação atual: ", info.current)
+				print("Animação alvo: ", info.target)
+				print("Está reproduzindo: ", info.is_playing)
+				print("Em transição: ", info.is_transitioning)
+				print("AnimationPlayer atual: ", info.player_animation)
+				print("Tempo de blend: ", animation_blend_time, " segundos")
+				if animation_player:
+					print("Animações disponíveis: ", animation_player.get_animation_list())
+				print("========================================")
 
 func shoot_first_person():
 	# GARANTIA EXTRA: Só funciona se estiver realmente no modo primeira pessoa
 	if not first_person_mode:
 		print("DEBUG: Tentativa de ataque bloqueada - não está no modo primeira pessoa")
+		return
+	
+	# === SISTEMA DE MUNIÇÃO ===
+	# Verifica se pode atirar (cooldown + munição)
+	if not can_shoot():
+		if not has_ammo_for_current_mode():
+			print("🚫 TIRO BLOQUEADO: Sem munição de ", get_current_attack_name(), "!")
+			# Para o tiro contínuo se não tiver munição
+			is_shooting = false
+			laser_active = false
+			if laser_line and is_instance_valid(laser_line):
+				laser_line.visible = false
+		else:
+			print("⏱️ TIRO BLOQUEADO: Aguarde o cooldown de ", ammo_consumption_rate, " segundos")
+		return
+	
+	# Consome munição antes de atirar
+	if not consume_ammo():
+		print("🚫 TIRO CANCELADO: Falha ao consumir munição")
+		# Para o tiro contínuo se falhar ao consumir munição
+		is_shooting = false
+		laser_active = false
+		if laser_line and is_instance_valid(laser_line):
+			laser_line.visible = false
 		return
 		
 	if not shoot_ray:
@@ -425,7 +674,9 @@ func shoot_first_person():
 			if collider.has_method("take_damage"):
 				var final_damage = calculate_damage_against_target(collider)
 				collider.take_damage(final_damage)
-				print("DEBUG: Acertou inimigo em primeira pessoa! Dano: ", final_damage, " (modo: ", get_current_attack_name(), ")")
+				print("🎯 ACERTO! Dano: ", final_damage, " (modo: ", get_current_attack_name(), ")")
+	else:
+		print("💥 TIRO DISPARADO: Sem alvo atingido (modo: ", get_current_attack_name(), ")")
 
 func rotate_camera(mouse_motion: Vector2):
 	if not first_person_camera:
@@ -477,16 +728,21 @@ func activate_first_person():
 func activate_third_person():
 	first_person_mode = false
 	
+	# === PARA COMPLETAMENTE O SISTEMA DE TIRO CONTÍNUO ===
+	is_shooting = false
+	can_shoot_continuous = false
+	
 	# === DESABILITA COMPLETAMENTE O SISTEMA DE LASER E ATAQUE ===
+	# Para garantir que não haja ataques no modo terceira pessoa
 	laser_active = false
 	current_target = null
 	
-	# Garante que o laser está invisível e desabilitado
+	# Esconde e desabilita o laser
 	if laser_line and is_instance_valid(laser_line):
 		laser_line.visible = false
-		print("DEBUG: LaseLine desabilitado no modo terceira pessoa")
+		print("DEBUG: Laser desabilitado no modo terceira pessoa")
 	
-	# Desabilita o ShootRay para evitar detecção de colisões
+	# Desabilita o ShootRay para evitar detecções acidentais
 	if shoot_ray and is_instance_valid(shoot_ray):
 		shoot_ray.enabled = false
 		print("DEBUG: ShootRay desabilitado no modo terceira pessoa")
@@ -497,27 +753,54 @@ func activate_third_person():
 	if crosshair and is_instance_valid(crosshair):
 		crosshair.visible = false
 	if hud and is_instance_valid(hud):
-		hud.visible = true
-		# Alterna crosshair para seguir o mouse
+		# Alterna crosshair para modo de terceira pessoa
 		if hud.has_method("set_crosshair_mode"):
 			hud.set_crosshair_mode(false)
-	if third_person_camera:
-		third_person_camera.current = true
 	if first_person_camera:
 		first_person_camera.current = false
+	if third_person_camera:
+		third_person_camera.current = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
 	if weapon and is_instance_valid(weapon):
 		weapon.visible = false
 	
-	print("DEBUG: Modo terceira pessoa ativado - Laser e ataques desabilitados")
+	print("DEBUG: Modo terceira pessoa ativado - Laser, ataques e tiro contínuo desabilitados")
 
 # === SISTEMA DE MODOS DE ATAQUE ===
 func set_attack_mode(mode: AttackMode):
 	current_attack_mode = mode
 	var mode_name = attack_mode_names[mode]
-	var mode_color = attack_mode_colors[mode]
+	var ammo_count = get_current_ammo_count()
 	
-	print("Modo de ataque alterado para: ", mode_name, " (", mode_color, ")")
+	print("========================================")
+	print("🎯 MODO DE ATAQUE ALTERADO")
+	print("Modo: ", mode_name)
+	print("Cor: ", attack_mode_colors[mode])
+	print("Munição disponível: ", ammo_count)
+	
+	# Verifica se tem munição para este modo
+	if ammo_count <= 0:
+		print("⚠️ ATENÇÃO: Sem munição! Colete presentes de ", mode_name, " para atirar")
+		
+		# Esconde o laser se estiver ativo e não tiver munição
+		if laser_active and laser_line and is_instance_valid(laser_line):
+			laser_line.visible = false
+			print("🚫 Laser escondido - sem munição de ", mode_name)
+		
+		# Para o tiro contínuo se estiver ativo
+		if is_shooting:
+			is_shooting = false
+			laser_active = false
+			stop_continuous_shooting()
+			print("🛑 Tiro contínuo interrompido - sem munição de ", mode_name)
+	else:
+		# Mostra o laser se estiver ativo e tiver munição
+		if laser_active and laser_line and is_instance_valid(laser_line):
+			laser_line.visible = true
+			print("✅ Laser reativado - munição de ", mode_name, " disponível")
+	
+	print("========================================")
 	
 	# Atualiza a cor do laser
 	update_laser_color()
@@ -535,7 +818,7 @@ func get_current_attack_name() -> String:
 	return attack_mode_names[current_attack_mode]
 
 func calculate_damage_against_target(target) -> float:
-	var base_damage = attack_damage
+	var base_damage = attack_damage  # 20 de dano base
 	
 	# Verifica se o alvo é um fantasma com estágio de luto
 	if target.has_method("get_grief_stage"):
@@ -553,9 +836,11 @@ func calculate_damage_against_target(target) -> float:
 		# Se o modo de ataque corresponde ao estágio do fantasma, dano duplo
 		if target_stage in stage_to_mode and stage_to_mode[target_stage] == current_attack_mode:
 			base_damage *= 2.0
-			print("DANO CRÍTICO! Modo de ataque ", get_current_attack_name(), " é efetivo contra fantasma do estágio ", target_stage)
+			print("💥 DANO CRÍTICO! Modo ", get_current_attack_name(), " vs fantasma ", target_stage, " = ", base_damage, " dano")
 		else:
-			print("Dano normal. Modo ", get_current_attack_name(), " contra fantasma estágio ", target_stage)
+			print("⚔️ Dano normal: ", base_damage, " (modo ", get_current_attack_name(), " vs fantasma estágio ", target_stage, ")")
+	else:
+		print("⚔️ Dano base: ", base_damage, " contra alvo sem estágio de luto")
 	
 	return base_damage
 
@@ -586,7 +871,72 @@ func update_crosshair_color():
 	if hud and hud.has_method("set_crosshair_color"):
 		hud.set_crosshair_color(get_current_attack_color())
 
+# === SISTEMA DE MUNIÇÃO BASEADO NOS PONTOS DO LUTO ===
+func can_shoot() -> bool:
+	# Verifica se passou o tempo de cooldown
+	if ammo_timer and not ammo_timer.is_stopped():
+		return false
+	
+	# Verifica se tem munição (pontos do estágio correspondente)
+	return has_ammo_for_current_mode()
 
+func has_ammo_for_current_mode() -> bool:
+	if not gift_manager:
+		print("AVISO: GiftManager não disponível - permitindo tiro")
+		return true
+	
+	var ammo_type = get_ammo_type_for_mode(current_attack_mode)
+	var current_ammo = gift_manager.get_gift_count(ammo_type)
+	
+	return current_ammo > 0
+
+func get_ammo_type_for_mode(mode: AttackMode) -> String:
+	# Mapeia os modos de ataque para os tipos de gift
+	match mode:
+		AttackMode.NEGACAO:
+			return "negacao"
+		AttackMode.RAIVA:
+			return "raiva"
+		AttackMode.BARGANHA:
+			return "barganha"
+		AttackMode.DEPRESSAO:
+			return "depressao"
+		AttackMode.ACEITACAO:
+			return "aceitacao"
+		_:
+			return "negacao"  # Fallback
+
+func consume_ammo() -> bool:
+	if not gift_manager:
+		print("AVISO: GiftManager não disponível - não consumindo munição")
+		return true
+	
+	var ammo_type = get_ammo_type_for_mode(current_attack_mode)
+	var current_ammo = gift_manager.get_gift_count(ammo_type)
+	
+	if current_ammo <= 0:
+		print("🚫 SEM MUNIÇÃO! Não há pontos de ", get_current_attack_name(), " disponíveis")
+		return false
+	
+	# Consome 1 ponto do estágio correspondente
+	if gift_manager.use_gift(ammo_type, 1):
+		print("💥 MUNIÇÃO CONSUMIDA: -1 ponto de ", get_current_attack_name(), " (Restante: ", gift_manager.get_gift_count(ammo_type), ")")
+		
+		# Inicia o cooldown para o próximo tiro
+		if ammo_timer:
+			ammo_timer.start()
+		
+		return true
+	else:
+		print("ERRO: Falha ao consumir munição")
+		return false
+
+func get_current_ammo_count() -> int:
+	if not gift_manager:
+		return 0
+	
+	var ammo_type = get_ammo_type_for_mode(current_attack_mode)
+	return gift_manager.get_gift_count(ammo_type)
 
 func die() -> void:
 	print("DEBUG: Jogador morreu!")
@@ -891,3 +1241,43 @@ func reactivate_player():
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	
 	print("[Player] Player reativado - can_move: ", can_move, " physics: ", is_physics_processing(), " input: ", is_processing_input())
+
+# === SISTEMA DE TIRO CONTÍNUO ===
+func start_continuous_shooting():
+	print("🔫 Iniciando tiro contínuo...")
+	can_shoot_continuous = true
+	# Dispara o primeiro tiro imediatamente
+	shoot_first_person()
+
+func stop_continuous_shooting():
+	print("🛑 Parando tiro contínuo...")
+	can_shoot_continuous = false
+	current_target = null
+
+# === FUNÇÃO LEGACY PARA COMPATIBILIDADE ===
+func _on_attack_timer_timeout():
+	# Função mantida para compatibilidade - não é mais usada no sistema de tiro contínuo
+	# O sistema antigo de attack_timer foi substituído pelo sistema de tiro contínuo
+	pass
+
+# === CONTROLE DINÂMICO DO SISTEMA DE ANIMAÇÕES ===
+func set_animation_blend_time(new_time: float):
+	animation_blend_time = clamp(new_time, 0.1, 2.0)  # Entre 0.1 e 2 segundos
+	print("🎭 Tempo de blend das animações alterado para: ", animation_blend_time, " segundos")
+	# Reaplica as configurações
+	setup_animations()
+
+func get_animation_blend_time() -> float:
+	return animation_blend_time
+
+func force_animation_reset():
+	"""Força o reset do sistema de animações para resolver problemas"""
+	if animation_player:
+		animation_player.stop()
+		current_animation = ""
+		target_animation = ""
+		is_transitioning = false
+		print("🔄 Sistema de animações resetado")
+
+func is_animation_transitioning() -> bool:
+	return is_transitioning

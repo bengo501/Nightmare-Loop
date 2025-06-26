@@ -7,21 +7,28 @@ var max_lucidity_points: int = 100
 
 func _ready():
 	reset_lucidity_points()
+	# Adiciona alguns pontos para teste
+	add_lucidity_point(5)
+	print("[LucidityManager] Sistema inicializado com ", lucidity_points, " pontos")
 
 # Adiciona pontos de lucidez
 func add_lucidity_point(amount: int = 1) -> void:
+	var old_points = lucidity_points
 	lucidity_points = min(lucidity_points + amount, max_lucidity_points)
 	emit_signal("lucidity_points_changed", lucidity_points)
-	print("Pontos de lucidez atualizados: ", lucidity_points)
+	print("[LucidityManager] Pontos adicionados: +", amount, " (", old_points, " -> ", lucidity_points, ")")
 
 # Usa pontos de lucidez
 func use_lucidity_point(amount: int = 1) -> bool:
 	if lucidity_points >= amount:
+		var old_points = lucidity_points
 		lucidity_points -= amount
 		emit_signal("lucidity_points_changed", lucidity_points)
-		print("Pontos de lucidez usados: ", amount)
+		print("[LucidityManager] Pontos gastos: -", amount, " (", old_points, " -> ", lucidity_points, ")")
 		return true
-	return false
+	else:
+		print("[LucidityManager] ERRO: Tentativa de gastar ", amount, " pontos, mas só tem ", lucidity_points)
+		return false
 
 # Retorna os pontos de lucidez atuais
 func get_lucidity_points() -> int:

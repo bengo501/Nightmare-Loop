@@ -28,6 +28,8 @@ shape = SubResource("SphereShape3D_xxxxx")
 [node name="Label3D" type="Label3D" parent="InteractionPrompt"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 billboard = 1
-text = "Pressione E para coletar"
-font_size = 24
+text = "Pressione E para coletar
+Ponto de Lucidez"
+font_size = 20
 outline_size = 4
+outline_color = Color(0, 0, 0, 1)

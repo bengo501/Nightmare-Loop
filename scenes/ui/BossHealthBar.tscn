@@ -1,0 +1,94 @@
+[gd_scene load_steps=5 format=3 uid="uid://boss_health_bar_ui"]
+
+[ext_resource type="Script" path="res://scripts/ui/boss_health_bar.gd" id="1_boss_health_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_background"]
+bg_color = Color(0.1, 0.1, 0.1, 0.8)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.3, 0.3, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_bg"]
+bg_color = Color(0.2, 0.2, 0.2, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_fill"]
+bg_color = Color(0.1, 0.8, 0.1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="LabelSettings" id="LabelSettings_1"]
+font_size = 18
+font_color = Color(1, 1, 1, 1)
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="BossHealthBar" type="Control"]
+layout_mode = 3
+anchors_preset = 10
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -400.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 120.0
+grow_horizontal = 0
+script = ExtResource("1_boss_health_script")
+
+[node name="Background" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_background")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="BossNameLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "CHEFE DA NEGAÇÃO"
+label_settings = SubResource("LabelSettings_1")
+horizontal_alignment = 1
+
+[node name="HealthBarContainer" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HealthBar" type="ProgressBar" parent="VBoxContainer/HealthBarContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+max_value = 500.0
+value = 500.0
+theme_override_styles/background = SubResource("StyleBoxFlat_health_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_health_fill")
+show_percentage = false
+
+[node name="HealthLabel" type="Label" parent="VBoxContainer/HealthBarContainer"]
+layout_mode = 2
+text = "500 / 500"
+horizontal_alignment = 1
+
+[node name="PhaseLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "FASE 1: NEGAÇÃO"
+horizontal_alignment = 1
+modulate = Color(0.8, 0.8, 0.8, 1)

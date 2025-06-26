@@ -34,10 +34,17 @@ func _ready():
 	# Conecta os sinais da skill tree
 	if skill_tree_ui:
 		skill_tree_ui.connect("skill_upgraded", _on_skill_upgraded)
+		skill_tree_ui.connect("skill_tree_closed", _on_skill_tree_closed)
+		print("[TV] ✓ Conectado aos sinais da skill tree")
+	else:
+		print("[TV] ❌ SkillTreeUI não encontrado!")
 	
 	# Conecta aos sinais do SkillManager
 	if skill_manager:
 		skill_manager.skill_upgraded.connect(_on_skill_manager_upgraded)
+		print("[TV] ✓ Conectado ao SkillManager")
+	else:
+		print("[TV] ❌ SkillManager não encontrado!")
 	
 	print("[TV] Sistema de TV-Skill Tree inicializado")
 
@@ -132,11 +139,14 @@ func start_william_dialog():
 	
 	print("[TV] Escondendo HUD...")
 	# Esconde a HUD principal
-	if ui_manager and ui_manager.hud_instance and is_instance_valid(ui_manager.hud_instance):
-		ui_manager.hud_instance.visible = false
-		print("[TV] HUD escondida com sucesso")
+	var hud = get_node_or_null("/root/UIManager/hud_instance")
+	if not hud:
+		hud = get_tree().get_first_node_in_group("hud")
+	if hud and is_instance_valid(hud):
+		hud.visible = false
+		print("[TV] HUD escondida")
 	else:
-		print("[TV] AVISO: HUD não encontrada ou inválida")
+		print("[TV] AVISO: HUD não encontrada")
 	
 	print("[TV] Criando instância do sistema de diálogo...")
 	# Cria e mostra o sistema de diálogo
@@ -181,8 +191,14 @@ func _on_dialog_finished():
 		player_ref.set_process_input(true)
 	
 	# Mostra a HUD principal
-	if ui_manager and ui_manager.hud_instance and is_instance_valid(ui_manager.hud_instance):
-		ui_manager.hud_instance.visible = true
+	var hud = get_node_or_null("/root/UIManager/hud_instance")
+	if not hud:
+		hud = get_tree().get_first_node_in_group("hud")
+	if hud and is_instance_valid(hud):
+		hud.visible = true
+		print("[TV] HUD restaurada")
+	else:
+		print("[TV] AVISO: HUD não encontrada para restaurar")
 	
 	# Despausa o jogo
 	get_tree().paused = false
@@ -207,9 +223,10 @@ func activate_skill_tree():
 	# Salva a câmera original
 	original_camera = get_viewport().get_camera_3d()
 	
-		# Ativa a câmera da TV
+	# Ativa a câmera da TV
 	if tv_camera:
 		tv_camera.make_current()
+		print("[TV] Câmera da TV ativada")
 	
 	# Esconde o prompt de interação
 	hide_interaction_prompt()
@@ -218,15 +235,27 @@ func activate_skill_tree():
 	if player_ref:
 		player_ref.set_physics_process(false)
 		player_ref.set_process_input(false)
+		print("[TV] Jogador pausado para skill tree")
 	
 	# Esconde a HUD principal
-	if ui_manager and ui_manager.hud_instance and is_instance_valid(ui_manager.hud_instance):
-		ui_manager.hud_instance.visible = false
+	var hud = get_node_or_null("/root/UIManager/hud_instance")
+	if not hud:
+		hud = get_tree().get_first_node_in_group("hud")
+	if hud and is_instance_valid(hud):
+		hud.visible = false
+		print("[TV] HUD escondida")
+	else:
+		print("[TV] AVISO: HUD não encontrada")
 	
 	# Mostra a skill tree
 	if skill_tree_ui and is_instance_valid(skill_tree_ui):
 		skill_tree_ui.visible = true
 		skill_tree_ui.show_menu()
+		print("[TV] Skill tree UI ativada")
+	else:
+		print("[TV] ERRO: Skill tree UI não encontrada!")
+		deactivate_skill_tree()
+		return
 	
 	# Muda o estado do jogo
 	if state_manager:
@@ -237,6 +266,8 @@ func activate_skill_tree():
 	
 	# Libera o cursor
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+	print("[TV] Árvore de habilidades ativada com sucesso!")
 
 func deactivate_skill_tree():
 	if not skill_tree_active:
@@ -246,26 +277,38 @@ func deactivate_skill_tree():
 	
 	skill_tree_active = false
 	
+	# Esconde a skill tree primeiro
+	if skill_tree_ui and is_instance_valid(skill_tree_ui):
+		skill_tree_ui.hide_skill_tree()
+		skill_tree_ui.visible = false
+		print("[TV] Skill tree UI desativada")
+	
 	# Restaura a câmera original
-	if original_camera:
+	if original_camera and is_instance_valid(original_camera):
 		original_camera.make_current()
+		print("[TV] Câmera original restaurada")
+	else:
+		print("[TV] AVISO: Câmera original não encontrada")
 	
 	# Mostra o prompt de interação novamente se o jogador ainda estiver na área
 	if player_inside:
 		show_interaction_prompt()
 	
 	# Libera o jogador
-	if player_ref:
+	if player_ref and is_instance_valid(player_ref):
 		player_ref.set_physics_process(true)
 		player_ref.set_process_input(true)
+		print("[TV] Jogador liberado")
 	
 	# Mostra a HUD principal
-	if ui_manager and ui_manager.hud_instance and is_instance_valid(ui_manager.hud_instance):
-		ui_manager.hud_instance.visible = true
-	
-	# Esconde a skill tree
-	if skill_tree_ui and is_instance_valid(skill_tree_ui):
-		skill_tree_ui.visible = false
+	var hud = get_node_or_null("/root/UIManager/hud_instance")
+	if not hud:
+		hud = get_tree().get_first_node_in_group("hud")
+	if hud and is_instance_valid(hud):
+		hud.visible = true
+		print("[TV] HUD restaurada")
+	else:
+		print("[TV] AVISO: HUD não encontrada para restaurar")
 	
 	# Muda o estado do jogo
 	if state_manager:
@@ -275,18 +318,25 @@ func deactivate_skill_tree():
 	get_tree().paused = false
 	
 	# Restaura o modo do cursor baseado no modo da câmera do jogador
-	if player_ref and player_ref.has_method("get") and player_ref.get("first_person_mode"):
+	if player_ref and is_instance_valid(player_ref) and player_ref.has_method("get") and player_ref.get("first_person_mode"):
 		if player_ref.first_person_mode:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		else:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	else:
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+	print("[TV] Árvore de habilidades desativada com sucesso!")
 
 func _on_skill_upgraded(branch: String, level: int):
 	print("[TV] Habilidade melhorada via UI: ", branch, " nível ", level)
 	# A aplicação real será feita pelo SkillManager
 	play_upgrade_effect()
+
+func _on_skill_tree_closed():
+	print("[TV] Skill tree foi fechada via sinal")
+	# Chama a função de desativação
+	deactivate_skill_tree()
 
 func _on_skill_manager_upgraded(branch: String, level: int):
 	print("[TV] Habilidade melhorada via SkillManager: ", branch, " nível ", level)

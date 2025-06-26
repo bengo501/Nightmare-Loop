@@ -11,7 +11,6 @@ extends Node3D
 
 # Variáveis do mundo
 var is_paused: bool = false
-var is_skill_tree_open: bool = false
 var current_map: Node = null
 var dialog_system: CanvasLayer = null
 var intro_dialog_shown: bool = false
@@ -54,10 +53,6 @@ func _process(_delta):
 	# Verifica se o jogo está pausado
 	if Input.is_action_just_pressed("ui_cancel"):  # Tecla ESC
 		toggle_pause()
-	
-	# Verifica se a skill tree deve ser aberta
-	if Input.is_action_just_pressed("skill_tree"):  # Tecla H
-		toggle_skill_tree()
 
 func toggle_pause():
 	print("[World] Alternando estado de pausa...")
@@ -79,32 +74,6 @@ func toggle_pause():
 		# Esconde o menu de pause
 		ui_manager.hide_ui("pause_menu")
 
-func toggle_skill_tree():
-	print("[World] Alternando estado da skill tree...")
-	
-	if state_manager.current_state == state_manager.GameState.PLAYING:
-		# Abre a skill tree
-		print("[World] Abrindo skill tree...")
-		state_manager.change_state(state_manager.GameState.SKILL_TREE)
-		get_tree().paused = true
-		is_skill_tree_open = true
-		# Mostra a skill tree
-		ui_manager.show_ui("skill_tree")
-		# Esconde a HUD
-		if ui_manager.hud_instance and is_instance_valid(ui_manager.hud_instance):
-			ui_manager.hud_instance.visible = false
-	else:
-		# Fecha a skill tree
-		print("[World] Fechando skill tree...")
-		state_manager.change_state(state_manager.GameState.PLAYING)
-		get_tree().paused = false
-		is_skill_tree_open = false
-		# Esconde a skill tree
-		ui_manager.hide_ui("skill_tree")
-		# Mostra a HUD
-		if ui_manager.hud_instance and is_instance_valid(ui_manager.hud_instance):
-			ui_manager.hud_instance.visible = true
-
 func _on_player_health_changed(new_health: int):
 	# Atualiza a vida do jogador no GameManager
 	game_manager.player_health = new_health
@@ -121,7 +90,6 @@ func restart_game():
 	state_manager.change_state(state_manager.GameState.PLAYING)
 	get_tree().paused = false
 	is_paused = false
-	is_skill_tree_open = false
 	
 	# Reposiciona o jogador e reseta sua vida
 	if player:

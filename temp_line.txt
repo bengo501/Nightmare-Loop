@@ -1,0 +1,1 @@
+[ext_resource type="PackedScene" uid="uid://boss_denial_nightmare" path="res://scenes/enemies/DenialBoss.tscn" id="38_boss_denial"]
