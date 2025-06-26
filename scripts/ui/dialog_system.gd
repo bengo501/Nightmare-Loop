@@ -759,12 +759,12 @@ func start_tv_dialog():
 	show_dialog(0)
 	print("[DialogSystem] Iniciando diálogos da TV com William")
 
-# Função para iniciar os diálogos do Boss da Negação
-func start_denial_boss_dialog():
-	print("[DialogSystem] start_denial_boss_dialog() chamada")
+# Função para iniciar o diálogo de confronto com o Boss da Negação
+func start_denial_boss_confrontation_dialog():
+	print("[DialogSystem] start_denial_boss_confrontation_dialog() chamada")
 	
-	# Diálogos específicos do Boss da Negação - Confronto profundo sobre luto
-	var denial_boss_dialogs = [
+	# Diálogos do confronto inicial - Preparação para a batalha
+	var denial_boss_confrontation_dialogs = [
 		{
 			"speaker": "Boss da Negação",
 			"text": "Então... você finalmente veio até mim...",
@@ -791,18 +791,6 @@ func start_denial_boss_dialog():
 		},
 		{
 			"speaker": "Boss da Negação",
-			"text": "Você passou meses fingindo que nada aconteceu... que ele ainda vai voltar para casa.",
-			"character": "ghost",
-			"mouth_animation": false
-		},
-		{
-			"speaker": "Protagonista",
-			"text": "Não... não fale sobre ele...",
-			"character": "mc2",
-			"mouth_animation": true
-		},
-		{
-			"speaker": "Boss da Negação",
 			"text": "Gustavo. Seu melhor amigo. Aquele que estava dirigindo naquela noite chuvosa.",
 			"character": "ghost",
 			"mouth_animation": false
@@ -815,51 +803,9 @@ func start_denial_boss_dialog():
 		},
 		{
 			"speaker": "Boss da Negação",
-			"text": "Quantas vezes você ligou para o celular dele, sabendo que ninguém ia atender?",
+			"text": "Você passou meses fingindo que nada aconteceu... que ele ainda vai voltar para casa.",
 			"character": "ghost",
 			"mouth_animation": false
-		},
-		{
-			"speaker": "Boss da Negação",
-			"text": "Quantas vezes você passou pela casa dele, esperando ver a luz acesa?",
-			"character": "ghost",
-			"mouth_animation": false
-		},
-		{
-			"speaker": "Protagonista",
-			"text": "Isso não... isso não significa nada... ele pode estar...",
-			"character": "mc2",
-			"mouth_animation": true
-		},
-		{
-			"speaker": "Boss da Negação",
-			"text": "Você viu o acidente. Você estava lá. Você sabe a verdade.",
-			"character": "ghost",
-			"mouth_animation": false
-		},
-		{
-			"speaker": "Protagonista",
-			"text": "NÃO! A gente ia se formar juntos... a gente tinha planos...",
-			"character": "mc1",
-			"mouth_animation": true
-		},
-		{
-			"speaker": "Boss da Negação",
-			"text": "E por isso você se refugiou naquele site maldito... tentando falar com os mortos.",
-			"character": "ghost",
-			"mouth_animation": false
-		},
-		{
-			"speaker": "Boss da Negação",
-			"text": "Porque aceitar que ele se foi significa aceitar que seus planos... acabaram.",
-			"character": "ghost",
-			"mouth_animation": false
-		},
-		{
-			"speaker": "Protagonista",
-			"text": "Eu... eu só queria... mais um dia... mais uma conversa...",
-			"character": "mc2",
-			"mouth_animation": true
 		},
 		{
 			"speaker": "Boss da Negação",
@@ -869,103 +815,162 @@ func start_denial_boss_dialog():
 		},
 		{
 			"speaker": "Protagonista",
-			"text": "Então... o que eu faço? Como eu... como eu aceito isso?",
-			"character": "mc1",
-			"mouth_animation": true
-		},
-		{
-			"speaker": "Boss da Negação",
-			"text": "Primeiro, você precisa parar de fingir que não aconteceu.",
-			"character": "ghost",
-			"mouth_animation": false
-		},
-		{
-			"speaker": "Boss da Negação",
-			"text": "Diga em voz alta. Diga a verdade que você tem evitado por tanto tempo.",
-			"character": "ghost",
-			"mouth_animation": false
-		},
-		{
-			"speaker": "Protagonista",
-			"text": "Eu... eu não consigo...",
+			"text": "Eu... eu não quero ficar presa...",
 			"character": "mc2",
 			"mouth_animation": true
 		},
 		{
 			"speaker": "Boss da Negação",
-			"text": "Então continuará presa aqui. Comigo. Na negação eterna.",
+			"text": "Então me enfrente! Prove que está pronta para aceitar a verdade!",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Boss da Negação",
+			"text": "Só quando você me derrotar... poderá verdadeiramente superar a negação!",
 			"character": "ghost",
 			"mouth_animation": false
 		},
 		{
 			"speaker": "Protagonista",
-			"text": "Não... eu... eu não quero ficar presa...",
+			"text": "Então... vamos acabar com isso!",
 			"character": "mc1",
 			"mouth_animation": true
+		}
+	]
+	
+	# Substitui os diálogos pelos diálogos do confronto
+	dialogs = denial_boss_confrontation_dialogs
+	current_dialog_index = 0
+	
+	initialize_buttons()
+	print("[DialogSystem] Diálogos de confronto do Boss da Negação carregados")
+	show_dialog(0)
+	print("[DialogSystem] Iniciando diálogos de confronto com Boss da Negação")
+
+# Função para iniciar o diálogo de superação após derrotar o Boss da Negação
+func start_denial_boss_victory_dialog():
+	print("[DialogSystem] start_denial_boss_victory_dialog() chamada")
+	
+	# Diálogos de superação final - A verdadeira aceitação
+	var denial_boss_victory_dialogs = [
+		{
+			"speaker": "Boss da Negação",
+			"text": "*com voz enfraquecida* Você... você conseguiu me derrotar...",
+			"character": "ghost",
+			"mouth_animation": false
 		},
 		{
 			"speaker": "Protagonista",
-			"text": "Gustavo... Gustavo está... morto.",
+			"text": "Eu... eu venci? Mas... por que ainda sinto esse vazio?",
 			"character": "mc2",
 			"mouth_animation": true
 		},
 		{
 			"speaker": "Boss da Negação",
-			"text": "Continue...",
+			"text": "Porque derrotar-me na batalha foi apenas o primeiro passo...",
 			"character": "ghost",
 			"mouth_animation": false
-		},
-		{
-			"speaker": "Protagonista",
-			"text": "Ele morreu no acidente... e eu... eu sobrevivi.",
-			"character": "mc1",
-			"mouth_animation": true
-		},
-		{
-			"speaker": "Protagonista",
-			"text": "Ele não vai voltar para casa... nunca mais.",
-			"character": "mc2",
-			"mouth_animation": true
 		},
 		{
 			"speaker": "Boss da Negação",
-			"text": "E como você se sente ao admitir isso?",
+			"text": "Agora você precisa enfrentar a verdade... completamente.",
 			"character": "ghost",
 			"mouth_animation": false
 		},
 		{
 			"speaker": "Protagonista",
-			"text": "Como um buraco no peito... como se uma parte de mim tivesse morrido com ele.",
+			"text": "A verdade... sobre Gustavo...",
 			"character": "mc1",
 			"mouth_animation": true
 		},
 		{
 			"speaker": "Boss da Negação",
-			"text": "Mas você ainda está aqui. Ainda está viva. E isso... isso também é verdade.",
+			"text": "Diga. Diga em voz alta. Pela primeira vez... sem fugir.",
 			"character": "ghost",
 			"mouth_animation": false
 		},
 		{
 			"speaker": "Protagonista",
-			"text": "Por que eu sobrevivi e ele não? Por que não foi comigo?",
+			"text": "Gustavo... está morto.",
+			"character": "mc2",
+			"mouth_animation": true
+		},
+		{
+			"speaker": "Protagonista",
+			"text": "Ele morreu no acidente de carro... e eu sobrevivi.",
+			"character": "mc1",
+			"mouth_animation": true
+		},
+		{
+			"speaker": "Boss da Negação",
+			"text": "Continue... Como você se sente sobre isso?",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Protagonista",
+			"text": "*chorando* Eu sinto como se uma parte de mim tivesse morrido com ele...",
+			"character": "mc2",
+			"mouth_animation": true
+		},
+		{
+			"speaker": "Protagonista",
+			"text": "Eu sinto raiva... por que eu sobrevivi e ele não?",
+			"character": "mc1",
+			"mouth_animation": true
+		},
+		{
+			"speaker": "Protagonista",
+			"text": "Eu sinto culpa... como se eu devesse ter feito alguma coisa...",
 			"character": "mc2",
 			"mouth_animation": true
 		},
 		{
 			"speaker": "Boss da Negação",
-			"text": "Essas são perguntas que não têm respostas simples... mas negar não as fará desaparecer.",
+			"text": "E é normal sentir tudo isso. A dor... faz parte do amor.",
 			"character": "ghost",
 			"mouth_animation": false
 		},
 		{
 			"speaker": "Boss da Negação",
-			"text": "Aceitar a perda não significa esquecer. Significa permitir-se continuar vivendo.",
+			"text": "Você negava a morte dele porque... não queria sentir essa dor.",
 			"character": "ghost",
 			"mouth_animation": false
 		},
 		{
 			"speaker": "Protagonista",
-			"text": "Como eu faço isso? Como eu vivo sabendo que ele não está mais aqui?",
+			"text": "É verdade... era mais fácil fingir que ele ainda estava vivo...",
+			"character": "mc1",
+			"mouth_animation": true
+		},
+		{
+			"speaker": "Protagonista",
+			"text": "Mas fingir... não trouxe ele de volta.",
+			"character": "mc2",
+			"mouth_animation": true
+		},
+		{
+			"speaker": "Boss da Negação",
+			"text": "Não. E fingir só te manteve presa... neste pesadelo.",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Boss da Negação",
+			"text": "Aceitar a perda não significa esquecer dele...",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Boss da Negação",
+			"text": "Significa permitir que as memórias sejam... memórias. Preciosas, mas do passado.",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Protagonista",
+			"text": "Como eu faço isso? Como eu vivo... sem ele?",
 			"character": "mc1",
 			"mouth_animation": true
 		},
@@ -977,68 +982,116 @@ func start_denial_boss_dialog():
 		},
 		{
 			"speaker": "Boss da Negação",
-			"text": "E lembre-se: honrar a memória dele é diferente de negar sua morte.",
+			"text": "E lembre-se... honrar a memória dele é diferente de negar sua morte.",
 			"character": "ghost",
 			"mouth_animation": false
 		},
 		{
 			"speaker": "Protagonista",
-			"text": "Eu... eu quero honrar a memória dele. Quero que ele fique orgulhoso de mim.",
+			"text": "Como... como eu honro a memória dele?",
 			"character": "mc2",
 			"mouth_animation": true
 		},
 		{
 			"speaker": "Boss da Negação",
-			"text": "Então você está pronta para enfrentar os próximos estágios do luto.",
+			"text": "Vivendo. Continuando os sonhos que vocês tinham... mas agora por vocês dois.",
 			"character": "ghost",
 			"mouth_animation": false
 		},
 		{
 			"speaker": "Boss da Negação",
-			"text": "A negação era apenas o primeiro passo. Há muito mais pela frente.",
+			"text": "Sendo feliz novamente... porque ele quereria que você fosse feliz.",
 			"character": "ghost",
 			"mouth_animation": false
 		},
 		{
 			"speaker": "Protagonista",
-			"text": "Eu sei... e eu vou enfrentar. Por mim... e por ele.",
+			"text": "Ele... ele sempre quis que eu fosse feliz...",
 			"character": "mc1",
 			"mouth_animation": true
 		},
 		{
+			"speaker": "Protagonista",
+			"text": "Ele ficaria... ficaria triste em me ver assim, presa neste lugar...",
+			"character": "mc2",
+			"mouth_animation": true
+		},
+		{
 			"speaker": "Boss da Negação",
-			"text": "Então... nossa batalha aqui está completa. Você não precisa mais me destruir.",
+			"text": "Exatamente. E agora... você está pronta para deixar este pesadelo para trás.",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Protagonista",
+			"text": "Eu... eu quero viver. Por mim... e por ele.",
+			"character": "mc1",
+			"mouth_animation": true
+		},
+		{
+			"speaker": "Protagonista",
+			"text": "Quero que ele fique orgulhoso de mim.",
+			"character": "mc2",
+			"mouth_animation": true
+		},
+		{
+			"speaker": "Boss da Negação",
+			"text": "Ele já está orgulhoso. E agora... eu posso descansar.",
 			"character": "ghost",
 			"mouth_animation": false
 		},
 		{
 			"speaker": "Boss da Negação",
-			"text": "Você me venceu ao aceitar a verdade. Isso é mais poderoso que qualquer arma.",
+			"text": "A negação não tem mais poder sobre você.",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Boss da Negação",
+			"text": "Mas lembre-se... ainda há outros estágios pela frente. Raiva, barganha, depressão...",
+			"character": "ghost",
+			"mouth_animation": false
+		},
+		{
+			"speaker": "Boss da Negação",
+			"text": "Cada um será um desafio. Mas agora... você tem a força para enfrentá-los.",
 			"character": "ghost",
 			"mouth_animation": false
 		},
 		{
 			"speaker": "Protagonista",
 			"text": "Obrigada... por me forçar a enfrentar isso.",
+			"character": "mc1",
+			"mouth_animation": true
+		},
+		{
+			"speaker": "Protagonista",
+			"text": "Eu estava com medo... mas agora... agora eu sei que posso superar isso.",
 			"character": "mc2",
 			"mouth_animation": true
 		},
 		{
 			"speaker": "Boss da Negação",
-			"text": "Agora vá. Os próximos estágios a aguardam. E lembre-se... Gustavo sempre estará em seu coração.",
+			"text": "*desaparecendo lentamente* Vá em paz... e leve Gustavo em seu coração... para sempre.",
 			"character": "ghost",
 			"mouth_animation": false
+		},
+		{
+			"speaker": "Protagonista",
+			"text": "*sorrindo através das lágrimas* Adeus, negação. Olá... aceitação.",
+			"character": "mc1",
+			"mouth_animation": true
 		}
 	]
 	
-	# Substitui os diálogos pelos diálogos do boss da negação
-	dialogs = denial_boss_dialogs
+	# Substitui os diálogos pelos diálogos de superação
+	dialogs = denial_boss_victory_dialogs
 	current_dialog_index = 0
 	
 	initialize_buttons()
-	print("[DialogSystem] Diálogos do Boss da Negação carregados, chamando show_dialog(0)")
+	print("[DialogSystem] Diálogos de superação do Boss da Negação carregados")
 	show_dialog(0)
-	print("[DialogSystem] Iniciando diálogos do Boss da Negação")
+	print("[DialogSystem] Iniciando diálogos de superação - momento final!")
 
 # Função para iniciar os diálogos do Estágio 1 (Negação)
 func start_stage1_dialog():

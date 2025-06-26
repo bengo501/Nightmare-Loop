@@ -19,7 +19,8 @@ class_name DenialBoss
 var player_in_dialog_area: bool = false
 var dialog_active: bool = false
 var first_encounter: bool = true
-var dialog_completed: bool = false
+var confrontation_dialog_completed: bool = false
+var victory_dialog_completed: bool = false
 var interaction_prompt: Node3D = null
 var dialog_area: Area3D = null
 
@@ -126,8 +127,10 @@ func _setup_dialog_system():
 	dialog_area.body_entered.connect(_on_dialog_area_entered)
 	dialog_area.body_exited.connect(_on_dialog_area_exited)
 	
-	# Cria prompt de interação
-	_create_interaction_prompt()
+	# Obtém referência ao prompt de interação da cena
+	interaction_prompt = get_node_or_null("InteractionPrompt")
+	if not interaction_prompt:
+		_create_interaction_prompt()
 	
 	print("✅ Sistema de diálogo configurado com sucesso!")
 
@@ -138,19 +141,14 @@ func _create_interaction_prompt():
 	interaction_prompt.text = "Pressione E para conversar\ncom o Chefe da Negação"
 	interaction_prompt.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	interaction_prompt.font_size = 24
+	# Usar outline_size sem outline_color (Godot 4 compatibility)
 	interaction_prompt.outline_size = 4
-	interaction_prompt.outline_color = Color(0, 0, 0, 1)
 	interaction_prompt.modulate = Color(1, 0.8, 0.4, 1)  # Cor dourada
 	interaction_prompt.position = Vector3(0, 6, 0)  # Acima do boss
 	interaction_prompt.visible = false
 	add_child(interaction_prompt)
 
 func _physics_process(delta):
-	# Verifica entrada para diálogo se o jogador estiver na área
-	if player_in_dialog_area and not dialog_active and not dialog_completed:
-		if Input.is_action_just_pressed("interact"):
-			start_boss_dialog()
-	
 	# Atualiza timers dos ataques especiais (apenas se não estiver em diálogo)
 	if not dialog_active:
 		_update_special_attack_timers(delta)
@@ -377,7 +375,7 @@ func die():
 		return
 	
 	is_dying = true
-	print("👑 INICIANDO SEQUÊNCIA DE MORTE DO CHEFE DA NEGAÇÃO...")
+	print("👑 BOSS DA NEGAÇÃO DERROTADO - INICIANDO DIÁLOGO DE SUPERAÇÃO...")
 	
 	# Remove todos os fantasmas invocados
 	for ghost in summoned_ghosts:
@@ -385,14 +383,20 @@ func die():
 			ghost.queue_free()
 	summoned_ghosts.clear()
 	
-	# Efeito especial de morte do boss
+	# Efeito especial de "morte" do boss (mas não remove ainda)
 	await _boss_death_sequence()
+	
+	# Inicia o diálogo de superação final
+	start_boss_victory_dialog()
+	
+	# Aguarda o diálogo de vitória terminar antes de finalizar
+	await dialog_finished
 	
 	# Concede muitos pontos de lucidez
 	var lucidity_manager = get_node("/root/LucidityManager")
 	if lucidity_manager:
-		lucidity_manager.add_lucidity_point(10)  # 10 pontos por derrotar o boss!
-		print("🎯 BOSS DERROTADO! +10 pontos de lucidez concedidos!")
+		lucidity_manager.add_lucidity_point(15)  # 15 pontos por completar o arco da negação!
+		print("🎯 NEGAÇÃO SUPERADA! +15 pontos de lucidez concedidos!")
 	
 	# Emite sinais
 	emit_signal("boss_defeated")
@@ -444,17 +448,13 @@ func _execute_special_ability():
 
 # === SISTEMA DE DIÁLOGO ===
 func _on_dialog_area_entered(body):
-	if body.is_in_group("player") and not dialog_completed:
+	if body.is_in_group("player") and not confrontation_dialog_completed and not dialog_active:
 		player_in_dialog_area = true
 		player_ref = body
-		if interaction_prompt and is_instance_valid(interaction_prompt):
-			interaction_prompt.visible = true
-			# Adiciona animação piscante
-			var tween = create_tween()
-			tween.set_loops()
-			tween.tween_property(interaction_prompt, "modulate:a", 0.6, 0.8)
-			tween.tween_property(interaction_prompt, "modulate:a", 1.0, 0.8)
 		print("💬 Jogador entrou na área de diálogo do Boss Negação")
+		
+		# Inicia o diálogo automaticamente (sem precisar pressionar E)
+		call_deferred("start_boss_confrontation_dialog")
 
 func _on_dialog_area_exited(body):
 	if body.is_in_group("player"):
@@ -463,8 +463,8 @@ func _on_dialog_area_exited(body):
 			interaction_prompt.visible = false
 		print("💬 Jogador saiu da área de diálogo do Boss Negação")
 
-func start_boss_dialog():
-	if dialog_active or dialog_completed:
+func start_boss_confrontation_dialog():
+	if dialog_active or confrontation_dialog_completed:
 		return
 	
 	print("💬 Iniciando diálogo com o Boss da Negação...")
@@ -496,13 +496,13 @@ func start_boss_dialog():
 	get_tree().current_scene.add_child(dialog_instance)
 	
 	# Conecta o sinal de fim do diálogo
-	dialog_instance.connect("dialog_sequence_finished", _on_boss_dialog_finished)
+	dialog_instance.connect("dialog_sequence_finished", _on_boss_confrontation_finished)
 	
 	# Pausa o jogo
 	get_tree().paused = true
 	
-	# Inicia os diálogos específicos do boss
-	dialog_instance.start_denial_boss_dialog()
+	# Inicia os diálogos específicos do boss (confronto)
+	dialog_instance.start_denial_boss_confrontation_dialog()
 	
 	# Libera o cursor
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -512,11 +512,11 @@ func start_boss_dialog():
 	
 	print("💬 Diálogo com Boss da Negação iniciado com sucesso!")
 
-func _on_boss_dialog_finished():
-	print("💬 Diálogo com Boss da Negação finalizado")
+func _on_boss_confrontation_finished():
+	print("💬 Diálogo de confronto com Boss da Negação finalizado")
 	
 	dialog_active = false
-	dialog_completed = true
+	confrontation_dialog_completed = true
 	
 	# Libera o jogador
 	if player_ref:
@@ -549,9 +549,84 @@ func _on_boss_dialog_finished():
 func _on_dialog_started():
 	print("💬 Sinal de início de diálogo recebido")
 
+func start_boss_victory_dialog():
+	if dialog_active or victory_dialog_completed:
+		return
+	
+	print("💬 Iniciando diálogo de superação com o Boss da Negação...")
+	dialog_active = true
+	
+	# Pausa o jogador
+	if player_ref:
+		player_ref.set_physics_process(false)
+		player_ref.set_process_input(false)
+		print("💬 Jogador pausado para diálogo de superação")
+	
+	# Esconde a HUD principal
+	var ui_manager = get_node_or_null("/root/UIManager")
+	if ui_manager and ui_manager.hud_instance and is_instance_valid(ui_manager.hud_instance):
+		ui_manager.hud_instance.visible = false
+		print("💬 HUD escondida para diálogo")
+	
+	# Cria e mostra o sistema de diálogo
+	var dialog_instance = dialog_system_scene.instantiate()
+	if not dialog_instance:
+		print("💬 ERRO: Falha ao instanciar sistema de diálogo!")
+		return
+	
+	get_tree().current_scene.add_child(dialog_instance)
+	
+	# Conecta o sinal de fim do diálogo
+	dialog_instance.connect("dialog_sequence_finished", _on_boss_victory_finished)
+	
+	# Pausa o jogo
+	get_tree().paused = true
+	
+	# Inicia os diálogos de superação
+	dialog_instance.start_denial_boss_victory_dialog()
+	
+	# Libera o cursor
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+	print("💬 Diálogo de superação iniciado com sucesso!")
+
+func _on_boss_victory_finished():
+	print("💬 Diálogo de superação finalizado - NEGAÇÃO SUPERADA!")
+	
+	dialog_active = false
+	victory_dialog_completed = true
+	
+	# Libera o jogador
+	if player_ref:
+		player_ref.set_physics_process(true)
+		player_ref.set_process_input(true)
+	
+	# Mostra a HUD principal
+	var ui_manager = get_node_or_null("/root/UIManager")
+	if ui_manager and ui_manager.hud_instance and is_instance_valid(ui_manager.hud_instance):
+		ui_manager.hud_instance.visible = true
+		print("💬 HUD restaurada após diálogo de superação")
+	
+	# Despausa o jogo
+	get_tree().paused = false
+	
+	# Restaura o modo do cursor
+	if player_ref and player_ref.has_method("get") and player_ref.get("first_person_mode"):
+		if player_ref.first_person_mode:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		else:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+	# Emite sinal para finalizar sequência
+	emit_signal("dialog_finished")
+	
+	print("💬 Protagonista superou o primeiro estágio do luto!")
+
 func _on_dialog_finished():
 	print("💬 Sinal de fim de diálogo recebido")
-	# Após o diálogo, o boss se enfraquece significativamente
+	# Após o diálogo de confronto, o boss se enfraquece significativamente
 	# Representa que aceitar a verdade diminui o poder da negação
 	current_health = max_health * 0.3  # Fica com apenas 30% da vida
 	emit_signal("boss_health_changed", current_health, max_health)

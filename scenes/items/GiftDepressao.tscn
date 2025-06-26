@@ -1,10 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://es4q5r6s7t8u9"]
+[gd_scene load_steps=3 format=3 uid="uid://xpvkqaknnd4i"]
 
-[ext_resource type="Script" path="res://scripts/items/SpecialGift.gd" id="1_special"]
+[ext_resource type="Script" uid="uid://ccp0fpkgidmjh" path="res://scripts/items/SpecialGift.gd" id="1_special"]
 [ext_resource type="PackedScene" uid="uid://c8yvxqj6yvnxq" path="res://scenes/items/CollectibleItem.tscn" id="2_base"]
 
 [node name="GiftDepressao" instance=ExtResource("2_base")]
 script = ExtResource("1_special")
 grief_stage = "depressao"
 item_description = "Um presente especial que representa a depressão da perda. Adiciona +5 pontos de Depressão."
-bonus_points = 5 
+bonus_points = 5

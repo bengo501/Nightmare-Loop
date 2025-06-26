@@ -1,4 +1,4 @@
-[gd_scene load_steps=182 format=3 uid="uid://ddlldwbytxok2"]
+[gd_scene load_steps=184 format=3 uid="uid://ddlldwbytxok2"]
 
 [ext_resource type="PackedScene" uid="uid://cdooq3wu5wgv3" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/FloorLamp.fbx_Scene/FloorLamp.fbx_Scene.fbx" id="1_6cupr"]
 [ext_resource type="Texture2D" uid="uid://ca44uy3jlfa6w" path="res://assets/textures/Floor/Horror_Floor_05-128x128.png" id="1_mdskg"]
@@ -37,7 +37,9 @@
 [ext_resource type="PackedScene" uid="uid://b32bfkl2u1lu2" path="res://scenes/items/GiftNegacao.tscn" id="35_ya2kv"]
 [ext_resource type="PackedScene" uid="uid://cgc3p4t7c63mb" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Bed_Double/Bed_Double.fbx.fbx" id="36_vlako"]
 [ext_resource type="PackedScene" uid="uid://cewd237rs3tm8" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Cupboard/Cupboard.fbx_Scene/Cupboard.fbx_Scene.fbx" id="37_inn4y"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/DenialBoss.tscn" id="38_inn4y"]
+[ext_resource type="PackedScene" uid="uid://bhrrw56n8cfk7" path="res://scenes/enemies/DenialBoss.tscn" id="38_inn4y"]
+[ext_resource type="PackedScene" uid="uid://dgvusvrjwfwou" path="res://scenes/items/GiftRaiva.tscn" id="39_prrio"]
+[ext_resource type="PackedScene" uid="uid://xpvkqaknnd4i" path="res://scenes/items/GiftDepressao.tscn" id="40_1ae16"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r5yoc"]
 albedo_texture = ExtResource("1_mdskg")
@@ -963,13 +965,43 @@ transform = Transform3D(0.99902, 0, -0.0442645, 0, 1, 0, 0.0442645, 0, 0.99902, 
 transform = Transform3D(0.508951, 0, 0.860795, 0, 1, 0, -0.860795, 0, 0.508951, -29.8565, 0.340989, -45.6871)
 
 [node name="Dresser_fbx_Scene" parent="Objetos" instance=ExtResource("8_5sm4q")]
-transform = Transform3D(0.0157073, 0, -0.999877, 0, 1, 0, 0.999877, 0, 0.0157073, -15.5437, 0.340989, -41.1729)
+transform = Transform3D(0.0293309, 0, -1.0135, 0, 1.23861, 0, 1.86711, 0, 0.0159213, -15.5437, 0.340988, -41.53)
 
 [node name="Box_fbx_Scene6" parent="Objetos" instance=ExtResource("9_cyjou")]
 transform = Transform3D(0.832148, 0, 0.554554, 0, 1, 0, -0.554554, 0, 0.832148, -15.4009, 0.343989, -49.0312)
 
 [node name="Box_fbx_Scene7" parent="Objetos" instance=ExtResource("9_cyjou")]
 transform = Transform3D(0.382474, 0, 0.923966, 0, 1, 0, -0.923966, 0, 0.382474, -15.5186, 0.343989, -48.2706)
+
+[node name="GiftNegacao" parent="Objetos" instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -16.9772, 1.48314, -42.5241)
+
+[node name="GiftNegacao2" parent="Objetos" instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -16.9772, 1.48314, -40.528)
+
+[node name="GiftAceitacao" parent="Objetos" instance=ExtResource("33_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -16.179, 0.490988, -50.6814)
+
+[node name="GiftDepressao" parent="Objetos" instance=ExtResource("40_1ae16")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -11.2582, 1.06877, -40.3254)
+
+[node name="GiftDepressao2" parent="Objetos" instance=ExtResource("40_1ae16")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -13.0946, 1.06877, -40.3254)
+
+[node name="GiftNegacao3" parent="Objetos" instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.51866, 0.956196, -61.4883)
+
+[node name="GiftNegacao4" parent="Objetos" instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.51866, 0.956196, -59.9332)
+
+[node name="GiftNegacao5" parent="Objetos" instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.43187, 1.21943, -64.6303)
+
+[node name="GiftNegacao6" parent="Objetos" instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.43187, 1.21943, -65.8124)
+
+[node name="GiftNegacao7" parent="Objetos" instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.43187, 1.21943, -66.9457)
 
 [node name="PontoNascimento" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.8871, 1, -27.3619)
@@ -1076,6 +1108,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.8646, -0.159011, -43.5975)
 material_override = SubResource("StandardMaterial3D_1v02h")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1083,6 +1117,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.9806, -0.159011, -43.5973)
 material_override = SubResource("StandardMaterial3D_shehe")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -1139,6 +1175,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.407618, -0.159011, -33.6799)
 material_override = SubResource("StandardMaterial3D_rga7q")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(9.28564, 1, 9.93604)
 material = ExtResource("2_tu8f1")
 
@@ -1188,6 +1226,8 @@ material = ExtResource("2_tu8f1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.93422, -0.159011, -33.7358)
 material_override = SubResource("StandardMaterial3D_n78cu")
 use_collision = true
+collision_layer = 129
+collision_mask = 129
 size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
@@ -2712,3 +2752,177 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -120)
 
 [node name="DenialBoss" parent="." instance=ExtResource("38_inn4y")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 14.848, 2.96099, -130.179)
+
+[node name="GiftAceitacao2" parent="." instance=ExtResource("33_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -30.0042, 1.0417, -31.4114)
+
+[node name="GiftNegacao5" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -28.3086, 1.19991, -32.8228)
+
+[node name="GiftNegacao6" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -18.0381, 0.490988, -38.4182)
+
+[node name="GiftBarganha8" parent="." instance=ExtResource("34_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -18.1466, 0.892166, -35.6976)
+
+[node name="GiftBarganha9" parent="." instance=ExtResource("34_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.9543, 1.00781, -35.1337)
+
+[node name="GiftNegacao7" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -3.5888, 1.13659, -32.3252)
+
+[node name="GiftRaiva" parent="." instance=ExtResource("39_prrio")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.26444, 1.02175, -57.7164)
+
+[node name="GiftRaiva2" parent="." instance=ExtResource("39_prrio")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -3.08394, 0.958672, -57.4155)
+
+[node name="GiftDepressao" parent="." instance=ExtResource("40_1ae16")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.162455, 1.14096, -44.6295)
+
+[node name="GiftDepressao2" parent="." instance=ExtResource("40_1ae16")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.17485, 0.958355, -43.4779)
+
+[node name="GiftAceitacao3" parent="." instance=ExtResource("33_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.0051, 0.955574, -39.9763)
+
+[node name="GiftRaiva3" parent="." instance=ExtResource("39_prrio")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.4101, 1.58628, -55.9385)
+
+[node name="GiftAceitacao4" parent="." instance=ExtResource("33_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 18.9137, 1.3279, -71.39)
+
+[node name="GiftNegacao8" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 5.95055, 1.3754, -68.7339)
+
+[node name="GiftNegacao9" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6.48023, 1.3754, -62.3692)
+
+[node name="GiftDepressao3" parent="." instance=ExtResource("40_1ae16")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 16.9894, 1.97506, -65.9738)
+
+[node name="GiftNegacao10" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -5.59761, 1.34756, -74.3216)
+
+[node name="GiftNegacao11" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -8.53771, 1.84803, -74.3216)
+
+[node name="GiftNegacao12" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.88854, 1.84803, -74.3216)
+
+[node name="GiftRaiva4" parent="." instance=ExtResource("39_prrio")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.494936, 1.64165, -85.0989)
+
+[node name="GiftNegacao13" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -39.8587, 1.1741, -25.0977)
+
+[node name="GiftNegacao14" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -38.0463, 1.8388, -23.3139)
+
+[node name="GiftRaiva5" parent="." instance=ExtResource("39_prrio")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -29.8472, 1.04691, -29.241)
+
+[node name="GiftBarganha10" parent="." instance=ExtResource("34_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -30.7103, 1.82353, -25.2702)
+
+[node name="GiftDepressao4" parent="." instance=ExtResource("40_1ae16")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -39.595, 0.490988, -52.032)
+
+[node name="GiftRaiva6" parent="." instance=ExtResource("39_prrio")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -36.1849, 0.490988, -50.9107)
+
+[node name="GiftAceitacao5" parent="." instance=ExtResource("33_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -25.4983, 0.490988, -50.0654)
+
+[node name="GiftAceitacao6" parent="." instance=ExtResource("33_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -26.7961, 0.490988, -51.3464)
+
+[node name="GiftDepressao5" parent="." instance=ExtResource("40_1ae16")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -31.2915, 1.02687, -72.0529)
+
+[node name="GiftNegacao15" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -29.3549, 1.13077, -71.234)
+
+[node name="GiftAceitacao7" parent="." instance=ExtResource("33_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -19.0624, 1.1348, -64.6671)
+
+[node name="GiftRaiva7" parent="." instance=ExtResource("39_prrio")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -21.4255, 0.490988, -66.9121)
+
+[node name="GiftNegacao16" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -29.1974, 0.490988, -74.2824)
+
+[node name="GiftDepressao6" parent="." instance=ExtResource("40_1ae16")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6.96115, 1.2924, -72.3956)
+
+[node name="GiftNegacao17" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6.68551, 1.35837, -75.4768)
+
+[node name="GiftRaiva8" parent="." instance=ExtResource("39_prrio")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 7.91705, 1.35873, -72.0018)
+
+[node name="GiftRaiva9" parent="." instance=ExtResource("39_prrio")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 7.91705, 1.35873, -75.9843)
+
+[node name="GiftNegacao18" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2.35418, 1.58758, -69.9541)
+
+[node name="GiftDepressao7" parent="." instance=ExtResource("40_1ae16")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4.90216, 1.52966, -88.9026)
+
+[node name="GiftDepressao8" parent="." instance=ExtResource("40_1ae16")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 8.49084, 1.52966, -88.9026)
+
+[node name="GiftDepressao9" parent="." instance=ExtResource("40_1ae16")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 13.7332, 1.52966, -92.2714)
+
+[node name="GiftNegacao19" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.77846, 1.25938, -90.793)
+
+[node name="GiftNegacao20" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.77846, 1.25938, -93.3005)
+
+[node name="GiftRaiva10" parent="." instance=ExtResource("39_prrio")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -6.75155, 1.12432, -89.0549)
+
+[node name="GiftAceitacao8" parent="." instance=ExtResource("33_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -6.8582, 1.07342, -94.7799)
+
+[node name="GiftAceitacao9" parent="." instance=ExtResource("33_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -13.6672, 1.48875, -87.7626)
+
+[node name="GiftAceitacao10" parent="." instance=ExtResource("33_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -13.4391, 1.48875, -93.7107)
+
+[node name="GiftNegacao21" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -5.76072, 1.40992, -98.8244)
+
+[node name="GiftBarganha11" parent="." instance=ExtResource("34_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 5.42374, 1.3809, -95.6709)
+
+[node name="GiftRaiva11" parent="." instance=ExtResource("39_prrio")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4.36681, 1.9023, -107.301)
+
+[node name="GiftBarganha12" parent="." instance=ExtResource("34_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.30697, 1.38681, -114.995)
+
+[node name="GiftNegacao22" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.6794, 1.20498, -111.995)
+
+[node name="GiftRaiva12" parent="." instance=ExtResource("39_prrio")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.79305, 1.58238, -106.347)
+
+[node name="GiftAceitacao11" parent="." instance=ExtResource("33_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.3465, 1.26956, -111.126)
+
+[node name="GiftNegacao23" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.3571, 1.07937, -107.362)
+
+[node name="GiftDepressao10" parent="." instance=ExtResource("40_1ae16")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 23.9476, 1.31087, -98.0564)
+
+[node name="GiftBarganha13" parent="." instance=ExtResource("34_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 23.6945, 1.45992, -83.9916)
+
+[node name="GiftNegacao24" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 20.6051, 1.25003, -83.8246)

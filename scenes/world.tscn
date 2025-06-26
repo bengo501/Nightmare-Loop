@@ -5,13 +5,13 @@
 [ext_resource type="PackedScene" uid="uid://3dqgy2xopa1e" path="res://tv_fbx_scene.tscn" id="2_7t5mc"]
 [ext_resource type="Texture2D" uid="uid://ca44uy3jlfa6w" path="res://assets/textures/Floor/Horror_Floor_05-128x128.png" id="2_dss4m"]
 [ext_resource type="PackedScene" uid="uid://drs2ohyyh3uit" path="res://scenes/player/player.tscn" id="3_4wyf3"]
-[ext_resource type="Texture2D" uid="uid://cmd33s4pp6r0d" path="res://assets/textures/Wall/Horror_Wall_07-128x128.png" id="4_7t5mc"]
 [ext_resource type="PackedScene" uid="uid://bd1iioahw58ht" path="res://scenes/enemies/ghost1.tscn" id="4_e68xj"]
 [ext_resource type="Material" uid="uid://d3j53d06bnt3h" path="res://shaders/ditherTransparency.tres" id="5_lakw3"]
 [ext_resource type="Script" uid="uid://c40fe800olgwg" path="res://scripts/wall.gd" id="6_pm21f"]
 [ext_resource type="PackedScene" uid="uid://ytaetvi5ig5r" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Couch/Couch.fbx_Scene.fbm/Couch.fbx.fbx" id="7_q5onr"]
 [ext_resource type="PackedScene" uid="uid://cj47gniftse4d" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Dresser/Dresser.fbx_Scene/Dresser.fbx_Scene.fbx" id="8_jhx03"]
 [ext_resource type="PackedScene" uid="uid://c8q7v4j6y5n3q" path="res://scenes/items/GriefGifts.tscn" id="9_7r4gi"]
+[ext_resource type="Shader" uid="uid://buleteu1jwi75" path="res://shaders/ditherTransparency.gdshader" id="9_7t5mc"]
 [ext_resource type="PackedScene" uid="uid://87m6nvqs6nke" path="res://assets/models/props/DoubleBed.fbx" id="11_lakw3"]
 [ext_resource type="Script" uid="uid://dh2tqiu2d2827" path="res://scripts/bed_interaction.gd" id="12_bed_script"]
 [ext_resource type="PackedScene" uid="uid://ct6ppkdyv5tix" path="res://scenes/items/GiftBarganha.tscn" id="12_q5onr"]
@@ -21,17 +21,29 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w7kh3"]
 albedo_texture = ExtResource("2_dss4m")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2lf6f"]
-albedo_texture = ExtResource("4_7t5mc")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lakw3"]
+render_priority = 0
+shader = ExtResource("9_7t5mc")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/fade_amount = 0.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7iits"]
-albedo_texture = ExtResource("4_7t5mc")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pm21f"]
+render_priority = 0
+shader = ExtResource("9_7t5mc")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/fade_amount = 0.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oo54l"]
-albedo_texture = ExtResource("4_7t5mc")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2lf6f"]
+render_priority = 0
+shader = ExtResource("9_7t5mc")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/fade_amount = 0.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dss4m"]
-albedo_texture = ExtResource("4_7t5mc")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7iits"]
+render_priority = 0
+shader = ExtResource("9_7t5mc")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/fade_amount = 0.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bed"]
 size = Vector3(4, 2, 6)
@@ -83,7 +95,7 @@ material = ExtResource("1_rwgxs")
 
 [node name="Parede1" type="CSGBox3D" parent="Hub/Hub"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.47631, 2.74651, 0.0631443)
-material_override = SubResource("StandardMaterial3D_2lf6f")
+material_override = SubResource("ShaderMaterial_lakw3")
 use_collision = true
 size = Vector3(1, 4.81104, 10)
 material = ExtResource("5_lakw3")
@@ -91,14 +103,14 @@ script = ExtResource("6_pm21f")
 
 [node name="Parede2" type="CSGBox3D" parent="Hub/Hub"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.54139, 2.75951, 0.0428863)
-material_override = SubResource("StandardMaterial3D_7iits")
+material_override = SubResource("ShaderMaterial_pm21f")
 use_collision = true
 size = Vector3(1, 4.83704, 10)
 script = ExtResource("6_pm21f")
 
 [node name="Parede3" type="CSGBox3D" parent="Hub/Hub"]
 transform = Transform3D(-0.00487012, 0.000765077, -0.999988, 0.00052374, 1, 0.000762528, 0.999988, -0.000520009, -0.00487051, -0.0625975, 2.76742, 4.54235)
-material_override = SubResource("StandardMaterial3D_oo54l")
+material_override = SubResource("ShaderMaterial_2lf6f")
 use_collision = true
 size = Vector3(1, 4.84814, 8)
 material = ExtResource("5_lakw3")
@@ -106,7 +118,7 @@ script = ExtResource("6_pm21f")
 
 [node name="Parede4" type="CSGBox3D" parent="Hub/Hub"]
 transform = Transform3D(-0.00487012, 0.000765077, -0.999988, 0.00052374, 1, 0.000762528, 0.999988, -0.000520009, -0.00487051, -0.0187636, 2.76636, -4.45754)
-material_override = SubResource("StandardMaterial3D_dss4m")
+material_override = SubResource("ShaderMaterial_7iits")
 use_collision = true
 size = Vector3(1, 4.85547, 8)
 script = ExtResource("6_pm21f")
