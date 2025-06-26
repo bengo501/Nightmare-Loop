@@ -5,8 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://3dqgy2xopa1e" path="res://tv_fbx_scene.tscn" id="2_7t5mc"]
 [ext_resource type="Texture2D" uid="uid://ca44uy3jlfa6w" path="res://assets/textures/Floor/Horror_Floor_05-128x128.png" id="2_dss4m"]
 [ext_resource type="PackedScene" uid="uid://drs2ohyyh3uit" path="res://scenes/player/player.tscn" id="3_4wyf3"]
+[ext_resource type="Texture2D" uid="uid://cmd33s4pp6r0d" path="res://assets/textures/Wall/Horror_Wall_07-128x128.png" id="4_7t5mc"]
 [ext_resource type="PackedScene" uid="uid://bd1iioahw58ht" path="res://scenes/enemies/ghost1.tscn" id="4_e68xj"]
-[ext_resource type="Material" uid="uid://d3j53d06bnt3h" path="res://shaders/ditherTransparency.tres" id="5_lakw3"]
 [ext_resource type="PackedScene" uid="uid://bad23dmold2ay" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Phone.fbx_Scene/Phone.fbx_Scene.fbx" id="5_munwf"]
 [ext_resource type="Script" uid="uid://c40fe800olgwg" path="res://scripts/wall.gd" id="6_pm21f"]
 [ext_resource type="PackedScene" uid="uid://d3h18t4d2rwml" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Toaster/Toaster.fbx_Scene.fbx" id="6_ts3gi"]
@@ -33,26 +33,34 @@ albedo_texture = ExtResource("2_dss4m")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lakw3"]
 render_priority = 0
 shader = ExtResource("9_7t5mc")
+shader_parameter/texture_albedo = ExtResource("4_7t5mc")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/fade_amount = 0.0
+shader_parameter/dither_intensity = 0.6
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pm21f"]
 render_priority = 0
 shader = ExtResource("9_7t5mc")
+shader_parameter/texture_albedo = ExtResource("4_7t5mc")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/fade_amount = 0.0
+shader_parameter/dither_intensity = 0.6
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2lf6f"]
 render_priority = 0
 shader = ExtResource("9_7t5mc")
+shader_parameter/texture_albedo = ExtResource("4_7t5mc")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/fade_amount = 0.0
+shader_parameter/dither_intensity = 0.6
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7iits"]
 render_priority = 0
 shader = ExtResource("9_7t5mc")
+shader_parameter/texture_albedo = ExtResource("4_7t5mc")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/fade_amount = 0.0
+shader_parameter/dither_intensity = 0.6
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bed"]
 size = Vector3(4, 2, 6)
@@ -110,7 +118,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.47631, 2.74651, 0.0631443)
 material_override = SubResource("ShaderMaterial_lakw3")
 use_collision = true
 size = Vector3(1, 4.81104, 10)
-material = ExtResource("5_lakw3")
 script = ExtResource("6_pm21f")
 
 [node name="Parede2" type="CSGBox3D" parent="Hub/Hub"]
@@ -125,7 +132,6 @@ transform = Transform3D(-0.00487012, 0.000765077, -0.999988, 0.00052374, 1, 0.00
 material_override = SubResource("ShaderMaterial_2lf6f")
 use_collision = true
 size = Vector3(1, 4.84814, 8)
-material = ExtResource("5_lakw3")
 script = ExtResource("6_pm21f")
 
 [node name="Parede4" type="CSGBox3D" parent="Hub/Hub"]
@@ -153,6 +159,9 @@ transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 1.94432, 0.832325, -
 script = ExtResource("12_bed_script")
 
 [node name="Area3D" type="Area3D" parent="Hub/Hub/DoubleBed"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hub/Hub/DoubleBed/Area3D"]
 shape = SubResource("BoxShape3D_bed")
@@ -194,7 +203,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Player" parent="." instance=ExtResource("3_4wyf3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.38221)
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0.433605, -2.38221)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 0, 10, 0)

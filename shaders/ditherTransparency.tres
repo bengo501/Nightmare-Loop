@@ -1,7 +1,7 @@
 [gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://d3j53d06bnt3h"]
 
 [ext_resource type="Shader" uid="uid://buleteu1jwi75" path="res://shaders/ditherTransparency.gdshader" id="1_jucjf"]
-[ext_resource type="Texture2D" uid="uid://s22mp21jyvrp" path="res://assets/textures/Wall/Horror_Wall_02-128x128.png" id="2_bw1w8"]
+[ext_resource type="Texture2D" uid="uid://cmd33s4pp6r0d" path="res://assets/textures/Wall/Horror_Wall_07-128x128.png" id="2_bw1w8"]
 
 [resource]
 render_priority = 0
@@ -9,3 +9,4 @@ shader = ExtResource("1_jucjf")
 shader_parameter/texture_albedo = ExtResource("2_bw1w8")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/fade_amount = 0.0
+shader_parameter/dither_intensity = 0.6

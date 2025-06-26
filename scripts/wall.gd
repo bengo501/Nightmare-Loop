@@ -2,6 +2,7 @@ extends CSGBox3D
 
 @export var fade_duration := 0.4
 @export var debug_mode := false
+@export var dither_intensity := 0.6  # Intensidade do dither (0.0 = mais sutil, 1.0 = mais agressivo)
 
 var player_ref: Node3D = null
 var camera_ref: Camera3D = null
@@ -12,6 +13,10 @@ func _ready():
 	# Torna o material único para cada parede
 	if material and material is ShaderMaterial:
 		material = material.duplicate()
+		# Configura a intensidade do dither
+		var mat := material as ShaderMaterial
+		if mat:
+			mat.set_shader_parameter("dither_intensity", dither_intensity)
 		if debug_mode:
 			print("[WallTransparency] Material duplicado para parede: ", name)
 	
@@ -120,9 +125,10 @@ func _update_shader_transparency():
 	var mat := material as ShaderMaterial
 	if mat and mat.shader:
 		mat.set_shader_parameter("fade_amount", fade_amount)
+		mat.set_shader_parameter("dither_intensity", dither_intensity)
 		
 		if debug_mode and fade_amount > 0.1:
-			print("[WallTransparency] fade_amount: ", fade_amount)
+			print("[WallTransparency] fade_amount: ", fade_amount, " dither_intensity: ", dither_intensity)
 	else:
 		if debug_mode:
 			print("[WallTransparency] ⚠️ Material não é ShaderMaterial ou shader é nulo")

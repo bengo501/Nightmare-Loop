@@ -4988,7 +4988,7 @@ transform = Transform3D(0.93473, 0.90577, -0.0658068, -0.0280639, 0.101928, -2.4
 collision_mask = 129
 
 [node name="FirstPersonCamera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312904, 1.59825, 0.36499)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312904, 1.94865, 0.36499)
 script = ExtResource("4_p47bc")
 
 [node name="weapon" type="TextureRect" parent="FirstPersonCamera"]

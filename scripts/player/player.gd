@@ -140,6 +140,10 @@ func _ready():
 	current_health = max_health
 	emit_signal("health_changed", current_health)
 	
+	# Configura collision layers para detecção pelos fantasmas
+	collision_layer = 2  # Layer 2 para detecção pelos fantasmas
+	collision_mask = 1   # Pode colidir com paredes (layer 1)
+	
 	# Garante que o player pode se mover
 	can_move = true
 	

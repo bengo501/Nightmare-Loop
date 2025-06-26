@@ -12,64 +12,66 @@ var interaction_active = false
 # Variáveis para animação
 var prompt_tween: Tween
 
-# Referências aos managers
-@onready var ui_manager = get_node("/root/UIManager")
-var scene_manager
+# Variáveis removidas para simplificar
 
 func _ready():
-	print("[BedInteraction] Inicializando sistema de interação com a cama")
-	
-	# Obtém referência ao SceneManager
-	scene_manager = SceneManager
-	if scene_manager:
-		print("[BedInteraction] SceneManager conectado com sucesso")
-	else:
-		print("[BedInteraction] ERRO: SceneManager não encontrado!")
+	print("[BedInteraction] 🛏️ Inicializando sistema de interação com a cama")
 	
 	# Conecta os sinais da área de interação
 	if area_3d:
 		area_3d.body_entered.connect(_on_body_entered)
 		area_3d.body_exited.connect(_on_body_exited)
-		print("[BedInteraction] Sinais da Area3D conectados")
+		print("[BedInteraction] ✅ Sinais da Area3D conectados")
+		
+		# Configura a Area3D
+		area_3d.collision_layer = 0
+		area_3d.collision_mask = 2  # Detecta player (layer 2)
+		area_3d.monitoring = true
+		area_3d.monitorable = false
+		
+		print("[BedInteraction] 📡 Area3D configurada - Layer: 0, Mask: 2")
 	else:
-		print("[BedInteraction] ERRO: Area3D não encontrada!")
+		print("[BedInteraction] ❌ ERRO: Area3D não encontrada!")
 	
 	# Esconde o prompt inicialmente
 	if interaction_prompt:
 		interaction_prompt.visible = false
-		print("[BedInteraction] Prompt de interação configurado")
+		print("[BedInteraction] 💬 Prompt de interação configurado")
 	else:
-		print("[BedInteraction] AVISO: Prompt de interação não encontrado")
+		print("[BedInteraction] ⚠️ AVISO: Prompt de interação não encontrado")
 
 func _on_body_entered(body):
+	print("[BedInteraction] 👤 Corpo entrou na área: ", body.name)
+	print("[BedInteraction] 🏷️ Grupos do corpo: ", body.get_groups())
+	
 	if body.is_in_group("player"):
 		player_inside = true
 		player_ref = body
 		show_interaction_prompt()
-		print("[BedInteraction] Jogador entrou na área da cama")
+		print("[BedInteraction] ✅ JOGADOR DETECTADO! Prompt ativado.")
 
 func _on_body_exited(body):
+	print("[BedInteraction] 👤 Corpo saiu da área: ", body.name)
+	
 	if body.is_in_group("player"):
 		player_inside = false
 		player_ref = null
 		hide_interaction_prompt()
-		print("[BedInteraction] Jogador saiu da área da cama")
+		print("[BedInteraction] 👋 Jogador saiu da área da cama")
 
 func _input(event):
 	if player_inside and event.is_action_pressed("interact") and not interaction_active:
+		print("[BedInteraction] ⚡ TECLA E PRESSIONADA! Iniciando transição...")
 		sleep_interaction()
-	
-	# Função de emergência para destravar o jogo
-	if event.is_action_pressed("ui_cancel") and interaction_active:
-		print("[BedInteraction] EMERGÊNCIA: Destravando jogo")
-		emergency_unlock()
 
 func show_interaction_prompt():
+	print("[BedInteraction] 💬 Mostrando prompt de interação")
 	if interaction_prompt and is_instance_valid(interaction_prompt):
 		interaction_prompt.visible = true
 		start_prompt_animation()
 
 func hide_interaction_prompt():
+	print("[BedInteraction] 🙈 Escondendo prompt de interação")
 	if interaction_prompt and is_instance_valid(interaction_prompt):
 		interaction_prompt.visible = false
 		stop_prompt_animation()
@@ -90,65 +92,79 @@ func stop_prompt_animation():
 		interaction_prompt.modulate.a = 1.0
 
 func sleep_interaction():
-	print("[BedInteraction] Iniciando interação de dormir")
+	print("[BedInteraction] 🌙 Iniciando transição para map_2...")
 	
 	interaction_active = true
 	hide_interaction_prompt()
 	
-	# NÃO pausa o jogador aqui - deixa o SceneManager gerenciar isso
-	print("[BedInteraction] Player não pausado - SceneManager irá gerenciar")
-	
-	# Cria efeito de fade out e troca apenas o hub
-	create_sleep_transition()
-
-func create_sleep_transition():
-	print("[BedInteraction] Criando transição de sono com preservação do player")
-	
-	# Usa o SceneManager para trocar apenas o hub mantendo o player
-	if SceneManager and SceneManager.has_method("change_hub_with_fade"):
-		print("[BedInteraction] Usando SceneManager para trocar hub")
-		
-		# Chama de forma assíncrona para evitar travamentos
-		call_deferred("_start_hub_change")
-	else:
-		print("[BedInteraction] AVISO: SceneManager não disponível, usando método alternativo")
-		# Fallback para o método tradicional
-		get_tree().change_scene_to_file("res://map_2.tscn")
-
-func _start_hub_change():
-	"""
-	Inicia a mudança de hub de forma diferida
-	"""
-	print("[BedInteraction] Iniciando mudança de hub diferida")
-	print("[BedInteraction] Estado atual - Jogo pausado: ", get_tree().paused)
-	print("[BedInteraction] SceneManager válido: ", SceneManager != null)
-	
-	if SceneManager:
-		print("[BedInteraction] Chamando SceneManager.change_hub_with_fade...")
-		SceneManager.change_hub_with_fade("map_2", 2.0)
-		print("[BedInteraction] Chamada para change_hub_with_fade concluída")
-	else:
-		print("[BedInteraction] ERRO: SceneManager é null!")
+	# Salva a posição atual do player para referência
+	var current_player = get_tree().get_first_node_in_group("player")
+	if not current_player:
+		print("[BedInteraction] ❌ Player não encontrado!")
 		interaction_active = false
+		return
+	
+	print("[BedInteraction] 👤 Player encontrado: ", current_player.name)
+	
+	# Preserva referências importantes do player
+	var player_scene_path = current_player.scene_file_path
+	if player_scene_path == "":
+		player_scene_path = "res://scenes/player/player.tscn"
+	
+	print("[BedInteraction] 💾 Player scene path: ", player_scene_path)
+	
+	# Cria um autoload temporário para gerenciar a transição
+	_create_transition_manager(player_scene_path)
+	
+	# Muda para a nova cena
+	var result = get_tree().change_scene_to_file("res://map_2.tscn")
+	if result != OK:
+		print("[BedInteraction] ❌ Erro ao mudar cena: ", result)
+		interaction_active = false
+		return
+	
+	print("[BedInteraction] 🎉 TRANSIÇÃO INICIADA!")
 
-func emergency_unlock():
-	"""
-	Função de emergência para destravar o jogo
-	"""
-	print("[BedInteraction] Executando destravamento de emergência")
-	interaction_active = false
-	get_tree().paused = false
+func _create_transition_manager(player_scene_path: String):
+	# Cria um nó temporário que sobrevive à mudança de cena
+	var transition_manager = Node.new()
+	transition_manager.name = "TransitionManager"
+	transition_manager.set_script(preload("res://scripts/transition_manager.gd"))
 	
-	# Reativa o player se existir
-	if player_ref and is_instance_valid(player_ref):
-		player_ref.set_physics_process(true)
-		player_ref.set_process_input(true)
-		print("[BedInteraction] Player reativado")
-	
-	# Mostra a HUD
-	if ui_manager and ui_manager.has_method("show_ui"):
-		ui_manager.show_ui("hud")
-	
-	print("[BedInteraction] Destravamento de emergência concluído")
+	# Adiciona ao root para que sobreviva à mudança de cena
+	get_tree().root.add_child(transition_manager)
+	transition_manager.setup_player_transition(player_scene_path)
 
- 
+# Função removida - agora usa TransitionManager
+
+func _find_spawn_point(scene: Node) -> Node3D:
+	"""
+	Procura recursivamente por um ponto de spawn na cena
+	"""
+	# Procura por nomes comuns de spawn points
+	var spawn_names = ["PontoNascimento", "SpawnPoint", "PlayerSpawn", "Spawn"]
+	
+	for spawn_name in spawn_names:
+		var spawn_point = _find_node_by_name(scene, spawn_name)
+		if spawn_point and spawn_point is Node3D:
+			return spawn_point
+	
+	return null
+
+func _find_node_by_name(parent: Node, node_name: String) -> Node:
+	"""
+	Busca recursivamente por um nó com o nome especificado
+	"""
+	if parent.name == node_name:
+		return parent
+	
+	for child in parent.get_children():
+		var result = _find_node_by_name(child, node_name)
+		if result:
+			return result
+	
+	return null
+
+# Funções removidas para simplificar o script
+
+	
