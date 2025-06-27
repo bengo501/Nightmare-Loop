@@ -30,7 +30,7 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w7kh3"]
 albedo_texture = ExtResource("2_dss4m")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lakw3"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_munwf"]
 render_priority = 0
 shader = ExtResource("9_7t5mc")
 shader_parameter/texture_albedo = ExtResource("4_7t5mc")
@@ -38,7 +38,7 @@ shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/fade_amount = 0.0
 shader_parameter/dither_intensity = 0.6
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pm21f"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ts3gi"]
 render_priority = 0
 shader = ExtResource("9_7t5mc")
 shader_parameter/texture_albedo = ExtResource("4_7t5mc")
@@ -46,7 +46,7 @@ shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/fade_amount = 0.0
 shader_parameter/dither_intensity = 0.6
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2lf6f"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0nbtd"]
 render_priority = 0
 shader = ExtResource("9_7t5mc")
 shader_parameter/texture_albedo = ExtResource("4_7t5mc")
@@ -54,7 +54,7 @@ shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/fade_amount = 0.0
 shader_parameter/dither_intensity = 0.6
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7iits"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_37qwj"]
 render_priority = 0
 shader = ExtResource("9_7t5mc")
 shader_parameter/texture_albedo = ExtResource("4_7t5mc")
@@ -115,30 +115,30 @@ material = ExtResource("1_rwgxs")
 
 [node name="Parede1" type="CSGBox3D" parent="Hub/Hub"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.47631, 2.74651, 0.0631443)
-material_override = SubResource("ShaderMaterial_lakw3")
 use_collision = true
 size = Vector3(1, 4.81104, 10)
+material = SubResource("ShaderMaterial_munwf")
 script = ExtResource("6_pm21f")
 
 [node name="Parede2" type="CSGBox3D" parent="Hub/Hub"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.54139, 2.75951, 0.0428863)
-material_override = SubResource("ShaderMaterial_pm21f")
 use_collision = true
 size = Vector3(1, 4.83704, 10)
+material = SubResource("ShaderMaterial_ts3gi")
 script = ExtResource("6_pm21f")
 
 [node name="Parede3" type="CSGBox3D" parent="Hub/Hub"]
 transform = Transform3D(-0.00487012, 0.000765077, -0.999988, 0.00052374, 1, 0.000762528, 0.999988, -0.000520009, -0.00487051, -0.0625975, 2.76742, 4.54235)
-material_override = SubResource("ShaderMaterial_2lf6f")
 use_collision = true
 size = Vector3(1, 4.84814, 8)
+material = SubResource("ShaderMaterial_0nbtd")
 script = ExtResource("6_pm21f")
 
 [node name="Parede4" type="CSGBox3D" parent="Hub/Hub"]
 transform = Transform3D(-0.00487012, 0.000765077, -0.999988, 0.00052374, 1, 0.000762528, 0.999988, -0.000520009, -0.00487051, -0.0187636, 2.76636, -4.45754)
-material_override = SubResource("ShaderMaterial_7iits")
 use_collision = true
 size = Vector3(1, 4.85547, 8)
+material = SubResource("ShaderMaterial_37qwj")
 script = ExtResource("6_pm21f")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Hub/Hub"]
@@ -203,7 +203,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Player" parent="." instance=ExtResource("3_4wyf3")]
-transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0.433605, -2.38221)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.433605, -2.38221)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 0, 10, 0)
@@ -286,7 +286,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.3124, 1.1888, -13.0021)
 visible = false
 collision_layer = 1
 collision_mask = 1
-monitorable = true
 
 [node name="Box_fbx_Scene" parent="." instance=ExtResource("20_0nbtd")]
 transform = Transform3D(1.58482, 0, 0, 0, 1.44211, 0, 0, 0, 1.73942, 3.2973, 0.362404, 3.26818)

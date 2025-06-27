@@ -124,39 +124,75 @@ func perform_attack():
 	can_attack = true
 
 func take_damage(amount: int):
+	# Método de compatibilidade - chama o método com crítico como false
+	take_damage_with_critical(amount, false)
+
+func take_damage_with_critical(amount: int, is_critical: bool = false):
 	if current_health <= 0 or is_dying:  # Se já estiver morto ou morrendo, não faz nada
 		return
 		
 	current_health -= amount
-	print("DEBUG: Ghost tomou ", amount, " de dano! Vida restante: ", current_health)
 	
-	# Mostra a label de dano
-	var label = damage_label_scene.instantiate()
-	add_child(label)
-	label.setup(amount, true)
+	if is_critical:
+		print("💥🔥 [Ghost] Fantasma tomou DANO CRÍTICO de ", amount, "! Vida restante: ", current_health, "/", max_health)
+	else:
+		print("👻 [Ghost] Fantasma tomou ", amount, " de dano! Vida restante: ", current_health, "/", max_health)
 	
-
+	# Mostra a label de dano com informação de crítico
+	if damage_label_scene:
+		var label = damage_label_scene.instantiate()
+		add_child(label)
+		label.setup(amount, true, is_critical)
 	
-	# Efeito visual de dano
+	# Efeito visual de dano mais intenso para críticos
+	var flash_color = Vector4(1.0, 0.0, 0.0, 1.0)  # Vermelho normal
+	var flash_duration = 0.3
+	
+	if is_critical:
+		flash_color = Vector4(1.0, 1.0, 0.0, 1.0)  # Amarelo para crítico
+		flash_duration = 0.5  # Dura mais tempo
+	
 	if mesh and mesh.material is ShaderMaterial:
-		mesh.material.set_shader_parameter("ghost_color", Vector4(2, 0, 0, 0.5))
-		await get_tree().create_timer(0.2).timeout
-		mesh.material.set_shader_parameter("ghost_color", Vector4(ghost_color.r, ghost_color.g, ghost_color.b, ghost_color.a))
+		var original_color = mesh.material.get_shader_parameter("ghost_color")
+		mesh.material.set_shader_parameter("ghost_color", flash_color)
+		await get_tree().create_timer(flash_duration).timeout
+		mesh.material.set_shader_parameter("ghost_color", original_color)
 	
 	# Toca animação de dano
 	if animation_player:
 		animation_player.play("take_damage")
 	
-	# Aplica shake na câmera
+	# Aplica shake na câmera quando o fantasma recebe dano (mais intenso para críticos)
 	var viewport = get_viewport()
 	if viewport:
 		var camera = viewport.get_camera_3d()
-		if camera and camera.get_script() and camera.get_script().resource_path.ends_with("FirstPersonCamera.gd"):
-			camera.shake()
+		if camera:
+			if is_critical:
+				# Shake mais intenso para dano crítico
+				if camera.has_method("shake_intense"):
+					camera.shake_intense()
+				elif camera.has_method("shake"):
+					camera.shake()
+			else:
+				if camera.has_method("shake"):
+					camera.shake()
+				elif camera.get_script() and camera.get_script().resource_path.ends_with("FirstPersonCamera.gd"):
+					camera.shake()
+	
+	# Força o fantasma a reagir ao dano se não estiver já perseguindo
+	if player_ref and global_position.distance_to(player_ref.global_position) > attack_range:
+		if is_critical:
+			print("🎯🔥 [Ghost] Fantasma ENFURECIDO pelo dano crítico! Focando no player!")
+		else:
+			print("🎯 [Ghost] Fantasma alertado pelo dano! Focando no player!")
+		_update_navigation_target()
 	
 	# Verifica se morreu
 	if current_health <= 0:
-		print("[Ghost] Fantasma morreu! Chamando função die()...")
+		if is_critical:
+			print("💀🔥 [Ghost] Fantasma foi ANIQUILADO com dano crítico!")
+		else:
+			print("💀 [Ghost] Fantasma foi derrotado!")
 		die()
 
 func attack_player():
@@ -233,3 +269,9 @@ func _connect_ghost_signal():
 				print("[Ghost] Sinal ghost_defeated conectado ao GameManager com sucesso!")
 			else:
 				push_error("[Ghost] Erro ao conectar sinal ghost_defeated ao GameManager: " + str(error))
+
+# Método para compatibilidade com o sistema de dano do player
+func get_grief_stage() -> int:
+	# Retorna um estágio baseado no tipo de fantasma
+	# Para fantasmas legados, usa o ghost_type como estágio
+	return ghost_type - 1  # Converte de 1-4 para 0-3

@@ -6,7 +6,7 @@
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_anger"]
 margin = 0.1
-height = 1.6
+height = 1.11406
 radius = 0.65
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_anger"]
@@ -26,7 +26,7 @@ script = ExtResource("1_anger")
 grief_stage = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." groups=["enemy"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+transform = Transform3D(1.28182, 0, 0, 0, 2.54853, 0, 0, 0, 1.43394, 0, 1.95263, 0)
 shape = SubResource("CylinderShape3D_anger")
 debug_color = Color(0.7, 0.7, 0.7, 0.42)
 
@@ -42,7 +42,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AttackArea"]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0.8, 0)
+transform = Transform3D(2.31122, 0, 0, 0, 1.5, 0, 0, 0, 2.29432, 0, 0.8, 0)
 shape = SubResource("CylinderShape3D_anger")
 debug_color = Color(0.7, 0.7, 0.7, 0.42)
 
@@ -55,7 +55,7 @@ height = 3.91533
 material = SubResource("ShaderMaterial_anger")
 
 [node name="Billboard" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25326, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="Billboard"]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0.458225, 0)

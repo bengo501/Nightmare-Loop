@@ -25,6 +25,12 @@ var grief_colors = {
 var rotation_speed = 2.0
 
 func _ready():
+	# Força configurações de área para garantir detecção
+	monitoring = true
+	monitorable = true
+	collision_layer = 0
+	collision_mask = 2
+	
 	# Obtém referência ao GiftManager singleton
 	gift_manager = get_node("/root/GiftManager")
 	
@@ -47,13 +53,20 @@ func _ready():
 	print("🎁 [CollectibleItem] Collision Layer: ", collision_layer)
 	print("🎁 [CollectibleItem] Collision Mask: ", collision_mask)
 	print("🎁 [CollectibleItem] Monitoring: ", monitoring)
+	print("🎁 [CollectibleItem] Monitorable: ", monitorable)
 	print("🎁 [CollectibleItem] Posição: ", global_position)
 	print("🎁 [CollectibleItem] GiftManager: ", gift_manager != null)
 
 func _process(delta):
 	# Verifica interação com a tecla E
 	if can_interact and Input.is_action_just_pressed("interact") and not is_collected:
+		print("🎁 [CollectibleItem] ✅ Tecla E pressionada! Coletando ", grief_stage)
 		collect()
+	
+	# Debug adicional para verificar estado
+	if can_interact and not is_collected:
+		if Input.is_action_just_pressed("interact"):
+			print("🎁 [CollectibleItem] 🔑 Input detectado mas item pode estar coletado ou can_interact=false")
 	
 	# Rotação contínua
 	if mesh_instance and not is_collected:
@@ -65,11 +78,13 @@ func _process(delta):
 
 func _on_body_entered(body):
 	print("🎁 [CollectibleItem] Corpo detectado: ", body.name, " Grupos: ", body.get_groups())
+	print("🎁 [CollectibleItem] Collision Layer do corpo: ", body.collision_layer)
 	if body.is_in_group("player"):
 		can_interact = true
 		if interaction_prompt and is_instance_valid(interaction_prompt):
 			interaction_prompt.visible = true
 		print("🎁 [CollectibleItem] ✅ PLAYER DETECTADO! Prompt ativado para: ", grief_stage)
+		print("🎁 [CollectibleItem] Tecla para interagir: E")
 	else:
 		print("🎁 [CollectibleItem] ❌ Corpo não é player: ", body.name)
 

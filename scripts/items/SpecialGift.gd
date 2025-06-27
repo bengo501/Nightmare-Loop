@@ -8,6 +8,8 @@ extends Area3D
 @onready var animation_player = $AnimationPlayer
 @onready var collision_shape = $CollisionShape3D
 @onready var interaction_prompt = $InteractionPrompt
+# Se não encontrar InteractionPrompt, tenta encontrar o Label3D diretamente
+@onready var interaction_label = $InteractionPrompt if has_node("InteractionPrompt") else null
 
 var is_collected: bool = false
 var can_interact: bool = false
@@ -26,6 +28,12 @@ var grief_colors = {
 var rotation_speed = 3.0
 
 func _ready():
+	# Força configurações de área para garantir detecção
+	monitoring = true
+	monitorable = true
+	collision_layer = 0
+	collision_mask = 2
+	
 	# Obtém referência ao GiftManager singleton
 	gift_manager = get_node("/root/GiftManager")
 	
@@ -42,15 +50,47 @@ func _ready():
 		mesh_instance.material_override = material
 	
 	# Esconde o prompt inicialmente
-	if interaction_prompt and is_instance_valid(interaction_prompt):
-		interaction_prompt.visible = false
+	var prompt_node = interaction_prompt if interaction_prompt else interaction_label
+	if prompt_node and is_instance_valid(prompt_node):
+		prompt_node.visible = false
 	
 	print("[SpecialGift] Gift especial criado: ", grief_stage, " (+", bonus_points, " pontos)")
+	print("[SpecialGift] InteractionPrompt encontrado: ", prompt_node != null)
+	print("[SpecialGift] Configurações - Monitoring: ", monitoring, " Monitorable: ", monitorable)
+	print("[SpecialGift] Collision Layer: ", collision_layer, " Collision Mask: ", collision_mask)
+	print("[SpecialGift] Posição: ", global_position)
+	
+	# Teste: procura por players na cena
+	var players = get_tree().get_nodes_in_group("player")
+	print("[SpecialGift] Players encontrados na cena: ", players.size())
+	for i in range(players.size()):
+		if i < players.size():
+			var player = players[i]
+			print("[SpecialGift] Player ", i, ": ", player.name, " Collision Layer: ", player.collision_layer)
 
 func _process(delta):
+	# Debug de distância do player (a cada 2 segundos)
+	if fmod(Time.get_time_dict_from_system()["second"], 2) == 0 and fmod(Time.get_ticks_msec(), 1000) < 50:
+		var players = get_tree().get_nodes_in_group("player")
+		if players.size() > 0:
+			var player = players[0]
+			var distance = global_position.distance_to(player.global_position)
+			if distance < 5.0:  # Só mostra se player estiver perto
+				print("[SpecialGift] 📏 Distância do player: ", distance, " can_interact: ", can_interact, " grief: ", grief_stage)
+	
+	# Debug global de input E (sempre ativo)
+	if Input.is_action_just_pressed("interact"):
+		print("[SpecialGift] 🔑 TECLA E DETECTADA GLOBALMENTE! can_interact=", can_interact, " is_collected=", is_collected, " grief_stage=", grief_stage)
+	
 	# Verifica interação com a tecla E
 	if can_interact and Input.is_action_just_pressed("interact") and not is_collected:
+		print("[SpecialGift] ✅ Tecla E pressionada! Coletando gift especial: ", grief_stage)
 		collect()
+	
+	# Debug adicional para verificar estado
+	if can_interact and not is_collected:
+		if Input.is_action_just_pressed("interact"):
+			print("[SpecialGift] 🔑 Input E detectado mas gift pode estar coletado ou can_interact=false")
 	
 	# Rotação contínua (mais rápida)
 	if mesh_instance and not is_collected:
@@ -61,17 +101,22 @@ func _process(delta):
 		mesh_instance.position.y = sin(Time.get_ticks_msec() * 0.002) * 0.3
 
 func _on_body_entered(body):
+	print("[SpecialGift] Corpo detectado: ", body.name, " Grupos: ", body.get_groups())
 	if body.is_in_group("player"):
 		can_interact = true
-		if interaction_prompt and is_instance_valid(interaction_prompt):
-			interaction_prompt.visible = true
-		print("[SpecialGift] Player entrou na área do gift especial: ", grief_stage)
+		var prompt_node = interaction_prompt if interaction_prompt else interaction_label
+		if prompt_node and is_instance_valid(prompt_node):
+			prompt_node.visible = true
+		print("[SpecialGift] ✅ PLAYER DETECTADO! Gift especial: ", grief_stage)
+		print("[SpecialGift] Prompt ativado: ", prompt_node != null)
 
 func _on_body_exited(body):
 	if body.is_in_group("player"):
 		can_interact = false
-		if interaction_prompt and is_instance_valid(interaction_prompt):
-			interaction_prompt.visible = false
+		var prompt_node = interaction_prompt if interaction_prompt else interaction_label
+		if prompt_node and is_instance_valid(prompt_node):
+			prompt_node.visible = false
+		print("[SpecialGift] Player saiu da área do gift: ", grief_stage)
 
 func collect():
 	if is_collected:

@@ -676,9 +676,20 @@ func shoot_first_person():
 		var collider = shoot_ray.get_collider()
 		if collider and collider.is_in_group("enemy"):
 			if collider.has_method("take_damage"):
-				var final_damage = calculate_damage_against_target(collider)
-				collider.take_damage(final_damage)
-				print("🎯 ACERTO! Dano: ", final_damage, " (modo: ", get_current_attack_name(), ")")
+				var damage_result = calculate_damage_against_target(collider)
+				var final_damage = damage_result.damage
+				var is_critical = damage_result.is_critical
+				
+				# Chama take_damage com informação de crítico se o método suportar
+				if collider.has_method("take_damage_with_critical"):
+					collider.take_damage_with_critical(final_damage, is_critical)
+				else:
+					collider.take_damage(final_damage)
+				
+				if is_critical:
+					print("💥🔥 ACERTO CRÍTICO! Dano: ", final_damage, " (modo: ", get_current_attack_name(), ")")
+				else:
+					print("🎯 ACERTO! Dano: ", final_damage, " (modo: ", get_current_attack_name(), ")")
 	else:
 		print("💥 TIRO DISPARADO: Sem alvo atingido (modo: ", get_current_attack_name(), ")")
 
@@ -821,8 +832,9 @@ func get_current_attack_color() -> Color:
 func get_current_attack_name() -> String:
 	return attack_mode_names[current_attack_mode]
 
-func calculate_damage_against_target(target) -> float:
+func calculate_damage_against_target(target) -> Dictionary:
 	var base_damage = attack_damage  # 20 de dano base
+	var is_critical = false
 	
 	# Verifica se o alvo é um fantasma com estágio de luto
 	if target.has_method("get_grief_stage"):
@@ -837,16 +849,20 @@ func calculate_damage_against_target(target) -> float:
 			4: AttackMode.ACEITACAO   # GriefStage.ACCEPTANCE
 		}
 		
-		# Se o modo de ataque corresponde ao estágio do fantasma, dano duplo
+		# Se o modo de ataque corresponde ao estágio do fantasma, dano duplo (CRÍTICO)
 		if target_stage in stage_to_mode and stage_to_mode[target_stage] == current_attack_mode:
 			base_damage *= 2.0
-			print("💥 DANO CRÍTICO! Modo ", get_current_attack_name(), " vs fantasma ", target_stage, " = ", base_damage, " dano")
+			is_critical = true
+			print("💥🔥 DANO CRÍTICO! Modo ", get_current_attack_name(), " vs fantasma ", target_stage, " = ", base_damage, " dano")
 		else:
 			print("⚔️ Dano normal: ", base_damage, " (modo ", get_current_attack_name(), " vs fantasma estágio ", target_stage, ")")
 	else:
 		print("⚔️ Dano base: ", base_damage, " contra alvo sem estágio de luto")
 	
-	return base_damage
+	return {
+		"damage": base_damage,
+		"is_critical": is_critical
+	}
 
 # === LASER ===
 func update_laser_color():

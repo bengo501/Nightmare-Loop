@@ -6,7 +6,7 @@
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_denial"]
 margin = 0.1
-height = 1.5
+height = 1.25415
 radius = 0.6
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_denial"]
@@ -20,12 +20,13 @@ shader_parameter/noise_speed = 1.5
 shader_parameter/noise_scale = 1.5
 
 [node name="GhostDenial" type="CharacterBody3D" groups=["enemy"]]
+transform = Transform3D(1.0453, 0, 0, 0, 1.49919, 0, 0, 0, 1.17698, 0, 0.101784, 0)
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_denial")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." groups=["enemy"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+transform = Transform3D(1.40121, 0, 0, 0, 3.19162, 0, 0, 0, 1.34933, 0, 1.54284, 0)
 shape = SubResource("CylinderShape3D_denial")
 debug_color = Color(0.2, 1, 0.2, 0.42)
 
@@ -41,7 +42,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AttackArea"]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0.75, 0)
+transform = Transform3D(1.80303, 0, 0, 0, 1.28921, 0, 0, 0, 2.00691, 0, 1.15285, 0)
 shape = SubResource("CylinderShape3D_denial")
 debug_color = Color(0.2, 1, 0.2, 0.42)
 
@@ -54,7 +55,7 @@ height = 3.13457
 material = SubResource("ShaderMaterial_denial")
 
 [node name="Billboard" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.37436, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="Billboard"]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)

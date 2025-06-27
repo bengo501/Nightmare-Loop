@@ -1,32 +1,33 @@
 [gd_resource type="Environment" format=3 uid="uid://12p1ky83ikyg"]
 
 [resource]
-background_mode = 1
-background_color = Color(0.02, 0.08, 0.02, 1)
+background_mode = 2
+background_color = Color(0.385431, 0.80507, 0.386814, 1)
+background_energy_multiplier = 0.95
 sky_custom_fov = 75.0
 ambient_light_source = 2
-ambient_light_color = Color(0.05, 0.2, 0.05, 1)
-ambient_light_energy = 0.2
-glow_enabled = true
+ambient_light_color = Color(0.189982, 0.562894, 0.191304, 1)
+ambient_light_energy = 9.5
 glow_levels/1 = 0.2
 glow_levels/2 = 0.4
 glow_levels/3 = 0.6
 glow_levels/4 = 0.8
 glow_levels/6 = 1.0
 glow_levels/7 = 0.8
-glow_intensity = 0.4
+glow_intensity = 2.08
 glow_strength = 0.8
-glow_bloom = 0.15
+glow_bloom = 0.18
 glow_blend_mode = 0
-glow_hdr_threshold = 0.8
-glow_hdr_scale = 1.2
+glow_hdr_threshold = 0.85
+glow_hdr_scale = 1.15
 glow_hdr_luminance_cap = 8.0
 glow_map_strength = 0.6
 fog_enabled = true
+fog_mode = 1
 fog_light_color = Color(0.1, 0.4, 0.1, 1)
 fog_light_energy = 0.8
 fog_sun_scatter = 0.6
-fog_density = 0.25
+fog_density = 1.0
 fog_height = -5.0
 fog_height_density = 0.08
 fog_depth_curve = 2.0

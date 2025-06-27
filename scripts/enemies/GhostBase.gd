@@ -19,15 +19,18 @@ enum GriefStage {
 @export var rotation_speed: float = 10.0
 
 # Propriedades de detecção visual
-@export var vision_range: float = 12.0
-@export var vision_angle: float = 90.0  # Ângulo de visão em graus
-@export var lose_sight_time: float = 3.0  # Tempo para perder o player de vista
+@export var vision_range: float = 15.0  # Aumentado para mais agressividade
+@export var vision_angle: float = 120.0  # Ângulo de visão mais amplo
+@export var lose_sight_time: float = 2.0  # Reduzido para manter perseguição mais tempo
 
-# Propriedades de movimento
-@export var wander_radius: float = 10.0
-@export var wander_chance: float = 0.3
-@export var idle_time_min: float = 2.0
-@export var idle_time_max: float = 5.0
+# Propriedades de movimento e patrulhamento
+@export var wander_radius: float = 15.0  # Área de patrulha maior
+@export var wander_chance: float = 0.5  # Mais movimento ativo
+@export var idle_time_min: float = 1.0  # Menos tempo parado
+@export var idle_time_max: float = 3.0  # Menos tempo parado
+@export var patrol_radius: float = 20.0  # Raio de patrulhamento
+@export var patrol_points_count: int = 6  # Número de pontos de patrulha
+@export var aggressive_chase_distance: float = 20.0  # Distância para perseguição agressiva
 
 # Propriedades específicas por estágio
 var stage_properties = {
@@ -209,6 +212,32 @@ func _setup_stage_properties():
 	
 	print("✅ [Ghost] Fantasma ", GriefStage.keys()[grief_stage], " configurado - Vision: ", vision_range)
 
+func _get_aggression_level() -> float:
+	"""Retorna o nível de agressividade do fantasma com verificação de segurança"""
+	if not stage_properties.has(grief_stage):
+		print("⚠️ [Ghost] Estágio não encontrado, usando agressividade padrão")
+		return 1.0
+	
+	var props = stage_properties[grief_stage]
+	if not props.has("aggression"):
+		print("⚠️ [Ghost] Propriedade 'aggression' não encontrada, usando padrão")
+		return 1.0
+	
+	return props["aggression"]
+
+func _get_special_ability() -> String:
+	"""Retorna a habilidade especial do fantasma com verificação de segurança"""
+	if not stage_properties.has(grief_stage):
+		print("⚠️ [Ghost] Estágio não encontrado, usando habilidade padrão")
+		return "phase_through"
+	
+	var props = stage_properties[grief_stage]
+	if not props.has("special_ability"):
+		print("⚠️ [Ghost] Propriedade 'special_ability' não encontrada, usando padrão")
+		return "phase_through"
+	
+	return props["special_ability"]
+
 func _setup_vision_detection():
 	# Garantia de que vision_range é numérico
 	if typeof(vision_range) != TYPE_FLOAT and typeof(vision_range) != TYPE_INT:
@@ -238,27 +267,94 @@ func _setup_vision_detection():
 	vision_area.collision_mask = 2  # Layer do player
 
 func _setup_patrol_points():
-	# Cria pontos de patrulha ao redor da posição inicial
+	"""Configura pontos de patrulha inteligentes ao redor da posição inicial"""
 	patrol_points.clear()
-	var num_points = 4
-	var radius = wander_radius * 0.7
 	
 	var navigation_map = get_world_3d().navigation_map if get_world_3d() else null
 	
+	# Cria múltiplos anéis de patrulha para cobertura mais ampla
+	var patterns = [
+		{"radius": patrol_radius * 0.3, "points": 3},  # Anel interno
+		{"radius": patrol_radius * 0.6, "points": 4},  # Anel médio
+		{"radius": patrol_radius * 1.0, "points": 5}   # Anel externo
+	]
+	
+	for pattern in patterns:
+		_add_circular_patrol_points(pattern.radius, pattern.points, navigation_map)
+	
+	# Adiciona pontos estratégicos em direções cardinais
+	_add_cardinal_patrol_points(navigation_map)
+	
+	# Garante que há pelo menos alguns pontos básicos
+	if patrol_points.size() == 0:
+		_add_emergency_patrol_points(navigation_map)
+	
+	# Embaralha os pontos para patrulhamento mais imprevisível
+	patrol_points.shuffle()
+	
+	print("👻 [Ghost] ", patrol_points.size(), " pontos de patrulha configurados para maior cobertura")
+
+func _add_circular_patrol_points(radius: float, num_points: int, navigation_map):
+	"""Adiciona pontos de patrulha em círculo com variação"""
 	for i in range(num_points):
-		var angle = (i * 2.0 * PI) / num_points
-		var base_point = spawn_position + Vector3(
-			cos(angle) * radius,
+		var angle = (i * 2.0 * PI) / num_points + randf_range(-0.3, 0.3)  # Variação angular
+		var actual_radius = radius + randf_range(-radius * 0.2, radius * 0.2)  # Variação no raio
+		
+		var point = spawn_position + Vector3(
+			cos(angle) * actual_radius,
 			0,
-			sin(angle) * radius
+			sin(angle) * actual_radius
 		)
 		
-		# Usa o NavigationMesh para obter a altura correta do ponto de patrulha
-		if navigation_map:
-			var nav_position = NavigationServer3D.map_get_closest_point(navigation_map, base_point)
-			base_point.y = nav_position.y if nav_position.y != 0.0 and not is_nan(nav_position.y) else spawn_position.y
-		
-		patrol_points.append(base_point)
+		_validate_and_add_patrol_point(point, navigation_map)
+
+func _add_cardinal_patrol_points(navigation_map):
+	"""Adiciona pontos de patrulha nas direções cardinais"""
+	var directions = [
+		Vector3.FORWARD * patrol_radius * 0.8,
+		Vector3.BACK * patrol_radius * 0.8,
+		Vector3.LEFT * patrol_radius * 0.8,
+		Vector3.RIGHT * patrol_radius * 0.8
+	]
+	
+	for direction in directions:
+		var point = spawn_position + direction
+		_validate_and_add_patrol_point(point, navigation_map)
+
+func _add_emergency_patrol_points(navigation_map):
+	"""Adiciona pontos de patrulha de emergência se nenhum foi criado"""
+	var emergency_points = [
+		spawn_position + Vector3(8, 0, 0),
+		spawn_position + Vector3(-8, 0, 0),
+		spawn_position + Vector3(0, 0, 8),
+		spawn_position + Vector3(0, 0, -8)
+	]
+	
+	for point in emergency_points:
+		_validate_and_add_patrol_point(point, navigation_map)
+
+func _validate_and_add_patrol_point(point: Vector3, navigation_map):
+	"""Valida e adiciona um ponto de patrulha com altura correta"""
+	# Usa o NavigationMesh para obter a altura correta
+	if navigation_map:
+		var nav_position = NavigationServer3D.map_get_closest_point(navigation_map, point)
+		if nav_position.y != 0.0 and not is_nan(nav_position.y):
+			point.y = nav_position.y
+		else:
+			point.y = spawn_position.y
+	else:
+		point.y = spawn_position.y
+	
+	# Verifica se o ponto não está muito próximo de outros pontos
+	var min_distance = 4.0
+	var too_close = false
+	for existing_point in patrol_points:
+		if point.distance_to(existing_point) < min_distance:
+			too_close = true
+			break
+	
+	if not too_close:
+		patrol_points.append(point)
 
 func _start_patrolling():
 	movement_state = MovementState.PATROLLING
@@ -435,8 +531,11 @@ func _update_ai_state():
 		return
 	
 	var distance_to_player = global_position.distance_to(player_ref.global_position)
+	var aggression_level = _get_aggression_level()
 	
-	print("👻 [Ghost] AI Update - Distance: ", distance_to_player, " State: ", MovementState.keys()[movement_state])
+	# Debug ocasional para não spam
+	if randf() < 0.1:
+		print("👻 [Ghost] AI Update - Distance: ", distance_to_player, " State: ", MovementState.keys()[movement_state], " Aggression: ", aggression_level)
 	
 	# Verifica se pode atacar
 	if distance_to_player <= attack_range and player_spotted and can_attack:
@@ -444,24 +543,54 @@ func _update_ai_state():
 		_start_attacking()
 		return
 	
-	# Estado baseado na detecção do player
+	# IA mais agressiva baseada no nível de agressão
 	if player_spotted:
-		# Player visível - perseguir
+		# Player visível - perseguir agressivamente
 		if movement_state != MovementState.CHASING_PLAYER:
-			print("👻 [Ghost] Mudando para CHASING_PLAYER")
+			print("👻 [Ghost] Mudando para CHASING_PLAYER (agressivo)")
 			_start_chasing()
 	else:
-		# Player não visível
-		if last_known_player_position != Vector3.ZERO:
-			# Tem última posição conhecida - investigar
-			if movement_state != MovementState.INVESTIGATING:
-				print("👻 [Ghost] Mudando para INVESTIGATING")
-				_start_investigating()
+		# Player não visível - comportamento baseado na agressividade
+		if distance_to_player <= aggressive_chase_distance * aggression_level:
+			# Dentro da distância de perseguição agressiva
+			if last_known_player_position != Vector3.ZERO:
+				# Tem última posição conhecida - investigar agressivamente
+				if movement_state != MovementState.INVESTIGATING:
+					print("👻 [Ghost] Mudando para INVESTIGATING (agressivo)")
+					_start_investigating()
+			else:
+				# Sem posição conhecida, mas player próximo - procurar ativamente
+				if movement_state != MovementState.SEARCHING:
+					print("👻 [Ghost] Mudando para SEARCHING (agressivo)")
+					_start_aggressive_search()
 		else:
-			# Sem informação do player - patrulhar
+			# Longe do player - patrulhar mais ativamente
 			if movement_state not in [MovementState.PATROLLING, MovementState.IDLE]:
 				print("👻 [Ghost] Mudando para PATROLLING")
 				_start_patrolling()
+			elif movement_state == MovementState.IDLE and aggression_level > 1.0:
+				# Fantasmas agressivos não ficam muito tempo parados
+				print("👻 [Ghost] Saindo do IDLE por agressividade")
+				_start_patrolling()
+
+func _start_aggressive_search():
+	"""Inicia busca agressiva pelo player"""
+	movement_state = MovementState.SEARCHING
+	
+	# Vai para uma posição próxima ao player para procurar
+	var search_target = player_ref.global_position + Vector3(
+		randf_range(-10, 10),
+		0,
+		randf_range(-10, 10)
+	)
+	
+	navigation_agent.target_position = search_target
+	print("👻 [Ghost] Iniciando busca agressiva em: ", search_target)
+	
+	# Após um tempo, volta a patrulhar se não encontrar
+	await get_tree().create_timer(3.0).timeout
+	if movement_state == MovementState.SEARCHING and not player_spotted:
+		_start_patrolling()
 
 func _start_chasing():
 	movement_state = MovementState.CHASING_PLAYER
@@ -478,15 +607,20 @@ func _start_attacking():
 	perform_attack()
 
 func _handle_movement(delta):
+	# Calcula velocidade baseada no estado e agressividade
+	var current_speed = _calculate_movement_speed()
+	
 	match movement_state:
 		MovementState.PATROLLING:
-			_move_towards_target()
+			_move_towards_target(current_speed)
 		MovementState.INVESTIGATING:
-			_move_towards_target()
+			_move_towards_target(current_speed * 1.2)  # Mais rápido ao investigar
 		MovementState.CHASING_PLAYER:
 			if player_spotted and player_ref:
 				navigation_agent.target_position = player_ref.global_position
-			_move_towards_target()
+			_move_towards_target(current_speed * 1.5)  # Muito mais rápido ao perseguir
+		MovementState.SEARCHING:
+			_move_towards_target(current_speed * 1.3)  # Rápido ao procurar
 		MovementState.ATTACKING:
 			velocity = Vector3.ZERO
 		MovementState.IDLE:
@@ -495,15 +629,41 @@ func _handle_movement(delta):
 			if idle_timer <= 0:
 				_start_patrolling()
 
-func _move_towards_target():
+func _calculate_movement_speed() -> float:
+	"""Calcula a velocidade de movimento baseada no estado e agressividade"""
+	var base_speed = speed
+	var aggression_level = _get_aggression_level()
+	
+	# Multiplicador baseado na agressividade
+	var aggression_multiplier = 0.8 + (aggression_level * 0.4)  # 0.8 a 1.4x
+	
+	# Multiplicador baseado no estado emocional
+	var state_multiplier = 1.0
+	match movement_state:
+		MovementState.CHASING_PLAYER:
+			state_multiplier = 1.3 + (aggression_level * 0.2)  # Muito mais rápido ao perseguir
+		MovementState.INVESTIGATING:
+			state_multiplier = 1.1 + (aggression_level * 0.1)  # Pouco mais rápido ao investigar
+		MovementState.SEARCHING:
+			state_multiplier = 1.2 + (aggression_level * 0.15)  # Rápido ao procurar
+		MovementState.PATROLLING:
+			state_multiplier = 0.9 + (aggression_level * 0.2)  # Velocidade base de patrulha
+	
+	return base_speed * aggression_multiplier * state_multiplier
+
+func _move_towards_target(movement_speed: float = 0.0):
 	if not navigation_agent:
 		print("❌ [Ghost] NavigationAgent3D não encontrado!")
 		return
 	
+	# Usa velocidade calculada ou velocidade padrão
+	var current_speed = movement_speed if movement_speed > 0.0 else speed
+	
 	# Verifica se há um caminho válido
 	if navigation_agent.is_navigation_finished():
 		velocity = Vector3.ZERO
-		print("🏁 [Ghost] Navegação finalizada - Posição: ", global_position)
+		if randf() < 0.1:  # Debug ocasional
+			print("🏁 [Ghost] Navegação finalizada - Posição: ", global_position)
 		return
 	
 	# Obtém a próxima posição do caminho
@@ -515,25 +675,26 @@ func _move_towards_target():
 	var nav_position = NavigationServer3D.map_get_closest_point(navigation_map, global_position)
 	var target_height = nav_position.y
 	
-	# Se não conseguir obter a altura da navegação, usa 1.5 como fallback
+	# Se não conseguir obter a altura da navegação, usa a altura do spawn como fallback
 	if target_height == 0.0 or is_nan(target_height):
-		target_height = 1.5
+		target_height = spawn_position.y
 	
 	# Corrige a altura do fantasma se estiver muito longe da navegação
 	if abs(global_position.y - target_height) > 0.5:
 		global_position.y = target_height
-		print("🔧 [Ghost] Altura corrigida para NavigationMesh: ", target_height)
+		if randf() < 0.1:  # Debug ocasional
+			print("🔧 [Ghost] Altura corrigida para NavigationMesh: ", target_height)
 	
 	# Aplica movimento apenas no plano horizontal
 	direction.y = 0
 	
-	# Debug do movimento
-	if randf() < 0.05:  # Debug ocasional para não spam
-		print("🚶 [Ghost] Movendo para: ", next_path_position, " | Distância: ", global_position.distance_to(next_path_position), " | Altura: ", global_position.y)
+	# Debug do movimento ocasional para não spam
+	if randf() < 0.02:
+		print("🚶 [Ghost] Movendo para: ", next_path_position, " | Speed: ", current_speed, " | State: ", MovementState.keys()[movement_state])
 	
-	# Aplica velocidade horizontal
-	velocity.x = direction.x * speed
-	velocity.z = direction.z * speed
+	# Aplica velocidade horizontal baseada na velocidade calculada
+	velocity.x = direction.x * current_speed
+	velocity.z = direction.z * current_speed
 	
 	# Adiciona flutuação vertical suave (pequena oscilação)
 	var float_time = Time.get_time_dict_from_system()["second"] + randf() * 10.0
@@ -542,20 +703,19 @@ func _move_towards_target():
 	# Rotaciona o fantasma na direção do movimento
 	if direction.length() > 0.1:
 		var target_rotation = atan2(direction.x, direction.z)
-		rotation.y = lerp_angle(rotation.y, target_rotation, 0.1)
-		if randf() < 0.05:  # Debug ocasional da rotação
-			print("🔄 Rotacionando para: ", rad_to_deg(target_rotation), "°")
+		var rotation_speed_multiplier = 1.0 + (current_speed / speed - 1.0) * 0.5  # Rotação mais rápida quando mais rápido
+		rotation.y = lerp_angle(rotation.y, target_rotation, 0.1 * rotation_speed_multiplier)
 	
 	# Aplica o movimento
 	move_and_slide()
 	
-	# Garante que a altura seja mantida após o movimento usando a altura do NavigationMesh
+	# Garante que a altura seja mantida após o movimento
 	var final_nav_position = NavigationServer3D.map_get_closest_point(navigation_map, global_position)
 	var final_target_height = final_nav_position.y
 	
-	# Se não conseguir obter a altura da navegação, usa 1.5 como fallback
+	# Se não conseguir obter a altura da navegação, usa a altura do spawn
 	if final_target_height == 0.0 or is_nan(final_target_height):
-		final_target_height = 1.5
+		final_target_height = spawn_position.y
 	
 	if global_position.y < final_target_height - 0.2 or global_position.y > final_target_height + 0.5:
 		global_position.y = final_target_height
@@ -571,13 +731,25 @@ func _on_navigation_finished():
 func _next_patrol_point():
 	if patrol_points.size() == 0:
 		return
-		
-	current_patrol_index = (current_patrol_index + 1) % patrol_points.size()
+	
+	var aggression_level = _get_aggression_level()
+	
+	# Fantasmas mais agressivos podem pular pontos ou ir diretamente para pontos mais distantes
+	if aggression_level > 1.0 and randf() < 0.4:
+		# Vai para um ponto aleatório em vez do próximo sequencial
+		current_patrol_index = randi() % patrol_points.size()
+		print("👻 [Ghost] Patrulhamento agressivo - saltando para ponto aleatório")
+	else:
+		current_patrol_index = (current_patrol_index + 1) % patrol_points.size()
+	
 	navigation_agent.target_position = patrol_points[current_patrol_index]
 	
-	# Chance de ficar idle no ponto de patrulha
-	if randf() < 0.3:
+	# Chance de ficar idle baseada na agressividade (menos agressivos ficam mais tempo parados)
+	var idle_chance = 0.4 - (aggression_level * 0.2)
+	if randf() < idle_chance:
 		_start_idle()
+	
+	print("👻 [Ghost] Próximo ponto de patrulha: ", patrol_points[current_patrol_index])
 
 func _start_searching_area():
 	movement_state = MovementState.SEARCHING
@@ -626,11 +798,7 @@ func perform_attack():
 		movement_state = MovementState.INVESTIGATING
 
 func _execute_special_ability():
-	if not stage_properties.has(grief_stage):
-		print("❌ [Ghost] Erro: Estágio de luto não encontrado para habilidade: ", grief_stage)
-		return
-	
-	var ability = stage_properties[grief_stage]["special_ability"]
+	var ability = _get_special_ability()
 	
 	match ability:
 		"phase_through":
@@ -678,28 +846,75 @@ func _peaceful_death_ability():
 	# Não causa dano extra, apenas o ataque normal
 
 func take_damage(amount: int):
+	# Método de compatibilidade - chama o método com crítico como false
+	take_damage_with_critical(amount, false)
+
+func take_damage_with_critical(amount: int, is_critical: bool = false):
 	if current_health <= 0 or is_dying:
 		return
 		
 	current_health -= amount
-	print("DEBUG: Ghost ", GriefStage.keys()[grief_stage], " tomou ", amount, " de dano! Vida restante: ", current_health)
 	
-	# Mostra a label de dano
+	if is_critical:
+		print("💥🔥 [Ghost] Fantasma ", GriefStage.keys()[grief_stage], " tomou DANO CRÍTICO de ", amount, "! Vida restante: ", current_health, "/", max_health)
+	else:
+		print("👻 [Ghost] Fantasma ", GriefStage.keys()[grief_stage], " tomou ", amount, " de dano! Vida restante: ", current_health, "/", max_health)
+	
+	# Mostra a label de dano com informação de crítico
 	if damage_label_scene:
 		var label = damage_label_scene.instantiate()
 		add_child(label)
-		label.setup(amount, true)
+		label.setup(amount, true, is_critical)
 	
-	# Efeito visual de dano
-	if sprite:
+	# Efeito visual de dano mais intenso para críticos
+	var flash_color = Vector4(1.0, 0.0, 0.0, 1.0)  # Vermelho normal
+	var flash_duration = 0.3
+	
+	if is_critical:
+		flash_color = Vector4(1.0, 1.0, 0.0, 1.0)  # Amarelo para crítico
+		flash_duration = 0.5  # Dura mais tempo
+	
+	if ghost_cylinder and ghost_cylinder.material is ShaderMaterial:
+		var original_color = ghost_cylinder.material.get_shader_parameter("ghost_color")
+		ghost_cylinder.material.set_shader_parameter("ghost_color", flash_color)
+		await get_tree().create_timer(flash_duration).timeout
+		ghost_cylinder.material.set_shader_parameter("ghost_color", original_color)
+	elif sprite:
 		var original_modulate = sprite.modulate
-		sprite.modulate = Color.RED
-		await get_tree().create_timer(0.2).timeout
+		var flash_sprite_color = Color(flash_color.x, flash_color.y, flash_color.z, flash_color.w)
+		sprite.modulate = flash_sprite_color
+		await get_tree().create_timer(flash_duration).timeout
 		sprite.modulate = original_modulate
+	
+	# Aplica shake na câmera quando o fantasma recebe dano (mais intenso para críticos)
+	var viewport = get_viewport()
+	if viewport:
+		var camera = viewport.get_camera_3d()
+		if camera and camera.has_method("shake"):
+			if is_critical:
+				# Shake mais intenso para dano crítico
+				if camera.has_method("shake_intense"):
+					camera.shake_intense()
+				else:
+					camera.shake()
+			else:
+				camera.shake()
+	
+	# Força o fantasma a reagir ao dano entrando em modo de perseguição
+	if player_ref and not player_spotted:
+		_spot_player()
+		movement_state = MovementState.CHASING_PLAYER
+		if is_critical:
+			print("🎯🔥 [Ghost] Fantasma ENFURECIDO pelo dano crítico! Iniciando perseguição intensa!")
+		else:
+			print("🎯 [Ghost] Fantasma alertado pelo dano! Iniciando perseguição!")
 	
 	# Verifica se morreu
 	if current_health <= 0:
-		print("[Ghost] Fantasma ", GriefStage.keys()[grief_stage], " morreu!")
+		if is_critical:
+			print("💀🔥 [Ghost] Fantasma ", GriefStage.keys()[grief_stage], " foi ANIQUILADO com dano crítico!")
+		else:
+			print("💀 [Ghost] Fantasma ", GriefStage.keys()[grief_stage], " foi derrotado!")
 		die()
 
 func heal(amount: int):
@@ -711,7 +926,16 @@ func die():
 		return
 		
 	is_dying = true
-	print("[Ghost] Iniciando sequência de morte do estágio ", GriefStage.keys()[grief_stage])
+	print("💀 [Ghost] Iniciando sequência de morte do estágio ", GriefStage.keys()[grief_stage])
+	
+	# === CONCEDE PONTOS DE LUCIDEZ ===
+	# Conecta ao LucidityManager para conceder pontos
+	var lucidity_manager = get_node_or_null("/root/LucidityManager")
+	if lucidity_manager and lucidity_manager.has_method("add_lucidity_point"):
+		lucidity_manager.add_lucidity_point(1)
+		print("✨ [Ghost] Fantasma derrotado! +1 ponto de lucidez concedido")
+	else:
+		print("⚠️ [Ghost] LucidityManager não encontrado - pontos não concedidos")
 	
 	# Executa morte especial baseada no estágio
 	_execute_death_special()
@@ -719,7 +943,8 @@ func die():
 	# Emite sinal de derrota
 	emit_signal("ghost_defeated")
 	
-	# Remove o fantasma da cena
+	# Remove o fantasma da cena após um pequeno delay para dar tempo dos efeitos
+	await get_tree().create_timer(0.5).timeout
 	queue_free()
 
 func _execute_death_special():

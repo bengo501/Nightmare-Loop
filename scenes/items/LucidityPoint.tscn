@@ -8,8 +8,13 @@
 material = SubResource("StandardMaterial3D_x0hy1")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_xxxxx"]
+radius = 2.0
 
 [node name="LucidityPoint" type="Area3D"]
+collision_layer = 0
+collision_mask = 2
+monitoring = true
+monitorable = true
 script = ExtResource("1_xxxxx")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

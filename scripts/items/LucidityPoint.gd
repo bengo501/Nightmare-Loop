@@ -11,6 +11,21 @@ var is_collected: bool = false
 var lucidity_color: Color = Color(0.2, 0.8, 1.0, 1.0)
 
 func _ready():
+	# === FORÇA CONFIGURAÇÕES DE COLLISION ===
+	# Garante que as configurações sejam aplicadas mesmo se não estiverem no .tscn
+	monitoring = true
+	monitorable = true
+	collision_layer = 0
+	collision_mask = 2
+	
+	# Debug detalhado
+	print("✨ [LucidityPoint] Ponto de Lucidez criado")
+	print("✨ [LucidityPoint] Collision Layer: ", collision_layer)
+	print("✨ [LucidityPoint] Collision Mask: ", collision_mask)
+	print("✨ [LucidityPoint] Monitoring: ", monitoring)
+	print("✨ [LucidityPoint] Monitorable: ", monitorable)
+	print("✨ [LucidityPoint] Posição: ", global_position)
+	
 	# Configurar animação de rotação e flutuação
 	_setup_animations()
 	
@@ -63,41 +78,65 @@ func _setup_visual():
 		mesh.material_override = material
 
 func _process(_delta):
-	if can_interact and Input.is_action_just_pressed("interact") and not is_collected:
-		collect()
+	if can_interact and not is_collected:
+		if Input.is_action_just_pressed("interact"):
+			print("✨ [LucidityPoint] Tecla E pressionada! Coletando...")
+			collect()
+	# Debug contínuo enquanto pode interagir
+	elif can_interact and not is_collected:
+		# Este debug só executa uma vez por ciclo quando pode interagir
+		pass
 
 func _on_body_entered(body):
+	print("✨ [LucidityPoint] Corpo detectado: ", body.name, " | Grupos: ", body.get_groups())
 	if body.is_in_group("player"):
 		can_interact = true
+		print("✨ [LucidityPoint] Player detectado! Interaction habilitada")
 		if interaction_prompt and is_instance_valid(interaction_prompt):
 			interaction_prompt.visible = true
+			print("✨ [LucidityPoint] Prompt mostrado")
+	else:
+		print("✨ [LucidityPoint] Corpo não é player")
 
 func _on_body_exited(body):
+	print("✨ [LucidityPoint] Corpo saiu: ", body.name, " | Grupos: ", body.get_groups())
 	if body.is_in_group("player"):
 		can_interact = false
+		print("✨ [LucidityPoint] Player saiu! Interaction desabilitada")
 		if interaction_prompt and is_instance_valid(interaction_prompt):
 			interaction_prompt.visible = false
+			print("✨ [LucidityPoint] Prompt escondido")
+	else:
+		print("✨ [LucidityPoint] Corpo que saiu não é player")
 
 func collect():
 	if is_collected:
+		print("✨ [LucidityPoint] Item já foi coletado - ignorando")
 		return
 		
+	print("✨ [LucidityPoint] === INICIANDO COLETA ===")
 	is_collected = true
 	can_interact = false
 	
 	# Esconde o prompt
 	if interaction_prompt and is_instance_valid(interaction_prompt):
 		interaction_prompt.visible = false
+		print("✨ [LucidityPoint] Prompt escondido")
 	
 	# Adicionar ponto de lucidez ao LucidityManager
 	var lucidity_manager = get_node("/root/LucidityManager")
 	if lucidity_manager:
+		var old_points = lucidity_manager.get_lucidity_points()
 		lucidity_manager.add_lucidity_point(1)
-		print("✨ Ponto de Lucidez coletado! +1 ponto adicionado")
+		var new_points = lucidity_manager.get_lucidity_points()
+		print("✨✨ [LucidityPoint] PONTO DE LUCIDEZ COLETADO! ✨✨")
+		print("✨ [LucidityPoint] Pontos: ", old_points, " → ", new_points)
+		print("✨ [LucidityPoint] HUD será atualizada automaticamente via sinal")
 	else:
-		print("[LucidityPoint] ERRO: LucidityManager não encontrado!")
+		print("❌ [LucidityPoint] ERRO: LucidityManager não encontrado!")
 	
 	# Efeito visual de coleta
+	print("✨ [LucidityPoint] Executando efeito visual de coleta")
 	_play_collection_effect()
 
 func _play_collection_effect():

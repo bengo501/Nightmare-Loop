@@ -4988,7 +4988,7 @@ transform = Transform3D(0.93473, 0.90577, -0.0658068, -0.0280639, 0.101928, -2.4
 collision_mask = 129
 
 [node name="FirstPersonCamera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312904, 1.94865, 0.36499)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.312904, 1.38917, 0.36499)
 script = ExtResource("4_p47bc")
 
 [node name="weapon" type="TextureRect" parent="FirstPersonCamera"]
@@ -4999,6 +4999,8 @@ offset_bottom = 648.0
 texture = ExtResource("4_lvxji")
 
 [node name="ShootRay" type="RayCast3D" parent="FirstPersonCamera"]
+target_position = Vector3(0, 0, -50)
+collision_mask = 7
 
 [node name="LaseLine" type="CSGCylinder3D" parent="FirstPersonCamera"]
 transform = Transform3D(1.09828, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.0549873, -0.0914389, -1.58607)

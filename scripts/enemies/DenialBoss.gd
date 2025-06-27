@@ -320,16 +320,27 @@ func _change_to_phase_2():
 
 # === OVERRIDE DAS FUNÇÕES DA CLASSE PAI ===
 func take_damage(amount: int):
+	# Método de compatibilidade - chama o método com crítico como false
+	take_damage_with_critical(amount, false)
+
+func take_damage_with_critical(amount: int, is_critical: bool = false):
 	if is_dying or dialog_active:
 		return
 	
 	# Boss resiste a dano durante estado de negação
 	if is_in_denial_state:
 		amount = int(amount * 0.3)  # Reduz dano em 70%
-		print("🛡️ Boss em estado de negação! Dano reduzido para: ", amount)
+		if is_critical:
+			print("🛡️ Boss em estado de negação! Dano crítico reduzido para: ", amount)
+		else:
+			print("🛡️ Boss em estado de negação! Dano reduzido para: ", amount)
 	
 	current_health -= amount
-	print("👑 BOSS tomou ", amount, " de dano! Vida restante: ", current_health, "/", max_health)
+	
+	if is_critical:
+		print("👑💥 BOSS tomou DANO CRÍTICO de ", amount, "! Vida restante: ", current_health, "/", max_health)
+	else:
+		print("👑 BOSS tomou ", amount, " de dano! Vida restante: ", current_health, "/", max_health)
 	
 	# Emite sinal de mudança de vida
 	emit_signal("boss_health_changed", current_health, max_health)
@@ -338,18 +349,31 @@ func take_damage(amount: int):
 	if damage_label_scene:
 		var label = damage_label_scene.instantiate()
 		add_child(label)
-		label.setup(amount, true)
+		label.setup(amount, true, is_critical)
 		label.scale = Vector3(1.5, 1.5, 1.5)  # Label maior para boss
 	
-	# Efeito visual de dano mais intenso
+	# Efeito visual de dano mais intenso para críticos
+	var flash_color = Vector4(1.0, 0.0, 0.0, 1.0)  # Vermelho normal
+	var flash_duration = 0.3
+	
+	if is_critical:
+		flash_color = Vector4(1.0, 1.0, 0.0, 1.0)  # Amarelo para crítico
+		flash_duration = 0.6  # Boss dura ainda mais tempo
+	
 	if ghost_cylinder:
 		var original_color = ghost_cylinder.material.get_shader_parameter("ghost_color")
-		ghost_cylinder.material.set_shader_parameter("ghost_color", Vector4(1.0, 0.0, 0.0, 1.0))
-		await get_tree().create_timer(0.3).timeout
+		ghost_cylinder.material.set_shader_parameter("ghost_color", flash_color)
+		await get_tree().create_timer(flash_duration).timeout
 		ghost_cylinder.material.set_shader_parameter("ghost_color", original_color)
 	
-	# Chance de entrar em estado de negação quando recebe dano
-	if not is_in_denial_state and randf() < 0.25:  # 25% de chance
+	# Chance aumentada de entrar em estado de negação quando recebe dano crítico
+	var denial_chance = 0.25  # 25% chance normal
+	if is_critical:
+		denial_chance = 0.5  # 50% chance com dano crítico
+	
+	if not is_in_denial_state and randf() < denial_chance:
+		if is_critical:
+			print("🛡️💥 Boss ENFURECIDO pelo dano crítico! Entrando em estado de negação!")
 		_enter_denial_state()
 	
 	# Verifica mudança de fase
@@ -357,7 +381,10 @@ func take_damage(amount: int):
 	
 	# Verifica se morreu
 	if current_health <= 0:
-		print("👑 CHEFE DA NEGAÇÃO FOI DERROTADO!")
+		if is_critical:
+			print("👑💥 CHEFE DA NEGAÇÃO FOI ANIQUILADO COM DANO CRÍTICO!")
+		else:
+			print("👑 CHEFE DA NEGAÇÃO FOI DERROTADO!")
 		die()
 
 func _enter_denial_state():

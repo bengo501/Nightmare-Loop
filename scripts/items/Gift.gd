@@ -18,6 +18,12 @@ var gift_colors: Dictionary = {
 }
 
 func _ready():
+	# Força configurações de área para garantir detecção
+	monitoring = true
+	monitorable = true
+	collision_layer = 0
+	collision_mask = 2
+	
 	# Configurar animação de rotação
 	var animation_player = AnimationPlayer.new()
 	add_child(animation_player)
