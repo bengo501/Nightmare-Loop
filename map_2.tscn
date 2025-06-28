@@ -1,4 +1,4 @@
-[gd_scene load_steps=90 format=3 uid="uid://ddlldwbytxok2"]
+[gd_scene load_steps=92 format=3 uid="uid://ddlldwbytxok2"]
 
 [ext_resource type="PackedScene" uid="uid://cdooq3wu5wgv3" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/FloorLamp.fbx_Scene/FloorLamp.fbx_Scene.fbx" id="1_6cupr"]
 [ext_resource type="Texture2D" uid="uid://ca44uy3jlfa6w" path="res://assets/textures/Floor/Horror_Floor_05-128x128.png" id="1_mdskg"]
@@ -24,7 +24,9 @@
 [ext_resource type="Script" uid="uid://cgwj4282tvlde" path="res://scripts/map_2_controller.gd" id="22_map2_controller"]
 [ext_resource type="Environment" uid="uid://12p1ky83ikyg" path="res://environments/green_nightmare_environment.tres" id="23_green_environment"]
 [ext_resource type="PackedScene" uid="uid://b2vnqpoqdtfsb" path="res://scenes/items/GiftAceitacao.tscn" id="33_cyjou"]
+[ext_resource type="PackedScene" uid="uid://c4rvwq52s3ajv" path="res://scenes/items/LucidityPoint.tscn" id="34_cyjou"]
 [ext_resource type="PackedScene" uid="uid://ct6ppkdyv5tix" path="res://scenes/items/GiftBarganha.tscn" id="34_ya2kv"]
+[ext_resource type="PackedScene" path="res://scenes/items/HealthItem.tscn" id="35_x303b"]
 [ext_resource type="PackedScene" uid="uid://b32bfkl2u1lu2" path="res://scenes/items/GiftNegacao.tscn" id="35_ya2kv"]
 [ext_resource type="PackedScene" uid="uid://cgc3p4t7c63mb" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Bed_Double/Bed_Double.fbx.fbx" id="36_vlako"]
 [ext_resource type="PackedScene" uid="uid://cewd237rs3tm8" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Cupboard/Cupboard.fbx_Scene/Cupboard.fbx_Scene.fbx" id="37_inn4y"]
@@ -1349,6 +1351,30 @@ material = ExtResource("2_tu8f1")
 
 [node name="Teto" type="CSGBox3D" parent="."]
 transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, -10.0147, 35.1947, -4.0196)
+collision_layer = 129
+collision_mask = 129
+size = Vector3(10, 0.163147, 10)
+
+[node name="Teto2" type="CSGBox3D" parent="."]
+transform = Transform3D(50, 0, 0, 0, -2.18557e-06, -50, 0, 50, -2.18557e-06, -10.0147, 35.1947, 46.0793)
+collision_layer = 129
+collision_mask = 129
+size = Vector3(10, 0.163147, 10)
+
+[node name="Teto3" type="CSGBox3D" parent="."]
+transform = Transform3D(50, 0, 0, 0, -2.18557e-06, -50, 0, 50, -2.18557e-06, -10.0147, 35.1947, -310.107)
+collision_layer = 129
+collision_mask = 129
+size = Vector3(10, 0.163147, 10)
+
+[node name="Teto4" type="CSGBox3D" parent="."]
+transform = Transform3D(-2.18557e-06, 50, -2.18557e-06, 0, -2.18557e-06, -50, -50, -2.18557e-06, 9.55343e-14, -117.373, 35.1947, -163.241)
+collision_layer = 129
+collision_mask = 129
+size = Vector3(10, 0.163147, 10)
+
+[node name="Teto5" type="CSGBox3D" parent="."]
+transform = Transform3D(-2.18557e-06, 50, -2.18557e-06, 0, -2.18557e-06, -50, -50, -2.18557e-06, 9.55343e-14, 196.409, 35.1947, -167.571)
 collision_layer = 129
 collision_mask = 129
 size = Vector3(10, 0.163147, 10)
@@ -3615,3 +3641,120 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 7.9792
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -6.29414, 2.03899, -33.1604)
 
 [node name="FogOfWar" parent="." instance=ExtResource("41_fog_of_war")]
+
+[node name="LucidityPoint" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20.3457, 1.56499, -14.8412)
+
+[node name="LucidityPoint2" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20.3457, 1.56499, -20.0806)
+
+[node name="LucidityPoint3" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20.3457, 1.56499, -27.1561)
+
+[node name="LucidityPoint4" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.75851, 3.34099, -33.1349)
+
+[node name="LucidityPoint5" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.910083, 3.34099, -39.1897)
+
+[node name="LucidityPoint6" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 12.7047, 4.11375, -54.4961)
+
+[node name="LucidityPoint7" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 30.3913, 4.11375, -62.1978)
+
+[node name="LucidityPoint8" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 29.9993, 4.11375, -75.267)
+
+[node name="LucidityPoint9" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 43.0139, 4.11375, -81.0689)
+
+[node name="LucidityPoint10" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 47.9392, 4.11375, -79.5848)
+
+[node name="LucidityPoint11" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 35.6405, 4.11375, -91.4799)
+
+[node name="LucidityPoint12" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 40.7902, 4.11375, -102.394)
+
+[node name="LucidityPoint13" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 27.4083, 3.44071, -91.4647)
+
+[node name="LucidityPoint14" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 31.7534, 4.11375, -110.409)
+
+[node name="LucidityPoint15" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 5.08353, 4.11375, -100.87)
+
+[node name="LucidityPoint16" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.717698, 4.11375, -90.4689)
+
+[node name="LucidityPoint17" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -22.2373, 4.11375, -68.3692)
+
+[node name="LucidityPoint18" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -29.9736, 4.11375, -49.4465)
+
+[node name="LucidityPoint19" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -36.119, 3.34099, -23.4248)
+
+[node name="LucidityPoint20" parent="." instance=ExtResource("34_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -18.25, 4.11375, -41.3157)
+
+[node name="GiftNegacao31" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.53233, 0.490988, -27.1339)
+
+[node name="GiftNegacao32" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.53233, 0.490988, -23.0292)
+
+[node name="GiftNegacao33" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.53233, 0.490988, -19.2377)
+
+[node name="GiftNegacao34" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.53233, 0.490988, -14.7771)
+
+[node name="GiftRaiva13" parent="." instance=ExtResource("39_prrio")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -26.9481, 0.490988, -35.5335)
+
+[node name="GiftRaiva14" parent="." instance=ExtResource("39_prrio")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -25.5924, 0.490988, -36.4537)
+
+[node name="GiftRaiva15" parent="." instance=ExtResource("39_prrio")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -31.3786, 1.26375, -44.9144)
+
+[node name="GiftBarganha16" parent="." instance=ExtResource("34_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -24.5271, 1.26375, -54.6705)
+
+[node name="GiftBarganha17" parent="." instance=ExtResource("34_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -23.3924, 1.26375, -56.1368)
+
+[node name="GiftDepressao11" parent="." instance=ExtResource("40_1ae16")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.79594, 1.26375, -55.3845)
+
+[node name="GiftDepressao12" parent="." instance=ExtResource("40_1ae16")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.13135, 1.26375, -57.4714)
+
+[node name="GiftNegacao35" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -5.06631, 1.26375, -60.0378)
+
+[node name="GiftNegacao36" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.86499, 1.26375, -60.0378)
+
+[node name="GiftNegacao37" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.86499, 1.26375, -62.097)
+
+[node name="GiftAceitacao17" parent="." instance=ExtResource("33_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.39192, 1.26375, -46.5619)
+
+[node name="GiftAceitacao18" parent="." instance=ExtResource("33_cyjou")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.875918, 1.26375, -47.4135)
+
+[node name="GiftNegacao38" parent="." instance=ExtResource("35_ya2kv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 13.3122, 1.66925, -54.8181)
+
+[node name="GiftRaiva16" parent="." instance=ExtResource("39_prrio")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 19.3343, 1.26375, -62.4499)
+
+[node name="HealthItem" parent="." instance=ExtResource("35_x303b")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -26.924, 3.11543, -46.145)

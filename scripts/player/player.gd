@@ -562,6 +562,26 @@ func get_current_animation_info() -> Dictionary:
 
 # === ENTRADAS E TIRO EM PRIMEIRA PESSOA ===
 func _input(event):
+	# === SISTEMA DE CHEATS ===
+	# Processa cheats apenas quando está jogando
+	var state_manager = get_node_or_null("/root/GameStateManager")
+	if state_manager and state_manager.current_state == state_manager.GameState.PLAYING:
+		if event is InputEventKey and event.pressed:
+			match event.keycode:
+				KEY_G:  # Vida infinita
+					toggle_god_mode()
+				KEY_K:  # 99 de cada gift
+					cheat_give_all_gifts()
+				KEY_J:  # Ir para map_2.tscn
+					cheat_goto_map2()
+				KEY_H:  # Mostrar skill tree
+					cheat_show_skill_tree()
+				KEY_L:  # Ir para world.tscn
+					cheat_goto_world()
+				KEY_SEMICOLON:  # Tecla "ç" (no layout brasileiro) - Morte instantânea
+					cheat_instant_death()
+	
+	# === SISTEMA DE PRIMEIRA PESSOA ===
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			if event.pressed:
@@ -984,8 +1004,14 @@ func die() -> void:
 	
 	print("💀 [Player] Sequência de morte concluída")
 
-# Função para receber dano
+# Função para receber dano (com suporte a god mode)
 func take_damage(amount: float):
+	# Se god mode está ativo, ignora todo dano
+	if god_mode:
+		print("🔱 [GOD MODE] Dano ignorado: ", amount)
+		return
+	
+	# Chama a função original de dano
 	var actual_damage = amount * (1.0 - (stats.defesa / 100.0))
 	stats.hp = max(0, stats.hp - actual_damage)
 	current_health = stats.hp  # Sincroniza com current_health
@@ -1328,3 +1354,135 @@ func force_animation_reset():
 
 func is_animation_transitioning() -> bool:
 	return is_transitioning
+
+# === SISTEMA DE CHEATS ===
+var god_mode: bool = false
+var original_health_bar_color: Color
+
+func toggle_god_mode():
+	"""Cheat: G - Vida infinita e barra de vida amarela"""
+	god_mode = !god_mode
+	
+	# Busca a HUD para alterar a cor da barra de vida
+	var hud = get_node_or_null("/root/UIManager/hud_instance")
+	if not hud:
+		hud = get_tree().get_first_node_in_group("hud")
+	
+	if god_mode:
+		print("🔱 [CHEAT] GOD MODE ATIVADO! Vida infinita habilitada")
+		
+		# Restaura vida máxima
+		stats.hp = stats.max_hp
+		current_health = max_health
+		emit_signal("health_changed", stats.hp)
+		emit_signal("player_health_changed", stats.hp, stats.max_hp)
+		
+		# Muda a cor da barra de vida para amarelo
+		if hud and hud.has_node("HealthBar"):
+			var health_bar = hud.get_node("HealthBar")
+			if health_bar is ProgressBar:
+				# Salva a cor original se ainda não foi salva
+				if original_health_bar_color == Color():
+					var style = health_bar.get_theme_stylebox("fill")
+					if style and style.has_method("get_bg_color"):
+						original_health_bar_color = style.get_bg_color()
+					else:
+						original_health_bar_color = Color.GREEN  # Cor padrão de fallback
+				
+				# Aplica cor amarela
+				var yellow_style = health_bar.get_theme_stylebox("fill").duplicate()
+				yellow_style.bg_color = Color.YELLOW
+				health_bar.add_theme_stylebox_override("fill", yellow_style)
+				print("🔱 [CHEAT] Barra de vida alterada para amarelo")
+	else:
+		print("🔱 [CHEAT] GOD MODE DESATIVADO! Vida normal restaurada")
+		
+		# Restaura a cor original da barra de vida
+		if hud and hud.has_node("HealthBar"):
+			var health_bar = hud.get_node("HealthBar")
+			if health_bar is ProgressBar and original_health_bar_color != Color():
+				var original_style = health_bar.get_theme_stylebox("fill").duplicate()
+				original_style.bg_color = original_health_bar_color
+				health_bar.add_theme_stylebox_override("fill", original_style)
+				print("🔱 [CHEAT] Barra de vida restaurada para cor original")
+
+func cheat_give_all_gifts():
+	"""Cheat: K - Dar 99 de cada gift de todos os estágios do luto"""
+	print("🎁 [CHEAT] Dando 99 de cada gift de todos os estágios!")
+	
+	if gift_manager:
+		gift_manager.set_gift_count("negacao", 99)
+		gift_manager.set_gift_count("raiva", 99)
+		gift_manager.set_gift_count("barganha", 99)
+		gift_manager.set_gift_count("depressao", 99)
+		gift_manager.set_gift_count("aceitacao", 99)
+		
+		print("🎁 [CHEAT] Todos os gifts definidos para 99!")
+		print("🎁 [CHEAT] Negação: ", gift_manager.get_gift_count("negacao"))
+		print("🎁 [CHEAT] Raiva: ", gift_manager.get_gift_count("raiva"))
+		print("🎁 [CHEAT] Barganha: ", gift_manager.get_gift_count("barganha"))
+		print("🎁 [CHEAT] Depressão: ", gift_manager.get_gift_count("depressao"))
+		print("🎁 [CHEAT] Aceitação: ", gift_manager.get_gift_count("aceitacao"))
+	else:
+		print("❌ [CHEAT] ERRO: GiftManager não encontrado!")
+
+func cheat_goto_map2():
+	"""Cheat: J - Ir direto para map_2.tscn"""
+	print("🗺️ [CHEAT] Mudando para map_2.tscn...")
+	
+	var scene_manager = get_node_or_null("/root/SceneManager")
+	if scene_manager:
+		scene_manager.change_scene("map_2")
+		print("🗺️ [CHEAT] Mudança de cena solicitada para map_2")
+	else:
+		print("❌ [CHEAT] ERRO: SceneManager não encontrado!")
+
+func cheat_show_skill_tree():
+	"""Cheat: H - Mostrar menu da skill tree"""
+	print("🌳 [CHEAT] Abrindo skill tree...")
+	
+	var ui_manager = get_node_or_null("/root/UIManager")
+	if ui_manager and ui_manager.has_method("show_ui"):
+		ui_manager.show_ui("skill_tree")
+		print("🌳 [CHEAT] Skill tree aberta via UIManager")
+	else:
+		# Fallback: busca diretamente por uma skill tree na cena
+		var skill_trees = get_tree().get_nodes_in_group("skill_tree")
+		if skill_trees.size() > 0:
+			var skill_tree = skill_trees[0]
+			if skill_tree.has_method("show_skill_tree"):
+				skill_tree.show_skill_tree()
+				print("🌳 [CHEAT] Skill tree aberta diretamente")
+			elif skill_tree.has_method("show_menu"):
+				skill_tree.show_menu()
+				print("🌳 [CHEAT] Skill tree aberta via show_menu")
+		else:
+			print("❌ [CHEAT] ERRO: Skill tree não encontrada!")
+
+func cheat_goto_world():
+	"""Cheat: L - Ir para world.tscn"""
+	print("🌍 [CHEAT] Mudando para world.tscn...")
+	
+	var scene_manager = get_node_or_null("/root/SceneManager")
+	if scene_manager:
+		scene_manager.change_scene("world")
+		print("🌍 [CHEAT] Mudança de cena solicitada para world")
+	else:
+		print("❌ [CHEAT] ERRO: SceneManager não encontrado!")
+
+func cheat_instant_death():
+	"""Cheat: Ç - Morte instantânea"""
+	print("💀 [CHEAT] MORTE INSTANTÂNEA ATIVADA!")
+	
+	# Desativa god mode se estiver ativo
+	if god_mode:
+		toggle_god_mode()
+	
+	# Define vida como 0 e chama a função de morte
+	stats.hp = 0
+	current_health = 0
+	emit_signal("health_changed", stats.hp)
+	emit_signal("player_health_changed", stats.hp, stats.max_hp)
+	
+	# Chama a função de morte
+	die()

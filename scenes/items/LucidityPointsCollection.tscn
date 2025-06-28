@@ -1,35 +1,45 @@
-[gd_scene load_steps=2 format=3 uid="uid://bhqxcyj7dj8kx"]
+[gd_scene load_steps=2 format=3 uid="uid://d2x2p5klnojf0"]
 
-[ext_resource type="PackedScene" uid="uid://c4rvwq52s3ajv" path="res://scenes/items/LucidityPoint.tscn" id="1_lucidity"]
+[ext_resource type="PackedScene" uid="uid://c4rvwq52s3ajv" path="res://scenes/ui/hud.tscn" id="1_lucidity"]
 
 [node name="LucidityPointsCollection" type="Node3D"]
 
 [node name="LucidityPoint1" parent="." instance=ExtResource("1_lucidity")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+offset = Vector2(0, 1.5)
+transform = Transform2D(1, 0, 0, 1, 0, 1.5)
 
 [node name="LucidityPoint2" parent="." instance=ExtResource("1_lucidity")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.5, 0)
+offset = Vector2(5, 1.5)
+transform = Transform2D(1, 0, 0, 1, 5, 1.5)
 
 [node name="LucidityPoint3" parent="." instance=ExtResource("1_lucidity")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.5, 0)
+offset = Vector2(-5, 1.5)
+transform = Transform2D(1, 0, 0, 1, -5, 1.5)
 
 [node name="LucidityPoint4" parent="." instance=ExtResource("1_lucidity")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 5)
+offset = Vector2(0, 1.5)
+transform = Transform2D(1, 0, 0, 1, 0, 1.5)
 
 [node name="LucidityPoint5" parent="." instance=ExtResource("1_lucidity")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -5)
+offset = Vector2(0, 1.5)
+transform = Transform2D(1, 0, 0, 1, 0, 1.5)
 
 [node name="LucidityPoint6" parent="." instance=ExtResource("1_lucidity")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1.5, 3)
+offset = Vector2(3, 1.5)
+transform = Transform2D(1, 0, 0, 1, 3, 1.5)
 
 [node name="LucidityPoint7" parent="." instance=ExtResource("1_lucidity")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1.5, -3)
+offset = Vector2(-3, 1.5)
+transform = Transform2D(1, 0, 0, 1, -3, 1.5)
 
 [node name="LucidityPoint8" parent="." instance=ExtResource("1_lucidity")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.5, 2)
+offset = Vector2(7, 1.5)
+transform = Transform2D(1, 0, 0, 1, 7, 1.5)
 
 [node name="LucidityPoint9" parent="." instance=ExtResource("1_lucidity")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1.5, -2)
+offset = Vector2(-7, 1.5)
+transform = Transform2D(1, 0, 0, 1, -7, 1.5)
 
 [node name="LucidityPoint10" parent="." instance=ExtResource("1_lucidity")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.5, -7) 
+offset = Vector2(2, 1.5)
+transform = Transform2D(1, 0, 0, 1, 2, 1.5)

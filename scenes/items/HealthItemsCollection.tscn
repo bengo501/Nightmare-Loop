@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://bhqxcyj7dj8ky"]
+
+[ext_resource type="PackedScene" uid="uid://c4rvwq52s3ajw" path="res://scenes/items/HealthItem.tscn" id="1_health"]
+
+[node name="HealthItemsCollection" type="Node3D"]
+
+[node name="HealthItem1" parent="." instance=ExtResource("1_health")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="HealthItem2" parent="." instance=ExtResource("1_health")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.5, 0)
+
+[node name="HealthItem3" parent="." instance=ExtResource("1_health")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.5, 0)
+
+[node name="HealthItem4" parent="." instance=ExtResource("1_health")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 5)
+
+[node name="HealthItem5" parent="." instance=ExtResource("1_health")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -5)
+
+[node name="HealthItem6" parent="." instance=ExtResource("1_health")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1.5, 3)
+
+[node name="HealthItem7" parent="." instance=ExtResource("1_health")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1.5, -3)
+
+[node name="HealthItem8" parent="." instance=ExtResource("1_health")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.5, 2)
+
+[node name="HealthItem9" parent="." instance=ExtResource("1_health")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1.5, -2)
+
+[node name="HealthItem10" parent="." instance=ExtResource("1_health")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.5, -7) 
