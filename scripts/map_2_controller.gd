@@ -4,11 +4,21 @@ extends Node3D
 var intro_shown = false
 var stage1_dialog_shown = false
 
+# Sistema de pause
+var is_paused: bool = false
+
+# Referências aos managers
+@onready var state_manager = get_node("/root/GameStateManager")
+@onready var ui_manager = get_node("/root/UIManager")
+
 # Referência ao WorldEnvironment
 @onready var world_environment = $WorldEnvironment
 
 func _ready():
 	print("[Map2Controller] Inicializando controlador do Map 2")
+	
+	# Configura o sistema de input para pause
+	set_process_input(true)
 	
 	# Configura a atmosfera esverdeada
 	setup_green_atmosphere()
@@ -26,6 +36,80 @@ func _ready():
 		show_stage_intro()
 	else:
 		print("[Map2Controller] Introdução já foi mostrada, pulando")
+
+func _input(event):
+	"""Gerencia input para o sistema de pause"""
+	if Input.is_action_just_pressed("ui_cancel"):  # Tecla ESC
+		toggle_pause()
+
+func toggle_pause():
+	"""Alterna entre pausado e despausado"""
+	print("[Map2Controller] Alternando estado de pause...")
+	
+	if not is_paused:
+		# Pausar o jogo
+		pause_game()
+	else:
+		# Despausar o jogo
+		unpause_game()
+
+func pause_game():
+	"""Pausa o jogo"""
+	print("[Map2Controller] Pausando o jogo...")
+	is_paused = true
+	get_tree().paused = true
+	
+	# Muda o estado do jogo
+	if state_manager:
+		state_manager.change_state(state_manager.GameState.PAUSED)
+	
+	# Mostra o menu de pause
+	if ui_manager:
+		ui_manager.show_ui("pause_menu")
+		
+	# Conecta aos sinais do menu
+	_connect_pause_menu_signals()
+	
+	print("[Map2Controller] Jogo pausado com sucesso")
+
+func unpause_game():
+	"""Despausa o jogo"""
+	print("[Map2Controller] Despausando o jogo...")
+	is_paused = false
+	get_tree().paused = false
+	
+	# Muda o estado do jogo
+	if state_manager:
+		state_manager.change_state(state_manager.GameState.PLAYING)
+	
+	# Esconde o menu de pause
+	if ui_manager:
+		ui_manager.hide_ui("pause_menu")
+	
+	print("[Map2Controller] Jogo despausado com sucesso")
+
+func _connect_pause_menu_signals():
+	"""Conecta aos sinais do menu de pause para detectar quando é fechado"""
+	if ui_manager and ui_manager.active_ui.has("pause_menu"):
+		var pause_menu = ui_manager.active_ui["pause_menu"]
+		if pause_menu and is_instance_valid(pause_menu):
+			# Conecta ao botão Resume (Continuar)
+			var resume_button = pause_menu.get_node_or_null("MenuContainer/ResumeButton")
+			if resume_button and not resume_button.is_connected("pressed", unpause_game):
+				resume_button.pressed.connect(unpause_game)
+				print("[Map2Controller] Conectado ao botão Continuar do menu de pause")
+			
+			# Conecta ao botão Menu Principal
+			var main_menu_button = pause_menu.get_node_or_null("MenuContainer/MainMenuButton")
+			if main_menu_button and not main_menu_button.is_connected("pressed", _on_main_menu_pressed):
+				main_menu_button.pressed.connect(_on_main_menu_pressed)
+				print("[Map2Controller] Conectado ao botão Menu Principal do menu de pause")
+
+func _on_main_menu_pressed():
+	"""Chamado quando o botão de menu principal é pressionado no pause"""
+	print("[Map2Controller] Botão Menu Principal pressionado - resetando estado")
+	is_paused = false
+	get_tree().paused = false
 
 func setup_green_atmosphere():
 	"""

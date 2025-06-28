@@ -300,8 +300,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -952.0
 offset_top = -131.0
-offset_right = -234.0
-offset_bottom = -35.0
+offset_right = -301.0
+offset_bottom = 29.0
 grow_horizontal = 0
 grow_vertical = 0
 scale = Vector2(0.7, 0.7)
@@ -597,3 +597,32 @@ color = Color(0, 0.6, 0.8, 1)
 position = Vector2(226, 33.5)
 scale = Vector2(0.183333, 0.143154)
 texture = ExtResource("5_136eg")
+
+[node name="ControlsLabel" type="Label" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 831.0
+offset_top = 122.0
+offset_right = 831.0
+offset_bottom = 122.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9, 0.9, 1, 0.9)
+theme_override_font_sizes/font_size = 11
+text = "🎮 CONTROLES BÁSICOS:
+WASD - Caminhar
+Mouse - Mirar Câmera
+Botão Direito - Primeira Pessoa
+Botão Esquerdo - Atirar (1ª Pessoa)
+E - Interagir/Pegar Itens
+ESC - Menu de Pause
+
+🔧 CHEATS DISPONÍVEIS:
+G - God Mode (Vida Infinita)
+K - 99 de Cada Gift
+J - Ir para Map_2
+H - Abrir Skill Tree
+L - Ir para World (Hub)
+Ç - Morte Instantânea"
+vertical_alignment = 1

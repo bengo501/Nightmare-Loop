@@ -24,9 +24,9 @@
 [ext_resource type="Script" uid="uid://cgwj4282tvlde" path="res://scripts/map_2_controller.gd" id="22_map2_controller"]
 [ext_resource type="Environment" uid="uid://12p1ky83ikyg" path="res://environments/green_nightmare_environment.tres" id="23_green_environment"]
 [ext_resource type="PackedScene" uid="uid://b2vnqpoqdtfsb" path="res://scenes/items/GiftAceitacao.tscn" id="33_cyjou"]
-[ext_resource type="PackedScene" uid="uid://c4rvwq52s3ajv" path="res://scenes/items/LucidityPoint.tscn" id="34_cyjou"]
+[ext_resource type="PackedScene" uid="uid://c4rvwq52s3ajv" path="res://scenes/ui/hud.tscn" id="34_cyjou"]
 [ext_resource type="PackedScene" uid="uid://ct6ppkdyv5tix" path="res://scenes/items/GiftBarganha.tscn" id="34_ya2kv"]
-[ext_resource type="PackedScene" path="res://scenes/items/HealthItem.tscn" id="35_x303b"]
+[ext_resource type="PackedScene" uid="uid://c4rvwq52s3ajw" path="res://scenes/items/HealthItem.tscn" id="35_x303b"]
 [ext_resource type="PackedScene" uid="uid://b32bfkl2u1lu2" path="res://scenes/items/GiftNegacao.tscn" id="35_ya2kv"]
 [ext_resource type="PackedScene" uid="uid://cgc3p4t7c63mb" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Bed_Double/Bed_Double.fbx.fbx" id="36_vlako"]
 [ext_resource type="PackedScene" uid="uid://cewd237rs3tm8" path="res://assets/models/props/PSX_Furniture, Appliances, And Others/Cupboard/Cupboard.fbx_Scene/Cupboard.fbx_Scene.fbx" id="37_inn4y"]
@@ -34,7 +34,7 @@
 [ext_resource type="PackedScene" uid="uid://dgvusvrjwfwou" path="res://scenes/items/GiftRaiva.tscn" id="39_prrio"]
 [ext_resource type="PackedScene" uid="uid://xpvkqaknnd4i" path="res://scenes/items/GiftDepressao.tscn" id="40_1ae16"]
 [ext_resource type="PackedScene" uid="uid://bvhxm8k3n7d8p" path="res://scenes/effects/FogOfWar.tscn" id="41_fog_of_war"]
-[ext_resource type="Script" path="res://scripts/debug_system.gd" id="42_debug"]
+[ext_resource type="Script" uid="uid://cp13v3woii5m" path="res://scripts/debug_system.gd" id="42_debug"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r5yoc"]
 albedo_texture = ExtResource("1_mdskg")
@@ -3643,64 +3643,124 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -6.294
 [node name="FogOfWar" parent="." instance=ExtResource("41_fog_of_war")]
 
 [node name="LucidityPoint" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20.3457, 1.56499, -14.8412)
+offset = Vector2(-20.3457, 1.56499)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, -20.3457, 1.56499)
 
 [node name="LucidityPoint2" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20.3457, 1.56499, -20.0806)
+offset = Vector2(-20.3457, 1.56499)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, -20.3457, 1.56499)
 
 [node name="LucidityPoint3" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20.3457, 1.56499, -27.1561)
+offset = Vector2(-20.3457, 1.56499)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, -20.3457, 1.56499)
 
 [node name="LucidityPoint4" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.75851, 3.34099, -33.1349)
+offset = Vector2(-7.75851, 3.34099)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, -7.75851, 3.34099)
 
 [node name="LucidityPoint5" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.910083, 3.34099, -39.1897)
+offset = Vector2(-0.910083, 3.34099)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, -0.910083, 3.34099)
 
 [node name="LucidityPoint6" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 12.7047, 4.11375, -54.4961)
+offset = Vector2(12.7047, 4.11375)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, 12.7047, 4.11375)
 
 [node name="LucidityPoint7" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 30.3913, 4.11375, -62.1978)
+offset = Vector2(30.3913, 4.11375)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, 30.3913, 4.11375)
 
 [node name="LucidityPoint8" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 29.9993, 4.11375, -75.267)
+offset = Vector2(29.9993, 4.11375)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, 29.9993, 4.11375)
 
 [node name="LucidityPoint9" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 43.0139, 4.11375, -81.0689)
+offset = Vector2(43.0139, 4.11375)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, 43.0139, 4.11375)
 
 [node name="LucidityPoint10" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 47.9392, 4.11375, -79.5848)
+offset = Vector2(47.9392, 4.11375)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, 47.9392, 4.11375)
 
 [node name="LucidityPoint11" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 35.6405, 4.11375, -91.4799)
+offset = Vector2(35.6405, 4.11375)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, 35.6405, 4.11375)
 
 [node name="LucidityPoint12" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 40.7902, 4.11375, -102.394)
+offset = Vector2(40.7902, 4.11375)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, 40.7902, 4.11375)
 
 [node name="LucidityPoint13" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 27.4083, 3.44071, -91.4647)
+offset = Vector2(27.4083, 3.44071)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, 27.4083, 3.44071)
 
 [node name="LucidityPoint14" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 31.7534, 4.11375, -110.409)
+offset = Vector2(31.7534, 4.11375)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, 31.7534, 4.11375)
 
 [node name="LucidityPoint15" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 5.08353, 4.11375, -100.87)
+offset = Vector2(5.08353, 4.11375)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, 5.08353, 4.11375)
 
 [node name="LucidityPoint16" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.717698, 4.11375, -90.4689)
+offset = Vector2(-0.717698, 4.11375)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, -0.717698, 4.11375)
 
 [node name="LucidityPoint17" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -22.2373, 4.11375, -68.3692)
+offset = Vector2(-22.2373, 4.11375)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, -22.2373, 4.11375)
 
 [node name="LucidityPoint18" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -29.9736, 4.11375, -49.4465)
+offset = Vector2(-29.9736, 4.11375)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, -29.9736, 4.11375)
 
 [node name="LucidityPoint19" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -36.119, 3.34099, -23.4248)
+offset = Vector2(-36.119, 3.34099)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, -36.119, 3.34099)
 
 [node name="LucidityPoint20" parent="." instance=ExtResource("34_cyjou")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -18.25, 4.11375, -41.3157)
+offset = Vector2(-18.25, 4.11375)
+rotation = 3.14159
+scale = Vector2(4.37114e-08, -1)
+transform = Transform2D(-4.37114e-08, 0, 0, 1, -18.25, 4.11375)
 
 [node name="GiftNegacao31" parent="." instance=ExtResource("35_ya2kv")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.53233, 0.490988, -27.1339)

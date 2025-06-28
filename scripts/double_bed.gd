@@ -28,7 +28,7 @@ func _on_body_exited(body):
 			pressE.visible = false
 
 func _input(event):
-	if player_inside and event.is_action_pressed("interact") and player_ref and teleport_position != null:
+	if player_inside and Input.is_action_just_pressed("interact") and player_ref and teleport_position != null:
 		if pressE and is_instance_valid(pressE):
 			pressE.visible = false
 

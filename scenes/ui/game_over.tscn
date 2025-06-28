@@ -1,6 +1,9 @@
-[gd_scene format=3 uid="uid://c556k7oq4vxl0"]
+[gd_scene load_steps=2 format=3 uid="uid://c556k7oq4vxl0"]
+
+[ext_resource type="Script" path="res://scripts/ui/game_over.gd" id="1_game_over"]
 
 [node name="GameOverMenu" type="CanvasLayer"]
+script = ExtResource("1_game_over")
 
 [node name="Background" type="ColorRect" parent="."]
 anchors_preset = 15

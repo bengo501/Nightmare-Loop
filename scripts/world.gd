@@ -57,22 +57,55 @@ func _process(_delta):
 func toggle_pause():
 	print("[World] Alternando estado de pausa...")
 	
-	if state_manager.current_state == state_manager.GameState.PLAYING:
+	if not is_paused:
 		# Pausa o jogo
-		print("[World] Pausando o jogo...")
-		state_manager.change_state(state_manager.GameState.PAUSED)
-		get_tree().paused = true
-		is_paused = true
-		# Mostra o menu de pause
-		ui_manager.show_ui("pause_menu")
+		pause_game()
 	else:
 		# Despausa o jogo
-		print("[World] Despausando o jogo...")
-		state_manager.change_state(state_manager.GameState.PLAYING)
-		get_tree().paused = false
-		is_paused = false
-		# Esconde o menu de pause
-		ui_manager.hide_ui("pause_menu")
+		unpause_game()
+
+func pause_game():
+	"""Pausa o jogo"""
+	print("[World] Pausando o jogo...")
+	is_paused = true
+	get_tree().paused = true
+	state_manager.change_state(state_manager.GameState.PAUSED)
+	# Mostra o menu de pause
+	ui_manager.show_ui("pause_menu")
+	# Conecta aos sinais do menu
+	_connect_pause_menu_signals()
+
+func unpause_game():
+	"""Despausa o jogo"""
+	print("[World] Despausando o jogo...")
+	is_paused = false
+	get_tree().paused = false
+	state_manager.change_state(state_manager.GameState.PLAYING)
+	# Esconde o menu de pause
+	ui_manager.hide_ui("pause_menu")
+
+func _connect_pause_menu_signals():
+	"""Conecta aos sinais do menu de pause"""
+	if ui_manager and ui_manager.active_ui.has("pause_menu"):
+		var pause_menu = ui_manager.active_ui["pause_menu"]
+		if pause_menu and is_instance_valid(pause_menu):
+			# Conecta ao botão Continuar
+			var resume_button = pause_menu.get_node_or_null("MenuContainer/ResumeButton")
+			if resume_button and not resume_button.is_connected("pressed", unpause_game):
+				resume_button.pressed.connect(unpause_game)
+				print("[World] Conectado ao botão Continuar do menu de pause")
+			
+			# Conecta ao botão Menu Principal
+			var main_menu_button = pause_menu.get_node_or_null("MenuContainer/MainMenuButton")
+			if main_menu_button and not main_menu_button.is_connected("pressed", _on_main_menu_pressed):
+				main_menu_button.pressed.connect(_on_main_menu_pressed)
+				print("[World] Conectado ao botão Menu Principal do menu de pause")
+
+func _on_main_menu_pressed():
+	"""Chamado quando o botão de menu principal é pressionado"""
+	print("[World] Botão Menu Principal pressionado - resetando estado")
+	is_paused = false
+	get_tree().paused = false
 
 func _on_player_health_changed(new_health: int):
 	# Atualiza a vida do jogador no GameManager

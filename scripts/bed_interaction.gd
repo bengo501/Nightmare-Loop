@@ -60,7 +60,7 @@ func _on_body_exited(body):
 		print("[BedInteraction] 👋 Jogador saiu da área da cama")
 
 func _input(event):
-	if player_inside and event.is_action_pressed("interact") and not interaction_active:
+	if player_inside and Input.is_action_just_pressed("interact") and not interaction_active:
 		print("[BedInteraction] ⚡ TECLA E PRESSIONADA! Iniciando transição...")
 		sleep_interaction()
 

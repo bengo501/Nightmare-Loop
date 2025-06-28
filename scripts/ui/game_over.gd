@@ -1,4 +1,4 @@
-extends "res://scripts/ui/base_menu.gd"
+extends CanvasLayer
 
 # Referências para autoloads
 @onready var game_manager = get_node("/root/GameManager")
@@ -8,7 +8,6 @@ extends "res://scripts/ui/base_menu.gd"
 @onready var lucidity_manager = get_node("/root/LucidityManager")
 
 func _ready():
-	super._ready()
 	connect_buttons()
 
 func connect_buttons():
@@ -32,19 +31,24 @@ func _on_wake_up_pressed():
 	# Restaura o player com vida máxima
 	_restore_player_after_death()
 	
-	# Zera as munições (gifts)
-	_reset_ammo()
-	
-	# Preserva pontos de lucidez (não faz nada - eles já estão preservados)
-	print("🧠 [GameOver] Pontos de lucidez preservados")
+	# PRESERVA PONTOS DE LUCIDEZ - NÃO ZERA NADA!
+	print("🧠 [GameOver] Pontos de lucidez mantidos intactos")
+	print("🔫 [GameOver] Munições (gifts) mantidas intactas")
 	
 	# Volta para o quarto (world.tscn)
 	print("🏠 [GameOver] Voltando para o quarto...")
 	state_manager.change_state(state_manager.GameState.PLAYING)
 	scene_manager.change_scene("world")
 	
-	# Anima a saída do menu
-	animate_menu_out()
+	# Remove o menu após um pequeno delay
+	await get_tree().create_timer(0.3).timeout
+	queue_free()
+
+func animate_button_press(button: Button):
+	"""Anima o pressionamento de um botão"""
+	var tween = create_tween()
+	tween.tween_property(button, "scale", Vector2(0.95, 0.95), 0.1)
+	tween.tween_property(button, "scale", Vector2(1, 1), 0.1)
 
 func _restore_player_after_death():
 	"""Restaura o player com vida máxima após a morte"""
@@ -67,21 +71,7 @@ func _restore_player_after_death():
 	else:
 		print("⚠️ [GameOver] Player não encontrado para restaurar")
 
-func _reset_ammo():
-	"""Zera todas as munições (gifts) do player"""
-	print("🔫 [GameOver] Zerando munições...")
-	
-	if gift_manager:
-		# Zera todos os tipos de gifts
-		gift_manager.set_gift_count("negacao", 0)
-		gift_manager.set_gift_count("raiva", 0)
-		gift_manager.set_gift_count("barganha", 0)
-		gift_manager.set_gift_count("depressao", 0)
-		gift_manager.set_gift_count("aceitacao", 0)
-		
-		print("🔫 [GameOver] Todas as munições foram zeradas")
-	else:
-		print("⚠️ [GameOver] GiftManager não encontrado")
+
 
 func _on_main_menu_pressed():
 	print("🏠 [GameOver] Botão Menu Principal pressionado")
@@ -94,8 +84,9 @@ func _on_main_menu_pressed():
 	# Carrega a cena do menu principal
 	scene_manager.change_scene("main_menu")
 	
-	# Anima a saída do menu
-	animate_menu_out()
+	# Remove o menu após um pequeno delay
+	await get_tree().create_timer(0.3).timeout
+	queue_free()
 
 func _on_quit_pressed():
 	print("❌ [GameOver] Botão Sair pressionado")

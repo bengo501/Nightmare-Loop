@@ -28,21 +28,6 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Continuar"
 
-[node name="SaveButton" type="Button" parent="MenuContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Salvar Jogo"
-
-[node name="RestartButton" type="Button" parent="MenuContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Reiniciar Fase"
-
-[node name="OptionsButton" type="Button" parent="MenuContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Opções"
-
 [node name="MainMenuButton" type="Button" parent="MenuContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
