@@ -1226,7 +1226,7 @@ size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
 [node name="Piso42" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0421297, -0.159012, -23.7369)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0421297, -0.159011, -23.7369)
 material_override = SubResource("StandardMaterial3D_4kmvx")
 use_collision = true
 collision_layer = 129
@@ -1235,7 +1235,7 @@ size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
 [node name="Piso61" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0421301, -0.159012, -13.8213)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0421301, -0.159011, -13.8213)
 material_override = SubResource("StandardMaterial3D_4kmvx")
 use_collision = true
 collision_layer = 129
@@ -1278,7 +1278,7 @@ size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
 [node name="Piso48" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.847, -0.159012, -13.82)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.847, -0.159011, -13.82)
 material_override = SubResource("StandardMaterial3D_4kmvx")
 use_collision = true
 collision_layer = 129
@@ -1287,7 +1287,7 @@ size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
 [node name="Piso65" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.847, -0.159012, -4.0196)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.847, -0.159011, -4.0196)
 material_override = SubResource("StandardMaterial3D_4kmvx")
 use_collision = true
 collision_layer = 129
@@ -1296,7 +1296,7 @@ size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
 [node name="Piso84" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.847, -0.159012, 5.77653)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.847, -0.159011, 5.77653)
 material_override = SubResource("StandardMaterial3D_4kmvx")
 use_collision = true
 collision_layer = 129
@@ -1305,7 +1305,7 @@ size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
 [node name="Piso85" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.9937, -0.159012, 5.77653)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.9937, -0.159011, 5.77653)
 material_override = SubResource("StandardMaterial3D_4kmvx")
 use_collision = true
 collision_layer = 129
@@ -1314,7 +1314,7 @@ size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
 [node name="Piso86" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.1556, -0.159012, 5.77653)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.1556, -0.159011, 5.77653)
 material_override = SubResource("StandardMaterial3D_4kmvx")
 use_collision = true
 collision_layer = 129
@@ -1323,7 +1323,7 @@ size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
 [node name="Piso87" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.469295, -0.159012, 5.77653)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.469295, -0.159011, 5.77653)
 material_override = SubResource("StandardMaterial3D_4kmvx")
 use_collision = true
 collision_layer = 129
@@ -1332,7 +1332,7 @@ size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
 [node name="Piso66" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.9115, -0.159012, -4.0196)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.9115, -0.159011, -4.0196)
 material_override = SubResource("StandardMaterial3D_4kmvx")
 use_collision = true
 collision_layer = 129
@@ -1341,7 +1341,7 @@ size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
 [node name="Piso67" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.0147, -0.159012, -4.0196)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.0147, -0.159011, -4.0196)
 material_override = SubResource("StandardMaterial3D_4kmvx")
 use_collision = true
 collision_layer = 129
@@ -1380,7 +1380,7 @@ collision_mask = 129
 size = Vector3(10, 0.163147, 10)
 
 [node name="Piso76" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.134412, -0.159012, -4.0196)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.134412, -0.159011, -4.0196)
 material_override = SubResource("StandardMaterial3D_4kmvx")
 use_collision = true
 collision_layer = 129
@@ -1389,7 +1389,7 @@ size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
 [node name="Piso80" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.80301, -0.159012, -4.0196)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.80301, -0.159011, -4.0196)
 material_override = SubResource("StandardMaterial3D_4kmvx")
 use_collision = true
 collision_layer = 129
@@ -1398,7 +1398,7 @@ size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
 [node name="Piso83" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.6041, -0.159012, -4.0196)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.6041, -0.159011, -4.0196)
 material_override = SubResource("StandardMaterial3D_4kmvx")
 use_collision = true
 collision_layer = 129
@@ -1407,7 +1407,7 @@ size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
 [node name="Piso49" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.909, -0.159012, -13.82)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.909, -0.159011, -13.82)
 material_override = SubResource("StandardMaterial3D_4kmvx")
 use_collision = true
 collision_layer = 129
@@ -1416,7 +1416,7 @@ size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
 [node name="Piso57" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.0297, -0.159012, -13.82)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.0297, -0.159011, -13.82)
 material_override = SubResource("StandardMaterial3D_4kmvx")
 use_collision = true
 collision_layer = 129
@@ -2071,7 +2071,7 @@ size = Vector3(10, 1, 10)
 material = ExtResource("2_tu8f1")
 
 [node name="Piso104" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9179, -0.159012, -152.278)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.9179, -0.159011, -152.278)
 material_override = SubResource("StandardMaterial3D_xgy6y")
 use_collision = true
 collision_layer = 129

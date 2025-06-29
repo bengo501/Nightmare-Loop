@@ -4,6 +4,9 @@ extends Node3D
 var intro_shown = false
 var stage1_dialog_shown = false
 
+# Sistema persistente para intro (garante que só aparece uma vez por sessão)
+const INTRO_SAVE_KEY = "map2_intro_shown"
+
 # Sistema de pause
 var is_paused: bool = false
 
@@ -14,11 +17,18 @@ var is_paused: bool = false
 # Referência ao WorldEnvironment
 @onready var world_environment = $WorldEnvironment
 
+# PSX Effect Manager (aplicado por padrão)
+var psx_effect_manager: Node = null
+var psx_effect_scene = preload("res://scripts/managers/PSXEffectManager.gd")
+
 func _ready():
 	print("[Map2Controller] Inicializando controlador do Map 2")
 	
 	# Configura o sistema de input para pause
 	set_process_input(true)
+	
+	# Verifica se a intro já foi mostrada anteriormente
+	_check_intro_status()
 	
 	# Configura a atmosfera esverdeada
 	setup_green_atmosphere()
@@ -29,13 +39,14 @@ func _ready():
 	await get_tree().process_frame
 	
 	print("[Map2Controller] Frames aguardados, verificando intro_shown: ", intro_shown)
+	print("🌍 [Map2Controller] Efeitos PSX aplicados automaticamente via GlobalPSXEffect!")
 	
 	# Mostra a introdução do estágio se ainda não foi mostrada
 	if not intro_shown:
 		print("[Map2Controller] Chamando show_stage_intro()")
 		show_stage_intro()
 	else:
-		print("[Map2Controller] Introdução já foi mostrada, pulando")
+		print("[Map2Controller] Introdução já foi mostrada anteriormente, pulando")
 
 func _input(event):
 	"""Gerencia input para o sistema de pause"""
@@ -250,6 +261,47 @@ func find_node_by_name(parent: Node, node_name: String) -> Node:
 	
 	return null
 
+func _check_intro_status():
+	"""Verifica se a intro já foi mostrada anteriormente"""
+	# Verifica se existe um GameStateManager ou similar para persistência
+	var game_state_manager = get_node_or_null("/root/GameStateManager")
+	if game_state_manager and game_state_manager.has_method("get_data"):
+		intro_shown = game_state_manager.get_data(INTRO_SAVE_KEY, false)
+		print("[Map2Controller] Status da intro carregado: ", intro_shown)
+	else:
+		# Usa sempre variável de sessão para simplicidade
+		intro_shown = _get_session_intro_status()
+		print("[Map2Controller] Status da intro (sessão): ", intro_shown)
+
+func _save_intro_status():
+	"""Salva que a intro já foi mostrada"""
+	var game_state_manager = get_node_or_null("/root/GameStateManager")
+	if game_state_manager and game_state_manager.has_method("set_data"):
+		game_state_manager.set_data(INTRO_SAVE_KEY, true)
+		print("[Map2Controller] Status da intro salvo: true")
+	else:
+		# Usa sempre variável de sessão para simplicidade
+		_set_session_intro_status(true)
+		print("[Map2Controller] Status da intro salvo (sessão): true")
+
+func _reset_intro_status():
+	"""Reset do status da intro (apenas para debug)"""
+	var game_state_manager = get_node_or_null("/root/GameStateManager")
+	if game_state_manager and game_state_manager.has_method("set_data"):
+		game_state_manager.set_data(INTRO_SAVE_KEY, false)
+	else:
+		_set_session_intro_status(false)
+	print("[Map2Controller] Status da intro resetado para debug")
+
+# Variável estática para controle de sessão (fallback)
+static var _session_intro_shown = false
+
+func _get_session_intro_status() -> bool:
+	return _session_intro_shown
+
+func _set_session_intro_status(value: bool):
+	_session_intro_shown = value
+
 func show_stage_intro():
 	"""
 	Mostra a introdução do Estágio 1
@@ -260,6 +312,8 @@ func show_stage_intro():
 	if ui_manager:
 		print("[Map2Controller] UIManager encontrado")
 		intro_shown = true
+		# Salva o status persistentemente
+		_save_intro_status()
 		print("[Map2Controller] Chamando ui_manager.show_stage_intro('estagio1')")
 		ui_manager.show_stage_intro("estagio1")
 		
@@ -380,4 +434,22 @@ func _on_stage1_dialog_finished():
 	# Retorna o cursor ao modo capturado (se necessário)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
-	print("[Map2Controller] Jogo retomado após diálogo do estágio 1") 
+	print("[Map2Controller] Jogo retomado após diálogo do estágio 1")
+
+func setup_psx_effects():
+	"""Configura efeitos PSX FORTES por padrão no Map 2 - VERSÃO CORRIGIDA"""
+	print("🎮 [Map2Controller] Configurando efeitos PSX FORTES por padrão...")
+	
+	# Cria e adiciona o PSX Effect Manager (funciona corretamente)
+	psx_effect_manager = Node.new()
+	psx_effect_manager.set_script(psx_effect_scene)
+	psx_effect_manager.name = "PSXEffectManager"
+	add_child(psx_effect_manager)
+	
+	print("✅ [Map2Controller] PSX Effect Manager adicionado - efeitos FORTES ativos!")
+	print("📺 [Map2Controller] Controles PSX disponíveis:")
+	print("  F1 - Toggle PSX Mode")
+	print("  F2 - Preset Clássico")
+	print("  F3 - Preset Horror FORTE")
+	print("  F4 - Preset Nightmare")
+	print("⚠️ [Map2Controller] PSX FullScreen Effect removido para evitar tela branca") 

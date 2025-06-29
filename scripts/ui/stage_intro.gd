@@ -9,7 +9,7 @@ extends CanvasLayer
 @onready var timer = $Timer
 
 # Configurações da introdução
-@export var display_duration: float = 8.0
+@export var display_duration: float = 4.0
 @export var fade_in_duration: float = 2.0
 @export var fade_out_duration: float = 2.0
 
@@ -50,14 +50,14 @@ func _ready():
 		timer.connect("timeout", _on_timer_timeout)
 		print("[StageIntro] Timer conectado")
 	
-	# Inicia invisível
+	# Inicia invisível - REMOVIDO visible = false para permitir visibilidade
 	if center_container:
 		center_container.modulate.a = 0.0
 		print("[StageIntro] CenterContainer alpha definido para 0")
 	if margin_container:
 		margin_container.modulate.a = 0.0
 		print("[StageIntro] MarginContainer alpha definido para 0")
-	visible = false
+	# visible = false  # COMENTADO - deixa visível para funcionar
 	
 	print("[StageIntro] Sistema de introdução de estágio inicializado com sucesso")
 
@@ -167,16 +167,25 @@ func _show_stage_intro_deferred(stage_name: String):
 	# === FORÇA VISIBILIDADE COM PROTEÇÃO EXTRA ===
 	print("[StageIntro] Estado ANTES de tornar visível: ", visible)
 	visible = true
+	show()  # FORÇA show() também
 	print("[StageIntro] Estado DEPOIS de tornar visível: ", visible)
 	
 	# FORÇA visibilidade também nos containers
 	if center_container and is_instance_valid(center_container):
 		center_container.visible = true
+		center_container.show()  # FORÇA show() também
 		print("[StageIntro] CenterContainer forçado para visível")
 	
 	if margin_container and is_instance_valid(margin_container):
 		margin_container.visible = true
+		margin_container.show()  # FORÇA show() também
 		print("[StageIntro] MarginContainer forçado para visível")
+	
+	# FORÇA visibilidade do background também
+	if background and is_instance_valid(background):
+		background.visible = true
+		background.show()
+		print("[StageIntro] Background forçado para visível")
 	
 	# FORÇA alpha inicial para 0 para animação de fade in
 	if center_container:

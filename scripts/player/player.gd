@@ -245,7 +245,7 @@ func setup_attack_system():
 	
 	if shoot_ray:
 		shoot_ray.target_position = Vector3(0, 0, -attack_range)
-		shoot_ray.collision_mask = 2
+		shoot_ray.collision_mask = 4  # Layer 4: Fantasmas (para detectar e atirar)
 		shoot_ray.enabled = true
 
 func setup_animations():
@@ -338,10 +338,10 @@ func _physics_process(delta: float):
 	# Sistema de movimento baseado no modo da câmera
 	if can_move:
 		if not first_person_mode:
-			# Movimento isométrico no modo terceira pessoa
-			move_isometric(delta)
-			# Rotação para o mouse
-			rotate_toward_mouse(delta)
+			# Movimento isométrico PURO no modo terceira pessoa
+			handle_isometric_movement(delta)
+			# Rotação independente para o mouse (apenas visual)
+			handle_mouse_rotation(delta)
 		else:
 			# Movimento em primeira pessoa
 			handle_first_person_movement()
@@ -349,8 +349,49 @@ func _physics_process(delta: float):
 	# Aplica o movimento
 	move_and_slide()
 
-# === ROTAÇÃO PARA O MOUSE ===
-func rotate_toward_mouse(delta):
+# === MOVIMENTO ISOMÉTRICO PURO ===
+func handle_isometric_movement(delta: float):
+	var input_vector = Vector3.ZERO
+	var raw_input = Vector2.ZERO
+	
+	# Captura as entradas do jogador - DIREÇÕES CORRIGIDAS
+	if Input.is_action_pressed("foward"):
+		input_vector.z += 1  # Norte (para frente na tela) - CORRIGIDO
+		raw_input.y -= 1
+	if Input.is_action_pressed("backward"):
+		input_vector.z -= 1  # Sul (para trás na tela) - CORRIGIDO
+		raw_input.y += 1
+	if Input.is_action_pressed("left"):
+		input_vector.x += 1  # Oeste (para esquerda na tela) - INVERTIDO
+		raw_input.x -= 1
+	if Input.is_action_pressed("right"):
+		input_vector.x -= 1  # Leste (para direita na tela) - INVERTIDO
+		raw_input.x += 1
+	
+	# Se há movimento, aplica o movimento isométrico
+	if input_vector != Vector3.ZERO:
+		input_vector = input_vector.normalized()
+		
+		# MOVIMENTO ISOMÉTRICO PURO - SEM ROTAÇÃO DA CÂMERA
+		# O movimento é sempre nas direções fixas do mundo
+		velocity.x = input_vector.x * SPEED * speed_multiplier
+		velocity.z = input_vector.z * SPEED * speed_multiplier
+		
+		# Determina a animação baseada na direção do input
+		var animation_to_play = get_movement_animation(raw_input)
+		play_animation(animation_to_play)
+		
+		print("🎮 Movimento isométrico FINAL: input(", input_vector.x, ", ", input_vector.z, ") -> velocity(", velocity.x, ", ", velocity.z, ")")
+	else:
+		# Para o movimento suavemente quando não há input
+		velocity.x = lerp(velocity.x, 0.0, 0.2)
+		velocity.z = lerp(velocity.z, 0.0, 0.2)
+		
+		# Toca a animação idle
+		play_animation("idle")
+
+# === ROTAÇÃO INDEPENDENTE DO MOUSE ===
+func handle_mouse_rotation(delta: float):
 	if not third_person_camera or not mouse_ray:
 		return
 		
@@ -366,62 +407,30 @@ func rotate_toward_mouse(delta):
 		# Só rotaciona se a direção for significativa
 		if dir.length_squared() > 0.01:
 			var target_angle = atan2(dir.x, dir.z)
+			
+			# ROTAÇÃO SUAVE E INDEPENDENTE DO MOVIMENTO
 			rotation.y = lerp_angle(rotation.y, target_angle, delta * rotation_speed)
 			
 			# Aplica a rotação também aos visuais se disponível
 			if visuals:
 				visuals.rotation.y = rotation.y
 				
-			print("🔄 Rotacionando para: ", rad_to_deg(rotation.y), "°")
+			# Debug apenas quando há mudança significativa
+			var angle_diff = abs(angle_difference(rotation.y, target_angle))
+			if angle_diff > 0.1:  # Só imprime se há mudança significativa
+				print("🔄 Rotação do mouse: ", rad_to_deg(rotation.y), "° (alvo: ", rad_to_deg(target_angle), "°)")
+
+# === ROTAÇÃO PARA O MOUSE ===
+func rotate_toward_mouse(delta):
+	# FUNÇÃO DEPRECIADA - Substituída por handle_mouse_rotation()
+	# Mantida para compatibilidade, mas não deve ser usada
+	handle_mouse_rotation(delta)
 
 # === MOVIMENTO ISOMÉTRICO ===
 func move_isometric(delta: float):
-	var input_vector = Vector3.ZERO
-	var raw_input = Vector2.ZERO
-	
-	# Captura as entradas do jogador
-	if Input.is_action_pressed("foward"):
-		input_vector.z -= 1
-		raw_input.y -= 1
-	if Input.is_action_pressed("backward"):
-		input_vector.z += 1
-		raw_input.y += 1
-	if Input.is_action_pressed("left"):
-		input_vector.x -= 1
-		raw_input.x -= 1
-	if Input.is_action_pressed("right"):
-		input_vector.x += 1
-		raw_input.x += 1
-	
-	# Se há movimento, aplica o movimento isométrico
-	if input_vector != Vector3.ZERO:
-		input_vector = input_vector.normalized()
-		
-		# Converte o input para movimento isométrico baseado na câmera
-		if third_person_camera:
-			var camera_basis = third_person_camera.global_transform.basis
-			var direction = (camera_basis.x * input_vector.x) + (camera_basis.z * input_vector.z)
-			direction.y = 0
-			direction = direction.normalized()
-			
-			# Aplica a velocidade
-			velocity.x = direction.x * SPEED * speed_multiplier
-			velocity.z = direction.z * SPEED * speed_multiplier
-		else:
-			# Fallback se não tiver câmera
-			velocity.x = input_vector.x * SPEED * speed_multiplier
-			velocity.z = input_vector.z * SPEED * speed_multiplier
-		
-		# Determina a animação baseada na direção do input
-		var animation_to_play = get_movement_animation(raw_input)
-		play_animation(animation_to_play)
-	else:
-		# Para o movimento suavemente quando não há input
-		velocity.x = lerp(velocity.x, 0.0, 0.2)
-		velocity.z = lerp(velocity.z, 0.0, 0.2)
-		
-		# Toca a animação idle
-		play_animation("idle")
+	# FUNÇÃO DEPRECIADA - Substituída por handle_isometric_movement()
+	# Mantida para compatibilidade, mas não deve ser usada
+	handle_isometric_movement(delta)
 
 # === SISTEMA DE ANIMAÇÕES DIRECIONAIS ===
 func get_movement_animation(input_dir: Vector2) -> String:
@@ -442,6 +451,8 @@ func get_movement_animation(input_dir: Vector2) -> String:
 # === MOVIMENTO EM PRIMEIRA PESSOA ===
 func handle_first_person_movement():
 	var input_dir = Vector3()
+	
+	# Movimento baseado na orientação da câmera de primeira pessoa
 	if Input.is_action_pressed("foward"):
 		input_dir -= first_person_camera.global_transform.basis.z
 	if Input.is_action_pressed("backward"):
@@ -450,10 +461,18 @@ func handle_first_person_movement():
 		input_dir -= first_person_camera.global_transform.basis.x
 	if Input.is_action_pressed("right"):
 		input_dir += first_person_camera.global_transform.basis.x
+	
+	# Mantém o movimento no plano horizontal
 	input_dir.y = 0
 	input_dir = input_dir.normalized()
+	
+	# Aplica a velocidade
 	velocity.x = input_dir.x * SPEED * speed_multiplier
 	velocity.z = input_dir.z * SPEED * speed_multiplier
+	
+	# Debug do movimento em primeira pessoa
+	if input_dir != Vector3.ZERO:
+		print("🎯 Movimento primeira pessoa: input_dir(", input_dir.x, ", ", input_dir.z, ") -> velocity(", velocity.x, ", ", velocity.z, ")")
 
 # === ANIMAÇÕES ===
 func play_animation(anim_name: String):
@@ -580,6 +599,15 @@ func _input(event):
 					cheat_goto_world()
 				KEY_SEMICOLON:  # Tecla "ç" (no layout brasileiro) - Morte instantânea
 					cheat_instant_death()
+				# === CONTROLES PSX ===
+				KEY_F1:  # Toggle PSX Mode
+					cheat_toggle_psx_mode()
+				KEY_F2:  # Preset PSX Clássico
+					cheat_psx_classic_preset()
+				KEY_F3:  # Preset PSX Horror
+					cheat_psx_horror_preset()
+				KEY_F4:  # Preset PSX Nightmare
+					cheat_psx_nightmare_preset()
 	
 	# === SISTEMA DE PRIMEIRA PESSOA ===
 	if event is InputEventMouseButton:
@@ -716,13 +744,21 @@ func shoot_first_person():
 func rotate_camera(mouse_motion: Vector2):
 	if not first_person_camera:
 		return
+	
+	# Rotação horizontal do player (Y-axis)
 	rotation.y -= mouse_motion.x * MOUSE_SENSITIVITY
-	# Bloqueia rotação vertical no modo primeira pessoa
+	
+	# Rotação vertical da câmera (X-axis) - apenas em primeira pessoa
 	if first_person_mode:
-		first_person_camera.rotation.x = 0
-	else:
 		first_person_camera.rotation.x -= mouse_motion.y * MOUSE_SENSITIVITY
 		first_person_camera.rotation.x = clamp(first_person_camera.rotation.x, deg_to_rad(-89), deg_to_rad(89))
+		
+		# Debug da rotação da câmera apenas quando há movimento significativo
+		if abs(mouse_motion.x) > 0.1 or abs(mouse_motion.y) > 0.1:
+			print("📹 Rotação câmera FP: player.y=", rad_to_deg(rotation.y), "° camera.x=", rad_to_deg(first_person_camera.rotation.x), "°")
+	else:
+		# Em terceira pessoa, reseta a rotação vertical da câmera
+		first_person_camera.rotation.x = 0
 
 # === MODOS ===
 func activate_first_person():
@@ -1486,3 +1522,35 @@ func cheat_instant_death():
 	
 	# Chama a função de morte
 	die()
+
+func cheat_toggle_psx_mode():
+	var psx_manager = get_node_or_null("/root/PSXEffectManager")
+	if psx_manager:
+		psx_manager.toggle_psx_mode()
+		print("🎮 [CHEAT] PSX Mode alternado via PSXEffectManager")
+	else:
+		print("⚠️ [CHEAT] PSXEffectManager não encontrado!")
+
+func cheat_psx_classic_preset():
+	var psx_manager = get_node_or_null("/root/PSXEffectManager")
+	if psx_manager:
+		psx_manager.apply_classic_psx_preset()
+		print("🎮 [CHEAT] Preset PSX Clássico aplicado")
+	else:
+		print("⚠️ [CHEAT] PSXEffectManager não encontrado!")
+
+func cheat_psx_horror_preset():
+	var psx_manager = get_node_or_null("/root/PSXEffectManager")
+	if psx_manager:
+		psx_manager.apply_horror_psx_preset()
+		print("🎮 [CHEAT] Preset PSX Horror aplicado")
+	else:
+		print("⚠️ [CHEAT] PSXEffectManager não encontrado!")
+
+func cheat_psx_nightmare_preset():
+	var psx_manager = get_node_or_null("/root/PSXEffectManager")
+	if psx_manager:
+		psx_manager.apply_nightmare_psx_preset()
+		print("🎮 [CHEAT] Preset PSX Nightmare aplicado")
+	else:
+		print("⚠️ [CHEAT] PSXEffectManager não encontrado!")

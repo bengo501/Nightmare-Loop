@@ -7,6 +7,7 @@
 [node name="StageIntro" type="CanvasLayer"]
 process_mode = 3
 layer = 100
+visible = false
 script = ExtResource("1_u8xqv")
 
 [node name="Background" type="ColorRect" parent="."]
@@ -38,7 +39,7 @@ stretch_mode = 5
 
 [node name="Timer" type="Timer" parent="."]
 process_mode = 3
-wait_time = 8.0
+wait_time = 4.0
 one_shot = true
 
 [node name="MarginContainer" type="MarginContainer" parent="."]

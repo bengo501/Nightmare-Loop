@@ -1,13 +1,12 @@
-extends "res://scripts/ui/base_menu.gd"
+extends CanvasLayer
 
 # Referências para autoloads
-@onready var state_manager = get_node("/root/GameStateManager")
-@onready var scene_manager = get_node("/root/SceneManager")
-@onready var ui_manager = get_node("/root/UIManager")
-@onready var game_manager = get_node("/root/GameManager")
+@onready var state_manager = get_node_or_null("/root/GameStateManager")
+@onready var scene_manager = get_node_or_null("/root/SceneManager")
+@onready var ui_manager = get_node_or_null("/root/UIManager")
+@onready var game_manager = get_node_or_null("/root/GameManager")
 
 func _ready():
-	super._ready()
 	connect_buttons()
 
 func connect_buttons():
@@ -100,6 +99,7 @@ func _unpause_current_scene():
 		state_manager.change_state(state_manager.GameState.PLAYING)
 
 func animate_button_press(button: Button):
+	"""Animação simples de pressionar botão"""
 	var tween = create_tween()
 	tween.tween_property(button, "scale", Vector2(0.95, 0.95), 0.1)
 	tween.tween_property(button, "scale", Vector2(1, 1), 0.1) 

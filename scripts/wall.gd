@@ -9,6 +9,12 @@ var camera_ref: Camera3D = null
 var fade_amount: float = 0.0
 var fade_target: float = 0.0
 
+# OTIMIZAÇÃO: Cache e timer para reduzir consultas frequentes
+var player_search_timer: float = 0.0
+var player_search_interval: float = 1.0  # Busca player a cada 1 segundo se não encontrado
+var last_physics_update: float = 0.0
+var physics_update_interval: float = 0.016  # ~60 FPS, mas controlado
+
 func _ready():
 	# Torna o material único para cada parede
 	if material and material is ShaderMaterial:
@@ -26,6 +32,10 @@ func _ready():
 func _find_player_and_camera():
 	"""Encontra o player e câmera na cena de forma robusta"""
 	
+	# OTIMIZAÇÃO: Só busca se ainda não encontrou
+	if player_ref and is_instance_valid(player_ref):
+		return
+	
 	# Procura pelo player em diferentes locais possíveis
 	var possible_player_paths = [
 		"../../Player",
@@ -41,7 +51,7 @@ func _find_player_and_camera():
 				print("[WallTransparency] Player encontrado: ", player_ref.name)
 			break
 	
-	# Se não encontrou pelos paths, tenta pelo grupo
+	# Se não encontrou pelos paths, tenta pelo grupo (APENAS UMA VEZ)
 	if not player_ref:
 		var players = get_tree().get_nodes_in_group("player")
 		if players.size() > 0:
@@ -54,13 +64,8 @@ func _find_player_and_camera():
 		if not camera_ref:
 			camera_ref = player_ref.get_node_or_null("FirstPersonCamera")
 		if not camera_ref:
-			# Procura por qualquer câmera ativa na cena
-			var cameras = get_tree().get_nodes_in_group("camera")
-			if cameras.size() > 0:
-				camera_ref = cameras[0]
-			else:
-				# Último recurso: procura por qualquer Camera3D
-				camera_ref = get_viewport().get_camera_3d()
+			# Último recurso: procura por qualquer Camera3D
+			camera_ref = get_viewport().get_camera_3d()
 	
 	if debug_mode:
 		if player_ref:
@@ -73,15 +78,28 @@ func _find_player_and_camera():
 		else:
 			print("[WallTransparency] ❌ Camera não encontrada!")
 
-
 func _physics_process(delta):
-	if not player_ref or not camera_ref:
-		# Tenta encontrar novamente se não encontrou antes
-		if not player_ref or not camera_ref:
+	# OTIMIZAÇÃO: Controla frequência de atualização
+	last_physics_update += delta
+	if last_physics_update < physics_update_interval:
+		return
+	last_physics_update = 0.0
+	
+	# OTIMIZAÇÃO: Verifica validade das referências primeiro
+	if not player_ref or not is_instance_valid(player_ref):
+		player_search_timer += delta
+		if player_search_timer >= player_search_interval:
+			player_search_timer = 0.0
 			_find_player_and_camera()
-		
-		if not player_ref or not camera_ref:
-			return
+		return
+	
+	if not camera_ref or not is_instance_valid(camera_ref):
+		# Tenta encontrar a câmera novamente se o player existe
+		if player_ref:
+			camera_ref = player_ref.get_node_or_null("ThirdPersonCamera")
+			if not camera_ref:
+				camera_ref = player_ref.get_node_or_null("FirstPersonCamera")
+		return
 	
 	# Verifica se há uma parede entre o player e a câmera
 	_check_wall_occlusion()
@@ -139,4 +157,14 @@ func set_debug_mode(enabled: bool):
 
 # Função para forçar busca de player/camera
 func refresh_references():
+	player_ref = null
+	camera_ref = null
 	_find_player_and_camera()
+
+# OTIMIZAÇÃO: Função para definir referência diretamente (evita buscas)
+func set_player_reference(player: Node3D):
+	player_ref = player
+	if player_ref:
+		camera_ref = player_ref.get_node_or_null("ThirdPersonCamera")
+		if not camera_ref:
+			camera_ref = player_ref.get_node_or_null("FirstPersonCamera")

@@ -1,11 +1,11 @@
 extends CanvasLayer
 
 # Referências para autoloads
-@onready var game_manager = get_node("/root/GameManager")
-@onready var state_manager = get_node("/root/GameStateManager")
-@onready var scene_manager = get_node("/root/SceneManager")
-@onready var gift_manager = get_node("/root/GiftManager")
-@onready var lucidity_manager = get_node("/root/LucidityManager")
+@onready var game_manager = get_node_or_null("/root/GameManager")
+@onready var state_manager = get_node_or_null("/root/GameStateManager")
+@onready var scene_manager = get_node_or_null("/root/SceneManager")
+@onready var gift_manager = get_node_or_null("/root/GiftManager")
+@onready var lucidity_manager = get_node_or_null("/root/LucidityManager")
 
 func _ready():
 	connect_buttons()
@@ -70,8 +70,6 @@ func _restore_player_after_death():
 		print("❤️ [GameOver] Player restaurado com ", player.stats.hp, " HP")
 	else:
 		print("⚠️ [GameOver] Player não encontrado para restaurar")
-
-
 
 func _on_main_menu_pressed():
 	print("🏠 [GameOver] Botão Menu Principal pressionado")

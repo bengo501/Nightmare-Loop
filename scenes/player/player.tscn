@@ -4654,6 +4654,7 @@ shader_parameter/core_color = Color(0.3, 0.8, 1, 1)
 shader_parameter/distortion_strength = 1.0
 
 [node name="Player" type="CharacterBody3D"]
+collision_layer = 2
 script = ExtResource("1_8afob")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

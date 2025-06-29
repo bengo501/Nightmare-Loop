@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqm8x3y9p1k4r"]
+
+[ext_resource type="Script" path="res://scripts/effects/PSXScreenEffect.gd" id="1"]
+[ext_resource type="Material" path="res://materials/psx_post_process_material.tres" id="2"]
+
+[node name="PSXScreenEffect" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1")
+enable_psx_effects = true
+color_levels = 10
+dither_strength = 0.75
+enable_dithering = true
+enable_color_limitation = true
+enable_fog = true
+fog_strength = 0.8
+noise_strength = 0.6
+affect_ui = true
+ui_layer_priority = 100
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = ExtResource("2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 1) 

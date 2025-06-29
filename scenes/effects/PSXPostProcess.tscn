@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://bvn3x7qwm8y4k"]
+
+[ext_resource type="Material" path="res://materials/psx_post_process_material.tres" id="1"]
+[ext_resource type="Script" path="res://scripts/effects/PSXPostProcess.gd" id="2"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_1"]
+size = Vector2(2, 2)
+
+[node name="PSXPostProcess" type="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+mesh = SubResource("QuadMesh_1")
+surface_material_override/0 = ExtResource("1")
+script = ExtResource("2")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+projection = 1
+size = 2.0
+near = 0.1
+far = 10.0 

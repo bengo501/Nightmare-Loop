@@ -25,8 +25,8 @@ var hud_instance = null       # Referência específica para a HUD
 var stage_intro_instance = null  # Referência específica para a introdução de estágio
 var boss_health_bar_instance = null  # Referência específica para a barra de vida do boss
 
-@onready var state_manager = get_node("/root/GameStateManager")
-@onready var scene_manager = get_node("/root/SceneManager")
+@onready var state_manager = get_node_or_null("/root/GameStateManager")
+@onready var scene_manager = get_node_or_null("/root/SceneManager")
 
 func _ready():
 	state_manager.connect("state_changed", _on_state_changed)
@@ -273,10 +273,17 @@ func _show_stage_intro_deferred(stage_name: String):
 	"""
 	print("[UIManager] _show_stage_intro_deferred() executado com estágio: ", stage_name)
 	print("[UIManager] stage_intro_instance válido: ", stage_intro_instance != null and is_instance_valid(stage_intro_instance))
+	print("[UIManager] stage_intro_instance visível: ", stage_intro_instance.visible if stage_intro_instance else "null")
 	
 	# Mostra a introdução
 	if stage_intro_instance != null and is_instance_valid(stage_intro_instance) and not stage_intro_instance.is_queued_for_deletion():
 		print("[UIManager] Instância válida encontrada")
+		
+		# FORÇA visibilidade antes de chamar o método
+		stage_intro_instance.visible = true
+		stage_intro_instance.show()
+		print("[UIManager] Visibilidade forçada na instância")
+		
 		if stage_intro_instance.has_method("show_stage_intro"):
 			print("[UIManager] Método show_stage_intro encontrado, chamando...")
 			stage_intro_instance.show_stage_intro(stage_name)

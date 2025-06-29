@@ -20,8 +20,7 @@ shader_parameter/noise_speed = 0.8
 shader_parameter/noise_scale = 0.8
 
 [node name="GhostDepression" type="CharacterBody3D" groups=["enemy"]]
-collision_layer = 3
-collision_mask = 3
+collision_layer = 4
 script = ExtResource("1_depression")
 grief_stage = 3
 

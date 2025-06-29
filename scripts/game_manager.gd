@@ -19,8 +19,8 @@ signal game_over
 signal enemy_defeated
 
 # References to other managers
-@onready var scene_manager = get_node("/root/SceneManager")
-@onready var state_manager = get_node("/root/GameStateManager")
+@onready var scene_manager = get_node_or_null("/root/SceneManager")
+@onready var state_manager = get_node_or_null("/root/GameStateManager")
 
 # Configurações de opções
 var settings = {

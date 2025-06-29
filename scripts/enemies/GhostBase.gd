@@ -817,7 +817,7 @@ func _phase_through_ability():
 	print("🌫️ Ghost da Negação passou através do jogador!")
 	collision_layer = 0
 	await get_tree().create_timer(1.0).timeout
-	collision_layer = 3
+	collision_layer = 4
 
 func _rage_attack_ability():
 	# Raiva: Ataque duplo

@@ -11,6 +11,9 @@ var health_recovery: int = 20
 # Cor específica do item de vida (verde brilhante)
 var health_color: Color = Color(0.2, 1.0, 0.2, 1.0)
 
+# OTIMIZAÇÃO: Timer para verificação de input
+var input_check_timer: Timer
+
 func _ready():
 	# === FORÇA CONFIGURAÇÕES DE COLLISION ===
 	monitoring = true
@@ -26,6 +29,9 @@ func _ready():
 	print("❤️ [HealthItem] Monitorable: ", monitorable)
 	print("❤️ [HealthItem] Posição: ", global_position)
 	
+	# OTIMIZAÇÃO: Setup timer ao invés de _process
+	_setup_input_timer()
+	
 	# Configurar animação de rotação e flutuação
 	_setup_animations()
 	
@@ -40,6 +46,21 @@ func _ready():
 	if interaction_prompt and is_instance_valid(interaction_prompt):
 		interaction_prompt.visible = false
 		interaction_prompt.text = "Pressione E para coletar\nItem de Vida (+20 HP)"
+
+func _setup_input_timer():
+	"""OTIMIZAÇÃO: Timer para verificação de input ao invés de _process"""
+	input_check_timer = Timer.new()
+	input_check_timer.wait_time = 0.033  # ~30 FPS
+	input_check_timer.autostart = true
+	input_check_timer.timeout.connect(_check_input)
+	add_child(input_check_timer)
+
+func _check_input():
+	"""OTIMIZAÇÃO: Verifica input apenas quando necessário"""
+	if can_interact and not is_collected:
+		if Input.is_action_just_pressed("interact"):
+			print("❤️ [HealthItem] Tecla E pressionada! Coletando...")
+			collect()
 
 func _setup_animations():
 	# Animação de rotação
@@ -77,11 +98,8 @@ func _setup_visual():
 		material.roughness = 0.1
 		mesh_instance.material_override = material
 
-func _process(_delta):
-	if can_interact and not is_collected:
-		if Input.is_action_just_pressed("interact"):
-			print("❤️ [HealthItem] Tecla E pressionada! Coletando...")
-			collect()
+# OTIMIZAÇÃO: Remove _process completamente
+# func _process(_delta): # REMOVIDO - substituído por timer
 
 func _on_body_entered(body):
 	print("❤️ [HealthItem] Corpo detectado: ", body.name, " | Grupos: ", body.get_groups())
@@ -114,12 +132,16 @@ func collect():
 	is_collected = true
 	can_interact = false
 	
+	# OTIMIZAÇÃO: Para o timer quando coletado
+	if input_check_timer:
+		input_check_timer.stop()
+	
 	# Esconde o prompt
 	if interaction_prompt and is_instance_valid(interaction_prompt):
 		interaction_prompt.visible = false
 		print("❤️ [HealthItem] Prompt escondido")
 	
-	# Busca o player e recupera vida
+	# OTIMIZAÇÃO: Busca player de forma mais eficiente
 	var players = get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
 		var player = players[0]
@@ -136,7 +158,7 @@ func collect():
 	_play_collection_effect()
 
 func _play_collection_effect():
-	# Para todas as animações existentes
+	# OTIMIZAÇÃO: Limpeza mais eficiente de tweens
 	var tweens = get_tree().get_nodes_in_group("tween")
 	for tween in tweens:
 		if tween.get_parent() == self:

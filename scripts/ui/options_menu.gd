@@ -1,7 +1,7 @@
 extends Control
 
 # Referências para autoloads
-@onready var game_manager = get_node("/root/GameManager")
+@onready var game_manager = get_node_or_null("/root/GameManager")
 
 # Referências aos controles
 # VOLUME
@@ -78,8 +78,12 @@ func _on_apply_pressed():
 	print("[OptionsMenu] Configurações aplicadas!")
 
 func _on_back_pressed():
-	game_manager.save_settings()
+	if game_manager and game_manager.has_method("save_settings"):
+		game_manager.save_settings()
 	print("[OptionsMenu] Saindo do menu de opções!")
 	# Aqui você pode chamar o UIManager para fechar o menu, se desejar:
-	var ui_manager = get_node("/root/UIManager")
-	ui_manager.hide_ui("options_menu") 
+	var ui_manager = get_node_or_null("/root/UIManager")
+	if ui_manager:
+		ui_manager.hide_ui("options_menu")
+	else:
+		print("[OptionsMenu] AVISO: UIManager não encontrado") 
