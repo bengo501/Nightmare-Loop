@@ -1,61 +1,52 @@
 extends CanvasLayer
 
-# Efeito PSX de Tela Completa para Nightmare Loop
-# Aplica o shader PSX como overlay sobre toda a tela
+# Efeito PSX que afeta toda a tela incluindo UIs
+# Usa BackBufferCopy + ColorRect com shader canvas_item
 
 # Referências
-@onready var psx_quad = $PSXQuad
-@onready var psx_camera = $PSXCamera
+@onready var back_buffer_copy = $BackBufferCopy
+@onready var psx_overlay = $PSXOverlay
 
 # Material do shader
 var psx_material: ShaderMaterial
 
 # Configurações PSX
 @export var enable_psx_effects: bool = true
-@export var fog_color: Color = Color(0.4, 0.4, 0.6)
-@export var noise_color: Color = Color(0.2, 0.2, 0.4)
-@export var fog_distance: float = 150.0
-@export var fog_fade_range: float = 75.0
+@export var fog_color: Color = Color(0.3, 0.3, 0.5)
+@export var noise_color: Color = Color(0.1, 0.1, 0.3)
+@export var fog_distance: float = 100.0
+@export var fog_fade_range: float = 50.0
 @export var enable_noise: bool = true
-@export var noise_time_factor: float = 3.0
+@export var noise_time_factor: float = 4.0
 @export var enable_color_limitation: bool = true
-@export var color_levels: int = 24
+@export var color_levels: int = 16
 @export var enable_dithering: bool = true
-@export var dither_strength: float = 0.4
+@export var dither_strength: float = 0.5
 
 func _ready():
-	print("🎮 PSX Screen Effect inicializado!")
+	print("🎮 PSX UI Effect inicializado!")
 	
 	# Configura o material PSX
 	setup_psx_material()
 	
-	# Configura a câmera
-	setup_camera()
+	# Aplica preset padrão
+	apply_classic_psx_preset()
 	
-	print("📺 PSX Screen Effect pronto! Controles:")
-	print("  F6 - Toggle PSX Screen Effect")
-	print("  F7 - Preset Clássico")
-	print("  F8 - Preset Horror")
-	print("  F9 - Preset Nightmare")
+	print("📺 PSX UI Effect ativo! (afeta jogo + UI)")
+	print("  F1 - Toggle PSX Effects")
+	print("  F2 - Preset Clássico")
+	print("  F3 - Preset Horror")
+	print("  F4 - Preset Nightmare")
 
 func setup_psx_material():
 	"""Configura o material do shader PSX"""
-	if psx_quad:
-		psx_material = psx_quad.get_surface_override_material(0)
+	if psx_overlay:
+		psx_material = psx_overlay.material as ShaderMaterial
 		if psx_material:
 			update_shader_parameters()
-			print("🎨 Material PSX Screen Effect configurado!")
+			print("🎨 Material PSX UI configurado!")
 		else:
 			print("⚠️ ERRO: Material PSX não encontrado!")
-
-func setup_camera():
-	"""Configura a câmera para o efeito"""
-	if psx_camera:
-		psx_camera.current = true
-		psx_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
-		psx_camera.size = 2.0
-		psx_camera.near = 0.1
-		psx_camera.far = 10.0
 
 func update_shader_parameters():
 	"""Atualiza todos os parâmetros do shader PSX"""
@@ -80,19 +71,19 @@ func toggle_psx_effects():
 	"""Liga/desliga os efeitos PSX"""
 	enable_psx_effects = !enable_psx_effects
 	update_shader_parameters()
-	print("🎮 PSX Screen Effect: ", "ATIVADO" if enable_psx_effects else "DESATIVADO")
+	print("🎮 PSX UI Effect: ", "ATIVADO" if enable_psx_effects else "DESATIVADO")
 
 func show_effect():
 	"""Mostra o efeito PSX"""
 	visible = true
 	enable_psx_effects = true
 	update_shader_parameters()
-	print("🎮 PSX Screen Effect: MOSTRADO")
+	print("🎮 PSX UI Effect: MOSTRADO")
 
 func hide_effect():
 	"""Esconde o efeito PSX"""
 	visible = false
-	print("🎮 PSX Screen Effect: ESCONDIDO")
+	print("🎮 PSX UI Effect: ESCONDIDO")
 
 # Presets de configuração PSX
 func apply_classic_psx_preset():
@@ -135,11 +126,11 @@ func apply_nightmare_psx_preset():
 func _input(event):
 	if event is InputEventKey and event.pressed:
 		match event.keycode:
-			KEY_F6:
+			KEY_F1:
 				toggle_psx_effects()
-			KEY_F7:
+			KEY_F2:
 				apply_classic_psx_preset()
-			KEY_F8:
+			KEY_F3:
 				apply_horror_psx_preset()
-			KEY_F9:
+			KEY_F4:
 				apply_nightmare_psx_preset() 

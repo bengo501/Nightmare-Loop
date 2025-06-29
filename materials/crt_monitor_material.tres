@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dj6y7pv31vc0"]
+
+[ext_resource type="Shader" path="res://shaders/crt_monitor_effect.gdshader" id="1"]
+
+[resource]
+shader = ExtResource("1")
+shader_parameter/brightnessMult = 4.0
+shader_parameter/wiggleMult = 0.005
+shader_parameter/chromaticAberrationOffset = 0.001 

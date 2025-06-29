@@ -17,10 +17,6 @@ var is_paused: bool = false
 # Referência ao WorldEnvironment
 @onready var world_environment = $WorldEnvironment
 
-# PSX Effect Manager (aplicado por padrão)
-var psx_effect_manager: Node = null
-var psx_effect_scene = preload("res://scripts/managers/PSXEffectManager.gd")
-
 func _ready():
 	print("[Map2Controller] Inicializando controlador do Map 2")
 	
@@ -39,7 +35,6 @@ func _ready():
 	await get_tree().process_frame
 	
 	print("[Map2Controller] Frames aguardados, verificando intro_shown: ", intro_shown)
-	print("🌍 [Map2Controller] Efeitos PSX aplicados automaticamente via GlobalPSXEffect!")
 	
 	# Mostra a introdução do estágio se ainda não foi mostrada
 	if not intro_shown:
@@ -434,22 +429,4 @@ func _on_stage1_dialog_finished():
 	# Retorna o cursor ao modo capturado (se necessário)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
-	print("[Map2Controller] Jogo retomado após diálogo do estágio 1")
-
-func setup_psx_effects():
-	"""Configura efeitos PSX FORTES por padrão no Map 2 - VERSÃO CORRIGIDA"""
-	print("🎮 [Map2Controller] Configurando efeitos PSX FORTES por padrão...")
-	
-	# Cria e adiciona o PSX Effect Manager (funciona corretamente)
-	psx_effect_manager = Node.new()
-	psx_effect_manager.set_script(psx_effect_scene)
-	psx_effect_manager.name = "PSXEffectManager"
-	add_child(psx_effect_manager)
-	
-	print("✅ [Map2Controller] PSX Effect Manager adicionado - efeitos FORTES ativos!")
-	print("📺 [Map2Controller] Controles PSX disponíveis:")
-	print("  F1 - Toggle PSX Mode")
-	print("  F2 - Preset Clássico")
-	print("  F3 - Preset Horror FORTE")
-	print("  F4 - Preset Nightmare")
-	print("⚠️ [Map2Controller] PSX FullScreen Effect removido para evitar tela branca") 
+	print("[Map2Controller] Jogo retomado após diálogo do estágio 1") 

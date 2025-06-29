@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://cax5k3m7n8q4p"]
+
+[ext_resource type="Material" path="res://materials/psx_viewport_material.tres" id="1"]
+[ext_resource type="Script" path="res://scripts/effects/PSXFullScreenViewport.gd" id="2"]
+
+[node name="PSXFullScreenViewport" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+material = ExtResource("1")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1024, 600)
+render_target_update_mode = 4
+
+[node name="GameContent" type="Node3D" parent="SubViewportContainer/SubViewport"] 

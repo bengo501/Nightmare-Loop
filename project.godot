@@ -16,7 +16,6 @@ config/features=PackedStringArray("4.4", "Forward Plus")
 
 [autoload]
 
-GlobalPSXEffect="*res://scripts/managers/GlobalPSXEffect.gd"
 GameManager="*res://scripts/game_manager.gd"
 GameStateManager="*res://scripts/game_state_manager.gd"
 UIManager="*res://scripts/ui_manager.gd"

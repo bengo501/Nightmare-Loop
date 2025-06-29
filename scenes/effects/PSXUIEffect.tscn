@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://6d27pu5uvg6"]
+
+[ext_resource type="Material" path="res://materials/psx_ui_material.tres" id="1"]
+[ext_resource type="Script" path="res://scripts/effects/PSXUIEffect.gd" id="2"]
+
+[node name="PSXUIEffect" type="CanvasLayer"]
+layer = 1000
+script = ExtResource("2")
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="."]
+
+[node name="PSXOverlay" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+material = ExtResource("1") 

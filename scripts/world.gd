@@ -43,8 +43,6 @@ func _ready():
 	# Inicia a sequência de diálogos de introdução
 	if not intro_dialog_shown:
 		start_intro_dialog()
-	
-	print("🌍 [World] Efeitos PSX aplicados automaticamente via GlobalPSXEffect!")
 
 func _validate_managers() -> bool:
 	"""Valida se todos os managers necessários estão disponíveis"""

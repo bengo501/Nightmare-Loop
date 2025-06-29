@@ -1,0 +1,51 @@
+[gd_scene load_steps=5 format=3 uid="uid://dam4k8x7s3q2r"]
+
+[ext_resource type="Material" path="res://materials/psx_post_process_material.tres" id="1"]
+[ext_resource type="Script" path="res://scripts/effects/PSXFullScreenEffect.gd" id="2"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_1"]
+size = Vector2(2, 2)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_1"]
+viewport_path = NodePath("../SubViewportContainer/SubViewport")
+
+[node name="PSXFullScreenEffect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1024, 600)
+render_target_update_mode = 4
+
+[node name="GameContent" type="Node" parent="SubViewportContainer/SubViewport"]
+
+[node name="PSXOverlay" type="CanvasLayer" parent="."]
+layer = 1000
+
+[node name="PSXQuad" type="MeshInstance3D" parent="PSXOverlay"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+mesh = SubResource("QuadMesh_1")
+surface_material_override/0 = ExtResource("1")
+
+[node name="PSXCamera" type="Camera3D" parent="PSXOverlay"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+projection = 1
+size = 2.0
+near = 0.1
+far = 10.0
+current = true 
