@@ -107,19 +107,30 @@ func debug_ghosts():
 
 func find_nodes_by_script(script_path: String) -> Array:
 	var nodes = []
-	_find_nodes_by_script_recursive(get_tree().current_scene, script_path, nodes)
+	var current_scene = get_tree().current_scene
+	if current_scene:
+		_find_nodes_by_script_recursive(current_scene, script_path, nodes)
 	return nodes
 
 func _find_nodes_by_script_recursive(node: Node, script_path: String, result: Array):
-	if node.get_script() and node.get_script().resource_path.ends_with(script_path):
+	if not node:
+		return
+		
+	var script = node.get_script()
+	if script and script.resource_path.ends_with(script_path):
 		result.append(node)
 	
 	for child in node.get_children():
-		_find_nodes_by_script_recursive(child, script_path, result)
+		if child:
+			_find_nodes_by_script_recursive(child, script_path, result)
 
 func _find_navigation_regions(node: Node, result: Array):
+	if not node:
+		return
+		
 	if node is NavigationRegion3D:
 		result.append(node)
 	
 	for child in node.get_children():
-		_find_navigation_regions(child, result) 
+		if child:
+			_find_navigation_regions(child, result) 

@@ -1,5 +1,9 @@
 extends CanvasLayer
 
+# Referências para autoloads
+@onready var scene_manager = get_node_or_null("/root/SceneManager")
+@onready var state_manager = get_node_or_null("/root/GameStateManager")
+
 # Estrutura dos slides com imagem e narrativa
 var slides = [
 	{
@@ -181,5 +185,8 @@ func finish_slides():
 	# Remove a cena atual antes de mudar
 	queue_free()
 	
-	# Muda para a tela de loading
-	get_tree().change_scene_to_file("res://scenes/ui/loading_screen.tscn") 
+	# Muda para a tela de loading usando o SceneManager
+	if scene_manager:
+		scene_manager.change_scene("loading_screen")
+	else:
+		push_error("[StorySlides] SceneManager não encontrado!") 

@@ -10,7 +10,10 @@ signal scene_changed(scene_path: String)
 var is_changing_scene: bool = false
 
 var scenes = {
+	"splash_screen": "res://scenes/ui/splash_screen.tscn",
 	"main_menu": "res://scenes/ui/main_menu.tscn",
+	"story_slides": "res://scenes/ui/story_slides.tscn",
+	"loading_screen": "res://scenes/ui/loading_screen.tscn",
 	"world": "res://scenes/world.tscn",
 	"map_2": "res://map_2.tscn",
 	"options_menu": "res://scenes/ui/options_menu.tscn",
@@ -37,6 +40,12 @@ func change_scene(scene_name: String):
 	print("[SceneManager] Cena atual: ", get_tree().current_scene.name if get_tree().current_scene else "Nenhuma")
 	print("[SceneManager] Tentando mudar para cena: ", scene_name)
 	
+	if is_changing_scene:
+		print("[SceneManager] AVISO: Já está em processo de mudança de cena!")
+		return
+		
+	is_changing_scene = true
+	
 	if scenes.has(scene_name):
 		var path = scenes[scene_name]
 		print("[SceneManager] Caminho da cena: ", path)
@@ -48,6 +57,7 @@ func change_scene(scene_name: String):
 			print("[SceneManager] Arquivo da cena encontrado!")
 		else:
 			push_error("[SceneManager] Erro: Arquivo da cena não encontrado: " + path)
+			is_changing_scene = false
 			return
 		
 		print("[SceneManager] Trocando para a cena: " + scene_name + " (" + path + ")")
@@ -56,19 +66,27 @@ func change_scene(scene_name: String):
 		var scene_resource = load(path)
 		if scene_resource == null:
 			push_error("[SceneManager] Erro: Não foi possível carregar a cena: " + path)
+			is_changing_scene = false
 			return
 			
-		# Limpa a cena atual
-		if get_tree().current_scene and is_instance_valid(get_tree().current_scene) and not get_tree().current_scene.is_queued_for_deletion():
-			get_tree().current_scene.queue_free()
+		# Limpa a cena atual e TODAS as suas crianças
+		if get_tree().current_scene:
+			print("[SceneManager] Removendo cena atual e todas as suas crianças...")
+			var current = get_tree().current_scene
+			# Remove todos os filhos primeiro
+			for child in current.get_children():
+				current.remove_child(child)
+				child.queue_free()
+			# Remove a cena atual
+			current.queue_free()
+			await current.tree_exited
 			print("[SceneManager] Cena atual removida com segurança")
-		else:
-			print("[SceneManager] Cena atual já foi liberada ou é inválida")
 		
 		# Instancia e adiciona a nova cena
 		var new_scene = scene_resource.instantiate()
 		if new_scene == null:
 			push_error("[SceneManager] Erro: Não foi possível instanciar a cena: " + path)
+			is_changing_scene = false
 			return
 			
 		get_tree().root.add_child(new_scene)
@@ -83,6 +101,7 @@ func change_scene(scene_name: String):
 	else:
 		push_error("[SceneManager] Cena não encontrada: " + scene_name)
 	
+	is_changing_scene = false
 	print("[SceneManager] ====== FIM DA MUDANÇA DE CENA ======\n")
 
 func change_map(map_name: String):

@@ -40,36 +40,36 @@ func _validate_managers():
 		print("[MainMenu] ✅ Todos os managers carregados!")
 
 func _on_new_game_pressed():
+	print("[MainMenu] Iniciando novo jogo...")
+	
 	# Primeiro reseta o jogo
 	if game_manager and game_manager.has_method("reset_game"):
 		game_manager.reset_game()
 	else:
 		print("[MainMenu] AVISO: GameManager não disponível para reset")
 	
-	# Exibe os slides da história antes de iniciar o jogo
-	get_tree().change_scene_to_file("res://scenes/ui/story_slides.tscn")
-
-func _show_fade_and_start_game():
-	fade_rect = ColorRect.new()
-	fade_rect.color = Color(0,0,0,0)
-	fade_rect.anchor_right = 1.0
-	fade_rect.anchor_bottom = 1.0
-	fade_rect.z_index = 1000
-	add_child(fade_rect)
-	var tween = create_tween()
-	tween.tween_property(fade_rect, "color:a", 1.0, 0.8)
-	tween.tween_callback(Callable(self, "_on_fade_complete"))
-
-func _on_fade_complete():
-	queue_free()
-	if scene_manager and scene_manager.has_method("change_scene"):
-		scene_manager.change_scene("world")
-	else:
-		print("[MainMenu] AVISO: SceneManager não disponível, mudando cena diretamente")
-		get_tree().change_scene_to_file("res://world.tscn")
+	# Cria overlay para fade out
+	var fade_overlay = ColorRect.new()
+	fade_overlay.name = "FadeOverlay"
+	fade_overlay.anchors_preset = Control.PRESET_FULL_RECT
+	fade_overlay.color = Color(0, 0, 0, 0)
+	fade_overlay.z_index = 100
+	add_child(fade_overlay)
 	
-	if state_manager:
-		state_manager.change_state(state_manager.GameState.PLAYING)
+	# Fade out
+	var tween = create_tween()
+	tween.tween_property(fade_overlay, "color:a", 1.0, 1.0)
+	
+	await tween.finished
+	
+	# Remove a cena atual antes de mudar
+	queue_free()
+	
+	# Muda para os slides da história usando o SceneManager
+	if scene_manager:
+		scene_manager.change_scene("story_slides")
+	else:
+		push_error("[MainMenu] SceneManager não encontrado!")
 
 func _on_options_pressed():
 	if ui_manager:

@@ -20,6 +20,11 @@ var crt_material: ShaderMaterial
 
 func _ready():
 	print("📺 CRT Overlay inicializado!")
+	
+	# Garante que o CRTEffect ignore inputs
+	if crt_effect:
+		crt_effect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	
 	if crt_effect:
 		crt_material = crt_effect.material as ShaderMaterial
 		setup_crt_material()

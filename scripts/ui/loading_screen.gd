@@ -6,6 +6,10 @@ extends CanvasLayer
 @onready var status_text = $CenterContainer/VBoxContainer/StatusText
 @onready var loading_timer = $LoadingTimer
 
+# Referências aos managers
+@onready var scene_manager = get_node_or_null("/root/SceneManager")
+@onready var state_manager = get_node_or_null("/root/GameStateManager")
+
 # Estados do loading
 var loading_progress = 0.0
 var loading_speed = 8.0
@@ -88,15 +92,22 @@ func complete_loading():
 	add_child(final_overlay)
 	
 	var final_tween = create_tween()
-	final_tween.tween_property(final_overlay, "color", Color(0, 0, 0, 1), 1.5)
+	final_tween.tween_property(final_overlay, "color:a", 1.0, 1.0)
 	
 	await final_tween.finished
 	
 	# Remove a cena atual antes de mudar
 	queue_free()
 	
-	# Muda para o mundo do jogo
-	get_tree().change_scene_to_file("res://scenes/world.tscn")
+	# Muda para o mundo usando o SceneManager
+	if scene_manager:
+		# Muda o estado do jogo para PLAYING
+		if state_manager:
+			state_manager.change_state(state_manager.GameState.PLAYING)
+		# Muda para a cena do mundo
+		scene_manager.change_scene("world")
+	else:
+		push_error("[LoadingScreen] SceneManager não encontrado!")
 
 # Função para acelerar o loading (caso o jogador clique)
 func _input(event):

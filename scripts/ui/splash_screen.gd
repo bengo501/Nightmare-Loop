@@ -2,6 +2,7 @@ extends CanvasLayer
 
 @onready var logo = $Logo
 @onready var loading_label = $Loading
+@onready var scene_manager = get_node_or_null("/root/SceneManager")
 
 var loading_dots = 0
 var loading_timer = null
@@ -40,8 +41,11 @@ func _on_fade_in_finished():
     # Remove a SplashScreen antes de mudar de cena
     queue_free()
     
-    # Muda para o menu principal
-    get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+    # Muda para o menu principal usando o SceneManager
+    if scene_manager:
+        scene_manager.change_scene("main_menu")
+    else:
+        push_error("[SplashScreen] SceneManager não encontrado!")
 
 func _on_loading_timer_timeout():
     loading_dots = (loading_dots + 1) % 4
