@@ -13,13 +13,9 @@ extends Node
 var main_viewport: Viewport
 var current_environment: Environment
 var original_environment: Environment
-var psx_viewport_effect: Control = null
 var psx_crt_effect: Control = null
 
-# Cena do efeito PSX Viewport
-var psx_viewport_effect_scene = preload("res://scenes/effects/PSXFullScreenViewport.tscn")
-
-# Cena do efeito PSX + CRT
+# Cena do efeito PSX + CRT (única que será usada)
 var psx_crt_effect_scene = preload("res://scenes/effects/PSXWithCRT.tscn")
 
 func _ready():
@@ -59,10 +55,7 @@ func apply_psx_effects():
 	# 3. Configurações de projeto
 	apply_project_settings()
 	
-	# 4. Aplica efeito PSX Viewport (jogo + UI)
-	apply_psx_viewport_effect()
-	
-	# 5. Aplica efeito PSX + CRT (jogo + UI)
+	# 4. Aplica APENAS o efeito PSX + CRT (que inclui tudo)
 	apply_psx_crt_effect()
 	
 	print("✅ Efeitos PSX + CRT aplicados por padrão!")
@@ -99,36 +92,6 @@ func apply_project_settings():
 		print("🔲 Filtros de textura desabilitados")
 	
 	# Outras configurações podem ser adicionadas aqui
-
-func apply_psx_viewport_effect():
-	"""Aplica o efeito PSX Viewport que afeta jogo + UI"""
-	if not psx_viewport_effect and psx_viewport_effect_scene:
-		# Instancia o efeito PSX Viewport
-		psx_viewport_effect = psx_viewport_effect_scene.instantiate()
-		
-		# Adiciona à árvore principal (substitui a cena atual)
-		get_tree().root.add_child(psx_viewport_effect)
-		
-		print("🎬 PSX Viewport Effect aplicado! (afeta jogo + UI)")
-	else:
-		print("⚠️ PSX Viewport Effect já ativo ou cena não encontrada")
-
-func remove_psx_viewport_effect():
-	"""Remove o efeito PSX Viewport"""
-	if psx_viewport_effect and is_instance_valid(psx_viewport_effect):
-		psx_viewport_effect.queue_free()
-		psx_viewport_effect = null
-		print("🎬 PSX Viewport Effect removido!")
-
-func toggle_psx_viewport_effect():
-	"""Liga/desliga o efeito PSX Viewport"""
-	if psx_viewport_effect and is_instance_valid(psx_viewport_effect):
-		if psx_viewport_effect.visible:
-			psx_viewport_effect.hide_effect()
-		else:
-			psx_viewport_effect.show_effect()
-	else:
-		apply_psx_viewport_effect()
 
 func toggle_psx_mode():
 	enable_psx_mode = !enable_psx_mode
@@ -171,9 +134,6 @@ func disable_psx_effects():
 		print("🔄 Environment original restaurado em ", restored_count, " câmeras")
 	else:
 		print("⚠️ Nenhum environment original salvo para restaurar")
-	
-	# Remove efeito PSX Viewport
-	remove_psx_viewport_effect()
 	
 	# Remove efeito PSX + CRT
 	remove_psx_crt_effect()
@@ -393,31 +353,22 @@ func toggle_psx_crt_effect():
 		apply_psx_crt_effect()
 
 func apply_crt_vintage_preset():
-	var env = current_environment
-	if env:
-		env.fog_light_color = Color(0.3, 0.3, 0.5)
-		env.fog_density = 0.008
-		env.adjustment_brightness = 0.9
-		env.adjustment_contrast = 1.1
-		env.adjustment_saturation = 0.8
-		print("🎮 Preset CRT Vintage aplicado!")
+	"""Aplica preset CRT vintage via PSXWithCRT"""
+	if psx_crt_effect and psx_crt_effect.has_method("apply_vintage_crt_preset"):
+		psx_crt_effect.apply_vintage_crt_preset()
+	else:
+		print("⚠️ PSX+CRT Effect não encontrado para aplicar preset CRT Vintage")
 
 func apply_crt_modern_preset():
-	var env = current_environment
-	if env:
-		env.fog_light_color = Color(0.2, 0.1, 0.1)
-		env.fog_density = 0.015
-		env.adjustment_brightness = 0.7
-		env.adjustment_contrast = 1.4
-		env.adjustment_saturation = 0.6
-		print("🎮 Preset CRT Modern aplicado!")
+	"""Aplica preset CRT moderno via PSXWithCRT"""
+	if psx_crt_effect and psx_crt_effect.has_method("apply_modern_crt_preset"):
+		psx_crt_effect.apply_modern_crt_preset()
+	else:
+		print("⚠️ PSX+CRT Effect não encontrado para aplicar preset CRT Moderno")
 
 func apply_crt_strong_preset():
-	var env = current_environment
-	if env:
-		env.fog_light_color = Color(0.1, 0.05, 0.2)
-		env.fog_density = 0.02
-		env.adjustment_brightness = 0.6
-		env.adjustment_contrast = 1.6
-		env.adjustment_saturation = 0.4
-		print("🎮 Preset CRT Strong aplicado!") 
+	"""Aplica preset CRT forte via PSXWithCRT"""
+	if psx_crt_effect and psx_crt_effect.has_method("apply_strong_crt_preset"):
+		psx_crt_effect.apply_strong_crt_preset()
+	else:
+		print("⚠️ PSX+CRT Effect não encontrado para aplicar preset CRT Forte") 

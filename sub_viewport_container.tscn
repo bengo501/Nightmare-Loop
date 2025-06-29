@@ -12,9 +12,10 @@ shader_parameter/dither_size = 2
 
 [node name="SubViewportContainer" type="SubViewportContainer"]
 material = SubResource("ShaderMaterial_qfnet")
-offset_right = 1152.0
+offset_left = -40.0
+offset_right = 1112.0
 offset_bottom = 648.0
-scale = Vector2(4, 4)
+scale = Vector2(0.95, 0.95)
 
 [node name="SubViewport" type="SubViewport" parent="."]
 handle_input_locally = false

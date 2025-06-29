@@ -1,14 +1,15 @@
 extends Control
 
 # Sistema PSX + CRT combinado
-# PSX aplicado no SubViewportContainer, CRT aplicado por cima via SCREEN_TEXTURE
+# PSX aplicado no SubViewportContainer, CRT aplicado via CanvasLayer + BackBufferCopy
 
 # Referências
 @onready var viewport_container = $SubViewportContainer
 @onready var viewport = $SubViewportContainer/SubViewport
 @onready var game_content = $SubViewportContainer/SubViewport/GameContent
-@onready var crt_overlay = $CRTOverlay
-@onready var crt_effect = $CRTOverlay/CRTEffect
+@onready var crt_effect = $CRTEffect
+@onready var back_buffer_copy = $CRTEffect/BackBufferCopy
+@onready var crt_overlay = $CRTEffect/CRTOverlay
 
 # Materiais dos shaders
 var psx_material: ShaderMaterial
@@ -27,13 +28,13 @@ var crt_material: ShaderMaterial
 @export var enable_dithering: bool = true
 @export var dither_strength: float = 0.5
 
-# Configurações CRT
+# Configurações CRT (valores mais sutis)
 @export var enable_crt_effects: bool = true
-@export var wiggle_strength: float = 2.0
-@export var wiggle_speed: float = 1.0
-@export var chromatic_aberration: float = 0.003
-@export var scanline_intensity: float = 0.5
-@export var vignette_strength: float = 0.3
+@export var wiggle_strength: float = 0.5
+@export var wiggle_speed: float = 0.8
+@export var chromatic_aberration: float = 0.001
+@export var scanline_intensity: float = 0.2
+@export var vignette_strength: float = 0.15
 @export var brightness: float = 1.0
 
 # Referências para restaurar conteúdo
@@ -80,21 +81,46 @@ func move_scene_to_viewport():
 	"""Move a cena atual para dentro do SubViewport"""
 	var current_scene = get_tree().current_scene
 	
+	# Evita recursão - não move a si mesmo
 	if current_scene == self:
 		print("⚠️ Não pode mover a cena PSX+CRT para si mesma")
 		return
 	
+	# Evita mover cenas de efeitos
+	if current_scene and (current_scene.name.contains("PSX") or current_scene.name.contains("CRT")):
+		print("⚠️ Não pode mover cenas de efeitos PSX/CRT")
+		return
+	
 	if current_scene and game_content:
+		# Verifica se a cena já não está dentro do GameContent
+		if current_scene.get_parent() == game_content:
+			print("⚠️ Cena já está no GameContent: ", current_scene.name)
+			return
+		
 		original_scene = current_scene
 		original_parent = current_scene.get_parent()
 		
+		print("🎬 Movendo cena para SubViewport: ", current_scene.name)
+		print("  📁 Cena original: ", current_scene.name)
+		print("  📍 Parent original: ", original_parent.name if original_parent else "null")
+		
+		# Remove da árvore original
 		if original_parent:
 			original_parent.remove_child(current_scene)
 		
+		# Adiciona ao GameContent
 		game_content.add_child(current_scene)
-		print("🎬 Cena movida para SubViewport: ", current_scene.name)
+		print("  ✅ Cena movida para GameContent!")
 		
+		# Define este nó como a nova cena atual
 		get_tree().current_scene = self
+		print("  📺 PSXWithCRT agora é a cena atual")
+	else:
+		print("⚠️ Erro: current_scene ou game_content não encontrados")
+		if not current_scene:
+			print("    current_scene é null")
+		if not game_content:
+			print("    game_content é null")
 
 func setup_materials():
 	"""Configura os materiais PSX e CRT"""
@@ -106,9 +132,9 @@ func setup_materials():
 		else:
 			print("⚠️ ERRO: Material PSX não encontrado!")
 	
-	# Material CRT (ColorRect overlay)
-	if crt_effect:
-		crt_material = crt_effect.material as ShaderMaterial
+	# Material CRT (ColorRect overlay no CanvasLayer)
+	if crt_overlay:
+		crt_material = crt_overlay.material as ShaderMaterial
 		if crt_material:
 			print("📺 Material CRT configurado!")
 		else:
@@ -155,9 +181,9 @@ func toggle_crt_effects():
 	"""Liga/desliga os efeitos CRT"""
 	enable_crt_effects = !enable_crt_effects
 	if enable_crt_effects:
-		crt_overlay.visible = true
+		crt_effect.visible = true
 	else:
-		crt_overlay.visible = false
+		crt_effect.visible = false
 	update_crt_parameters()
 	print("📺 CRT Effects: ", "ATIVADO" if enable_crt_effects else "DESATIVADO")
 
@@ -201,53 +227,53 @@ func apply_nightmare_psx_preset():
 # Presets CRT
 func apply_classic_crt_preset():
 	"""Aplica preset CRT clássico"""
-	wiggle_strength = 2.0
-	wiggle_speed = 1.0
-	chromatic_aberration = 0.003
-	scanline_intensity = 0.5
-	vignette_strength = 0.3
+	wiggle_strength = 0.5
+	wiggle_speed = 0.8
+	chromatic_aberration = 0.001
+	scanline_intensity = 0.2
+	vignette_strength = 0.15
 	brightness = 1.0
 	enable_crt_effects = true
-	crt_overlay.visible = true
+	crt_effect.visible = true
 	update_crt_parameters()
 	print("📺 Preset CRT Clássico aplicado!")
 
 func apply_vintage_crt_preset():
 	"""Aplica preset CRT vintage (mais forte)"""
-	wiggle_strength = 4.0
-	wiggle_speed = 1.5
-	chromatic_aberration = 0.005
-	scanline_intensity = 0.7
-	vignette_strength = 0.5
-	brightness = 0.9
+	wiggle_strength = 1.0
+	wiggle_speed = 1.2
+	chromatic_aberration = 0.002
+	scanline_intensity = 0.4
+	vignette_strength = 0.25
+	brightness = 0.95
 	enable_crt_effects = true
-	crt_overlay.visible = true
+	crt_effect.visible = true
 	update_crt_parameters()
 	print("📺 Preset CRT Vintage aplicado!")
 
 func apply_modern_crt_preset():
 	"""Aplica preset CRT moderno (mais sutil)"""
-	wiggle_strength = 1.0
-	wiggle_speed = 0.8
-	chromatic_aberration = 0.002
-	scanline_intensity = 0.3
-	vignette_strength = 0.2
-	brightness = 1.1
+	wiggle_strength = 0.3
+	wiggle_speed = 0.6
+	chromatic_aberration = 0.0005
+	scanline_intensity = 0.1
+	vignette_strength = 0.1
+	brightness = 1.05
 	enable_crt_effects = true
-	crt_overlay.visible = true
+	crt_effect.visible = true
 	update_crt_parameters()
 	print("📺 Preset CRT Moderno aplicado!")
 
 func apply_strong_crt_preset():
 	"""Aplica preset CRT forte (efeito intenso)"""
-	wiggle_strength = 6.0
-	wiggle_speed = 2.0
-	chromatic_aberration = 0.008
-	scanline_intensity = 0.8
-	vignette_strength = 0.6
-	brightness = 0.8
+	wiggle_strength = 1.5
+	wiggle_speed = 1.5
+	chromatic_aberration = 0.003
+	scanline_intensity = 0.6
+	vignette_strength = 0.35
+	brightness = 0.9
 	enable_crt_effects = true
-	crt_overlay.visible = true
+	crt_effect.visible = true
 	update_crt_parameters()
 	print("📺 Preset CRT Forte aplicado!")
 
