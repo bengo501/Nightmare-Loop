@@ -92,6 +92,9 @@ func complete_loading():
 	
 	await final_tween.finished
 	
+	# Remove a cena atual antes de mudar
+	queue_free()
+	
 	# Muda para o mundo do jogo
 	get_tree().change_scene_to_file("res://scenes/world.tscn")
 

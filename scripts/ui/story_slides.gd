@@ -178,5 +178,8 @@ func finish_slides():
 	
 	await final_tween.finished
 	
+	# Remove a cena atual antes de mudar
+	queue_free()
+	
 	# Muda para a tela de loading
 	get_tree().change_scene_to_file("res://scenes/ui/loading_screen.tscn") 

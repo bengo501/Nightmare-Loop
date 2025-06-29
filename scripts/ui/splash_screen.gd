@@ -22,6 +22,25 @@ func _ready():
 
 func _on_fade_in_finished():
     await get_tree().create_timer(1.0).timeout
+    
+    # Cria overlay para fade out
+    var fade_overlay = ColorRect.new()
+    fade_overlay.name = "FadeOverlay"
+    fade_overlay.anchors_preset = Control.PRESET_FULL_RECT
+    fade_overlay.color = Color(0, 0, 0, 0)
+    fade_overlay.z_index = 100
+    add_child(fade_overlay)
+    
+    # Fade out
+    var tween = create_tween()
+    tween.tween_property(fade_overlay, "color:a", 1.0, 1.0)
+    
+    await tween.finished
+    
+    # Remove a SplashScreen antes de mudar de cena
+    queue_free()
+    
+    # Muda para o menu principal
     get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
 
 func _on_loading_timer_timeout():

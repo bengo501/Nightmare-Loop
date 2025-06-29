@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8k5m2qaq7r4s"]
+
+[ext_resource type="Material" path="res://materials/crt_monitor_material.tres" id="1"]
+[ext_resource type="Script" path="res://scripts/effects/CRTOverlay.gd" id="2"]
+
+[node name="CRTOverlay" type="CanvasLayer"]
+layer = 1001
+script = ExtResource("2")
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="."]
+
+[node name="CRTEffect" type="ColorRect" parent="."]
+material = ExtResource("1")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0 

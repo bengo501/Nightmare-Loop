@@ -25,7 +25,7 @@ LucidityManager="*res://scripts/managers/LucidityManager.gd"
 GiftManager="*res://scripts/managers/GiftManager.gd"
 SkillManager="*res://scripts/managers/SkillManager.gd"
 PlayerReferenceManager="*res://scripts/managers/PlayerReferenceManager.gd"
-PSXEffectManager="*res://scripts/managers/PSXEffectManager.gd"
+GlobalPSXManager="*res://scripts/managers/GlobalPSXManager.gd"
 
 [display]
 
