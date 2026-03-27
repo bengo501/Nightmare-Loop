@@ -5,13 +5,16 @@ Script para garantir que TODOS os pisos do map_2.tscn tenham collision_layer = 1
 """
 
 import re
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 def fix_all_floors_to_129():
-    file_path = "map_2.tscn"
+    file_path = PROJECT_ROOT / "scenes" / "levels" / "map_2.tscn"
     
     print("🔧 Corrigindo collision_layer de todos os pisos para 129...")
     
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open(file_path, "r", encoding="utf-8") as f:
         content = f.read()
     
     lines = content.split('\n')
@@ -59,7 +62,7 @@ def fix_all_floors_to_129():
     # Salva o arquivo modificado
     content = '\n'.join(lines)
     
-    with open(file_path, 'w', encoding='utf-8') as f:
+    with open(file_path, "w", encoding="utf-8") as f:
         f.write(content)
     
     print(f"\n✅ Correção concluída!")

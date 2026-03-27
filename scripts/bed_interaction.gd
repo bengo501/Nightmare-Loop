@@ -117,7 +117,7 @@ func sleep_interaction():
 	_create_transition_manager(player_scene_path)
 	
 	# Muda para a nova cena
-	var result = get_tree().change_scene_to_file("res://map_2.tscn")
+	var result = get_tree().change_scene_to_file("res://scenes/levels/map_2.tscn")
 	if result != OK:
 		print("[BedInteraction] ❌ Erro ao mudar cena: ", result)
 		interaction_active = false

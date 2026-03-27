@@ -15,7 +15,7 @@ var scenes = {
 	"story_slides": "res://scenes/ui/story_slides.tscn",
 	"loading_screen": "res://scenes/ui/loading_screen.tscn",
 	"world": "res://scenes/world.tscn",
-	"map_2": "res://map_2.tscn",
+	"map_2": "res://scenes/levels/map_2.tscn",
 	"options_menu": "res://scenes/ui/options_menu.tscn",
 	"pause_menu": "res://scenes/ui/pause_menu.tscn",
 	"hud": "res://scenes/ui/hud.tscn",

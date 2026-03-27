@@ -4,13 +4,16 @@ Script para adicionar collision_layer = 129 a todos os pisos do map_2.tscn
 """
 
 import re
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 def add_collision_layer_to_floors():
-    file_path = "map_2.tscn"
+    file_path = PROJECT_ROOT / "scenes" / "levels" / "map_2.tscn"
     
     print("🔧 Adicionando collision_layer = 129 a todos os pisos...")
     
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open(file_path, "r", encoding="utf-8") as f:
         content = f.read()
     
     # Padrão para encontrar pisos com use_collision = true mas sem collision_layer
@@ -64,7 +67,7 @@ def add_collision_layer_to_floors():
     # Salva o arquivo
     content = '\n'.join(lines)
     
-    with open(file_path, 'w', encoding='utf-8') as f:
+    with open(file_path, "w", encoding="utf-8") as f:
         f.write(content)
     
     print(f"\n✅ Processo concluído!")

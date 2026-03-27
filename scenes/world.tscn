@@ -2,7 +2,7 @@
 
 [ext_resource type="Material" uid="uid://xtsip8oah052" path="res://materials/floor_material.tres" id="1_rwgxs"]
 [ext_resource type="Script" uid="uid://bwhtkocfb8obw" path="res://scripts/world.gd" id="1_xxxxx"]
-[ext_resource type="PackedScene" uid="uid://3dqgy2xopa1e" path="res://tv_fbx_scene.tscn" id="2_7t5mc"]
+[ext_resource type="PackedScene" uid="uid://3dqgy2xopa1e" path="res://scenes/props/tv_fbx_scene.tscn" id="2_7t5mc"]
 [ext_resource type="Texture2D" uid="uid://ca44uy3jlfa6w" path="res://assets/textures/Floor/Horror_Floor_05-128x128.png" id="2_dss4m"]
 [ext_resource type="PackedScene" uid="uid://drs2ohyyh3uit" path="res://scenes/player/player.tscn" id="3_4wyf3"]
 [ext_resource type="Texture2D" uid="uid://cmd33s4pp6r0d" path="res://assets/textures/Wall/Horror_Wall_07-128x128.png" id="4_7t5mc"]

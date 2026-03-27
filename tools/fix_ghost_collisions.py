@@ -7,8 +7,9 @@ Script para corrigir colisores dos fantasmas e player
 """
 
 import re
-import os
 from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 def fix_ghost_collisions():
     """Corrige as configurações de colisão dos fantasmas e player"""
@@ -36,18 +37,21 @@ def fix_ghost_collisions():
     ]
     
     for ghost_file in ghost_scenes:
-        if os.path.exists(ghost_file):
-            changes = fix_ghost_scene(ghost_file)
+        p = PROJECT_ROOT / ghost_file
+        if p.is_file():
+            changes = fix_ghost_scene(str(p))
             changes_made.extend(changes)
     
     # 2. Corrigir player.tscn
-    if os.path.exists("scenes/player/player.tscn"):
-        changes = fix_player_scene("scenes/player/player.tscn")
+    player_tscn = PROJECT_ROOT / "scenes/player/player.tscn"
+    if player_tscn.is_file():
+        changes = fix_player_scene(str(player_tscn))
         changes_made.extend(changes)
     
     # 3. Atualizar script do player para usar collision mask correto
-    if os.path.exists("scripts/player/player.gd"):
-        changes = fix_player_script("scripts/player/player.gd")
+    player_gd = PROJECT_ROOT / "scripts/player/player.gd"
+    if player_gd.is_file():
+        changes = fix_player_script(str(player_gd))
         changes_made.extend(changes)
     
     # Relatório
@@ -218,7 +222,8 @@ def create_collision_layers_documentation():
 4. **Teste de Paredes**: Nem player nem fantasmas devem atravessar paredes
 """
     
-    with open("documentacao/sistema_collision_layers.md", 'w', encoding='utf-8') as f:
+    doc_path = PROJECT_ROOT / "documentacao/sistema_collision_layers.md"
+    with open(doc_path, "w", encoding="utf-8") as f:
         f.write(doc_content)
     
     print("📝 Documentação criada: documentacao/sistema_collision_layers.md")

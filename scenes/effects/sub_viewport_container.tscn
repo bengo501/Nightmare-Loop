@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://3s1u27dlmait"]
 
 [ext_resource type="Shader" uid="uid://dfbg35n7n8gwe" path="res://shaders/psx.gdshader" id="1_rbxnt"]
-[ext_resource type="PackedScene" uid="uid://csv22yqit6mlw" path="res://cr_tshader.tscn" id="2_gcxxy"]
+[ext_resource type="PackedScene" uid="uid://csv22yqit6mlw" path="res://scenes/effects/cr_tshader.tscn" id="2_gcxxy"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qfnet"]
 shader = ExtResource("1_rbxnt")

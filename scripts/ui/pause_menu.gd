@@ -74,7 +74,7 @@ func _unpause_current_scene():
 			state_manager.change_state(state_manager.GameState.PLAYING)
 	
 	# Verifica se é o map_2.tscn
-	elif current_scene.scene_file_path == "res://map_2.tscn" or current_scene.name == "Map2":
+	elif current_scene.scene_file_path == "res://scenes/levels/map_2.tscn" or current_scene.name == "Map2":
 		print("[PauseMenu] Despausando map_2.tscn...")
 		# Procura pelo Map2Controller
 		var map2_controller = current_scene.get_node_or_null("Map2Controller")

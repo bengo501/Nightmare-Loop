@@ -1,3 +1,9 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+*.tmp
+__pycache__/
+
+# backups antigos na raiz (novos devem ir para backups/)
+/map_2.tscn.backup
+/map_2.tscn.backup_heights
