@@ -4,6 +4,7 @@
 # nightmare loop
 jogo em **godot 4.4** com estética psx/crt, foco em exploração, combate em primeira pessoa e narrativa ligada ao luto e aos estágios da negação. o projeto inclui hub, mapas, sistema de diálogos, hud, efeitos de pós-processamento e gestão de estado por autoloads.
 ---
+
 ## visão geral
 | | |
 |--|--|
@@ -11,10 +12,12 @@ jogo em **godot 4.4** com estética psx/crt, foco em exploração, combate em pr
 | cena inicial | `scenes/ui/splash_screen.tscn` |
 | resolução base | 1024×600 (stretch em canvas) |
 ---
+
 <p align="center">
   <img src="assets/slides/slideJogo1.png" alt="cena noturna na estrada com chuva" width="640">
 </p>
 ---
+
 ## requisitos
 - [godot 4.4](https://godotengine.org/download) (editor compatível com o projeto)
 - clone deste repositório
